@@ -4,7 +4,8 @@
 
 package Environment.FacadeAdapter;
 
-import OCPlateforme.OCService;
+
+import Environment.OCPlateforme.OCService;
 
 /**
  * Binding Interface : connection of two component's services in a component framework
@@ -16,16 +17,16 @@ public interface IBinding {
     /**
      * Bind 2 services of components
      *
-     * @param service1
-     * @param service2
+     * @param service1 the first service
+     * @param service2 the second service
      */
-    public void bind(OCService service1, OCService service2) throws BindingFailure;
+    void bind(OCService service1, OCService service2) throws BindingFailure;
 
     /**
      * Unbind 2 connected services
      *
-     * @param service1
-     * @param service2
+     * @param service1 the first service
+     * @param service2 the second service
      */
-    public void unbind(OCService service1, OCService service2) throws UnbindingFailure;
+    void unbind(OCService service1, OCService service2) throws UnbindingFailure;
 }

@@ -4,8 +4,9 @@
 
 package Environment.FacadeAdapter;
 
-import OCPlateforme.OCComponent;
-import OCPlateforme.OCService;
+import Environment.OCPlateforme.OCComponent;
+import Environment.OCPlateforme.OCService;
+
 
 import java.util.Set;
 
@@ -20,26 +21,25 @@ public interface IAcquisition {
      * get components that have appeared
      *
      * @return a set of new components
-     * @throws Exception
+     * @throws AcquisitionFailure
      */
-    public Set<OCComponent> getNewComponents() throws AcquisitionFailure;
+     Set<OCComponent> getNewComponents() throws AcquisitionFailure;
 
     /**
      * get components that have disappeared
      *
      * @return a set of disappeared components
-     * @throws Exception
+     * @throws AcquisitionFailure
      */
-    public Set<OCComponent> getDisappearedComponents()
-            throws AcquisitionFailure;
+     Set<OCComponent> getDisappearedComponents() throws AcquisitionFailure;
 
     /**
      * get components that are yet in the environment
      *
      * @return a set of current components
-     * @throws Exception
+     * @throws AcquisitionFailure
      */
-    public Set<OCComponent> getCurrentComponents() throws AcquisitionFailure;
+     Set<OCComponent> getCurrentComponents() throws AcquisitionFailure;
 
     /**
      * get services of components that have appeared
@@ -47,7 +47,7 @@ public interface IAcquisition {
      * @return a set of services
      * @throws AcquisitionFailure
      */
-    public Set<OCService> getNewServices() throws AcquisitionFailure;
+     Set<OCService> getNewServices() throws AcquisitionFailure;
 
     /**
      * get services of components that have disappeared
@@ -55,7 +55,7 @@ public interface IAcquisition {
      * @return a set of services
      * @throws AcquisitionFailure
      */
-    public Set<OCService> getDisappearedServices() throws AcquisitionFailure;
+    Set<OCService> getDisappearedServices() throws AcquisitionFailure;
 
     /**
      * get services of components that are in the environment
@@ -63,7 +63,7 @@ public interface IAcquisition {
      * @return a set of services
      * @throws AcquisitionFailure
      */
-    public Set<OCService> getCurrentServices() throws AcquisitionFailure;
+     Set<OCService> getCurrentServices() throws AcquisitionFailure;
 
 
 }

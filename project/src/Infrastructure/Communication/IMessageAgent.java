@@ -4,8 +4,7 @@
 
 package Infrastructure.Communication;
 
-import Agent.Beans.Perceptions.AbstractPerception;
-import sma.infrastructure.agent.ReferenceAgent;
+import Infrastructure.Agent.ReferenceAgent;
 
 import java.util.ArrayList;
 

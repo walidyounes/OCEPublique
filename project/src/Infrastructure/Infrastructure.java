@@ -14,10 +14,7 @@ import Infrastructure.Etat.IEtat;
 import Infrastructure.Fabrique.Fabrique;
 import Infrastructure.Fabrique.ICreationAgent;
 import Infrastructure.Fabrique.ISuicideService;
-import Infrastructure.Ordonnanceur.IOrdonnanceur;
-import Infrastructure.Ordonnanceur.IStratOrdonnanceur;
-import Infrastructure.Ordonnanceur.Ordonnanceur;
-import Infrastructure.Ordonnanceur.StrategieClassique;
+import Infrastructure.Ordonnanceur.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +99,7 @@ public class Infrastructure implements ICreationAgent, ISuicideService, ICommuni
     public ReferenceAgent creer(IEtat etatInit) {
         ReferenceAgent ref = fabrique.creer(etatInit);
         // ordonnanceur.OrdagentAjoute(agent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'ordonnanceur se fait par fabrique
-        return (ref);
+        return ref;
     }
 
     public IAnnuaire getAnnuaire() {

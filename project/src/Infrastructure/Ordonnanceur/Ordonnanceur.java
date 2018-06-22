@@ -4,8 +4,8 @@
 
 package Infrastructure.Ordonnanceur;
 
-import sma.infrastructure.EnumVitesse;
-import sma.infrastructure.agent.Agent;
+import Infrastructure.Agent.Agent;
+
 
 import java.util.List;
 
@@ -50,4 +50,6 @@ public class Ordonnanceur implements IOrdonnanceur {
     public void OrdagentRetire(Agent agent) {
         stratOrdonnanceur.agentRetire(agent);
     }
+
+
 }

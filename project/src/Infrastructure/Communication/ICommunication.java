@@ -4,8 +4,7 @@
 
 package Infrastructure.Communication;
 
-import sma.infrastructure.agent.ReferenceAgent;
-
+import Infrastructure.Agent.ReferenceAgent;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public interface ICommunication {
      *
      * @param message the message to be sent
      */
-    public void diffuserMessage(IMessageAgent message);
+    void diffuserMessage(IMessageAgent message);
 
     /**
      * sends a message from one agent to another
@@ -28,7 +27,7 @@ public interface ICommunication {
      * @param message the message to be sent
      */
 
-    public void envoyerMessage(IMessageAgent message);
+    void envoyerMessage(IMessageAgent message);
 
     /**
      * allows an agent to receive One message
@@ -44,6 +43,6 @@ public interface ICommunication {
      * @param destinataire the recipient of the messages
      * @return list of messages received
      */
-    public List<IMessageAgent> recevoirMessages(ReferenceAgent destinataire);
+    List<IMessageAgent> recevoirMessages(ReferenceAgent destinataire);
 
 }

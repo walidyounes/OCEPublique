@@ -4,10 +4,10 @@
 
 package Infrastructure.Fabrique;
 
-import sma.infrastructure.agent.Agent;
-import sma.infrastructure.agent.ReferenceAgent;
-import sma.infrastructure.annuaire.IAnnuaire;
-import sma.infrastructure.etat.IEtat;
+import Infrastructure.Agent.Agent;
+import Infrastructure.Agent.ReferenceAgent;
+import Infrastructure.Annuaire.IAnnuaire;
+import Infrastructure.Etat.IEtat;
 import Infrastructure.Ordonnanceur.Ordonnanceur;
 
 public class Fabrique implements ICreationAgent, ISuicideService {

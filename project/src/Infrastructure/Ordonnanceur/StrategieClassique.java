@@ -4,9 +4,8 @@
 
 package Infrastructure.Ordonnanceur;
 
-import sma.infrastructure.EnumVitesse;
-import sma.infrastructure.agent.Agent;
-import sma.infrastructure.annuaire.IReferenceAgentListener;
+import Infrastructure.Agent.Agent;
+import Infrastructure.Annuaire.IReferenceAgentListener;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
 		Agent agentCourant;
 		while (run) {
 			agentCourant = listOrdonnancement.get(0);
-			cycleDeVie(agentCourant.getReferenceAgent(), agentCourant.getEtatInitial());
+			LifeCyrcle(agentCourant.getReferenceAgent(), agentCourant.getEtatInitial());
 			listOrdonnancement.remove(agentCourant);
 			listOrdonnancement.add(agentCourant);
 
@@ -57,7 +56,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
         int i = 0; // Walid : fixer le itérations
         while (i < 18) {
             agentCourant = listOrdonnancement.get(0);
-            //cycleDeVie(agentCourant.getReferenceAgent(), agentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
+            //LifeCyrcle(agentCourant.getReferenceAgent(), agentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
             agentCourant.changerEtat(); // walid : On actionne le changment d'etat de l'agent
             listOrdonnancement.remove(agentCourant);
             listOrdonnancement.add(agentCourant);
@@ -72,7 +71,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
     }
 
     /*
-        private void cycleDeVie(ReferenceAgent agentCourantReference, EtatAbstract etatAbstract) {
+        private void LifeCyrcle(ReferenceAgent agentCourantReference, EtatAbstract etatAbstract) {
             listListenerPourOrdonnanceur.forEach(
                     ordonnanceurListener -> ordonnanceurListener.changementEtat(agentCourantReference, etatAbstract));
             try {
@@ -81,7 +80,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
                 e.printStackTrace();
             }
 
-            etatAbstract.executer().ifPresent(iEtat -> cycleDeVie(agentCourantReference, iEtat));
+            etatAbstract.executer().ifPresent(iEtat -> LifeCyrcle(agentCourantReference, iEtat));
         }
     */
     @Override

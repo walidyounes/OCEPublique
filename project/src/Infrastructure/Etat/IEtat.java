@@ -15,5 +15,5 @@ public interface IEtat {
      * This functin allows to run the action associated to the current state
      * @param c the life cyrcle of the agent
      */
-    void executer(lifeCyrcle c);
+    void executer(LifeCyrcle c);
 }

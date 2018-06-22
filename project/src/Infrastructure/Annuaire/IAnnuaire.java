@@ -4,8 +4,8 @@
 
 package Infrastructure.Annuaire;
 
-import sma.infrastructure.agent.Agent;
-import sma.infrastructure.agent.ReferenceAgent;
+import Infrastructure.Agent.Agent;
+import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Communication.ICommunication;
 import Infrastructure.Communication.IMessageAgent;
 

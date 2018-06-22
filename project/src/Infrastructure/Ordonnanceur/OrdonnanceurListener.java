@@ -4,8 +4,9 @@
 
 package Infrastructure.Ordonnanceur;
 
-import sma.infrastructure.agent.ReferenceAgent;
-import sma.infrastructure.etat.IEtat;
+import Infrastructure.Agent.ReferenceAgent;
+import Infrastructure.Etat.IEtat;
+
 
 public interface OrdonnanceurListener {
 

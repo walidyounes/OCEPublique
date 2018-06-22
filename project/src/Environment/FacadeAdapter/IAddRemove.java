@@ -4,18 +4,16 @@
 
 package Environment.FacadeAdapter;
 
-import OCPlateforme.OCComponent;
+import Environment.OCPlateforme.OCComponent;
 
 
 public interface IAddRemove {
 
-    public void addComponent(OCComponent component);
-
     /**
      * add components
      */
+     void addComponent(OCComponent component);
 
-    public void removeComponent(OCComponent component);
 
 
     /**
@@ -23,6 +21,10 @@ public interface IAddRemove {
      *
      *
      */
+    void removeComponent(OCComponent component);
+
+
+
 
 
 }

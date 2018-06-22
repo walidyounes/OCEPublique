@@ -4,7 +4,7 @@
 
 package Infrastructure.Annuaire;
 
-import sma.infrastructure.agent.ReferenceAgent;
+import Infrastructure.Agent.ReferenceAgent;
 
 public interface IReferenceAgentListener {
 

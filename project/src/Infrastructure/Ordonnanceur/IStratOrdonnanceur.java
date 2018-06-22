@@ -4,9 +4,8 @@
 
 package Infrastructure.Ordonnanceur;
 
-import sma.infrastructure.EnumVitesse;
-import sma.infrastructure.agent.Agent;
-import sma.infrastructure.annuaire.IAgentListener;
+import Infrastructure.Agent.Agent;
+import Infrastructure.Annuaire.IAgentListener;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public interface IStratOrdonnanceur extends IAgentListener {
 
     void addOrdonnaceurListener(OrdonnanceurListener ordonnanceurListener);
 
-    public void agentAjoute(Agent agent);
+    void agentAjoute(Agent agent);
 
-    public void agentRetire(Agent agent);
+    void agentRetire(Agent agent);
 }

@@ -4,7 +4,7 @@
 
 package Infrastructure.Annuaire;
 
-import sma.infrastructure.agent.Agent;
+import Infrastructure.Agent.Agent;
 
 public interface IAgentListener {
 

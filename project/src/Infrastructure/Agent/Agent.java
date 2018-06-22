@@ -5,21 +5,21 @@
 package Infrastructure.Agent;
 
 
-import sma.infrastructure.etat.CycleDeVie;
-import sma.infrastructure.etat.IEtat;
+import Infrastructure.Etat.IEtat;
+import Infrastructure.Etat.LifeCyrcle;
 
 public class Agent {
     private final ReferenceAgent referenceAgent;
-    // private final EtatAbstract etatInitial; --> Walid : Pas besoin de cet attribut il est substitué par la classe cycleDeVie
+    // private final EtatAbstract etatInitial; --> Walid : Pas besoin de cet attribut il est substitué par la classe LifeCyrcle
     //private OCService serviceGere; // Le service géré par l'agent
-    private CycleDeVie cycleDeVie;
+    private LifeCyrcle lifeCyrcle;
 
     public Agent(IEtat etatInit) {
         //this.etatInitial = etatInitial;
         this.referenceAgent = new ReferenceAgent();
         //this.etatInitial.setReferenceAgent(this.referenceAgent);
         //this.serviceGere = serviceGere;
-        this.cycleDeVie = new CycleDeVie(etatInit, this.referenceAgent);
+        this.lifeCyrcle = new LifeCyrcle(etatInit, this.referenceAgent);
     }
 
     public ReferenceAgent getReferenceAgent() {
@@ -27,11 +27,11 @@ public class Agent {
     }
 
     public IEtat getEtat() {
-        return cycleDeVie.getEtatCourant();
+        return lifeCyrcle.getCurrentState();
     }
 
     public void changerEtat() {
-        this.cycleDeVie.changerEtat();
+        this.lifeCyrcle.run();
     }
 
 }

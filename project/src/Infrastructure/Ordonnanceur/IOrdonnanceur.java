@@ -4,8 +4,8 @@
 
 package Infrastructure.Ordonnanceur;
 
-import sma.infrastructure.EnumVitesse;
-import sma.infrastructure.agent.Agent;
+import Infrastructure.Agent.Agent;
+
 
 import java.util.List;
 

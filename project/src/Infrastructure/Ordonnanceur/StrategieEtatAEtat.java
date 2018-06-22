@@ -4,9 +4,8 @@
 
 package Infrastructure.Ordonnanceur;
 
-import sma.infrastructure.EnumVitesse;
-import sma.infrastructure.agent.Agent;
-import sma.infrastructure.etat.IEtat;
+import Infrastructure.Agent.Agent;
+import Infrastructure.Etat.IEtat;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +43,7 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
         IEtat etatCourant;
         while (run) {
             agentCourant = listOrdonnancement.get(0);
-            etatCourant = listEtatAgent.get(agentCourant);
+            etatCourant = listEtatAgent.get(agentCourant); //TOdo delete this line
             try {
                 TimeUnit.MICROSECONDS.sleep(vitesse);
             } catch (InterruptedException e) {

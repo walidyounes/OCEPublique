@@ -4,7 +4,7 @@
 
 package Infrastructure.Fabrique;
 
-import sma.infrastructure.agent.ReferenceAgent;
+import Infrastructure.Agent.ReferenceAgent;
 
 public interface ISuicideService {
 
