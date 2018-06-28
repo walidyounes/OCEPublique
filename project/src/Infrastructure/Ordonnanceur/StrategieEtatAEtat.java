@@ -20,9 +20,9 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
     private int vitesse;
     private boolean run = true;
     /*Etat1 etatInitial = new Etat1();
-	Agent agent1 = new Agent(etatInitial);
-	Agent agent2 = new Agent(etatInitial);
-	Agent agent3 = new Agent(etatInitial);*/
+	OCE.Agent agent1 = new OCE.Agent(etatInitial);
+	OCE.Agent agent2 = new OCE.Agent(etatInitial);
+	OCE.Agent agent3 = new OCE.Agent(etatInitial);*/
 
     public StrategieEtatAEtat(List<Agent> listAgent, List<OrdonnanceurListener> listListenerActuels) {
         listOrdonnancement = listAgent;

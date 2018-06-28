@@ -18,9 +18,9 @@ public class StrategieClassique implements IStratOrdonnanceur {
     private int vitesse;
     private boolean run = true;
     // Etat1 etatInitial = new Etat1();
-    // Agent agent1 = new Agent(etatInitial);
-    // Agent agent2 = new Agent(etatInitial);
-    // Agent agent3 = new Agent(etatInitial);
+    // OCE.Agent agent1 = new OCE.Agent(etatInitial);
+    // OCE.Agent agent2 = new OCE.Agent(etatInitial);
+    // OCE.Agent agent3 = new OCE.Agent(etatInitial);
 
     public StrategieClassique(List<Agent> listAgents, List<OrdonnanceurListener> listListenerActuels) {
         listOrdonnancement = listAgents;
@@ -35,7 +35,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
 /*	@Override
 	public void ordonnancer() {
 		run = true;
-		Agent agentCourant;
+		OCE.Agent agentCourant;
 		while (run) {
 			agentCourant = listOrdonnancement.get(0);
 			LifeCyrcle(agentCourant.getReferenceAgent(), agentCourant.getEtatInitial());
@@ -57,7 +57,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
         while (i < 18) {
             agentCourant = listOrdonnancement.get(0);
             //LifeCyrcle(agentCourant.getReferenceAgent(), agentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
-            agentCourant.changerEtat(); // walid : On actionne le changment d'etat de l'agent
+            agentCourant.run(); // walid : On actionne le changment d'etat de l'agent
             listOrdonnancement.remove(agentCourant);
             listOrdonnancement.add(agentCourant);
 

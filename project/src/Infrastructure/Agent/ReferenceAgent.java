@@ -32,7 +32,7 @@ public class ReferenceAgent {
 
     @Override
     public String toString() {
-        return "Agent{" +
+        return "OCE.Agent{" +
                 "reference=" + referenceInterne;
     }
 }
