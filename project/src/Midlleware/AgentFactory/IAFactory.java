@@ -4,6 +4,7 @@
 
 package Midlleware.AgentFactory;
 
+import Environment.OCPlateforme.OCService;
 import OCE.BinderAgent;
 import OCE.ServiceAgent;
 
@@ -18,7 +19,7 @@ public interface IAFactory {
      * Create an agent attached to a service
      * @return the service agent created
      */
-    ServiceAgent createServiceAgent();
+    ServiceAgent createServiceAgent(OCService attachedService);
 
     /**
      * Create a binding agent

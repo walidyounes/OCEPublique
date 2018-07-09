@@ -18,20 +18,20 @@ public class DecisionState implements IEtat {
     }
 
     @Override
-    public void executer(LifeCyrcle c) {
+    public void execute(LifeCyrcle c) {
 
     }
 
     /**
-     *
-     * @param nextState
+     *set the next state to go to from this state
+     * @param nextState : the next state in the cyrcle
      */
     public void setNextState(IEtat nextState) {
         this.nextState = nextState;
     }
 
     /**
-     *
+     * set the strategy of decision, each agent can have a different way to decide
      * @param myWayOfDecision
      */
     public void setMyWayOfDecision(IDecisionState myWayOfDecision) {

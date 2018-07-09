@@ -18,13 +18,13 @@ public class Agent {
     private LifeCyrcle lifeCyrcle;
     private OCService handledService;
 
-    public Agent(IEtat initialState, OCService handledService) {
+    public Agent(OCService handledService, LifeCyrcle lifeCyrcle) {
         // Create a unique ID for the Agent
         this.referenceAgent = new ReferenceAgent();
         //Attach the service to handle by this agent
         this.handledService = handledService;
         //Create the life cyrcle of the agent
-        this.lifeCyrcle = new LifeCyrcle(initialState, this.referenceAgent);
+        this.lifeCyrcle = lifeCyrcle;
     }
 
     /**

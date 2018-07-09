@@ -4,11 +4,13 @@
 
 package Infrastructure.Fabrique;
 
-import Infrastructure.Agent.ReferenceAgent;
+import Environment.OCPlateforme.OCService;
+import Infrastructure.Agent.Agent;
 import Infrastructure.Etat.IEtat;
+import Infrastructure.Etat.LifeCyrcle;
 
 public interface ICreationAgent {
 
-    ReferenceAgent creer(IEtat etatInit);
+    Agent creer(OCService attachedService, LifeCyrcle lifeCyrcle);
 
 }

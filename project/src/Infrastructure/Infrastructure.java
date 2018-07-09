@@ -4,6 +4,7 @@
 
 package Infrastructure;
 
+import Environment.OCPlateforme.OCService;
 import Infrastructure.Agent.Agent;
 import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Annuaire.Annuaire;
@@ -11,6 +12,7 @@ import Infrastructure.Annuaire.IAnnuaire;
 import Infrastructure.Communication.ICommunication;
 import Infrastructure.Communication.IMessageAgent;
 import Infrastructure.Etat.IEtat;
+import Infrastructure.Etat.LifeCyrcle;
 import Infrastructure.Fabrique.Fabrique;
 import Infrastructure.Fabrique.ICreationAgent;
 import Infrastructure.Fabrique.ISuicideService;
@@ -22,10 +24,6 @@ import java.util.Optional;
 
 
 /**
- * Modified by Sondes
- *
- * @author Lenovo
- * <p>
  * Infrastructure fournit le service ICreationAgent(création d'un agent)
  */
 public class Infrastructure implements ICreationAgent, ISuicideService, ICommunication, IOrdonnanceur {
@@ -75,13 +73,11 @@ public class Infrastructure implements ICreationAgent, ISuicideService, ICommuni
     */
     @Override
     public void diffuserMessage(IMessageAgent message) {
-        //ToDo : check if this work; --> it's working
         annuaire.diffuserMessage(message);
     }
 
     @Override
     public void envoyerMessage(IMessageAgent message) {
-        //ToDo : check if this work; --> it's working
         annuaire.envoyerMessage(message);
     }
 
@@ -96,10 +92,10 @@ public class Infrastructure implements ICreationAgent, ISuicideService, ICommuni
     }
 
     @Override
-    public ReferenceAgent creer(IEtat etatInit) {
-        ReferenceAgent ref = fabrique.creer(etatInit);
+    public Agent creer(OCService attachedService, LifeCyrcle lifeCyrcle) {
+        Agent agent = fabrique.creer(attachedService, lifeCyrcle);
         // ordonnanceur.OrdagentAjoute(agent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'ordonnanceur se fait par fabrique
-        return ref;
+        return agent;
     }
 
     public IAnnuaire getAnnuaire() {

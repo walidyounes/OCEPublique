@@ -4,10 +4,12 @@
 
 package Infrastructure.Fabrique;
 
+import Environment.OCPlateforme.OCService;
 import Infrastructure.Agent.Agent;
 import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Annuaire.IAnnuaire;
 import Infrastructure.Etat.IEtat;
+import Infrastructure.Etat.LifeCyrcle;
 import Infrastructure.Ordonnanceur.Ordonnanceur;
 
 public class Fabrique implements ICreationAgent, ISuicideService {
@@ -20,11 +22,11 @@ public class Fabrique implements ICreationAgent, ISuicideService {
     }
 
     @Override
-    public ReferenceAgent creer(IEtat etatInit) {
-        Agent agent = new Agent(etatInit);
+    public Agent creer(OCService attachedService, LifeCyrcle lifeCyrcle) {
+        Agent agent = new Agent(attachedService, lifeCyrcle);
         annuaire.addAgent(agent);
         ordonnanceur.ordagentAjoute(agent);
-        return agent.getReferenceAgent();
+        return agent;
     }
 
     @Override

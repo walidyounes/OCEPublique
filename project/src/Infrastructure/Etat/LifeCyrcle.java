@@ -20,16 +20,13 @@ import java.util.Map;
  */
 public class LifeCyrcle {
     private IEtat currentState;
-    private ReferenceAgent refAgent; // La référence de l'agent possédant le cycle
     private Map<String, ArrayList> sharedMemorie;
 
     /**
      * Constructor of the class
      * @param initialState : the first state of the cycle
-     * @param refAgent : the reference of the
      */
-    public LifeCyrcle(IEtat initialState, ReferenceAgent refAgent) {
-        this.refAgent = refAgent;
+    public LifeCyrcle(IEtat initialState) {
         this.currentState = initialState;
         this.sharedMemorie = new HashMap<>();
     }

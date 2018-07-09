@@ -4,12 +4,10 @@
 
 package OCE;
 
-import Logger.MyLogger;
+import Infrastructure.Agent.Agent;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
-
-import java.util.logging.Level;
 
 /**
  * This class implement the agent responsable of a physical service
@@ -17,30 +15,56 @@ import java.util.logging.Level;
  * @version 1.0
  */
 
-public class ServiceAgent implements IPerceptionState, IDecisionState, IActionState {
+public class ServiceAgent  {
+    IPerceptionState myWayOfPerception;
+    IDecisionState myWayOfDecision;
+    IActionState myWayOfAction;
+    Agent myAssociatedAgent;
 
-    /**
-     * Implement the perception process of the agent, which consist in reading the received messages
-     */
-    @Override
-    public void percept() {
-        MyLogger.log(Level.CONFIG, "The service agent is percepting the envirnment !");
+    public ServiceAgent(IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
+        this.myWayOfPerception = myWayOfPerception;
+        this.myWayOfDecision = myWayOfDecision;
+        this.myWayOfAction = myWayOfAction;
+        this.myAssociatedAgent = null;
     }
 
     /**
-     *  Impelment the decision mechanisme of the binder agent, and produce a list of decisions
+     * set the perception mechanism of this agent
+     * @param myWayOfPerception the perception mechanism
      */
-    @Override
-    public void decide() {
-        MyLogger.log(Level.CONFIG, "The service agent is making decisions !");
+    public void setMyWayOfPerception(IPerceptionState myWayOfPerception) {
+        this.myWayOfPerception = myWayOfPerception;
     }
 
     /**
-     * Execute the taken decisions and affect the environement acordingly
+     * set the decision mechanism of the agent
+     * @param myWayOfDecision  the decision mechanism
      */
-    @Override
-    public void act() {
-        MyLogger.log(Level.CONFIG, "The service agent is acting upon the environment !");
+    public void setMyWayOfDecision(IDecisionState myWayOfDecision) {
+        this.myWayOfDecision = myWayOfDecision;
     }
 
+    /**
+     * set the action mechanism of the agent
+     * @param myWayOfAction the action mechanism
+     */
+    public void setMyWayOfAction(IActionState myWayOfAction) {
+        this.myWayOfAction = myWayOfAction;
+    }
+
+    /**
+     * set the agent (in the infrastructure) which is associated to this service agent
+     * @param myAssociatedAgent : the associated agent
+     */
+    public void setMyAssociatedAgent(Agent myAssociatedAgent) {
+        this.myAssociatedAgent = myAssociatedAgent;
+    }
+
+    /**
+     * get the associated agent (un the infrastructure) to this serviceAgent
+     * @return the associated agent
+     */
+    public Agent getMyAssociatedAgent() {
+        return myAssociatedAgent;
+    }
 }

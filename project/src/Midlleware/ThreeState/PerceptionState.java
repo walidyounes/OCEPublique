@@ -18,7 +18,7 @@ public class PerceptionState implements IEtat{
     }
 
     @Override
-    public void executer(LifeCyrcle c) {
+    public void execute(LifeCyrcle c) {
 
     }
 
