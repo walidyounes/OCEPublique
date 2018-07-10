@@ -7,7 +7,7 @@ package Infrastructure.Annuaire;
 import Infrastructure.Agent.Agent;
 import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Communication.ICommunication;
-import Infrastructure.Communication.IMessageAgent;
+import Infrastructure.Communication.IMessage;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -25,7 +25,7 @@ public interface IAnnuaire extends ICommunication, IGestionAgent {
 
     List<IMessageAgentListener> getMessageAgentListeners();
 
-    ConcurrentMap<ReferenceAgent, ConcurrentLinkedQueue<IMessageAgent>> getAgentsMessagesQueues();
+    ConcurrentMap<ReferenceAgent, ConcurrentLinkedQueue<IMessage>> getAgentsMessagesQueues();
 
     ConcurrentMap<ReferenceAgent, Agent> getAgents();
 

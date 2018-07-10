@@ -8,7 +8,7 @@ import Infrastructure.Agent.ReferenceAgent;
 
 import java.util.ArrayList;
 
-public interface IMessageAgent {
+public interface IMessage {
 
     ReferenceAgent getExpediteur();
 

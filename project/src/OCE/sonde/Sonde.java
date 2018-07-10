@@ -15,26 +15,25 @@ import java.util.TimerTask;
 
 //ToDo 1 verifier l'imp de thread class Sonde implements runnable?
 //ToDo 2 Revoir la construction du composant Sonde
+
+/**
+ * This class is used to probe the environment for new components that appear and components that have disappeared
+ * @author Walid YOUNES
+ * @version 1.0
+ */
 public class Sonde {
 
-    // Composants de Sonde
     private ComponentManager componentsManager;
-    private long periodicity; // the periodicity of the souding of the environement
+    private long periodicity; // the periodicity of the task of souding the environement
 
-    // Services requis par la Sonde
-    private IAcquisition acquisition;
-    private IEnregistrement enregistrement;
-    private IAFactory fabriqueMAgent;
 
     public Sonde(IAcquisition acquisition, IEnregistrement enregistrement, IAFactory agentFactory, long periodicity) {
         // super(); // Todo : walid : Pourquoi appeler le constructeur de la classe mère alors qu'il n'ya pas un extend !!!!
         this.periodicity = periodicity;
-        this.enregistrement = enregistrement;
-        this.acquisition = acquisition;
-        this.fabriqueMAgent = agentFactory;
+        // Instanciation of the serviceManager
         ServiceManager serviceManager = new ServiceManager(agentFactory, enregistrement);
-        componentsManager = new ComponentManager(serviceManager, acquisition);
-
+        //Instanciation of the ccomponentManager
+        this.componentsManager = new ComponentManager(serviceManager, acquisition);
     }
 
     class ScheduledSounding extends TimerTask {
@@ -64,6 +63,17 @@ public class Sonde {
         }
     };
 
+    /**
+     * Change the value of the periodicity of the sounding
+     * @param periodicity : the new periodicity value
+     */
+    public void setPeriodicity(long periodicity) {
+        this.periodicity = periodicity;
+    }
+
+    /**
+     * Run the thread responsible of sounding the environement
+     */
     public void run() {
         t.start();
     }

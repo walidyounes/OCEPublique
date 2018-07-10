@@ -6,8 +6,7 @@ package Infrastructure.Annuaire;
 
 import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Agent.Agent;
-import Infrastructure.Agent.ReferenceAgent;
-import Infrastructure.Communication.IMessageAgent;
+import Infrastructure.Communication.IMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +25,7 @@ public class Annuaire implements IAnnuaire {
     private List<IReferenceAgentListener> referenceAgentListeners;
     private List<IMessageAgentListener> messageAgentListeners;
     private ConcurrentMap<ReferenceAgent, Agent> agents; // contient les references des agents à l'instant t
-    private ConcurrentMap<ReferenceAgent, ConcurrentLinkedQueue<IMessageAgent>> agentsMessagesQueues; // contient les references des agents associés aux messages reçus
+    private ConcurrentMap<ReferenceAgent, ConcurrentLinkedQueue<IMessage>> agentsMessagesQueues; // contient les references des agents associés aux messages reçus
     private ConcurrentMap<ReferenceAgent, ReadWriteLock> agentsLocks;
 
     /**
@@ -86,25 +85,25 @@ public class Annuaire implements IAnnuaire {
     }
 
     /*	@Override
-        public void envoyerMessage(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessageAgent IMessageAgent) {
+        public void envoyerMessage(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessage IMessage) {
 
             lockAgentLecture(destinataire);
             if (agentsMessagesQueues.containsKey(destinataire)) {
-                agentsMessagesQueues.get(destinataire).add(IMessageAgent);
+                agentsMessagesQueues.get(destinataire).add(IMessage);
                 messageAgentListeners.forEach(messageAgentListener -> messageAgentListener.messageEnvoye(expediteur,
-                        destinataire, IMessageAgent));
+                        destinataire, IMessage));
             }
             unlockAgentLecture(destinataire);
 
             System.out.println("liste envoyerMessage" + getAgentsMessagesQueues()); // Trace
         }
     */
-    public ConcurrentMap<ReferenceAgent, ConcurrentLinkedQueue<IMessageAgent>> getAgentsMessagesQueues() {
+    public ConcurrentMap<ReferenceAgent, ConcurrentLinkedQueue<IMessage>> getAgentsMessagesQueues() {
         return agentsMessagesQueues;
     }
 
     @Override
-    public void envoyerMessage(IMessageAgent message) {
+    public void envoyerMessage(IMessage message) {
 
         lockAgentLecture(message.getDestinataires().get(0));
         if (agentsMessagesQueues.containsKey(message.getDestinataires().get(0))) {
@@ -118,12 +117,12 @@ public class Annuaire implements IAnnuaire {
     }
 
     /*@Override
-    public void diffuserMessage(ReferenceAgent expediteur, IMessageAgent IMessageAgent) {
+    public void diffuserMessage(ReferenceAgent expediteur, IMessage IMessage) {
 
         agentsMessagesQueues.keySet().forEach(this::lockAgentLecture);
         agentsMessagesQueues.entrySet().forEach(referenceAgentEntry -> {
-            referenceAgentEntry.getValue().add(IMessageAgent);
-            notifierMessageAgentListeners(expediteur, IMessageAgent, referenceAgentEntry.getKey());
+            referenceAgentEntry.getValue().add(IMessage);
+            notifierMessageAgentListeners(expediteur, IMessage, referenceAgentEntry.getKey());
         });
         agentsMessagesQueues.keySet().forEach(this::unlockAgentLecture);
 
@@ -131,7 +130,7 @@ public class Annuaire implements IAnnuaire {
     }
 */
     @Override
-    public void diffuserMessage(IMessageAgent message) {
+    public void diffuserMessage(IMessage message) {
         agentsMessagesQueues.keySet().forEach(this::lockAgentLecture);
         agentsMessagesQueues.entrySet().forEach(referenceAgentEntry -> {
             referenceAgentEntry.getValue().add(message);
@@ -142,17 +141,17 @@ public class Annuaire implements IAnnuaire {
         // System.out.println("liste diffuserMessage" + getAgentsMessagesQueues()); // tarce
     }
 
-    private void notifierMessageAgentListeners(ReferenceAgent expediteur, IMessageAgent IMessageAgent,
+    private void notifierMessageAgentListeners(ReferenceAgent expediteur, IMessage IMessage,
                                                ReferenceAgent referenceAgent) {
         messageAgentListeners.forEach(
-                messageAgentListener -> messageAgentListener.messageEnvoye(expediteur, referenceAgent, IMessageAgent));
+                messageAgentListener -> messageAgentListener.messageEnvoye(expediteur, referenceAgent, IMessage));
     }
 
 
     @Override
-    public Optional<IMessageAgent> recevoirMessage(ReferenceAgent destinataire) {
+    public Optional<IMessage> recevoirMessage(ReferenceAgent destinataire) {
         lockAgentLecture(destinataire);
-        Optional<IMessageAgent> message = Optional.ofNullable(agentsMessagesQueues.get(destinataire))
+        Optional<IMessage> message = Optional.ofNullable(agentsMessagesQueues.get(destinataire))
                 .map(ConcurrentLinkedQueue::poll);
         message.ifPresent(messageAgent -> notifierMessageAgentListeners(messageAgent.getExpediteur(), messageAgent,
                 destinataire));
@@ -161,9 +160,9 @@ public class Annuaire implements IAnnuaire {
     }
 
     @Override
-    public List<IMessageAgent> recevoirMessages(ReferenceAgent destinataire) {
+    public List<IMessage> recevoirMessages(ReferenceAgent destinataire) {
         //lockAgentLecture(destinataire);
-        //Optional<IMessageAgent> message = Optional.ofNullable()
+        //Optional<IMessage> message = Optional.ofNullable()
         //		.map(ConcurrentLinkedQueue::poll);
         //message.ifPresent(messageAgent -> notifierMessageAgentListeners(messageAgent.getExpediteur(), messageAgent,
         //		destinataire));

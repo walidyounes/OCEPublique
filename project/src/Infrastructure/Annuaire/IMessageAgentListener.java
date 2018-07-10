@@ -5,11 +5,11 @@
 package Infrastructure.Annuaire;
 
 import Infrastructure.Agent.ReferenceAgent;
-import Infrastructure.Communication.IMessageAgent;
+import Infrastructure.Communication.IMessage;
 
 public interface IMessageAgentListener {
 
-    void messageEnvoye(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessageAgent IMessageAgent);
+    void messageEnvoye(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessage IMessage);
 
-    void messageRecu(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessageAgent IMessageAgent);
+    void messageRecu(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessage IMessage);
 }

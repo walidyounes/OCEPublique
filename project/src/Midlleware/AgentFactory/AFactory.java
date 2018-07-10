@@ -35,7 +35,7 @@ public class AFactory implements IAFactory {
         IDecisionState myWayOfDecision = new DecisionAgentService();
         IActionState myWayOfAction = new ActionAgentService();
 
-        ServiceAgent serviceAgent = new ServiceAgent(myWayOfPerception, myWayOfDecision, myWayOfAction);
+        ServiceAgent serviceAgent = new ServiceAgent(attachedService, myWayOfPerception, myWayOfDecision, myWayOfAction);
 
         //Create the cyrcle : perception -> decision -> action
         PerceptionState perceptionState = new PerceptionState(null,myWayOfPerception );

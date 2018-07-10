@@ -10,16 +10,16 @@ import java.util.Optional;
 
 public interface ICommunication {
 
-    // void envoyerMessage(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessageAgent IMessageAgent); // pourquoi on passe de l'expediteur alors qu'il est ds le msg
+    // void envoyerMessage(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessage IMessage); // pourquoi on passe de l'expediteur alors qu'il est ds le msg
 
-    // void diffuserMessage(ReferenceAgent expediteur, IMessageAgent IMessageAgent);// pourquoi on passe de l'expediteur alors qu'il est ds le msg
+    // void diffuserMessage(ReferenceAgent expediteur, IMessage IMessage);// pourquoi on passe de l'expediteur alors qu'il est ds le msg
 
     /**
      * sends a message from one agent to other agents
      *
      * @param message the message to be sent
      */
-    void diffuserMessage(IMessageAgent message);
+    void diffuserMessage(IMessage message);
 
     /**
      * sends a message from one agent to another
@@ -27,7 +27,7 @@ public interface ICommunication {
      * @param message the message to be sent
      */
 
-    void envoyerMessage(IMessageAgent message);
+    void envoyerMessage(IMessage message);
 
     /**
      * allows an agent to receive One message
@@ -35,7 +35,7 @@ public interface ICommunication {
      * @param destinataire the recipient of the messages
      * @return The message received
      */
-    Optional<IMessageAgent> recevoirMessage(ReferenceAgent destinataire);
+    Optional<IMessage> recevoirMessage(ReferenceAgent destinataire);
 
     /**
      * allows an agent to receive a list of messages
@@ -43,6 +43,6 @@ public interface ICommunication {
      * @param destinataire the recipient of the messages
      * @return list of messages received
      */
-    List<IMessageAgent> recevoirMessages(ReferenceAgent destinataire);
+    List<IMessage> recevoirMessages(ReferenceAgent destinataire);
 
 }

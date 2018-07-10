@@ -4,6 +4,7 @@
 
 package OCE;
 
+import Environment.OCPlateforme.OCService;
 import Infrastructure.Agent.Agent;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
@@ -16,16 +17,36 @@ import Midlleware.ThreeState.IPerceptionState;
  */
 
 public class ServiceAgent  {
-    IPerceptionState myWayOfPerception;
-    IDecisionState myWayOfDecision;
-    IActionState myWayOfAction;
-    Agent myAssociatedAgent;
+    private IDAgent myID;
+    private IPerceptionState myWayOfPerception;
+    private IDecisionState myWayOfDecision;
+    private IActionState myWayOfAction;
+    private OCService handledService;
+    private Agent myAssociatedAgent;
 
-    public ServiceAgent(IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
+    public ServiceAgent(OCService handledService, IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
+        this.myID = new IDAgent();
+        this.handledService = handledService;
         this.myWayOfPerception = myWayOfPerception;
         this.myWayOfDecision = myWayOfDecision;
         this.myWayOfAction = myWayOfAction;
         this.myAssociatedAgent = null;
+    }
+
+    /**
+     * Get the unique identifier of this agent
+     * @return the ID of this Agent
+     */
+    public IDAgent getMyID() {
+        return myID;
+    }
+
+    /**
+     * get the service handled by the agent
+     * @return the handled service
+     */
+    public OCService getHandledService() {
+        return handledService;
     }
 
     /**

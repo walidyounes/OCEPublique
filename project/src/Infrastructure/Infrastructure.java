@@ -10,8 +10,7 @@ import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Annuaire.Annuaire;
 import Infrastructure.Annuaire.IAnnuaire;
 import Infrastructure.Communication.ICommunication;
-import Infrastructure.Communication.IMessageAgent;
-import Infrastructure.Etat.IEtat;
+import Infrastructure.Communication.IMessage;
 import Infrastructure.Etat.LifeCyrcle;
 import Infrastructure.Fabrique.Fabrique;
 import Infrastructure.Fabrique.ICreationAgent;
@@ -63,31 +62,31 @@ public class Infrastructure implements ICreationAgent, ISuicideService, ICommuni
         return ordonnanceur.arreterOrdonnancement();
     }
 
-    /*	public void envoyerMessage(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessageAgent IMessageAgent) {
-            annuaire.envoyerMessage(expediteur, destinataire, IMessageAgent);
+    /*	public void envoyerMessage(ReferenceAgent expediteur, ReferenceAgent destinataire, IMessage IMessage) {
+            annuaire.envoyerMessage(expediteur, destinataire, IMessage);
         }
 
-        public void diffuserMessage(ReferenceAgent expediteur, IMessageAgent IMessageAgent) {
-            annuaire.diffuserMessage(expediteur, IMessageAgent);
+        public void diffuserMessage(ReferenceAgent expediteur, IMessage IMessage) {
+            annuaire.diffuserMessage(expediteur, IMessage);
         }
     */
     @Override
-    public void diffuserMessage(IMessageAgent message) {
+    public void diffuserMessage(IMessage message) {
         annuaire.diffuserMessage(message);
     }
 
     @Override
-    public void envoyerMessage(IMessageAgent message) {
+    public void envoyerMessage(IMessage message) {
         annuaire.envoyerMessage(message);
     }
 
     @Override
-    public Optional<IMessageAgent> recevoirMessage(ReferenceAgent destinataire) {
+    public Optional<IMessage> recevoirMessage(ReferenceAgent destinataire) {
         return annuaire.recevoirMessage(destinataire);
     }
 
     @Override
-    public List<IMessageAgent> recevoirMessages(ReferenceAgent destinataire) {
+    public List<IMessage> recevoirMessages(ReferenceAgent destinataire) {
         return annuaire.recevoirMessages(destinataire);
     }
 

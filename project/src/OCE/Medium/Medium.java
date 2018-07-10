@@ -4,46 +4,89 @@
 
 package OCE.Medium;
 
-
-import Environment.OCPlateforme.OCService;
 import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Communication.ICommunication;
-import OCE.Medium.composants.Mediator;
-import OCE.Medium.composants.MessageReceiver;
-import OCE.Medium.composants.MessageSender;
-import OCE.Medium.composants.Record;
-import OCE.Medium.services.IAcheminement;
-import OCE.Medium.services.IEnregistrement;
-import OCE.Unifieur.services.IMatching;
+import Infrastructure.Communication.IMessage;
+import OCE.Medium.Communication.CommunicationAdapterAdapter;
+import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.Medium.Recorder.IRecord;
+import OCE.Medium.Recorder.Record;
+import OCE.ServiceAgent;
 
-public class Medium implements IEnregistrement, IAcheminement {
+import java.util.ArrayList;
+import java.util.Optional;
 
-    private MessageSender messageSender;
-    private MessageReceiver messageReceiver;
-    private Mediator mediator;
-    private Record record;
+public class Medium implements IRecord, ICommunicationAdapter {
 
-    public Medium(ICommunication communication, IMatching matching) {
-        record = new Record();
-        messageSender = new MessageSender();
-        mediator = new Mediator(record, messageSender);
-        messageReceiver = new MessageReceiver(mediator);
-        messageSender.setMatching(matching);
-        messageSender.setCommunication(communication); // binding requis de messageSender avec fourni d'infrastructure
+    private IRecord myRecorder;
+    private ICommunicationAdapter mycomunnicationAdapter;
+
+    public Medium(ICommunication communicationInfrastructure) {
+        //Intanciate the recorder
+        this.myRecorder = new Record();
+        //Instanciate the communication adapter with the communication module from the infrastructure
+        this.mycomunnicationAdapter = new CommunicationAdapterAdapter(communicationInfrastructure);
     }
 
-
-    public void addAgent(ReferenceAgent agent, OCService service) {
-        record.addAgent(agent, service);
+    /**
+     * sends a message from one agent to all the other agents in broadcast
+     *
+     * @param message the message to be sent
+     */
+    @Override
+    public void sendMessageBroadcast(IMessage message) {
+        this.mycomunnicationAdapter.sendMessageBroadcast(message);
     }
 
-    public void removeAgent(ReferenceAgent agent) {
-        record.removeAgent(agent);
+    /**
+     * sends a message from one agent to another
+     *
+     * @param message the message to be sent
+     */
+    @Override
+    public void sendMessage(IMessage message) {
+        this.mycomunnicationAdapter.sendMessage(message);
     }
 
-    public Record getRecord() {
-
-        return record;
+    /**
+     * allows an agent to receive One message (the first in it's mail box)
+     *
+     * @param receiver the receiver of the messages
+     * @return The message received
+     */
+    @Override
+    public Optional<IMessage> receiveMessage(ServiceAgent receiver) {
+        return this.mycomunnicationAdapter.receiveMessage(receiver);
     }
 
+    /**
+     * allows an agent to retreive all the messages sented to it
+     *
+     * @param receiver the recipient of the messages
+     * @return list of messages received
+     */
+    @Override
+    public ArrayList<IMessage> receiveMessages(ServiceAgent receiver) {
+        return this.mycomunnicationAdapter.receiveMessages(receiver);
+    }
+
+    /**
+     * Register in the recording list the mapping between a serviceAgent and it's associated referenceAgent
+     * @param serviceAgent : the serviceAgent
+     * @param agentReference : the agent's Reference in the infrastructure which is associated to the serviceAgent
+     */
+    @Override
+    public void registerServiceAgent(ServiceAgent serviceAgent, ReferenceAgent agentReference) {
+        this.myRecorder.registerServiceAgent(serviceAgent, agentReference);
+    }
+
+    /**
+     * Unregister from the recording list the mapping between a serviceAgent and it's associated referenceAgent
+     * @param serviceAgent : the serviceAgent
+     *
+     */
+    @Override
+    public void unregisterServiceAgent(ServiceAgent serviceAgent) {
+        this.myRecorder.unregisterServiceAgent(serviceAgent);
+    }
 }
