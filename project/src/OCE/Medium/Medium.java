@@ -4,6 +4,7 @@
 
 package OCE.Medium;
 
+import Environment.OCPlateforme.OCService;
 import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Communication.ICommunication;
 import Infrastructure.Communication.IMessage;
@@ -25,7 +26,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
         //Intanciate the recorder
         this.myRecorder = new Record();
         //Instanciate the communication adapter with the communication module from the infrastructure
-        this.mycomunnicationAdapter = new CommunicationAdapterAdapter(communicationInfrastructure);
+        this.mycomunnicationAdapter = new CommunicationAdapterAdapter(communicationInfrastructure, myRecorder);
     }
 
     /**
@@ -88,5 +89,15 @@ public class Medium implements IRecord, ICommunicationAdapter {
     @Override
     public void unregisterServiceAgent(ServiceAgent serviceAgent) {
         this.myRecorder.unregisterServiceAgent(serviceAgent);
+    }
+
+    /**
+     * Retrieve and return the ServiceAgent which is attached to the physical service
+     * @param attachedService : the physical service
+     * @return the agent which is attached to it
+     */
+    @Override
+    public ServiceAgent retrieveSAgentByPService(OCService attachedService) {
+        return this.myRecorder.retrieveSAgentByPService(attachedService);
     }
 }

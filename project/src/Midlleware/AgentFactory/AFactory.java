@@ -6,10 +6,14 @@ package Midlleware.AgentFactory;
 
 import Environment.OCPlateforme.OCService;
 import Infrastructure.Agent.Agent;
+import Infrastructure.Agent.ReferenceAgent;
 import Infrastructure.Etat.LifeCyrcle;
 import Infrastructure.Infrastructure;
 import Midlleware.ThreeState.*;
 import OCE.*;
+
+import java.util.AbstractMap;
+import java.util.Map;
 
 /**
  * Agent Factory implementation : implements the functions in the IAFactory Interface to create different type of agent
@@ -26,10 +30,10 @@ public class AFactory implements IAFactory {
 
     /**
      * create a service agent
-     * @return the service Agent created
+     * @return the association between service Agent created and the physical reference of the agent
      */
     @Override
-    public ServiceAgent createServiceAgent(OCService attachedService) {
+    public Map.Entry<ServiceAgent, ReferenceAgent> createServiceAgent(OCService attachedService) {
 
         IPerceptionState myWayOfPerception = new PerceptionAgent();
         IDecisionState myWayOfDecision = new DecisionAgentService();
@@ -49,7 +53,8 @@ public class AFactory implements IAFactory {
         // Assoicate the serviceAgent to the agent in the infrastructure
         serviceAgent.setMyAssociatedAgent(associatedAgent);
 
-        return serviceAgent;
+        AbstractMap.SimpleEntry agentS_referenceAgent_Association = new AbstractMap.SimpleEntry(serviceAgent, associatedAgent.getReferenceAgent());
+        return agentS_referenceAgent_Association;
     }
 
     /**

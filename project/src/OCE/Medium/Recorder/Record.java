@@ -4,6 +4,7 @@
 
 package OCE.Medium.Recorder;
 
+import Environment.OCPlateforme.OCService;
 import Infrastructure.Agent.ReferenceAgent;
 import OCE.ServiceAgent;
 
@@ -42,5 +43,15 @@ public class Record implements IRecord{
     @Override
     public void unregisterServiceAgent(ServiceAgent serviceAgent) {
 
+    }
+
+    /**
+     * Retrieve and return the ServiceAgent which is attached to the physical service
+     * @param attachedService : the physical service
+     * @return the agent which is attached to it
+     */
+    @Override
+    public ServiceAgent retrieveSAgentByPService(OCService attachedService) {
+        return null;
     }
 }

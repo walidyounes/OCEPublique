@@ -8,7 +8,7 @@ import Environment.OCPlateforme.OCService;
 import Infrastructure.Agent.ReferenceAgent;
 import Logger.MyLogger;
 import Midlleware.AgentFactory.IAFactory;
-import OCE.Medium.services.IEnregistrement;
+import OCE.Medium.Recorder.IRecord;
 import OCE.ServiceAgent;
 
 import java.util.ArrayList;
@@ -20,44 +20,40 @@ import java.util.logging.Level;
 public class ServiceManager implements INotification {
 
     private IAFactory agentFactory;
-    private IEnregistrement iEnregistrement;
+    private IRecord agentRecorder;
 
-    private Map<OCService, ServiceAgent> listRefAgent = new HashMap<>(); // TODO walid : ça sert à quoi ???
     private Map<ReferenceAgent, OCService> listAssocAgentServiceDisparus = new HashMap<>(); //  TODO walid : ça sert à quoi ???
 
-    public ServiceManager(IAFactory fabriqueMAgents, IEnregistrement enregistrement) {
-        this.agentFactory = fabriqueMAgents;
-        this.iEnregistrement = enregistrement;
+    public ServiceManager(IAFactory agentFactory, IRecord agentRecorder) {
+        this.agentFactory = agentFactory;
+        this.agentRecorder = agentRecorder;
     }
 
     public void appearingServices(ArrayList<OCService> appearingServicesList) {
         for (OCService service : appearingServicesList) {
 
             MyLogger.log(Level.INFO, " Creating the service agent associated to the service = " + service.toString());
-            ServiceAgent serviceAgent = agentFactory.createServiceAgent(service);
+            Map.Entry<ServiceAgent, ReferenceAgent> agentS_referenceAgent_Association = agentFactory.createServiceAgent(service);
 
-            listRefAgent.put(service, serviceAgent);
-            // Enregistrement de l'association agent/service dans le composant Record de Medium
-            iEnregistrement.addAgent(serviceAgent.getMyAssociatedAgent().getReferenceAgent(), service);
+            // Register the association between the ServiceAgent and it's reference in the infrastructure into the recording component of the medium
+            agentRecorder.registerServiceAgent(agentS_referenceAgent_Association.getKey(), agentS_referenceAgent_Association.getValue());
         }
     }
 
     public void disappearingServices(ArrayList<OCService> disappearingServicesList) {
         // for each disappearing service
         for (OCService service : disappearingServicesList) {
-            // tget the serviceagent associated to this service
-            ServiceAgent serviceAgent = listRefAgent.get(service);
+            MyLogger.log(Level.INFO, " The service = " + service.toString()+ " has disappeared !");
+            // tget the serviceAgent associated to this service
+            ServiceAgent serviceAgent = this.agentRecorder.retrieveSAgentByPService(service);
+            // Unregister the association between the ServiceAgent and it's reference in the infrastructure from the recording component of the medium
+            agentRecorder.unregisterServiceAgent(serviceAgent);
+
             // get the physical reference of the agent
-            ReferenceAgent refAgent = serviceAgent.getMyAssociatedAgent().getReferenceAgent();
-            // Remove the agent from the record of the componenent "Medium"
-            iEnregistrement.removeAgent(refAgent);
+            ReferenceAgent refAgent = serviceAgent.getMyAssociatedAgent().getReferenceAgent(); // Todo : check if it's useful now
             //Todo à voir ça sert à quoi
             listAssocAgentServiceDisparus.put(refAgent, service);
         }
-    }
-
-    public Map<OCService, ServiceAgent> getListRefAgent() {
-        return listRefAgent;
     }
 
    /* // voir à quoi sert cette méthode qui l'appelle --> walid : c'est la fonction lire message sonde de percevoir !!!!

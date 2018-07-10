@@ -8,7 +8,7 @@ package OCE.sonde;
 import Environment.FacadeAdapter.AcquisitionFailure;
 import Environment.FacadeAdapter.IAcquisition;
 import Midlleware.AgentFactory.IAFactory;
-import OCE.Medium.services.IEnregistrement;
+import OCE.Medium.Recorder.IRecord;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,11 +27,10 @@ public class Sonde {
     private long periodicity; // the periodicity of the task of souding the environement
 
 
-    public Sonde(IAcquisition acquisition, IEnregistrement enregistrement, IAFactory agentFactory, long periodicity) {
-        // super(); // Todo : walid : Pourquoi appeler le constructeur de la classe mère alors qu'il n'ya pas un extend !!!!
+    public Sonde(IAcquisition acquisition, IRecord agentRecorder, IAFactory agentFactory, long periodicity) {
         this.periodicity = periodicity;
         // Instanciation of the serviceManager
-        ServiceManager serviceManager = new ServiceManager(agentFactory, enregistrement);
+        ServiceManager serviceManager = new ServiceManager(agentFactory, agentRecorder);
         //Instanciation of the ccomponentManager
         this.componentsManager = new ComponentManager(serviceManager, acquisition);
     }
