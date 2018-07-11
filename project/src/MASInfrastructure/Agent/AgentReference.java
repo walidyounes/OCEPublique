@@ -2,15 +2,15 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE;
+package MASInfrastructure.Agent;
 
 import java.util.UUID;
 
-public class IDAgent {
-    private final UUID internalReference;
+public class AgentReference {
+    private final UUID referenceInterne;
 
-    public IDAgent() {
-        internalReference = UUID.randomUUID();
+    public AgentReference() {
+        referenceInterne = UUID.randomUUID();
     }
 
     @Override
@@ -20,19 +20,19 @@ public class IDAgent {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        IDAgent that = (IDAgent) o;
+        AgentReference that = (AgentReference) o;
 
-        return internalReference.equals(that.internalReference);
+        return referenceInterne.equals(that.referenceInterne);
     }
 
     @Override
     public int hashCode() {
-        return internalReference.hashCode();
+        return referenceInterne.hashCode();
     }
 
     @Override
     public String toString() {
         return "OCE.Agent{" +
-                "ID=" + internalReference;
+                "reference=" + referenceInterne;
     }
 }

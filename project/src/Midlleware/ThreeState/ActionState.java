@@ -4,8 +4,8 @@
 
 package Midlleware.ThreeState;
 
-import Infrastructure.Etat.IEtat;
-import Infrastructure.Etat.LifeCyrcle;
+import MASInfrastructure.Etat.IEtat;
+import MASInfrastructure.Etat.LifeCycle;
 
 public class ActionState implements IEtat {
 
@@ -18,13 +18,13 @@ public class ActionState implements IEtat {
     }
 
     @Override
-    public void execute(LifeCyrcle c) {
+    public void execute(LifeCycle c) {
 
     }
 
     /**
-     *
-     * @param nextState
+     * change the current state of the cycle
+     * @param nextState the next state in the cycle
      */
     public void setNextState(IEtat nextState) {
         this.nextState = nextState;
@@ -32,7 +32,7 @@ public class ActionState implements IEtat {
 
     /**
      * set the strategy of action, each agent can have a different way to act upon the environment
-     * @param myWayOfAction
+     * @param myWayOfAction the way that the agent act
      */
     public void setMyWayOfAction(IActionState myWayOfAction) {
         this.myWayOfAction = myWayOfAction;

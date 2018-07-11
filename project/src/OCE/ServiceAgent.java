@@ -4,8 +4,8 @@
 
 package OCE;
 
-import Environment.OCPlateforme.OCService;
-import Infrastructure.Agent.Agent;
+import AmbientEnvironment.OCPlateforme.OCService;
+import MASInfrastructure.Agent.Agent;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
@@ -87,5 +87,20 @@ public class ServiceAgent  {
      */
     public Agent getMyAssociatedAgent() {
         return myAssociatedAgent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServiceAgent)) return false;
+
+        ServiceAgent that = (ServiceAgent) o;
+
+        return myID.equals(that.myID);
+    }
+
+    @Override
+    public int hashCode() {
+        return myID.hashCode();
     }
 }

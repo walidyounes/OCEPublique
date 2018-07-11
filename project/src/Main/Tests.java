@@ -4,26 +4,26 @@
 
 package Main;
 
-import Environment.MockupFacadeAdapter.MockupFacadeAdapter;
-import Infrastructure.Infrastructure;
+import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
+import MASInfrastructure.Infrastructure;
 import Logger.MyLogger;
-import Midlleware.AgentFactory.AFactory;
-import Midlleware.AgentFactory.IAFactory;
+import Midlleware.AgentFactory.AgentFactory;
+import Midlleware.AgentFactory.IAgentFactory;
+import OCE.Medium.Medium;
 import OCE.ServiceAgent;
-
-import javax.xml.ws.Service;
+import OCE.Unifieur.Composants.Matching;
 
 public class Tests {
 
     public static void main(){
 
         Infrastructure infrastructure = new Infrastructure();
-        IAFactory factoryAgent = new AFactory(infrastructure);
+        IAgentFactory factoryAgent = new AgentFactory(infrastructure);
 
         MockupFacadeAdapter mockupFacadeAdapter = new MockupFacadeAdapter();
 
         Matching alwaysTrueMatching = new Matching();
-        Medium medium = new Medium(infrastructure, alwaysTrueMatching);
+        Medium medium = new Medium(infrastructure);
         // LogComp logger = new LogComp(); // Lot Log
         //Walid
 
@@ -31,6 +31,6 @@ public class Tests {
         MyLogger logger = new MyLogger(); // Pas la peine d'instancier
         logger.init();
 
-        ServiceAgent myServiceAgent = factoryAgent.createServiceAgent();
+         // ServiceAgent myServiceAgent = factoryAgent.createServiceAgent();
     }
 }

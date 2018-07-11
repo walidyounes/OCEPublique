@@ -4,8 +4,8 @@
 
 package Midlleware.ThreeState;
 
-import Infrastructure.Etat.IEtat;
-import Infrastructure.Etat.LifeCyrcle;
+import MASInfrastructure.Etat.IEtat;
+import MASInfrastructure.Etat.LifeCycle;
 
 public class DecisionState implements IEtat {
 
@@ -18,7 +18,7 @@ public class DecisionState implements IEtat {
     }
 
     @Override
-    public void execute(LifeCyrcle c) {
+    public void execute(LifeCycle c) {
 
     }
 
@@ -32,7 +32,7 @@ public class DecisionState implements IEtat {
 
     /**
      * set the strategy of decision, each agent can have a different way to decide
-     * @param myWayOfDecision
+     * @param myWayOfDecision : the way that the agent decide
      */
     public void setMyWayOfDecision(IDecisionState myWayOfDecision) {
         this.myWayOfDecision = myWayOfDecision;

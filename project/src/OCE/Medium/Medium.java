@@ -4,11 +4,11 @@
 
 package OCE.Medium;
 
-import Environment.OCPlateforme.OCService;
-import Infrastructure.Agent.ReferenceAgent;
-import Infrastructure.Communication.ICommunication;
-import Infrastructure.Communication.IMessage;
-import OCE.Medium.Communication.CommunicationAdapterAdapter;
+import AmbientEnvironment.OCPlateforme.OCService;
+import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Communication.ICommunication;
+import MASInfrastructure.Communication.IMessage;
+import OCE.Medium.Communication.CommunicationAdapter;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.Recorder.Record;
@@ -26,7 +26,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
         //Intanciate the recorder
         this.myRecorder = new Record();
         //Instanciate the communication adapter with the communication module from the infrastructure
-        this.mycomunnicationAdapter = new CommunicationAdapterAdapter(communicationInfrastructure, myRecorder);
+        this.mycomunnicationAdapter = new CommunicationAdapter(communicationInfrastructure, myRecorder);
     }
 
     /**
@@ -35,8 +35,8 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * @param message the message to be sent
      */
     @Override
-    public void sendMessageBroadcast(IMessage message) {
-        this.mycomunnicationAdapter.sendMessageBroadcast(message);
+    public void sendMessageBroadcast(IMessage message,  ServiceAgent emetter, ArrayList<ServiceAgent> recievers) {
+        this.mycomunnicationAdapter.sendMessageBroadcast(message, emetter,  recievers);
     }
 
     /**
@@ -45,8 +45,8 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * @param message the message to be sent
      */
     @Override
-    public void sendMessage(IMessage message) {
-        this.mycomunnicationAdapter.sendMessage(message);
+    public void sendMessage(IMessage message,  ServiceAgent emetter, ArrayList<ServiceAgent> recievers) {
+        this.mycomunnicationAdapter.sendMessage(message, emetter,  recievers);
     }
 
     /**
@@ -77,7 +77,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * @param agentReference : the agent's Reference in the infrastructure which is associated to the serviceAgent
      */
     @Override
-    public void registerServiceAgent(ServiceAgent serviceAgent, ReferenceAgent agentReference) {
+    public void registerServiceAgent(ServiceAgent serviceAgent, AgentReference agentReference) {
         this.myRecorder.registerServiceAgent(serviceAgent, agentReference);
     }
 
@@ -89,6 +89,28 @@ public class Medium implements IRecord, ICommunicationAdapter {
     @Override
     public void unregisterServiceAgent(ServiceAgent serviceAgent) {
         this.myRecorder.unregisterServiceAgent(serviceAgent);
+    }
+
+    /**
+     * Resolve the physical adresse (AgentReference) of ONE ServiceAgent
+     * @param serviceAgent : the service Agent in question
+     * @return his physical reference
+     * @throws ReferenceResolutionFailure when the serviceAgent doesn't exist
+     */
+    @Override
+    public AgentReference resolveAgentReference(ServiceAgent serviceAgent) throws ReferenceResolutionFailure {
+        return this.myRecorder.resolveAgentReference(serviceAgent);
+    }
+
+    /**
+     * Resolve the physical adresse (AgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
+     * @param serviceAgents : the list of the serviceAgents
+     * @return the list of corresponding physical references
+     * @throws ReferenceResolutionFailure when a serviceAgent doesn't exist
+     */
+    @Override
+    public ArrayList<AgentReference> resolveAgentsReferences(ArrayList<ServiceAgent> serviceAgents) throws ReferenceResolutionFailure {
+        return this.myRecorder.resolveAgentsReferences(serviceAgents);
     }
 
     /**

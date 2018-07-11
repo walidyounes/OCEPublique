@@ -4,10 +4,10 @@
 
 package OCE.sonde;
 
-import Environment.FacadeAdapter.AcquisitionFailure;
-import Environment.FacadeAdapter.IAcquisition;
-import Environment.OCPlateforme.OCComponent;
-import Environment.OCPlateforme.OCService;
+import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
+import AmbientEnvironment.FacadeAdapter.IAcquisition;
+import AmbientEnvironment.OCPlateforme.OCComponent;
+import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ComponentManager {
     /**
      * Get, store the list of appearing componentns
      * and send the list of the services of these components to the ServiceManager
-     * @throws AcquisitionFailure
+     * @throws AcquisitionFailure raised when there is a failure in the acquisition of the components from the environement
      */
     public void appearingComponentsAcquisition() throws AcquisitionFailure {
 
@@ -55,10 +55,9 @@ public class ComponentManager {
     }
 
     /**
-     * Récuperer et Sauvgarder les composants disparus Envoyer la listes de ces
-     * services à ServiceManager
      *
-     * @throws AcquisitionFailure
+     * Fetch and store the appearing components and send the list of there services to the serviceManager
+     * @throws AcquisitionFailure raised when there is a failure in the acquisition of the components from the environement
      */
     public void disappearingComponentsAcquisition() throws AcquisitionFailure {
 

@@ -4,8 +4,8 @@
 
 package OCE.Messages;
 
-import Environment.OCPlateforme.OCService;
-import Infrastructure.Communication.IMessage;
+import AmbientEnvironment.OCPlateforme.OCService;
+import MASInfrastructure.Communication.IMessage;
 import OCE.ServiceAgent;
 
 import java.util.ArrayList;

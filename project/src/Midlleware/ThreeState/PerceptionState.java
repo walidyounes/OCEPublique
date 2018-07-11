@@ -4,8 +4,8 @@
 
 package Midlleware.ThreeState;
 
-import Infrastructure.Etat.IEtat;
-import Infrastructure.Etat.LifeCyrcle;
+import MASInfrastructure.Etat.IEtat;
+import MASInfrastructure.Etat.LifeCycle;
 
 public class PerceptionState implements IEtat{
 
@@ -18,7 +18,7 @@ public class PerceptionState implements IEtat{
     }
 
     @Override
-    public void execute(LifeCyrcle c) {
+    public void execute(LifeCycle c) {
 
     }
 

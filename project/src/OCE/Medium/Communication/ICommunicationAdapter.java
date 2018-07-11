@@ -5,7 +5,7 @@
 package OCE.Medium.Communication;
 
 
-import Infrastructure.Communication.IMessage;
+import MASInfrastructure.Communication.IMessage;
 import OCE.ServiceAgent;
 
 import java.util.ArrayList;
@@ -18,20 +18,20 @@ public interface ICommunicationAdapter {
      *
      * @param message the message to be sent
      */
-    void sendMessageBroadcast(IMessage message);
+    void sendMessageBroadcast(IMessage message, ServiceAgent emetter, ArrayList<ServiceAgent> recievers);
 
     /**
      * sends a message from one agent to another
      *
      * @param message the message to be sent
      */
-    void sendMessage(IMessage message);
+    void sendMessage(IMessage message, ServiceAgent emetter, ArrayList<ServiceAgent> recievers);
 
     /**
      * allows an agent to receive One message (the first in it's mail box)
      *
      * @param receiver the receiver of the messages
-     * @return The message received
+     * @return The received message
      */
     Optional<IMessage> receiveMessage(ServiceAgent receiver);
 
@@ -39,7 +39,7 @@ public interface ICommunicationAdapter {
      * allows an agent to retreive all the messages sented to it
      *
      * @param receiver the recipient of the messages
-     * @return list of messages received
+     * @return list of received messages
      */
     ArrayList<IMessage> receiveMessages(ServiceAgent receiver);
 }

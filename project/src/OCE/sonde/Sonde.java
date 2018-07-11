@@ -5,16 +5,14 @@
 package OCE.sonde;
 
 
-import Environment.FacadeAdapter.AcquisitionFailure;
-import Environment.FacadeAdapter.IAcquisition;
-import Midlleware.AgentFactory.IAFactory;
+import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
+import AmbientEnvironment.FacadeAdapter.IAcquisition;
+import Midlleware.AgentFactory.IAgentFactory;
 import OCE.Medium.Recorder.IRecord;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-//ToDo 1 verifier l'imp de thread class Sonde implements runnable?
-//ToDo 2 Revoir la construction du composant Sonde
 
 /**
  * This class is used to probe the environment for new components that appear and components that have disappeared
@@ -27,7 +25,7 @@ public class Sonde {
     private long periodicity; // the periodicity of the task of souding the environement
 
 
-    public Sonde(IAcquisition acquisition, IRecord agentRecorder, IAFactory agentFactory, long periodicity) {
+    public Sonde(IAcquisition acquisition, IRecord agentRecorder, IAgentFactory agentFactory, long periodicity) {
         this.periodicity = periodicity;
         // Instanciation of the serviceManager
         ServiceManager serviceManager = new ServiceManager(agentFactory, agentRecorder);

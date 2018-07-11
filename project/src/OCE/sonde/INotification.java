@@ -4,7 +4,7 @@
 
 package OCE.sonde;
 
-import Environment.OCPlateforme.OCService;
+import AmbientEnvironment.OCPlateforme.OCService;
 
 import java.util.ArrayList;
 
