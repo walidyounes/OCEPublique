@@ -2,11 +2,10 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Unifieur.Composants;
+package OCE.Unifieur;
 
-import MockupCompo.MockupService;
-import OCPlateforme.OCService;
-import unifieur.services.IMatching;
+import AmbientEnvironment.MockupCompo.MockupService;
+import AmbientEnvironment.OCPlateforme.OCService;
 
 /**
  * Le rôle de l'Unifieur est de proposer un service permettant de savoir si
@@ -27,7 +26,7 @@ public class Matching implements IMatching {
 		}
 		else {	//return true;
 			return serviceA.getLinkedServices().equals(serviceB.getLinkedServices());
-		*/
+			*/
         if (serviceA instanceof MockupService && serviceB instanceof MockupService)
 
             return ((MockupService) serviceA).getWay() != ((MockupService) serviceB).getWay() &&

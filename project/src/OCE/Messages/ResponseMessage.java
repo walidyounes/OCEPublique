@@ -4,55 +4,73 @@
 
 package OCE.Messages;
 
-import Agent.Beans.Perceptions.AbstractPerception;
-import Agent.Beans.Perceptions.ResponsePerception;
-import OCPlateforme.OCService;
-import sma.infrastructure.agent.ReferenceAgent;
+
+import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Communication.AbstractPerception;
 
 import java.util.ArrayList;
 
-
-public class ResponseMessage extends MessageAgent {
+/**
+ * This class represents the response message sent in the second step of the ARSA protocol (it tells the agent that send the ad that i'm interested)
+ * @author Walid YOUNES
+ * @version 1.0
+ */
+public class ResponseMessage extends Message {
 
     /**
-     * Creer une réponse
+     * Create a Response message
      *
-     * @param service       service de l'agent qui répond
-     * @param expediteur    reference de l'agent qui répond
-     * @param destinataires les references des agents destinataires. Si == Null, alors diffusion en Broadcast
+     * @param emitter    reference of the responding agent
+     * @param recievers the references of the recievers of the response, if null == Broadcast
      */
-    public ResponseMessage(OCService service, ReferenceAgent expediteur, ArrayList<ReferenceAgent> destinataires) {
-        this.service = service;
-        this.expediteur = expediteur;
-        this.destinataires = destinataires;
+    public ResponseMessage(AgentReference emitter, ArrayList<AgentReference> recievers) {
+        this.emitter= emitter;
+        this.recievers = recievers;
     }
 
-    @Override
-    public OCService getService() {
-        return this.service;
+    /**
+     * create a Response message (empty)
+     */
+    public ResponseMessage() {
+        this.emitter= null;
+        this.recievers = null;
     }
 
+    /**
+     * get the transmitter of the message
+     * @return the reference of the transmitter of the message
+     */
     @Override
-    public ReferenceAgent getExpediteur() {
-        return this.expediteur;
+    public AgentReference getEmitter() {
+        return this.emitter;
     }
 
+    /**
+     *  set the refernece of the transmitter of the message
+     * @param emitter : the reference of the transmitter
+     */
     @Override
-    public AbstractPerception toPerception() {
-        return new ResponsePerception(this);
+    public void setEmitter(AgentReference emitter) {
+        this.emitter = emitter;
     }
 
+    /**
+     * get the list of the recievers of the message
+     * @return the recievers of the message
+     */
     @Override
-    public ArrayList<ReferenceAgent> getDestinataires() {
-        return this.destinataires;
+    public ArrayList<AgentReference> getRecievers() {
+        return this.recievers;
     }
 
+    /**
+     * set the list of recievers for this message
+     * @param recievers : the list of recievers
+     */
     @Override
-    public String toString() {
-        return "ResponseMessage{" +
-                "service=" + service +
-                ", expediteur=" + expediteur +
-                ", destinataires=" + destinataires +
-                '}';
+    public void setRecievers(ArrayList<AgentReference> recievers) {
+        this.recievers = recievers;
     }
+
+
 }

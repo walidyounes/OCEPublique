@@ -4,54 +4,56 @@
 
 package OCE.Messages;
 
-import Agent.Beans.Perceptions.AbstractPerception;
-import Agent.Beans.Perceptions.AgreementPerception;
-import OCPlateforme.OCService;
-import sma.infrastructure.agent.ReferenceAgent;
+
+import MASInfrastructure.Agent.AgentReference;
 
 import java.util.ArrayList;
 
-public class AgreementMessage extends MessageAgent {
+public class AgreementMessage extends Message {
 
     /**
      * Creer un message d'acceptation
      *
-     * @param service       service de l'agent annonceur
-     * @param expediteur    reference de l'agent annonceur
-     * @param destinataires les references des agents destinataires. Si == Null, alors diffusion en Broadcast
      */
-    public AgreementMessage(OCService service, ReferenceAgent expediteur, ArrayList<ReferenceAgent> destinataires) {
-        this.expediteur = expediteur;
-        this.destinataires = destinataires;
-        this.service = service;
+    public AgreementMessage(AgentReference emitter, ArrayList<AgentReference> recievers) {
+        this.emitter = emitter;
+        this.recievers = recievers;
     }
 
+    /**
+     * get the transmitter of the message
+     * @return the reference of the transmitter of the message
+     */
     @Override
-    public AbstractPerception toPerception() {
-        return new AgreementPerception(this);
+    public AgentReference getEmitter() {
+        return this.emitter;
     }
 
+    /**
+     *  set the refernece of the transmitter of the message
+     * @param emitter : the reference of the transmitter
+     */
     @Override
-    public ArrayList<ReferenceAgent> getDestinataires() {
-        return this.destinataires;
+    public void setEmitter(AgentReference emitter) {
+        this.emitter = emitter;
     }
 
+    /**
+     * get the list of the recievers of the message
+     * @return the recievers of the message
+     */
     @Override
-    public OCService getService() {
-        return this.service;
+    public ArrayList<AgentReference> getRecievers() {
+        return this.recievers;
     }
 
+    /**
+     * set the list of recievers for this message
+     * @param recievers : the list of recievers
+     */
     @Override
-    public ReferenceAgent getExpediteur() {
-        return this.expediteur;
+    public void setRecievers(ArrayList<AgentReference> recievers) {
+        this.recievers = recievers;
     }
 
-    @Override
-    public String toString() {
-        return "AgreementMessage{" +
-                "service=" + service +
-                ", expediteur=" + expediteur +
-                ", destinataires=" + destinataires +
-                '}';
-    }
 }

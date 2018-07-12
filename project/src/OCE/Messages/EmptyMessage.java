@@ -4,52 +4,56 @@
 
 package OCE.Messages;
 
-import Agent.Beans.Perceptions.AbstractPerception;
-import Agent.Beans.Perceptions.EmptyPerception;
-import OCPlateforme.OCService;
-import sma.infrastructure.agent.ReferenceAgent;
+
+import MASInfrastructure.Agent.AgentReference;
 
 import java.util.ArrayList;
 
-public class EmptyMessage extends MessageAgent {
+public class EmptyMessage extends Message {
 
 
     /**
-     * Creer un message vide
+     * Create an empty message
      */
     public EmptyMessage() {
-        this.expediteur = null; // Aucun expéditeur car pas de messages
-        this.service = null; // Aucun service géré
-        this.destinataires = null;
+        this.emitter = null;
+        this.recievers = null;
     }
 
+    /**
+     * get the transmitter of the message
+     * @return the reference of the transmitter of the message
+     */
     @Override
-    public OCService getService() {
-        return this.service;
+    public AgentReference getEmitter() {
+        return this.emitter;
     }
 
+    /**
+     *  set the refernece of the transmitter of the message
+     * @param emitter : the reference of the transmitter
+     */
     @Override
-    public ReferenceAgent getExpediteur() {
-        return this.expediteur;
+    public void setEmitter(AgentReference emitter) {
+        this.emitter = emitter;
     }
 
-
+    /**
+     * get the list of the recievers of the message
+     * @return the recievers of the message
+     */
     @Override
-    public AbstractPerception toPerception() {
-        return new EmptyPerception();
+    public ArrayList<AgentReference> getRecievers() {
+        return this.recievers;
     }
 
+    /**
+     * set the list of recievers for this message
+     * @param recievers : the list of recievers
+     */
     @Override
-    public ArrayList<ReferenceAgent> getDestinataires() {
-        return this.destinataires;
+    public void setRecievers(ArrayList<AgentReference> recievers) {
+        this.recievers = recievers;
     }
 
-    @Override
-    public String toString() {
-        return "EmptyMessage{" +
-                "service=" + service +
-                ", expediteur=" + expediteur +
-                ", destinataires=" + destinataires +
-                '}';
-    }
 }

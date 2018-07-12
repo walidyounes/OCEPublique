@@ -2,9 +2,10 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Unifieur.services;
+package OCE.Unifieur;
 
-import OCPlateforme.OCService;
+
+import AmbientEnvironment.OCPlateforme.OCService;
 
 /**
  * Interface Matching. Service fourni par l'Unifieur.

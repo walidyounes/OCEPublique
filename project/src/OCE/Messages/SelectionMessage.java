@@ -4,65 +4,86 @@
 
 package OCE.Messages;
 
-import Agent.Beans.Perceptions.AbstractPerception;
-import Agent.Beans.Perceptions.SelectionPerception;
-import OCPlateforme.OCService;
-import sma.infrastructure.agent.ReferenceAgent;
+
+import MASInfrastructure.Agent.AgentReference;
 
 import java.util.ArrayList;
 
-public class SelectionMessage extends MessageAgent {
-    private ReferenceAgent agentBinder; // La référence de l'agent Binder
+public class SelectionMessage extends Message {
+    private AgentReference binderAgent; // The reference of the binding Agent
 
     /**
-     * créer un message de sélection
-     *
-     * @param service       service de l'agent émétteur
-     * @param expediteur    reference de l'agent qui émétteur
-     * @param destinataires les references des agents destinataires. Si == Null, alors diffusion en Broadcast
+     * create a selection message
+     * @param emitter    reference of the agent sending the selection message
+     * @param recievers the references of the recievers of the selection message
+     * @param bindingAgent the agent responsible of executing the physical binding
      */
-    public SelectionMessage(OCService service, ReferenceAgent expediteur, ArrayList<ReferenceAgent> destinataires, ReferenceAgent agentBinder) {
-        this.expediteur = expediteur;
-        this.destinataires = destinataires;
-        this.service = service;
-        this.agentBinder = agentBinder;
+    public SelectionMessage(AgentReference emitter, ArrayList<AgentReference> recievers, AgentReference bindingAgent) {
+        this.emitter = emitter;
+        this.recievers = recievers;
+        this.binderAgent = bindingAgent;
     }
 
-    public void setAgentBinder(ReferenceAgent agentBinder) {
-        this.agentBinder = agentBinder;
+    /**
+     * create a Selection message (empty)
+     */
+    public SelectionMessage() {
+        this.emitter = null;
+        this.recievers= null;
+        this.binderAgent = null;
     }
 
-    public ReferenceAgent getAgentBinder() {
-        return agentBinder;
-    }
-
+    /**
+     * get the transmitter of the message
+     * @return the reference of the transmitter of the message
+     */
     @Override
-    public ReferenceAgent getExpediteur() {
-        return this.expediteur;
+    public AgentReference getEmitter() {
+        return this.emitter;
     }
 
+    /**
+     *  set the refernece of the transmitter of the message
+     * @param emitter : the reference of the transmitter
+     */
     @Override
-    public AbstractPerception toPerception() {
-        return new SelectionPerception(this);
+    public void setEmitter(AgentReference emitter) {
+        this.emitter = emitter;
     }
 
+    /**
+     * get the list of the recievers of the message
+     * @return the recievers of the message
+     */
     @Override
-    public OCService getService() {
-        return this.service;
+    public ArrayList<AgentReference> getRecievers() {
+        return this.recievers;
     }
 
+    /**
+     * set the list of recievers for this message
+     * @param recievers : the list of recievers
+     */
     @Override
-    public ArrayList<ReferenceAgent> getDestinataires() {
-        return this.destinataires;
+    public void setRecievers(ArrayList<AgentReference> recievers) {
+        this.recievers = recievers;
     }
 
-    @Override
-    public String toString() {
-        return "SelectionMessage{" +
-                "agentBinder=" + agentBinder +
-                ", service=" + service +
-                ", expediteur=" + expediteur +
-                ", destinataires=" + destinataires +
-                '}';
+    /**
+     * get the reference of the binding agent
+     * @return the reference
+     */
+    public AgentReference getBinderAgent() {
+        return binderAgent;
     }
+
+    /**
+     * set the reference of the binding agent
+     * @param binderAgent : the reference of the binding agent
+     */
+    public void setBinderAgent(AgentReference binderAgent) {
+        this.binderAgent = binderAgent;
+    }
+
+
 }
