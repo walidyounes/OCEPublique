@@ -5,6 +5,7 @@
 package Midlleware.AgentFactory;
 
 import AmbientEnvironment.OCPlateforme.OCService;
+import Logger.MyLogger;
 import MASInfrastructure.Agent.Agent;
 import MASInfrastructure.Agent.AgentReference;
 import MASInfrastructure.Etat.LifeCycle;
@@ -14,6 +15,7 @@ import OCE.*;
 
 import java.util.AbstractMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Agent Factory implementation : implements the functions in the IAgentFactory Interface to create different type of agent
@@ -34,7 +36,7 @@ public class AgentFactory implements IAgentFactory {
      */
     @Override
     public Map.Entry<ServiceAgent, AgentReference> createServiceAgent(OCService attachedService) {
-
+        MyLogger.log(Level.INFO, "Creating the agent for the service * " + attachedService.toString() + " *");
         IPerceptionState myWayOfPerception = new PerceptionAgent();
         IDecisionState myWayOfDecision = new DecisionServiceAgent();
         IActionState myWayOfAction = new ActionServiceAgent();

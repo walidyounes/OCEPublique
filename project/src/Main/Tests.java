@@ -32,7 +32,7 @@ public class Tests {
         Matching alwaysTrueMatching = new Matching();
         Medium medium = new Medium(infrastructure);
 
-        Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 2000);
+        Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 1000);
         sonde.run();
 
         // Construction du composant "C1"
@@ -52,8 +52,17 @@ public class Tests {
         MockupComponent C2 = new MockupComponent("C2", providedByC2, requiredByC2);
         // Ajout de C2 dans le container
         mockupFacadeAdapter.addComponent(C2);
+
+        pause(5000);
         infrastructure.ordonnancer();
 
         logger.close();
+    }
+    public static void pause(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
     }
 }

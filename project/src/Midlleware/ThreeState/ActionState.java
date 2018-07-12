@@ -4,8 +4,11 @@
 
 package Midlleware.ThreeState;
 
+import Logger.MyLogger;
 import MASInfrastructure.Etat.IEtat;
 import MASInfrastructure.Etat.LifeCycle;
+
+import java.util.logging.Level;
 
 public class ActionState implements IEtat {
 
@@ -19,7 +22,9 @@ public class ActionState implements IEtat {
 
     @Override
     public void execute(LifeCycle c) {
+        MyLogger.log(Level.INFO, " Agent is in Action state " );
 
+        c.setCurrentState(this.nextState);
     }
 
     /**
