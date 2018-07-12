@@ -17,15 +17,19 @@ public interface ICommunicationAdapter {
      * sends a message from one agent to all the other agents in broadcast
      *
      * @param message the message to be sent
+     * @param emitter the sender of the message
+     * @param recievers  : the recievers of the message
      */
-    void sendMessageBroadcast(IMessage message, ServiceAgent emetter, ArrayList<ServiceAgent> recievers);
+    void sendMessageBroadcast(IMessage message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers);
 
     /**
-     * sends a message from one agent to another
+     * sends a message from one agent to another (point to point communication)
      *
      * @param message the message to be sent
+     * @param emitter the sender of the message
+     * @param recievers  : the recievers of the message
      */
-    void sendMessage(IMessage message, ServiceAgent emetter, ArrayList<ServiceAgent> recievers);
+    void sendMessage(IMessage message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers);
 
     /**
      * allows an agent to receive One message (the first in it's mail box)

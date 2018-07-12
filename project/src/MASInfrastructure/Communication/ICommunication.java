@@ -5,6 +5,9 @@
 package MASInfrastructure.Communication;
 
 import MASInfrastructure.Agent.AgentReference;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +46,6 @@ public interface ICommunication {
      * @param reciever the recipient of the messages
      * @return list of received messages
      */
-    List<IMessage> receiveMessages(AgentReference reciever);
+    ArrayList<IMessage> receiveMessages(AgentReference reciever);
 
 }

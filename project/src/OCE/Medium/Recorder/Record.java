@@ -35,7 +35,10 @@ public class Record implements IRecord{
      */
     @Override
     public void registerServiceAgent(ServiceAgent serviceAgent, AgentReference agentReference) {
-
+        //If the serviceAgent doesn't exist we add it to the list
+        if(!this.agentsReferenceMap.containsKey(serviceAgent)){
+            this.agentsReferenceMap.put(serviceAgent, agentReference);
+        }
     }
 
     /**
@@ -45,7 +48,10 @@ public class Record implements IRecord{
      */
     @Override
     public void unregisterServiceAgent(ServiceAgent serviceAgent) {
-
+        //If the serviceAgent exist we delete it
+        if(this.agentsReferenceMap.containsKey(serviceAgent)){
+            this.agentsReferenceMap.remove(serviceAgent);
+        }
     }
 
     /**

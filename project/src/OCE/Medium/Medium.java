@@ -33,20 +33,24 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * sends a message from one agent to all the other agents in broadcast
      *
      * @param message the message to be sent
+     * @param emitter the sender of the message
+     * @param recievers  : the recievers of the message
      */
     @Override
-    public void sendMessageBroadcast(IMessage message,  ServiceAgent emetter, ArrayList<ServiceAgent> recievers) {
-        this.mycomunnicationAdapter.sendMessageBroadcast(message, emetter,  recievers);
+    public void sendMessageBroadcast(IMessage message,  ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+        this.mycomunnicationAdapter.sendMessageBroadcast(message, emitter,  recievers);
     }
 
     /**
-     * sends a message from one agent to another
+     * sends a message from one agent to another (point to point communication)
      *
      * @param message the message to be sent
+     * @param emitter the sender of the message
+     * @param recievers  : the recievers of the message
      */
     @Override
-    public void sendMessage(IMessage message,  ServiceAgent emetter, ArrayList<ServiceAgent> recievers) {
-        this.mycomunnicationAdapter.sendMessage(message, emetter,  recievers);
+    public void sendMessage(IMessage message,  ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+        this.mycomunnicationAdapter.sendMessage(message, emitter,  recievers);
     }
 
     /**

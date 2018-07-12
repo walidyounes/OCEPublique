@@ -86,7 +86,7 @@ public class Infrastructure implements ICreationAgent, ISuicideService, ICommuni
     }
 
     @Override
-    public List<IMessage> receiveMessages(AgentReference reciever) {
+    public ArrayList<IMessage> receiveMessages(AgentReference reciever) {
         return annuaire.receiveMessages(reciever);
     }
 

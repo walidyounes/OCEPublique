@@ -4,8 +4,8 @@
 
 package MASInfrastructure.Annuaire;
 
-import MASInfrastructure.Agent.AgentReference;
 import MASInfrastructure.Agent.Agent;
+import MASInfrastructure.Agent.AgentReference;
 import MASInfrastructure.Communication.IMessage;
 
 import java.util.ArrayList;
@@ -105,13 +105,13 @@ public class Annuaire implements IAnnuaire {
     @Override
     public void sendMessage(IMessage message) {
 
-        lockAgentLecture(message.getDestinataires().get(0));
-        if (agentsMessagesQueues.containsKey(message.getDestinataires().get(0))) {
-            agentsMessagesQueues.get(message.getDestinataires().get(0)).add(message);
-            messageAgentListeners.forEach(messageAgentListener -> messageAgentListener.messageEnvoye(message.getExpediteur(),
-                    message.getDestinataires().get(0), message));
+        lockAgentLecture(message.getRecievers().get(0));
+        if (agentsMessagesQueues.containsKey(message.getRecievers().get(0))) {
+            agentsMessagesQueues.get(message.getRecievers().get(0)).add(message);
+            messageAgentListeners.forEach(messageAgentListener -> messageAgentListener.messageEnvoye(message.getEmitter(),
+                    message.getRecievers().get(0), message));
         }
-        unlockAgentLecture(message.getDestinataires().get(0));
+        unlockAgentLecture(message.getRecievers().get(0));
 
         //System.out.println("liste sendMessage" + getAgentsMessagesQueues()); // Trace
     }
@@ -134,7 +134,7 @@ public class Annuaire implements IAnnuaire {
         agentsMessagesQueues.keySet().forEach(this::lockAgentLecture);
         agentsMessagesQueues.entrySet().forEach(referenceAgentEntry -> {
             referenceAgentEntry.getValue().add(message);
-            notifierMessageAgentListeners(message.getExpediteur(), message, referenceAgentEntry.getKey());
+            notifierMessageAgentListeners(message.getEmitter(), message, referenceAgentEntry.getKey());
         });
         agentsMessagesQueues.keySet().forEach(this::unlockAgentLecture);
 
@@ -153,18 +153,18 @@ public class Annuaire implements IAnnuaire {
         lockAgentLecture(reciever);
         Optional<IMessage> message = Optional.ofNullable(agentsMessagesQueues.get(reciever))
                 .map(ConcurrentLinkedQueue::poll);
-        message.ifPresent(messageAgent -> notifierMessageAgentListeners(messageAgent.getExpediteur(), messageAgent,
+        message.ifPresent(messageAgent -> notifierMessageAgentListeners(messageAgent.getEmitter(), messageAgent,
                 reciever));
         unlockAgentLecture(reciever);
         return message;
     }
 
     @Override
-    public List<IMessage> receiveMessages(AgentReference reciever) {
+    public ArrayList<IMessage> receiveMessages(AgentReference reciever) {
         //lockAgentLecture(destinataire);
         //Optional<IMessage> message = Optional.ofNullable()
         //		.map(ConcurrentLinkedQueue::poll);
-        //message.ifPresent(messageAgent -> notifierMessageAgentListeners(messageAgent.getExpediteur(), messageAgent,
+        //message.ifPresent(messageAgent -> notifierMessageAgentListeners(messageAgent.getEmitter(), messageAgent,
         //		destinataire));
         // unlockAgentLecture(destinataire);
         //walid pour tester
