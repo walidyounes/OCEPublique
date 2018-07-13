@@ -54,7 +54,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
         Agent agentCourant;
         /// while (run) {
         int i = 0; // Walid : fixer le itérations
-        while (i < 18) {
+        while (i < 6) {
             agentCourant = listOrdonnancement.get(0);
             //LifeCycle(agentCourant.getAgentReference(), agentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
             agentCourant.run(); // walid : On actionne le changment d'etat de l'agent

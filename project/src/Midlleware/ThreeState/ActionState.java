@@ -23,7 +23,7 @@ public class ActionState implements IEtat {
     @Override
     public void execute(LifeCycle c) {
         MyLogger.log(Level.INFO, " Agent is in Action state " );
-
+        myWayOfAction.act();
         c.setCurrentState(this.nextState);
     }
 

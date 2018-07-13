@@ -6,6 +6,7 @@ package OCE;
 
 import Logger.MyLogger;
 import Midlleware.ThreeState.IActionState;
+import OCE.Medium.Communication.ICommunicationAdapter;
 
 import java.util.logging.Level;
 
@@ -16,11 +17,12 @@ import java.util.logging.Level;
  */
 public class ActionServiceAgent implements IActionState {
 
+    private ICommunicationAdapter communicationManager;
     /**
      * Execute the taken decisions and affect the environement acordingly
      */
     @Override
     public void act() {
-        MyLogger.log(Level.CONFIG, "The service agent is acting upon the environment !");
+        MyLogger.log(Level.INFO, "The service agent is acting upon the environment !");
     }
 }

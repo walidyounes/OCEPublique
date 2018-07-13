@@ -21,6 +21,6 @@ public class DecisionServiceAgent implements IDecisionState {
      */
     @Override
     public void decide() {
-        MyLogger.log(Level.CONFIG, "The service agent is making decisions !");
+        MyLogger.log(Level.INFO, "The service agent is making decisions !");
     }
 }

@@ -4,6 +4,8 @@
 
 package Midlleware.ThreeState;
 
+import OCE.Medium.Communication.ICommunicationAdapter;
+
 public interface IActionState {
 
     void act();

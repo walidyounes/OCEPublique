@@ -28,9 +28,11 @@ public class Tests {
         MyLogger logger = new MyLogger(); // Pas la peine d'instancier
         logger.init();
 
-        IAgentFactory agentFactory = new AgentFactory(infrastructure);
         Matching alwaysTrueMatching = new Matching();
         Medium medium = new Medium(infrastructure);
+
+        IAgentFactory agentFactory = new AgentFactory(infrastructure, medium);
+
 
         Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 1000);
         sonde.run();

@@ -23,7 +23,7 @@ public class DecisionState implements IEtat {
     @Override
     public void execute(LifeCycle c) {
         MyLogger.log(Level.INFO, " Agent is in Decision state " );
-
+        myWayOfDecision.decide();
         c.setCurrentState(this.nextState);
     }
 
