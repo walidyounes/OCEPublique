@@ -4,9 +4,9 @@
 
 package MASInfrastructure.Fabrique;
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 
 public interface ISuicideService {
 
-    void seSuicider(AgentReference agentReference);
+    void seSuicider(InfraAgentReference infraAgentReference);
 }

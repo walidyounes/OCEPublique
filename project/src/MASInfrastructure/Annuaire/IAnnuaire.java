@@ -4,8 +4,8 @@
 
 package MASInfrastructure.Annuaire;
 
-import MASInfrastructure.Agent.Agent;
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
 
@@ -25,10 +25,10 @@ public interface IAnnuaire extends ICommunication, IGestionAgent {
 
     List<IMessageAgentListener> getMessageAgentListeners();
 
-    ConcurrentMap<AgentReference, ConcurrentLinkedQueue<IMessage>> getAgentsMessagesQueues();
+    ConcurrentMap<InfraAgentReference, ConcurrentLinkedQueue<IMessage>> getAgentsMessagesQueues();
 
-    ConcurrentMap<AgentReference, Agent> getAgents();
+    ConcurrentMap<InfraAgentReference, InfraAgent> getAgents();
 
     //walid
-    Agent getAgentByRef(AgentReference agentReference);
+    InfraAgent getAgentByRef(InfraAgentReference infraAgentReference);
 }

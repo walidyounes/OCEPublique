@@ -32,7 +32,7 @@ public class IDAgent {
 
     @Override
     public String toString() {
-        return "OCE.Agent{" +
+        return "OCE.InfraAgent{" +
                 "ID=" + internalReference;
     }
 }

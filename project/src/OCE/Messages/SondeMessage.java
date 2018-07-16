@@ -4,7 +4,7 @@
 
 package OCE.Messages;
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class SondeMessage extends Message {
      * @param exist :  boolean value informing if the service attached to the agent is still existing in the environement or not
      * @param recievers : the references of the recievers of the ad, if null == Broadcast
      */
-    public SondeMessage(Boolean exist, ArrayList<AgentReference> recievers) {
+    public SondeMessage(Boolean exist, ArrayList<InfraAgentReference> recievers) {
         this.exist = exist;
         this.emitter = null; // The sonde has no reference
         this.recievers = recievers;
@@ -37,7 +37,7 @@ public class SondeMessage extends Message {
      * @return the reference of the transmitter of the message
      */
     @Override
-    public AgentReference getEmitter() {
+    public InfraAgentReference getEmitter() {
         return this.emitter;
     }
 
@@ -46,7 +46,7 @@ public class SondeMessage extends Message {
      * @param emitter : the reference of the transmitter
      */
     @Override
-    public void setEmitter(AgentReference emitter) {
+    public void setEmitter(InfraAgentReference emitter) {
         this.emitter = emitter;
     }
 
@@ -55,7 +55,7 @@ public class SondeMessage extends Message {
      * @return the recievers of the message
      */
     @Override
-    public ArrayList<AgentReference> getRecievers() {
+    public ArrayList<InfraAgentReference> getRecievers() {
         return this.recievers;
     }
 
@@ -64,7 +64,7 @@ public class SondeMessage extends Message {
      * @param recievers : the list of recievers
      */
     @Override
-    public void setRecievers(ArrayList<AgentReference> recievers) {
+    public void setRecievers(ArrayList<InfraAgentReference> recievers) {
         this.recievers = recievers;
     }
 

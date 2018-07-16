@@ -5,16 +5,16 @@
 package MASInfrastructure;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.Agent;
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Annuaire.Annuaire;
 import MASInfrastructure.Annuaire.IAnnuaire;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
 import MASInfrastructure.Etat.LifeCycle;
-import MASInfrastructure.Fabrique.Fabrique;
-import MASInfrastructure.Fabrique.ICreationAgent;
+import MASInfrastructure.Fabrique.IInfraAgentFactory;
 import MASInfrastructure.Fabrique.ISuicideService;
+import MASInfrastructure.Fabrique.InfraAgentFactory;
 import MASInfrastructure.Ordonnanceur.*;
 
 import java.util.ArrayList;
@@ -23,23 +23,23 @@ import java.util.Optional;
 
 
 /**
- * MASInfrastructure fournit le service ICreationAgent(création d'un agent)
+ * MASInfrastructure fournit le service IInfraAgentFactory(création d'un agent) et de communication
  */
-public class Infrastructure implements ICreationAgent, ISuicideService, ICommunication, IOrdonnanceur {
+public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICommunication, IOrdonnanceur {
 
-    private Fabrique fabrique;
-    private Ordonnanceur ordonnanceur;// pourquoi pas IOrdonnanceur ?
+    private InfraAgentFactory infraAgentFactory;
+    private IOrdonnanceur ordonnanceur;// Todo walid : pourquoi pas IOrdonnanceur ?
     private IAnnuaire annuaire;
 
     public Infrastructure() {
         ordonnanceur = new Ordonnanceur(new StrategieClassique(new ArrayList<>(), new ArrayList<>()));
         annuaire = Annuaire.getInstance();
-        fabrique = new Fabrique(annuaire, ordonnanceur);
+        infraAgentFactory = new InfraAgentFactory(annuaire, ordonnanceur);
     }
 
     @Override
-    public void seSuicider(AgentReference agent) {
-        fabrique.seSuicider(agent);
+    public void seSuicider(InfraAgentReference agent) {
+        infraAgentFactory.seSuicider(agent);
     }
 
     @Override
@@ -58,15 +58,15 @@ public class Infrastructure implements ICreationAgent, ISuicideService, ICommuni
     }
 
     @Override
-    public List<Agent> arreterOrdonnancement() {
+    public List<InfraAgent> arreterOrdonnancement() {
         return ordonnanceur.arreterOrdonnancement();
     }
 
-    /*	public void sendMessage(AgentReference expediteur, AgentReference destinataire, IMessage IMessage) {
+    /*	public void sendMessage(InfraAgentReference expediteur, InfraAgentReference destinataire, IMessage IMessage) {
             annuaire.sendMessage(expediteur, destinataire, IMessage);
         }
 
-        public void sendMessageBroadcast(AgentReference expediteur, IMessage IMessage) {
+        public void sendMessageBroadcast(InfraAgentReference expediteur, IMessage IMessage) {
             annuaire.sendMessageBroadcast(expediteur, IMessage);
         }
     */
@@ -81,40 +81,40 @@ public class Infrastructure implements ICreationAgent, ISuicideService, ICommuni
     }
 
     @Override
-    public Optional<IMessage> receiveMessage(AgentReference reciever) {
+    public Optional<IMessage> receiveMessage(InfraAgentReference reciever) {
         return annuaire.receiveMessage(reciever);
     }
 
     @Override
-    public ArrayList<IMessage> receiveMessages(AgentReference reciever) {
+    public ArrayList<IMessage> receiveMessages(InfraAgentReference reciever) {
         return annuaire.receiveMessages(reciever);
     }
 
     @Override
-    public Agent creer(OCService attachedService, LifeCycle lifeCycle) {
-        Agent agent = fabrique.creer(attachedService, lifeCycle);
-        // ordonnanceur.OrdagentAjoute(agent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'ordonnanceur se fait par fabrique
-        return agent;
+    public InfraAgent creer(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
+        InfraAgent infraAgent = infraAgentFactory.creer(attachedService, lifeCycle, myMailBoxManager);
+        // ordonnanceur.OrdagentAjoute(infraAgent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'ordonnanceur se fait par infraAgentFactory
+        return infraAgent;
     }
 
     public IAnnuaire getAnnuaire() {
         return annuaire;
     }
 
-    public Ordonnanceur getOrdonnanceur() {
+    public IOrdonnanceur getOrdonnanceur() {
         return ordonnanceur;
     }
 
     @Override
-    public void ordagentAjoute(Agent agent) {
+    public void ordagentAjoute(InfraAgent infraAgent) {
 
-        ordonnanceur.ordagentAjoute(agent);
+        ordonnanceur.ordagentAjoute(infraAgent);
     }
 
     @Override
-    public void OrdagentRetire(Agent agent) {
+    public void OrdagentRetire(InfraAgent infraAgent) {
 
-        ordonnanceur.OrdagentRetire(agent);
+        ordonnanceur.OrdagentRetire(infraAgent);
     }
 
 }

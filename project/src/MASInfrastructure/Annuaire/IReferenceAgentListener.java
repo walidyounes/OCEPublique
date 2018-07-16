@@ -4,11 +4,11 @@
 
 package MASInfrastructure.Annuaire;
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 
 public interface IReferenceAgentListener {
 
-    void agentAjoute(AgentReference agentReference);
+    void agentAjoute(InfraAgentReference infraAgentReference);
 
-    void agentRetire(AgentReference agentReference);
+    void agentRetire(InfraAgentReference infraAgentReference);
 }

@@ -4,7 +4,7 @@
 
 package OCE.Medium.Communication;
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
 import OCE.Medium.Recorder.IRecord;
@@ -78,18 +78,18 @@ public class CommunicationAdapter implements ICommunicationAdapter {
      * @param receiver the receiver of the messages
      * @return The message received
      */
-    @Override
+  /*  @Override
     public Optional<IMessage> receiveMessage(ServiceAgent receiver) {
         try {
             // Resolving the reference of the reciever
-            AgentReference recieverReference = this.mediumRecorder.resolveAgentReference(receiver);
+            InfraAgentReference recieverReference = this.mediumRecorder.resolveAgentReference(receiver);
             // Read the first message from the mail box of the agent through the MAS-Infrastructure
             return this.comunicationInfrastructure.receiveMessage(recieverReference);
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
-    }
+    }*/
 
     /**
      * allows an agent to retreive all the messages sented to it
@@ -97,16 +97,16 @@ public class CommunicationAdapter implements ICommunicationAdapter {
      * @param receiver the recipient of the messages
      * @return list of messages received
      */
-    @Override
+    /*@Override
     public ArrayList<IMessage> receiveMessages(ServiceAgent receiver) {
         try {
             // Resolving the reference of the reciever
-            AgentReference recieverReference = this.mediumRecorder.resolveAgentReference(receiver);
+            InfraAgentReference recieverReference = this.mediumRecorder.resolveAgentReference(receiver);
             // Read all the message from the mail box of the agent through the MAS-Infrastructure
             return this.comunicationInfrastructure.receiveMessages(recieverReference);
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
-    }
+    }*/
 }

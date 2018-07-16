@@ -5,10 +5,13 @@
 package OCE;
 
 import Logger.MyLogger;
+import MASInfrastructure.Communication.IMessage;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
+import OCE.Medium.Communication.ICommunicationAdapter;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 /**
@@ -22,8 +25,19 @@ public class BinderAgent implements IPerceptionState, IDecisionState, IActionSta
      * Implement the perception process of the agent, which consist in reading the received messages
      */
     @Override
-    public void percept() {
-        MyLogger.log(Level.CONFIG, "The service agent is percepting the envirnment !");
+    public ArrayList<IMessage> percept() {
+        MyLogger.log(Level.CONFIG, "The Binder agent is percepting the envirnment !");
+        return null;
+    }
+
+    @Override
+    public void setServiceAgent(ServiceAgent serviceAgent) {
+
+    }
+
+    @Override
+    public void setCommunicationManager(ICommunicationAdapter communicationManager) {
+
     }
 
     /**

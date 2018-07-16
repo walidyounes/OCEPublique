@@ -5,7 +5,7 @@
 package OCE.Medium;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
 import OCE.Medium.Communication.CommunicationAdapter;
@@ -59,10 +59,10 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * @param receiver the receiver of the messages
      * @return The message received
      */
-    @Override
+    /*@Override
     public Optional<IMessage> receiveMessage(ServiceAgent receiver) {
         return this.mycomunnicationAdapter.receiveMessage(receiver);
-    }
+    }*/
 
     /**
      * allows an agent to retreive all the messages sented to it
@@ -70,19 +70,19 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * @param receiver the recipient of the messages
      * @return list of messages received
      */
-    @Override
+    /*@Override
     public ArrayList<IMessage> receiveMessages(ServiceAgent receiver) {
         return this.mycomunnicationAdapter.receiveMessages(receiver);
-    }
+    }*/
 
     /**
      * Register in the recording list the mapping between a serviceAgent and it's associated referenceAgent
      * @param serviceAgent : the serviceAgent
-     * @param agentReference : the agent's Reference in the infrastructure which is associated to the serviceAgent
+     * @param infraAgentReference : the agent's Reference in the infrastructure which is associated to the serviceAgent
      */
     @Override
-    public void registerServiceAgent(ServiceAgent serviceAgent, AgentReference agentReference) {
-        this.myRecorder.registerServiceAgent(serviceAgent, agentReference);
+    public void registerServiceAgent(ServiceAgent serviceAgent, InfraAgentReference infraAgentReference) {
+        this.myRecorder.registerServiceAgent(serviceAgent, infraAgentReference);
     }
 
     /**
@@ -96,24 +96,24 @@ public class Medium implements IRecord, ICommunicationAdapter {
     }
 
     /**
-     * Resolve the physical adresse (AgentReference) of ONE ServiceAgent
-     * @param serviceAgent : the service Agent in question
+     * Resolve the physical adresse (InfraAgentReference) of ONE ServiceAgent
+     * @param serviceAgent : the service InfraAgent in question
      * @return his physical reference
      * @throws ReferenceResolutionFailure when the serviceAgent doesn't exist
      */
     @Override
-    public AgentReference resolveAgentReference(ServiceAgent serviceAgent) throws ReferenceResolutionFailure {
+    public InfraAgentReference resolveAgentReference(ServiceAgent serviceAgent) throws ReferenceResolutionFailure {
         return this.myRecorder.resolveAgentReference(serviceAgent);
     }
 
     /**
-     * Resolve the physical adresse (AgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
+     * Resolve the physical adresse (InfraAgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
      * @param serviceAgents : the list of the serviceAgents
      * @return the list of corresponding physical references
      * @throws ReferenceResolutionFailure when a serviceAgent doesn't exist
      */
     @Override
-    public ArrayList<AgentReference> resolveAgentsReferences(ArrayList<ServiceAgent> serviceAgents) throws ReferenceResolutionFailure {
+    public ArrayList<InfraAgentReference> resolveAgentsReferences(ArrayList<ServiceAgent> serviceAgents) throws ReferenceResolutionFailure {
         return this.myRecorder.resolveAgentsReferences(serviceAgents);
     }
 

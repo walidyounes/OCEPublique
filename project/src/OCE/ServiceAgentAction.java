@@ -15,7 +15,7 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class ActionServiceAgent implements IActionState {
+public class ServiceAgentAction implements IActionState {
 
     private ICommunicationAdapter communicationManager;
     /**

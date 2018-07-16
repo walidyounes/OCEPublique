@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Ordonnanceur;
 
-import MASInfrastructure.Agent.Agent;
+import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Annuaire.IAgentListener;
 
 import java.util.List;
@@ -14,11 +14,11 @@ public interface IStratOrdonnanceur extends IAgentListener {
 
     void changerVitesse(EnumVitesse vitesse);
 
-    List<Agent> arreterOrdonnancement();
+    List<InfraAgent> arreterOrdonnancement();
 
     void addOrdonnaceurListener(OrdonnanceurListener ordonnanceurListener);
 
-    void agentAjoute(Agent agent);
+    void agentAjoute(InfraAgent infraAgent);
 
-    void agentRetire(Agent agent);
+    void agentRetire(InfraAgent infraAgent);
 }

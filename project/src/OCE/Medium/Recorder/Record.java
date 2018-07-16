@@ -5,11 +5,10 @@
 package OCE.Medium.Recorder;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.ServiceAgent;
 
-import java.lang.module.ResolutionException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,7 @@ import java.util.Map;
  */
 public class Record implements IRecord{
 
-    private Map<ServiceAgent, AgentReference> agentsReferenceMap;
+    private Map<ServiceAgent, InfraAgentReference> agentsReferenceMap;
 
     public Record() {
         this.agentsReferenceMap =  new HashMap<>();
@@ -31,13 +30,13 @@ public class Record implements IRecord{
     /**
      * Register in the recording list the mapping between a serviceAgent and it's associated referenceAgent
      * @param serviceAgent : the serviceAgent
-     * @param agentReference : the agent's Reference in the infrastructure which is associated to the serviceAgent
+     * @param infraAgentReference : the agent's Reference in the infrastructure which is associated to the serviceAgent
      */
     @Override
-    public void registerServiceAgent(ServiceAgent serviceAgent, AgentReference agentReference) {
+    public void registerServiceAgent(ServiceAgent serviceAgent, InfraAgentReference infraAgentReference) {
         //If the serviceAgent doesn't exist we add it to the list
         if(!this.agentsReferenceMap.containsKey(serviceAgent)){
-            this.agentsReferenceMap.put(serviceAgent, agentReference);
+            this.agentsReferenceMap.put(serviceAgent, infraAgentReference);
         }
     }
 
@@ -55,13 +54,13 @@ public class Record implements IRecord{
     }
 
     /**
-     * Resolve the physical adresse (AgentReference) of ONE ServiceAgent
-     * @param serviceAgent : the service Agent in question
+     * Resolve the physical adresse (InfraAgentReference) of ONE ServiceAgent
+     * @param serviceAgent : the service InfraAgent in question
      * @return his physical reference
      * @throws ReferenceResolutionFailure when the serviceAgent doesn't exist
      */
     @Override
-    public AgentReference resolveAgentReference(ServiceAgent serviceAgent) throws ReferenceResolutionFailure {
+    public InfraAgentReference resolveAgentReference(ServiceAgent serviceAgent) throws ReferenceResolutionFailure {
         if(this.agentsReferenceMap.containsKey(serviceAgent)){
             // if the serviceAgent exist we return it
             return this.agentsReferenceMap.get(serviceAgent);
@@ -69,24 +68,24 @@ public class Record implements IRecord{
     }
 
     /**
-     * Resolve the physical adresse (AgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
+     * Resolve the physical adresse (InfraAgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
      * @param serviceAgents : the list of the serviceAgents
      * @return the list of corresponding physical references
      * @throws ReferenceResolutionFailure when a serviceAgent doesn't exist
      */
     @Override
-    public ArrayList<AgentReference> resolveAgentsReferences(ArrayList<ServiceAgent> serviceAgents) throws ReferenceResolutionFailure {
-        ArrayList<AgentReference> agentReferenceList = new ArrayList<>();
+    public ArrayList<InfraAgentReference> resolveAgentsReferences(ArrayList<ServiceAgent> serviceAgents) throws ReferenceResolutionFailure {
+        ArrayList<InfraAgentReference> infraAgentReferenceList = new ArrayList<>();
         for (ServiceAgent serviceAgent : serviceAgents) {
             if(this.agentsReferenceMap.containsKey(serviceAgent)){
                 // Add the physical reference of the serviceAgent if it exists
-                agentReferenceList.add(this.agentsReferenceMap.get(serviceAgent));
+                infraAgentReferenceList.add(this.agentsReferenceMap.get(serviceAgent));
             }else{
                 // Throw an exception
                 throw new ReferenceResolutionFailure("The serviceAgent * "+ serviceAgent.getMyID() + " * doesn't exist ! ");
             }
         }
-        return agentReferenceList;
+        return infraAgentReferenceList;
     }
 
     /**

@@ -14,7 +14,7 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class DecisionServiceAgent implements IDecisionState {
+public class ServiceAgentDecision implements IDecisionState {
 
     /**
      *  Impelment the decision mechanisme of the binder agent, and produce a list of decisions

@@ -48,6 +48,8 @@ public class PerceptionAgent implements IPerceptionState {
     public ArrayList<IMessage> percept() {
         MyLogger.log(Level.INFO, "The service agent is percepting the envirnment !");
         // Read the messages from the mail-Box
-        return communicationManager.receiveMessages(serviceAgent);
+        ArrayList<IMessage> messages = this.serviceAgent.getMyInfraAgent().readMessages();
+        MyLogger.log(Level.INFO, "La Liste des messages reçu est !"+ messages.toString());
+        return messages;
     }
 }

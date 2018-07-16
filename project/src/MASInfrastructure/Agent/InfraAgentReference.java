@@ -6,10 +6,10 @@ package MASInfrastructure.Agent;
 
 import java.util.UUID;
 
-public class AgentReference {
+public class InfraAgentReference {
     private final UUID referenceInterne;
 
-    public AgentReference() {
+    public InfraAgentReference() {
         referenceInterne = UUID.randomUUID();
     }
 
@@ -20,7 +20,7 @@ public class AgentReference {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        AgentReference that = (AgentReference) o;
+        InfraAgentReference that = (InfraAgentReference) o;
 
         return referenceInterne.equals(that.referenceInterne);
     }
@@ -32,7 +32,7 @@ public class AgentReference {
 
     @Override
     public String toString() {
-        return "OCE.Agent{" +
+        return "OCE.InfraAgent{" +
                 "reference=" + referenceInterne;
     }
 }

@@ -4,16 +4,15 @@
 
 package OCE.Messages;
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.IMessage;
-import OCE.ServiceAgent;
 
 import java.util.ArrayList;
 
 public abstract class Message implements IMessage {
 
-    protected AgentReference emitter; // The transmitter of the message
-    protected ArrayList<AgentReference> recievers; // The list of the recipients of the message, if == null -> message is in broadcast
+    protected InfraAgentReference emitter; // The transmitter of the message
+    protected ArrayList<InfraAgentReference> recievers; // The list of the recipients of the message, if == null -> message is in broadcast
 
     // public abstract AbstractPerception toPerception();
 }

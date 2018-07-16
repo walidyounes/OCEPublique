@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Ordonnanceur;
 
-import MASInfrastructure.Agent.Agent;
+import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Etat.IEtat;
 
 import java.util.HashMap;
@@ -14,21 +14,21 @@ import java.util.concurrent.TimeUnit;
 
 public class StrategieEtatAEtat implements IStratOrdonnanceur {
 
-    private List<Agent> listOrdonnancement; // liste d'ordonnancement des agents
+    private List<InfraAgent> listOrdonnancement; // liste d'ordonnancement des agents
     private List<OrdonnanceurListener> listListenerPourOrdonnanceur;
-    private Map<Agent, IEtat> listEtatAgent;
+    private Map<InfraAgent, IEtat> listEtatAgent;
     private int vitesse;
     private boolean run = true;
     /*Etat1 etatInitial = new Etat1();
-	OCE.Agent agent1 = new OCE.Agent(etatInitial);
-	OCE.Agent agent2 = new OCE.Agent(etatInitial);
-	OCE.Agent agent3 = new OCE.Agent(etatInitial);*/
+	OCE.InfraAgent agent1 = new OCE.InfraAgent(etatInitial);
+	OCE.InfraAgent agent2 = new OCE.InfraAgent(etatInitial);
+	OCE.InfraAgent agent3 = new OCE.InfraAgent(etatInitial);*/
 
-    public StrategieEtatAEtat(List<Agent> listAgent, List<OrdonnanceurListener> listListenerActuels) {
-        listOrdonnancement = listAgent;
-		/*listAgent.add(agent1);
-		listAgent.add(agent2);
-		listAgent.add(agent3);*/
+    public StrategieEtatAEtat(List<InfraAgent> listInfraAgent, List<OrdonnanceurListener> listListenerActuels) {
+        listOrdonnancement = listInfraAgent;
+		/*listInfraAgent.add(agent1);
+		listInfraAgent.add(agent2);
+		listInfraAgent.add(agent3);*/
         listListenerPourOrdonnanceur = listListenerActuels;
         listEtatAgent = new HashMap<>();
         // listOrdonnancement.forEach(agent -> listEtatAgent.put(agent, agent.getEtatInitial())); // todo : Walid
@@ -39,37 +39,37 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
     @Override
     public void ordonnancer() {
         run = true;
-        Agent agentCourant;
+        InfraAgent infraAgentCourant;
         IEtat etatCourant;
         while (run) {
-            agentCourant = listOrdonnancement.get(0);
-            etatCourant = listEtatAgent.get(agentCourant); //TOdo delete this line
+            infraAgentCourant = listOrdonnancement.get(0);
+            etatCourant = listEtatAgent.get(infraAgentCourant); //TOdo delete this line
             try {
                 TimeUnit.MICROSECONDS.sleep(vitesse);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // changerEtatAgent(agentCourant, etatCourant.executer().orElseGet(agentCourant::getEtatInitial)); - todo Walid
-            listOrdonnancement.remove(agentCourant);
-            listOrdonnancement.add(agentCourant);
+            // changerEtatAgent(infraAgentCourant, etatCourant.executer().orElseGet(infraAgentCourant::getEtatInitial)); - todo Walid
+            listOrdonnancement.remove(infraAgentCourant);
+            listOrdonnancement.add(infraAgentCourant);
             System.out.println("listOrdonnancement" + getListOrdonnancement());
             System.out.println("ListEtatAgent" + getListEtatAgent());
 
         }
     }
 
-    public Map<Agent, IEtat> getListEtatAgent() {
+    public Map<InfraAgent, IEtat> getListEtatAgent() {
         return listEtatAgent;
     }
 
-    public List<Agent> getListOrdonnancement() {
+    public List<InfraAgent> getListOrdonnancement() {
         return listOrdonnancement;
     }
 
-    private void changerEtatAgent(Agent agentCourant, IEtat etatAbstract) {
+    private void changerEtatAgent(InfraAgent infraAgentCourant, IEtat etatAbstract) {
         listListenerPourOrdonnanceur.forEach(ordonnanceurListener -> ordonnanceurListener
-                .changementEtat(agentCourant.getAgentReference(), etatAbstract));
-        listEtatAgent.put(agentCourant, etatAbstract);
+                .changementEtat(infraAgentCourant.getInfraAgentReference(), etatAbstract));
+        listEtatAgent.put(infraAgentCourant, etatAbstract);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
     }
 
     @Override
-    public List<Agent> arreterOrdonnancement() {
+    public List<InfraAgent> arreterOrdonnancement() {
         run = false;
         return listOrdonnancement;
     }
@@ -105,15 +105,15 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
     }
 
     @Override
-    public void agentAjoute(Agent agent) {
-        listOrdonnancement.add(agent);
-        listEtatAgent.put(agent, agent.getState());
+    public void agentAjoute(InfraAgent infraAgent) {
+        listOrdonnancement.add(infraAgent);
+        listEtatAgent.put(infraAgent, infraAgent.getState());
     }
 
     @Override
-    public void agentRetire(Agent agent) {
-        listOrdonnancement.remove(agent);
-        listEtatAgent.remove(agent);
+    public void agentRetire(InfraAgent infraAgent) {
+        listOrdonnancement.remove(infraAgent);
+        listEtatAgent.remove(infraAgent);
     }
 
 }

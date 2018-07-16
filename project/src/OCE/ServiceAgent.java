@@ -5,7 +5,7 @@
 package OCE;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.Agent;
+import MASInfrastructure.Agent.InfraAgent;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
@@ -22,7 +22,7 @@ public class ServiceAgent  {
     private IDecisionState myWayOfDecision;
     private IActionState myWayOfAction;
     private OCService handledService;
-    private Agent myAssociatedAgent; // Todo : maybe we will not need it after all ^^
+    private InfraAgent myInfraAgent; // Todo : maybe we will not need it after all ^^
 
     public ServiceAgent(OCService handledService, IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
         this.myID = new IDAgent();
@@ -30,12 +30,12 @@ public class ServiceAgent  {
         this.myWayOfPerception = myWayOfPerception;
         this.myWayOfDecision = myWayOfDecision;
         this.myWayOfAction = myWayOfAction;
-        this.myAssociatedAgent = null;
+        this.myInfraAgent = null;
     }
 
     /**
      * Get the unique identifier of this agent
-     * @return the ID of this Agent
+     * @return the ID of this InfraAgent
      */
     public IDAgent getMyID() {
         return myID;
@@ -75,18 +75,18 @@ public class ServiceAgent  {
 
     /**
      * set the agent (in the infrastructure) which is associated to this service agent
-     * @param myAssociatedAgent : the associated agent
+     * @param myInfraAgent : the associated agent
      */
-    public void setMyAssociatedAgent(Agent myAssociatedAgent) {
-        this.myAssociatedAgent = myAssociatedAgent;
+    public void setMyInfraAgent(InfraAgent myInfraAgent) {
+        this.myInfraAgent = myInfraAgent;
     }
 
     /**
      * get the associated agent (un the infrastructure) to this serviceAgent
      * @return the associated agent
      */
-    public Agent getMyAssociatedAgent() {
-        return myAssociatedAgent;
+    public InfraAgent getMyInfraAgent() {
+        return myInfraAgent;
     }
 
     @Override

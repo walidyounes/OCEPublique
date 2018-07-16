@@ -4,11 +4,11 @@
 
 package MASInfrastructure.Ordonnanceur;
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Etat.IEtat;
 
 
 public interface OrdonnanceurListener {
 
-    void changementEtat(AgentReference agentReference, IEtat etatAbstract);
+    void changementEtat(InfraAgentReference infraAgentReference, IEtat etatAbstract);
 }

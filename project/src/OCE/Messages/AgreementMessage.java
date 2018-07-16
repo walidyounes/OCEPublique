@@ -5,7 +5,7 @@
 package OCE.Messages;
 
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class AgreementMessage extends Message {
      * Creer un message d'acceptation
      *
      */
-    public AgreementMessage(AgentReference emitter, ArrayList<AgentReference> recievers) {
+    public AgreementMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter = emitter;
         this.recievers = recievers;
     }
@@ -25,7 +25,7 @@ public class AgreementMessage extends Message {
      * @return the reference of the transmitter of the message
      */
     @Override
-    public AgentReference getEmitter() {
+    public InfraAgentReference getEmitter() {
         return this.emitter;
     }
 
@@ -34,7 +34,7 @@ public class AgreementMessage extends Message {
      * @param emitter : the reference of the transmitter
      */
     @Override
-    public void setEmitter(AgentReference emitter) {
+    public void setEmitter(InfraAgentReference emitter) {
         this.emitter = emitter;
     }
 
@@ -43,7 +43,7 @@ public class AgreementMessage extends Message {
      * @return the recievers of the message
      */
     @Override
-    public ArrayList<AgentReference> getRecievers() {
+    public ArrayList<InfraAgentReference> getRecievers() {
         return this.recievers;
     }
 
@@ -52,7 +52,7 @@ public class AgreementMessage extends Message {
      * @param recievers : the list of recievers
      */
     @Override
-    public void setRecievers(ArrayList<AgentReference> recievers) {
+    public void setRecievers(ArrayList<InfraAgentReference> recievers) {
         this.recievers = recievers;
     }
 

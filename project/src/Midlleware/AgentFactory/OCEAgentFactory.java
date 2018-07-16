@@ -6,8 +6,8 @@ package Midlleware.AgentFactory;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
-import MASInfrastructure.Agent.Agent;
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Etat.LifeCycle;
 import MASInfrastructure.Infrastructure;
 import Midlleware.ThreeState.*;
@@ -19,32 +19,32 @@ import java.util.Map;
 import java.util.logging.Level;
 
 /**
- * Agent Factory implementation : implements the functions in the IAgentFactory Interface to create different type of agent
+ * InfraAgent Factory implementation : implements the functions in the IOCEAgentFactory Interface to create different type of agent
  * @author Walid YOUNES
  * @version 1.0
  */
-public class AgentFactory implements IAgentFactory {
+public class OCEAgentFactory implements IOCEAgentFactory {
 
     private Infrastructure infrastructure;
     private ICommunicationAdapter communicationManager;
 
-    public AgentFactory(Infrastructure infrastructure, ICommunicationAdapter communicationManager) {
+    public OCEAgentFactory(Infrastructure infrastructure, ICommunicationAdapter communicationManager) {
         this.infrastructure = infrastructure;
         this.communicationManager = communicationManager;
     }
 
     /**
      * create a service agent
-     * @return the association between service Agent created and the physical reference of the agent
+     * @return the association between service InfraAgent created and the physical reference of the agent
      */
     @Override
-    public Map.Entry<ServiceAgent, AgentReference> createServiceAgent(OCService attachedService) {
+    public Map.Entry<ServiceAgent, InfraAgentReference> createServiceAgent(OCService attachedService) {
         MyLogger.log(Level.INFO, "Creating the agent for the service * " + attachedService.toString() + " *");
-        //Create the component of service Agent
+        //Create the component of service InfraAgent
         IPerceptionState myWayOfPerception = new PerceptionAgent();
-        IDecisionState myWayOfDecision = new DecisionServiceAgent();
-        IActionState myWayOfAction = new ActionServiceAgent();
-        // Create The service Agent
+        IDecisionState myWayOfDecision = new ServiceAgentDecision();
+        IActionState myWayOfAction = new ServiceAgentAction();
+        // Create The service InfraAgent
         ServiceAgent serviceAgent = new ServiceAgent(attachedService, myWayOfPerception, myWayOfDecision, myWayOfAction);
 
         // Update the attributes of the perception with the reference of the serviceAgent and the communicationManager
@@ -59,11 +59,11 @@ public class AgentFactory implements IAgentFactory {
         // create the agent's life cycle
         LifeCycle lifeCycle = new LifeCycle(perceptionState);
         // create the agent in the infrastructure
-        Agent associatedAgent = this.infrastructure.creer(attachedService, lifeCycle);
+        InfraAgent associatedInfraAgent = this.infrastructure.creer(attachedService, lifeCycle, this.infrastructure);
         // Associate the serviceAgent to the agent in the infrastructure
-        serviceAgent.setMyAssociatedAgent(associatedAgent);
+        serviceAgent.setMyInfraAgent(associatedInfraAgent);
 
-        AbstractMap.SimpleEntry agentS_referenceAgent_Association = new AbstractMap.SimpleEntry(serviceAgent, associatedAgent.getAgentReference());
+        AbstractMap.SimpleEntry agentS_referenceAgent_Association = new AbstractMap.SimpleEntry(serviceAgent, associatedInfraAgent.getInfraAgentReference());
         return agentS_referenceAgent_Association;
     }
 

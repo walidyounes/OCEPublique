@@ -4,18 +4,16 @@
 
 package MASInfrastructure.Communication;
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public interface ICommunication {
 
-    // void sendMessage(AgentReference expediteur, AgentReference destinataire, IMessage IMessage); // pourquoi on passe de l'expediteur alors qu'il est ds le msg
+    // void sendMessage(InfraAgentReference expediteur, InfraAgentReference destinataire, IMessage IMessage); // pourquoi on passe de l'expediteur alors qu'il est ds le msg
 
-    // void sendMessageBroadcast(AgentReference expediteur, IMessage IMessage);// pourquoi on passe de l'expediteur alors qu'il est ds le msg
+    // void sendMessageBroadcast(InfraAgentReference expediteur, IMessage IMessage);// pourquoi on passe de l'expediteur alors qu'il est ds le msg
 
     /**
      * sends a message from one agent to other agents
@@ -38,7 +36,7 @@ public interface ICommunication {
      * @param reciever the recipient of the messages
      * @return The received message
      */
-    Optional<IMessage> receiveMessage(AgentReference reciever);
+    Optional<IMessage> receiveMessage(InfraAgentReference reciever);
 
     /**
      * allows an agent to receive a list of messages
@@ -46,6 +44,6 @@ public interface ICommunication {
      * @param reciever the recipient of the messages
      * @return list of received messages
      */
-    ArrayList<IMessage> receiveMessages(AgentReference reciever);
+    ArrayList<IMessage> receiveMessages(InfraAgentReference reciever);
 
 }

@@ -5,12 +5,12 @@
 package OCE.Messages;
 
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 
 import java.util.ArrayList;
 
 public class SelectionMessage extends Message {
-    private AgentReference binderAgent; // The reference of the binding Agent
+    private InfraAgentReference binderAgent; // The reference of the binding InfraAgent
 
     /**
      * create a selection message
@@ -18,7 +18,7 @@ public class SelectionMessage extends Message {
      * @param recievers the references of the recievers of the selection message
      * @param bindingAgent the agent responsible of executing the physical binding
      */
-    public SelectionMessage(AgentReference emitter, ArrayList<AgentReference> recievers, AgentReference bindingAgent) {
+    public SelectionMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers, InfraAgentReference bindingAgent) {
         this.emitter = emitter;
         this.recievers = recievers;
         this.binderAgent = bindingAgent;
@@ -38,7 +38,7 @@ public class SelectionMessage extends Message {
      * @return the reference of the transmitter of the message
      */
     @Override
-    public AgentReference getEmitter() {
+    public InfraAgentReference getEmitter() {
         return this.emitter;
     }
 
@@ -47,7 +47,7 @@ public class SelectionMessage extends Message {
      * @param emitter : the reference of the transmitter
      */
     @Override
-    public void setEmitter(AgentReference emitter) {
+    public void setEmitter(InfraAgentReference emitter) {
         this.emitter = emitter;
     }
 
@@ -56,7 +56,7 @@ public class SelectionMessage extends Message {
      * @return the recievers of the message
      */
     @Override
-    public ArrayList<AgentReference> getRecievers() {
+    public ArrayList<InfraAgentReference> getRecievers() {
         return this.recievers;
     }
 
@@ -65,7 +65,7 @@ public class SelectionMessage extends Message {
      * @param recievers : the list of recievers
      */
     @Override
-    public void setRecievers(ArrayList<AgentReference> recievers) {
+    public void setRecievers(ArrayList<InfraAgentReference> recievers) {
         this.recievers = recievers;
     }
 
@@ -73,7 +73,7 @@ public class SelectionMessage extends Message {
      * get the reference of the binding agent
      * @return the reference
      */
-    public AgentReference getBinderAgent() {
+    public InfraAgentReference getBinderAgent() {
         return binderAgent;
     }
 
@@ -81,7 +81,7 @@ public class SelectionMessage extends Message {
      * set the reference of the binding agent
      * @param binderAgent : the reference of the binding agent
      */
-    public void setBinderAgent(AgentReference binderAgent) {
+    public void setBinderAgent(InfraAgentReference binderAgent) {
         this.binderAgent = binderAgent;
     }
 

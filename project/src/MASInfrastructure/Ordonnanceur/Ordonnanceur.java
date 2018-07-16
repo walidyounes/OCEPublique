@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Ordonnanceur;
 
-import MASInfrastructure.Agent.Agent;
+import MASInfrastructure.Agent.InfraAgent;
 
 
 import java.util.List;
@@ -33,13 +33,13 @@ public class Ordonnanceur implements IOrdonnanceur {
     }
 
     @Override
-    public List<Agent> arreterOrdonnancement() {
+    public List<InfraAgent> arreterOrdonnancement() {
         return stratOrdonnanceur.arreterOrdonnancement();
     }
 
     @Override
-    public void ordagentAjoute(Agent agent) {
-        stratOrdonnanceur.agentAjoute(agent);
+    public void ordagentAjoute(InfraAgent infraAgent) {
+        stratOrdonnanceur.agentAjoute(infraAgent);
     }
 
     public IStratOrdonnanceur getStratOrdonnanceur() {
@@ -47,8 +47,8 @@ public class Ordonnanceur implements IOrdonnanceur {
     }
 
     @Override
-    public void OrdagentRetire(Agent agent) {
-        stratOrdonnanceur.agentRetire(agent);
+    public void OrdagentRetire(InfraAgent infraAgent) {
+        stratOrdonnanceur.agentRetire(infraAgent);
     }
 
 

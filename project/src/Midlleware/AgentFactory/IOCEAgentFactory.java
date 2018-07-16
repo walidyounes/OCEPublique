@@ -5,24 +5,24 @@
 package Midlleware.AgentFactory;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.BinderAgent;
 import OCE.ServiceAgent;
 
 import java.util.Map;
 
 /**
- * Agent Factory Interface : offer a set of functions allowing to create different type of agents
+ * InfraAgent Factory Interface : offer a set of functions allowing to create different type of agents
  * @author Walid YOUNES
  * @version 1.0
  */
-public interface IAgentFactory {
+public interface IOCEAgentFactory {
 
     /**
      * Create an agent attached to a service
      * @return the service agent created
      */
-    Map.Entry<ServiceAgent, AgentReference> createServiceAgent(OCService attachedService);
+    Map.Entry<ServiceAgent, InfraAgentReference> createServiceAgent(OCService attachedService);
 
     /**
      * Create a binding agent

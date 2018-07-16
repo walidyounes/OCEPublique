@@ -4,13 +4,13 @@
 
 package MASInfrastructure.Annuaire;
 
-import MASInfrastructure.Agent.Agent;
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfraAgentReference;
 
 
 public interface IGestionAgent {
 
-    void addAgent(Agent agent);
+    void addAgent(InfraAgent infraAgent);
 
-    void removeAgent(AgentReference agentReference);
+    void removeAgent(InfraAgentReference infraAgentReference);
 }

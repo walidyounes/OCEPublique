@@ -9,8 +9,8 @@ import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Infrastructure;
 import Logger.MyLogger;
-import Midlleware.AgentFactory.AgentFactory;
-import Midlleware.AgentFactory.IAgentFactory;
+import Midlleware.AgentFactory.OCEAgentFactory;
+import Midlleware.AgentFactory.IOCEAgentFactory;
 import OCE.Medium.Medium;
 import OCE.Unifieur.Matching;
 import OCE.sonde.Sonde;
@@ -31,7 +31,7 @@ public class Tests {
         Matching alwaysTrueMatching = new Matching();
         Medium medium = new Medium(infrastructure);
 
-        IAgentFactory agentFactory = new AgentFactory(infrastructure, medium);
+        IOCEAgentFactory agentFactory = new OCEAgentFactory(infrastructure, medium);
 
 
         Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 1000);

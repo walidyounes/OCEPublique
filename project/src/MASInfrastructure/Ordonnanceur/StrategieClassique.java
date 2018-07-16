@@ -4,29 +4,29 @@
 
 package MASInfrastructure.Ordonnanceur;
 
-import MASInfrastructure.Agent.Agent;
+import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Annuaire.IReferenceAgentListener;
 
 import java.util.List;
 
 public class StrategieClassique implements IStratOrdonnanceur {
 
-    private List<Agent> listOrdonnancement; // les agents observés
+    private List<InfraAgent> listOrdonnancement; // les agents observés
     private List<OrdonnanceurListener> listListenerPourOrdonnanceur; // Liste
     // des
     // observateurs
     private int vitesse;
     private boolean run = true;
     // Etat1 etatInitial = new Etat1();
-    // OCE.Agent agent1 = new OCE.Agent(etatInitial);
-    // OCE.Agent agent2 = new OCE.Agent(etatInitial);
-    // OCE.Agent agent3 = new OCE.Agent(etatInitial);
+    // OCE.InfraAgent agent1 = new OCE.InfraAgent(etatInitial);
+    // OCE.InfraAgent agent2 = new OCE.InfraAgent(etatInitial);
+    // OCE.InfraAgent agent3 = new OCE.InfraAgent(etatInitial);
 
-    public StrategieClassique(List<Agent> listAgents, List<OrdonnanceurListener> listListenerActuels) {
-        listOrdonnancement = listAgents;
+    public StrategieClassique(List<InfraAgent> listInfraAgents, List<OrdonnanceurListener> listListenerActuels) {
+        listOrdonnancement = listInfraAgents;
         /*
-		 * listAgents.add(agent1); listAgents.add(agent2);
-		 * listAgents.add(agent3);
+		 * listInfraAgents.add(agent1); listInfraAgents.add(agent2);
+		 * listInfraAgents.add(agent3);
 		 */
         listListenerPourOrdonnanceur = listListenerActuels;
         changerVitesse(EnumVitesse.CENT);
@@ -35,10 +35,10 @@ public class StrategieClassique implements IStratOrdonnanceur {
 /*	@Override
 	public void ordonnancer() {
 		run = true;
-		OCE.Agent agentCourant;
+		OCE.InfraAgent agentCourant;
 		while (run) {
 			agentCourant = listOrdonnancement.get(0);
-			LifeCycle(agentCourant.getAgentReference(), agentCourant.getEtatInitial());
+			LifeCycle(agentCourant.getInfraAgentReference(), agentCourant.getEtatInitial());
 			listOrdonnancement.remove(agentCourant);
 			listOrdonnancement.add(agentCourant);
 
@@ -51,27 +51,27 @@ public class StrategieClassique implements IStratOrdonnanceur {
     public void ordonnancer() {
         // Todo a compléter
         run = true;
-        Agent agentCourant;
+        InfraAgent infraAgentCourant;
         /// while (run) {
         int i = 0; // Walid : fixer le itérations
         while (i < 6) {
-            agentCourant = listOrdonnancement.get(0);
-            //LifeCycle(agentCourant.getAgentReference(), agentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
-            agentCourant.run(); // walid : On actionne le changment d'etat de l'agent
-            listOrdonnancement.remove(agentCourant);
-            listOrdonnancement.add(agentCourant);
+            infraAgentCourant = listOrdonnancement.get(0);
+            //LifeCycle(infraAgentCourant.getInfraAgentReference(), infraAgentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
+            infraAgentCourant.run(); // walid : On actionne le changment d'etat de l'agent
+            listOrdonnancement.remove(infraAgentCourant);
+            listOrdonnancement.add(infraAgentCourant);
 
             //System.out.println("listOrdonnancement" + getListOrdonnancement());
             i++;
         }
     }
 
-    public List<Agent> getListOrdonnancement() {
+    public List<InfraAgent> getListOrdonnancement() {
         return listOrdonnancement;
     }
 
     /*
-        private void LifeCycle(AgentReference agentCourantReference, EtatAbstract etatAbstract) {
+        private void LifeCycle(InfraAgentReference agentCourantReference, EtatAbstract etatAbstract) {
             listListenerPourOrdonnanceur.forEach(
                     ordonnanceurListener -> ordonnanceurListener.changementEtat(agentCourantReference, etatAbstract));
             try {
@@ -110,7 +110,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
     }
 
     @Override
-    public List<Agent> arreterOrdonnancement() {
+    public List<InfraAgent> arreterOrdonnancement() {
         run = false;
         return listOrdonnancement;
     }
@@ -121,8 +121,8 @@ public class StrategieClassique implements IStratOrdonnanceur {
     }
 
     @Override
-    public void agentAjoute(Agent agent) {
-        listOrdonnancement.add(agent);
+    public void agentAjoute(InfraAgent infraAgent) {
+        listOrdonnancement.add(infraAgent);
     }
 
     public List<IReferenceAgentListener> getReferenceAgentListeners() {
@@ -130,7 +130,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
     }
 
     @Override
-    public void agentRetire(Agent agent) {
-        listOrdonnancement.remove(agent);
+    public void agentRetire(InfraAgent infraAgent) {
+        listOrdonnancement.remove(infraAgent);
     }
 }

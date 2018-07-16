@@ -22,7 +22,7 @@ public class PerceptionState implements IEtat{
 
     @Override
     public void execute(LifeCycle c) {
-        MyLogger.log(Level.INFO, " Agent is in Perception state " );
+        MyLogger.log(Level.INFO, " InfraAgent is in Perception state " );
         myWayOfPerception.percept();
         c.setCurrentState(this.nextState);
     }

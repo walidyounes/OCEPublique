@@ -5,8 +5,7 @@
 package OCE.Messages;
 
 
-import MASInfrastructure.Agent.AgentReference;
-import MASInfrastructure.Communication.AbstractPerception;
+import MASInfrastructure.Agent.InfraAgentReference;
 
 import java.util.ArrayList;
 
@@ -23,7 +22,7 @@ public class ResponseMessage extends Message {
      * @param emitter    reference of the responding agent
      * @param recievers the references of the recievers of the response, if null == Broadcast
      */
-    public ResponseMessage(AgentReference emitter, ArrayList<AgentReference> recievers) {
+    public ResponseMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter= emitter;
         this.recievers = recievers;
     }
@@ -41,7 +40,7 @@ public class ResponseMessage extends Message {
      * @return the reference of the transmitter of the message
      */
     @Override
-    public AgentReference getEmitter() {
+    public InfraAgentReference getEmitter() {
         return this.emitter;
     }
 
@@ -50,7 +49,7 @@ public class ResponseMessage extends Message {
      * @param emitter : the reference of the transmitter
      */
     @Override
-    public void setEmitter(AgentReference emitter) {
+    public void setEmitter(InfraAgentReference emitter) {
         this.emitter = emitter;
     }
 
@@ -59,7 +58,7 @@ public class ResponseMessage extends Message {
      * @return the recievers of the message
      */
     @Override
-    public ArrayList<AgentReference> getRecievers() {
+    public ArrayList<InfraAgentReference> getRecievers() {
         return this.recievers;
     }
 
@@ -68,7 +67,7 @@ public class ResponseMessage extends Message {
      * @param recievers : the list of recievers
      */
     @Override
-    public void setRecievers(ArrayList<AgentReference> recievers) {
+    public void setRecievers(ArrayList<InfraAgentReference> recievers) {
         this.recievers = recievers;
     }
 

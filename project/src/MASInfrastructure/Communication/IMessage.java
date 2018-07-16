@@ -4,7 +4,8 @@
 
 package MASInfrastructure.Communication;
 
-import MASInfrastructure.Agent.AgentReference;
+import MASInfrastructure.Agent.InfraAgentReference;
+
 import java.util.ArrayList;
 
 /**
@@ -18,25 +19,25 @@ public interface IMessage {
      * get the transmitter of the message
      * @return the reference of the transmitter of the message
      */
-    AgentReference getEmitter();
+    InfraAgentReference getEmitter();
 
     /**
      *  set the refernece of the transmitter of the message
      * @param emitter : the reference of the transmitter
      */
-    void setEmitter(AgentReference emitter);
+    void setEmitter(InfraAgentReference emitter);
 
     /**
      * get the list of the recievers of the message
      * @return the recievers of the message
      */
-    ArrayList<AgentReference> getRecievers();
+    ArrayList<InfraAgentReference> getRecievers();
 
     /**
      * set the list of recievers for this message
      * @param recievers : the list of recievers
      */
-    void setRecievers(ArrayList<AgentReference> recievers);
+    void setRecievers(ArrayList<InfraAgentReference> recievers);
 
 
 

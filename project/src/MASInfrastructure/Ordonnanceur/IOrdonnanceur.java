@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Ordonnanceur;
 
-import MASInfrastructure.Agent.Agent;
+import MASInfrastructure.Agent.InfraAgent;
 
 
 import java.util.List;
@@ -17,11 +17,11 @@ public interface IOrdonnanceur {
 
     void changerOrdonnancement(IStratOrdonnanceur stratOrdonnanceur);
 
-    List<Agent> arreterOrdonnancement();
+    List<InfraAgent> arreterOrdonnancement();
 
-    void ordagentAjoute(Agent agent);
+    void ordagentAjoute(InfraAgent infraAgent);
 
-    void OrdagentRetire(Agent agent);
+    void OrdagentRetire(InfraAgent infraAgent);
 
 
 }

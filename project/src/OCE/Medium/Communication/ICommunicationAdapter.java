@@ -37,7 +37,7 @@ public interface ICommunicationAdapter {
      * @param receiver the receiver of the messages
      * @return The received message
      */
-    Optional<IMessage> receiveMessage(ServiceAgent receiver);
+    // Optional<IMessage> receiveMessage(ServiceAgent receiver);
 
     /**
      * allows an agent to retreive all the messages sented to it
@@ -45,5 +45,5 @@ public interface ICommunicationAdapter {
      * @param receiver the recipient of the messages
      * @return list of received messages
      */
-    ArrayList<IMessage> receiveMessages(ServiceAgent receiver);
+    // ArrayList<IMessage> receiveMessages(ServiceAgent receiver);
 }
