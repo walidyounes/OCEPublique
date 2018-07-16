@@ -22,7 +22,7 @@ public class ServiceAgent  {
     private IDecisionState myWayOfDecision;
     private IActionState myWayOfAction;
     private OCService handledService;
-    private InfraAgent myInfraAgent; // Todo : maybe we will not need it after all ^^
+    private InfraAgent myInfraAgent;
 
     public ServiceAgent(OCService handledService, IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
         this.myID = new IDAgent();

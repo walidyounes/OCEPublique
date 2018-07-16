@@ -5,6 +5,7 @@
 package OCE;
 
 import Logger.MyLogger;
+import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Communication.IMessage;
 import Midlleware.ThreeState.IPerceptionState;
 import OCE.Medium.Communication.ICommunicationAdapter;
@@ -17,29 +18,28 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class PerceptionAgent implements IPerceptionState {
+public class AgentPerception implements IPerceptionState {
 
-    private ServiceAgent serviceAgent;
-    private ICommunicationAdapter communicationManager;
+    private InfraAgent myInfraAgent;
 
 
     /**
-     * Update the reference of the ServiceAgent that this component is attached to
-     * @param serviceAgent : the serviceAgent whom this component is attached to
+     * Update the reference of the Infrastructure Agent that this component is attached to
+     * @param myInfraAgent : the Infrastructure Agent whom this component is attached to
      */
     @Override
-    public void setServiceAgent(ServiceAgent serviceAgent) {
-        this.serviceAgent = serviceAgent;
+    public void setInfraAgent(InfraAgent myInfraAgent) {
+        this.myInfraAgent = myInfraAgent;
     }
 
     /**
      * Update the communication manager used to retrieve the messages from the mail Box
      * @param communicationManager
      */
-    @Override
+   /* @Override
     public void setCommunicationManager(ICommunicationAdapter communicationManager) {
         this.communicationManager = communicationManager;
-    }
+    }*/
 
     /**
      * Implement the perception process of the agent, which consist in reading the received messages
@@ -48,7 +48,7 @@ public class PerceptionAgent implements IPerceptionState {
     public ArrayList<IMessage> percept() {
         MyLogger.log(Level.INFO, "The service agent is percepting the envirnment !");
         // Read the messages from the mail-Box
-        ArrayList<IMessage> messages = this.serviceAgent.getMyInfraAgent().readMessages();
+        ArrayList<IMessage> messages = this.myInfraAgent.readMessages();
         MyLogger.log(Level.INFO, "La Liste des messages reçu est !"+ messages.toString());
         return messages;
     }

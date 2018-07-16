@@ -41,15 +41,11 @@ public class OCEAgentFactory implements IOCEAgentFactory {
     public Map.Entry<ServiceAgent, InfraAgentReference> createServiceAgent(OCService attachedService) {
         MyLogger.log(Level.INFO, "Creating the agent for the service * " + attachedService.toString() + " *");
         //Create the component of service InfraAgent
-        IPerceptionState myWayOfPerception = new PerceptionAgent();
+        IPerceptionState myWayOfPerception = new AgentPerception();
         IDecisionState myWayOfDecision = new ServiceAgentDecision();
         IActionState myWayOfAction = new ServiceAgentAction();
         // Create The service InfraAgent
         ServiceAgent serviceAgent = new ServiceAgent(attachedService, myWayOfPerception, myWayOfDecision, myWayOfAction);
-
-        // Update the attributes of the perception with the reference of the serviceAgent and the communicationManager
-        myWayOfPerception.setServiceAgent(serviceAgent);
-        myWayOfPerception.setCommunicationManager(this.communicationManager);
 
         //Create the cycle : perception -> decision -> action
         PerceptionState perceptionState = new PerceptionState(null,myWayOfPerception );
@@ -62,6 +58,9 @@ public class OCEAgentFactory implements IOCEAgentFactory {
         InfraAgent associatedInfraAgent = this.infrastructure.creer(attachedService, lifeCycle, this.infrastructure);
         // Associate the serviceAgent to the agent in the infrastructure
         serviceAgent.setMyInfraAgent(associatedInfraAgent);
+
+        // Update the attributes of the perception with the reference of the Infrastructure Agent 
+        myWayOfPerception.setInfraAgent(associatedInfraAgent);
 
         AbstractMap.SimpleEntry agentS_referenceAgent_Association = new AbstractMap.SimpleEntry(serviceAgent, associatedInfraAgent.getInfraAgentReference());
         return agentS_referenceAgent_Association;

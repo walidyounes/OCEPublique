@@ -28,7 +28,7 @@ import java.util.Optional;
 public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICommunication, IOrdonnanceur {
 
     private InfraAgentFactory infraAgentFactory;
-    private IOrdonnanceur ordonnanceur;// Todo walid : pourquoi pas IOrdonnanceur ?
+    private IOrdonnanceur ordonnanceur;
     private IAnnuaire annuaire;
 
     public Infrastructure() {

@@ -5,6 +5,7 @@
 package OCE;
 
 import Logger.MyLogger;
+import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Communication.IMessage;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
@@ -19,41 +20,17 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class BinderAgent implements IPerceptionState, IDecisionState, IActionState {
+public class BinderAgent  {
 
-    /**
-     * Implement the perception process of the agent, which consist in reading the received messages
-     */
-    @Override
-    public ArrayList<IMessage> percept() {
-        MyLogger.log(Level.CONFIG, "The Binder agent is percepting the envirnment !");
-        return null;
+    private IDAgent myID;
+    private IPerceptionState myWayOfPerception;
+    private IDecisionState myWayOfDecision;
+    private IActionState myWayOfAction;
+
+    public BinderAgent(IDAgent myID, IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
+        this.myID = myID;
+        this.myWayOfPerception = myWayOfPerception;
+        this.myWayOfDecision = myWayOfDecision;
+        this.myWayOfAction = myWayOfAction;
     }
-
-    @Override
-    public void setServiceAgent(ServiceAgent serviceAgent) {
-
-    }
-
-    @Override
-    public void setCommunicationManager(ICommunicationAdapter communicationManager) {
-
-    }
-
-    /**
-     * Impelment the decision mechanisme of the binder agent, and produce a list of decisions
-     */
-    @Override
-    public void decide() {
-        MyLogger.log(Level.CONFIG, "The binding agent is making a decision !");
-    }
-
-    /**
-     * Execute the taken decisions and affect the environement acordingly
-     */
-    @Override
-    public void act() {
-        MyLogger.log(Level.CONFIG, "The binding agent lanch the bidning procedure !");
-    }
-
 }
