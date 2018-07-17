@@ -4,7 +4,11 @@
 
 package Midlleware.ThreeState;
 
+import MASInfrastructure.Communication.IMessage;
+
+import java.util.ArrayList;
+
 public interface IDecisionState {
 
-    void decide();
+    void decide(ArrayList<IMessage> perceptions);
 }

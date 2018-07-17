@@ -5,9 +5,11 @@
 package Midlleware.ThreeState;
 
 import Logger.MyLogger;
+import MASInfrastructure.Communication.IMessage;
 import MASInfrastructure.Etat.IEtat;
 import MASInfrastructure.Etat.LifeCycle;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class DecisionState implements IEtat {
@@ -23,7 +25,10 @@ public class DecisionState implements IEtat {
     @Override
     public void execute(LifeCycle c) {
         MyLogger.log(Level.INFO, " InfraAgent is in Decision state " );
-        myWayOfDecision.decide();
+        // Retrive the list of perceptions initialized in the previous state
+        ArrayList<IMessage> messages = c.getSharedData("ListPerceptions");
+        // execute the decision method of the agent
+        myWayOfDecision.decide(messages);
         c.setCurrentState(this.nextState);
     }
 

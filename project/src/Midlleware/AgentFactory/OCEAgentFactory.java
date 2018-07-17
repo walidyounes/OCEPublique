@@ -13,6 +13,8 @@ import MASInfrastructure.Infrastructure;
 import Midlleware.ThreeState.*;
 import OCE.*;
 import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.Selection.IMessageSelection;
+import OCE.Selection.RandomSelection;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -40,9 +42,12 @@ public class OCEAgentFactory implements IOCEAgentFactory {
     @Override
     public Map.Entry<ServiceAgent, InfraAgentReference> createServiceAgent(OCService attachedService) {
         MyLogger.log(Level.INFO, "Creating the agent for the service * " + attachedService.toString() + " *");
-        //Create the component of service InfraAgent
+        //Create the attributes of service InfraAgent
         IPerceptionState myWayOfPerception = new AgentPerception();
-        IDecisionState myWayOfDecision = new ServiceAgentDecision();
+        //Create the strategy of message selection
+        IMessageSelection messageSelectionStrategy = new RandomSelection(Integer.MAX_VALUE);
+
+        IDecisionState myWayOfDecision = new ServiceAgentDecision(messageSelectionStrategy);
         IActionState myWayOfAction = new ServiceAgentAction();
         // Create The service InfraAgent
         ServiceAgent serviceAgent = new ServiceAgent(attachedService, myWayOfPerception, myWayOfDecision, myWayOfAction);

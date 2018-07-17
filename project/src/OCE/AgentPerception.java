@@ -9,6 +9,7 @@ import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Communication.IMessage;
 import Midlleware.ThreeState.IPerceptionState;
 import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.Messages.EmptyMessage;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -49,7 +50,11 @@ public class AgentPerception implements IPerceptionState {
         MyLogger.log(Level.INFO, "The service agent is percepting the envirnment !");
         // Read the messages from the mail-Box
         ArrayList<IMessage> messages = this.myInfraAgent.readMessages();
-        MyLogger.log(Level.INFO, "La Liste des messages reçu est !"+ messages.toString());
+        MyLogger.log(Level.INFO, "The recieved messages are = "+ messages.toString());
+
+        if (messages.isEmpty()){ // If the agent didn't recieve any messages he send a EmptyMessage (equivalent to an Empty Perception)
+            messages.add(new EmptyMessage());
+        }
         return messages;
     }
 }
