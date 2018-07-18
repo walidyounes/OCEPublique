@@ -32,6 +32,8 @@ public class ServiceAgentDecision implements IDecisionState {
     public void decide(ArrayList<IMessage> perceptions) {
         MyLogger.log(Level.INFO, "The service agent is making decisions !");
         //Call the selection method to select the messages to treat
-        
+        IMessage messageSelected = this.selectionMessageStrategy.singleSelect(perceptions);
+        //Treat the selected message
+        messageSelected.toSelfTreat();
     }
 }

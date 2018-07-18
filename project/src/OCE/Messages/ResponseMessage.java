@@ -5,9 +5,12 @@
 package OCE.Messages;
 
 
+import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
+import OCE.Decisions.AbstractDecision;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * This class represents the response message sent in the second step of the ARSA protocol (it tells the agent that send the ad that i'm interested)
@@ -35,41 +38,9 @@ public class ResponseMessage extends Message {
         this.recievers = null;
     }
 
-    /**
-     * get the transmitter of the message
-     * @return the reference of the transmitter of the message
-     */
     @Override
-    public InfraAgentReference getEmitter() {
-        return this.emitter;
+    public AbstractDecision toSelfTreat() {
+        MyLogger.log(Level.INFO, "Treating a response message ! ");
+        return null;
     }
-
-    /**
-     *  set the refernece of the transmitter of the message
-     * @param emitter : the reference of the transmitter
-     */
-    @Override
-    public void setEmitter(InfraAgentReference emitter) {
-        this.emitter = emitter;
-    }
-
-    /**
-     * get the list of the recievers of the message
-     * @return the recievers of the message
-     */
-    @Override
-    public ArrayList<InfraAgentReference> getRecievers() {
-        return this.recievers;
-    }
-
-    /**
-     * set the list of recievers for this message
-     * @param recievers : the list of recievers
-     */
-    @Override
-    public void setRecievers(ArrayList<InfraAgentReference> recievers) {
-        this.recievers = recievers;
-    }
-
-
 }

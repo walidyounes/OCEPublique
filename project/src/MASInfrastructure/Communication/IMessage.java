@@ -5,6 +5,7 @@
 package MASInfrastructure.Communication;
 
 import MASInfrastructure.Agent.InfraAgentReference;
+import OCE.Decisions.AbstractDecision;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,10 @@ public interface IMessage {
      */
     void setRecievers(ArrayList<InfraAgentReference> recievers);
 
+    /**
+     * treat the message and make the suitable decision
+     * @return the deicision made by the engine
+     */
+    AbstractDecision toSelfTreat();
 
-
-    // AbstractPerception toPerception();
 }

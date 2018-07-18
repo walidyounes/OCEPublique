@@ -2,20 +2,17 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Messages;
+package OCE.Decisions;
 
 import MASInfrastructure.Agent.InfraAgentReference;
-import MASInfrastructure.Communication.IMessage;
-import OCE.Decisions.AbstractDecision;
 
 import java.util.ArrayList;
-
 /**
- * This is an abstract class representing a message that can be exchanged between agent
+ * This is an abstract class representing a decision made by the OCE engine
  * @author Walid YOUNES
  * @version 1.0
  */
-public abstract class Message implements IMessage {
+public abstract class AbstractDecision {
 
     protected InfraAgentReference emitter; // The transmitter of the message
     protected ArrayList<InfraAgentReference> recievers; // The list of the recipients of the message, if == null -> message is in broadcast
@@ -24,8 +21,8 @@ public abstract class Message implements IMessage {
      * get the transmitter of the message
      * @return the reference of the transmitter of the message
      */
-    @Override
-    public InfraAgentReference getEmitter() {
+
+    public final InfraAgentReference getEmitter() {
         return this.emitter;
     }
 
@@ -33,8 +30,7 @@ public abstract class Message implements IMessage {
      *  set the refernece of the transmitter of the message
      * @param emitter : the reference of the transmitter
      */
-    @Override
-    public void setEmitter(InfraAgentReference emitter) {
+    public final void setEmitter(InfraAgentReference emitter) {
         this.emitter = emitter;
     }
 
@@ -42,8 +38,7 @@ public abstract class Message implements IMessage {
      * get the list of the recievers of the message
      * @return the recievers of the message
      */
-    @Override
-    public ArrayList<InfraAgentReference> getRecievers() {
+    public final ArrayList<InfraAgentReference> getRecievers() {
         return this.recievers;
     }
 
@@ -51,13 +46,8 @@ public abstract class Message implements IMessage {
      * set the list of recievers for this message
      * @param recievers : the list of recievers
      */
-    @Override
-    public void setRecievers(ArrayList<InfraAgentReference> recievers) {
+    public final void setRecievers(ArrayList<InfraAgentReference> recievers) {
         this.recievers = recievers;
     }
 
-    /**
-     * treat the message according to it's type
-     */
-    public abstract AbstractDecision toSelfTreat();
 }
