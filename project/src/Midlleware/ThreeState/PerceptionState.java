@@ -8,6 +8,7 @@ import Logger.MyLogger;
 import MASInfrastructure.Communication.IMessage;
 import MASInfrastructure.Etat.IEtat;
 import MASInfrastructure.Etat.LifeCycle;
+import OCE.Messages.Message;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -26,7 +27,7 @@ public class PerceptionState implements IEtat{
     public void execute(LifeCycle c) {
         MyLogger.log(Level.INFO, " InfraAgent is in Perception state " );
         // Execute the perception method of the agent
-        ArrayList<IMessage> messages = myWayOfPerception.percept();
+        ArrayList<Message> messages = myWayOfPerception.percept();
         // Passe the list of messages to the next state
         c.shareVariable("ListPerceptions", messages);
         c.setCurrentState(this.nextState);
