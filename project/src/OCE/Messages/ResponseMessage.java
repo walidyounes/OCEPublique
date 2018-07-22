@@ -5,12 +5,13 @@
 package OCE.Messages;
 
 
-import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
-import OCE.Decisions.AbstractDecision;
+import OCE.Medium.Recorder.IRecord;
+import OCE.Medium.ReferenceResolutionFailure;
+import OCE.Perceptions.AbstractPerception;
+import OCE.Perceptions.ResponsePerception;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
  * This class represents the response message sent in the second step of the ARSA protocol (it tells the agent that send the ad that i'm interested)
@@ -30,17 +31,29 @@ public class ResponseMessage extends Message {
         this.recievers = recievers;
     }
 
-    /**
-     * create a Response message (empty)
-     */
-    public ResponseMessage() {
-        this.emitter= null;
-        this.recievers = null;
+
+/*
+    @Override
+    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
+        MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
+        //Verify the connexion state of the agent
+        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
+            // Send a selection message to the emitter of this message
+            ArrayList<InfraAgentReference> SelectionRecievers = new ArrayList<>();
+            SelectionRecievers.add(this.emitter);
+            return new SelectDecision(serviceAgentRef, SelectionRecievers);
+        }
+        return null;
     }
+    */
 
     @Override
-    public AbstractDecision toSelfTreat() {
-        MyLogger.log(Level.INFO, "Treating a response message ! ");
-        return null;
+    public AbstractPerception toPerception(IRecord referenceResolver) {
+        try {
+            return new ResponsePerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveServiceAgentsByInfraAgentReferences(this.recievers));
+        } catch (ReferenceResolutionFailure referenceResolutionFailure) {
+            referenceResolutionFailure.printStackTrace();
+            return null;
+        }
     }
 }

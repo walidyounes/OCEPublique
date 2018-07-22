@@ -4,7 +4,8 @@
 
 package OCE.Decisions;
 
-import MASInfrastructure.Agent.InfraAgentReference;
+import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.ServiceAgent;
 
 import java.util.ArrayList;
 
@@ -20,9 +21,14 @@ public class AgreeDecision extends AbstractDecision {
      * @param emitter    reference of the agent that agrees
      * @param recievers the references of the recievers of the ad, if null == Broadcast
      */
-    public AgreeDecision(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
+    public AgreeDecision(ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
         this.emitter= emitter;
         this.recievers = recievers;
+    }
+
+    @Override
+    public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
+
     }
 }
 

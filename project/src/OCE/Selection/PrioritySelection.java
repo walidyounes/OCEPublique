@@ -4,7 +4,7 @@
 
 package OCE.Selection;
 
-import MASInfrastructure.Communication.IMessage;
+import OCE.Messages.Message;
 
 import java.util.ArrayList;
 
@@ -13,12 +13,12 @@ public class PrioritySelection implements IMessageSelection {
     private float alpha; // Le seuil d'intérêt
 
     @Override
-    public IMessage singleSelect(ArrayList<IMessage> perceptions) {
+    public Message singleSelect(ArrayList<Message> perceptions) {
         return null;
     }
 
     @Override
-    public ArrayList<IMessage> multipleSelect(ArrayList<IMessage> perceptions) {
+    public ArrayList<Message> multipleSelect(ArrayList<Message> perceptions) {
         return null;
     }
 }

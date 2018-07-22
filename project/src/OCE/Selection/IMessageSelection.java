@@ -4,13 +4,13 @@
 
 package OCE.Selection;
 
-import MASInfrastructure.Communication.IMessage;
+import OCE.Messages.Message;
 
 import java.util.ArrayList;
 
 public interface IMessageSelection {
 
-    IMessage singleSelect(ArrayList<IMessage> perceptions);
+    Message singleSelect(ArrayList<Message> perceptions);
 
-    ArrayList<IMessage> multipleSelect(ArrayList<IMessage> perceptions);
+    ArrayList<Message> multipleSelect(ArrayList<Message> perceptions);
 }

@@ -26,7 +26,7 @@ public class Tests {
 
         //Create and configure the logger service
         MyLogger logger = new MyLogger(); // Pas la peine d'instancier
-        logger.init();
+        MyLogger.init();
 
         Matching alwaysTrueMatching = new Matching();
         Medium medium = new Medium(infrastructure);
@@ -58,7 +58,7 @@ public class Tests {
         pause(5000);
         infrastructure.ordonnancer();
 
-        logger.close();
+        MyLogger.close();
     }
     public static void pause(long ms) {
         try {

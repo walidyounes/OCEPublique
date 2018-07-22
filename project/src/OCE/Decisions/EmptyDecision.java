@@ -4,6 +4,8 @@
 
 package OCE.Decisions;
 
+import OCE.Medium.Communication.ICommunicationAdapter;
+
 /**
  * This class represent an empty decision which mean the engine wasn't abale for some reason to make a decision (and it can be also do not nothing)
  * @author Walid YOUNES
@@ -19,4 +21,8 @@ public class EmptyDecision extends AbstractDecision {
         this.recievers = null;
     }
 
+    @Override
+    public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
+
+    }
 }

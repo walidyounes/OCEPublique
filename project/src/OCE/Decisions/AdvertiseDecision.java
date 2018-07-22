@@ -4,9 +4,13 @@
 
 package OCE.Decisions;
 
-import MASInfrastructure.Agent.InfraAgentReference;
+import Logger.MyLogger;
+import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.Messages.AdMessage;
+import OCE.ServiceAgent;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * This class represent an advertisement decision (i.e. send an advertisement message -usualy in boradcast-)
@@ -20,8 +24,15 @@ public class AdvertiseDecision extends AbstractDecision {
      * @param emitter    reference of the advertising agent
      * @param recievers the references of the recievers of the ad, if null == Broadcast
      */
-    public AdvertiseDecision(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
+    public AdvertiseDecision(ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
         this.emitter= emitter;
         this.recievers = recievers;
+    }
+
+    @Override
+    public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
+        MyLogger.log(Level.INFO, "Treating an advertisement decision ! ");
+        AdMessage adMessage = new AdMessage(null, null);
+        communicationAdapter.sendMessageBroadcast(adMessage, this.emitter, this.recievers);
     }
 }

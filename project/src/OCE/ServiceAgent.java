@@ -23,6 +23,7 @@ public class ServiceAgent  {
     private IActionState myWayOfAction;
     private OCService handledService;
     private InfraAgent myInfraAgent;
+    private ServiceAgentConnexionState myConnexionState;
 
     public ServiceAgent(OCService handledService, IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
         this.myID = new IDAgent();
@@ -31,6 +32,7 @@ public class ServiceAgent  {
         this.myWayOfDecision = myWayOfDecision;
         this.myWayOfAction = myWayOfAction;
         this.myInfraAgent = null;
+        this.myConnexionState = ServiceAgentConnexionState.Created;
     }
 
     /**
@@ -87,6 +89,22 @@ public class ServiceAgent  {
      */
     public InfraAgent getMyInfraAgent() {
         return myInfraAgent;
+    }
+
+    /**
+     * Get the current connexion state of this agent
+     * @return the connexion state : connected , not connected, created, waiting
+     */
+    public ServiceAgentConnexionState getMyConnexionState() {
+        return myConnexionState;
+    }
+
+    /**
+     * Update the value of the connexion's state of this agent
+     * @param myConnexionState : the new value
+     */
+    public void setMyConnexionState(ServiceAgentConnexionState myConnexionState) {
+        this.myConnexionState = myConnexionState;
     }
 
     @Override

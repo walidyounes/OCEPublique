@@ -7,15 +7,14 @@ package OCE.Medium;
 import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
-import MASInfrastructure.Communication.IMessage;
 import OCE.Medium.Communication.CommunicationAdapter;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.Recorder.Record;
+import OCE.Messages.Message;
 import OCE.ServiceAgent;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class Medium implements IRecord, ICommunicationAdapter {
 
@@ -37,7 +36,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * @param recievers  : the recievers of the message
      */
     @Override
-    public void sendMessageBroadcast(IMessage message,  ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public void sendMessageBroadcast(Message message,  ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
         this.mycomunnicationAdapter.sendMessageBroadcast(message, emitter,  recievers);
     }
 
@@ -49,7 +48,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * @param recievers  : the recievers of the message
      */
     @Override
-    public void sendMessage(IMessage message,  ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public void sendMessage(Message message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
         this.mycomunnicationAdapter.sendMessage(message, emitter,  recievers);
     }
 
@@ -125,5 +124,27 @@ public class Medium implements IRecord, ICommunicationAdapter {
     @Override
     public ServiceAgent retrieveSAgentByPService(OCService attachedService) {
         return this.myRecorder.retrieveSAgentByPService(attachedService);
+    }
+
+    /**
+     * Resolve the logical adresse (ServiceAgent) of a list of InfraAgentReference
+     * @param infraAgents the liste of the refrence of the infrastructure agent
+     * @return the coresponding list of ServiceAgents
+     * @throws ReferenceResolutionFailure if one of the agents doesn't exist
+     */
+    @Override
+    public ArrayList<ServiceAgent> retrieveServiceAgentsByInfraAgentReferences(ArrayList<InfraAgentReference> infraAgents) throws ReferenceResolutionFailure {
+        return this.myRecorder.retrieveServiceAgentsByInfraAgentReferences(infraAgents);
+    }
+
+    /**
+     * Resolve the logical adresse (ServiceAgent) of the InfraAgentReference
+     * @param infraAgent the refrence of the infrastructure agent
+     * @return the coresponding ServiceAgent
+     * @throws ReferenceResolutionFailure if the agent doesn't exist
+     */
+    @Override
+    public ServiceAgent retrieveServiceAgentByInfraAgentReference(InfraAgentReference infraAgent) throws ReferenceResolutionFailure {
+        return this.myRecorder.retrieveServiceAgentByInfraAgentReference(infraAgent);
     }
 }

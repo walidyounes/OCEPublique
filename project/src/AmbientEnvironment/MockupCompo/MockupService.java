@@ -38,4 +38,22 @@ public abstract class MockupService extends OCService {
         // "+linkedServices;
         return "Service " + name + " of Component " + owner;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MockupService)) return false;
+
+        MockupService that = (MockupService) o;
+
+        if (!name.equals(that.name)) return false;
+        return myWay == that.myWay;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + myWay.hashCode();
+        return result;
+    }
 }

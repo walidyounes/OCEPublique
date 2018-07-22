@@ -8,6 +8,8 @@ import Logger.MyLogger;
 import MASInfrastructure.Communication.IMessage;
 import MASInfrastructure.Etat.IEtat;
 import MASInfrastructure.Etat.LifeCycle;
+import OCE.Decisions.AbstractDecision;
+import OCE.Messages.Message;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -26,9 +28,12 @@ public class DecisionState implements IEtat {
     public void execute(LifeCycle c) {
         MyLogger.log(Level.INFO, " InfraAgent is in Decision state " );
         // Retrive the list of perceptions initialized in the previous state
-        ArrayList<IMessage> messages = c.getSharedData("ListPerceptions");
+        ArrayList<Message> messages = c.getSharedData("ListPerceptions");
         // execute the decision method of the agent
-        myWayOfDecision.decide(messages);
+        ArrayList<AbstractDecision> myListOfDecisions= myWayOfDecision.decide(messages);
+        //send the data to the next state
+        c.shareVariable("ListDecisions", myListOfDecisions);
+        //Move forward to the next state "Action state"
         c.setCurrentState(this.nextState);
     }
 

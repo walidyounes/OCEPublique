@@ -5,13 +5,13 @@
 package OCE.Medium.Recorder;
 
 import AmbientEnvironment.OCPlateforme.OCService;
+import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.ServiceAgent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This compoenent is used to record each new ServiceAgent and it's associated reference in the infrastructure
@@ -62,7 +62,7 @@ public class Record implements IRecord{
     @Override
     public InfraAgentReference resolveAgentReference(ServiceAgent serviceAgent) throws ReferenceResolutionFailure {
         if(this.agentsReferenceMap.containsKey(serviceAgent)){
-            // if the serviceAgent exist we return it
+            // if the serviceAgent exist we return it's reference
             return this.agentsReferenceMap.get(serviceAgent);
         }else throw new ReferenceResolutionFailure("The serviceAgent * "+ serviceAgent.getMyID() + " * doesn't exist ! "); // Else we throw the exception
     }
@@ -89,6 +89,40 @@ public class Record implements IRecord{
     }
 
     /**
+     * Resolve the logical adresse (ServiceAgent) of the InfraAgentReference
+     * @param infraAgent the refrence of the infrastructure agent
+     * @return the coresponding ServiceAgent
+     * @throws ReferenceResolutionFailure if the agent doesn't exist
+     */
+    @Override
+    public ServiceAgent retrieveServiceAgentByInfraAgentReference(InfraAgentReference infraAgent) throws ReferenceResolutionFailure{
+        if(this.agentsReferenceMap.containsValue(infraAgent)){
+            // if the serviceAgent exist we return it
+            return this.getKeysByValue(this.agentsReferenceMap, infraAgent).iterator().next();
+        }else {
+            throw new ReferenceResolutionFailure("The serviceAgent with the Infra-Reference* "+ infraAgent + " * doesn't exist ! ");
+        }
+    }
+
+    /**
+     * Resolve the logical adresse (ServiceAgent) of a list of InfraAgentReference
+     * @param infraAgents the liste of the refrence of the infrastructure agent
+     * @return the coresponding list of ServiceAgents
+     * @throws ReferenceResolutionFailure if one of the agents doesn't exist
+     */
+    @Override
+    public ArrayList<ServiceAgent> retrieveServiceAgentsByInfraAgentReferences(ArrayList<InfraAgentReference> infraAgents) throws ReferenceResolutionFailure{
+        ArrayList<ServiceAgent> serviceAgents = new ArrayList<>();
+        for (InfraAgentReference infraAgent : infraAgents ) {
+            if (this.agentsReferenceMap.containsValue(infraAgent)){
+                serviceAgents.addAll(this.getKeysByValue(this.agentsReferenceMap, infraAgent));
+            }else{
+                throw new ReferenceResolutionFailure("The serviceAgent with the Infra-Reference* "+ infraAgent + " * doesn't exist ! ");
+            }
+        }return serviceAgents;
+    }
+
+    /**
      * Retrieve and return the ServiceAgent which is attached to the physical service
      * @param attachedService : the physical service
      * @return the agent which is attached to it
@@ -96,5 +130,21 @@ public class Record implements IRecord{
     @Override
     public ServiceAgent retrieveSAgentByPService(OCService attachedService) {
         return null;
+    }
+
+    /**
+     * private fonction used to get the corresponding keys from a value from a map
+     * @param map : The map <ServiceAgent, InfraAgentReference>
+     * @param value : The InfraAgentReference that we are looking for the keys corresponding
+     * @param <T> Objects
+     * @param <E> Objects
+     * @return the corresponding set of keys
+     */
+    private <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
+        return map.entrySet()
+                .stream()
+                .filter(entry -> Objects.equals(entry.getValue(), value))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 }

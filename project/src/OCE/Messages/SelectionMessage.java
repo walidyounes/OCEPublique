@@ -5,9 +5,16 @@
 package OCE.Messages;
 
 
+import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Decisions.AbstractDecision;
+import OCE.Medium.Recorder.IRecord;
+import OCE.Medium.ReferenceResolutionFailure;
+import OCE.Perceptions.AbstractPerception;
+import OCE.Perceptions.AdPerception;
+import OCE.Perceptions.SelectionPerception;
+import OCE.ServiceAgentConnexionState;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -52,9 +59,17 @@ public class SelectionMessage extends Message {
         this.binderAgent = binderAgent;
     }
 
+/*
     @Override
-    public AbstractDecision toSelfTreat() {
+    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
         MyLogger.log(Level.INFO, "Treating a selection message ! ");
         return null;
+    }*/
+
+    @Override
+    public AbstractPerception toPerception(IRecord referenceResolver) {
+
+            return new SelectionPerception(); // TOdO : retravailler cette partie
+
     }
 }

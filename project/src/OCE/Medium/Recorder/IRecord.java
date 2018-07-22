@@ -47,4 +47,20 @@ public interface IRecord {
      * @return the agent which is attached to it
      */
     ServiceAgent retrieveSAgentByPService(OCService attachedService);
+
+    /**
+     * Resolve the logical adresse (ServiceAgent) of a list of InfraAgentReference
+     * @param infraAgents the liste of the refrence of the infrastructure agent
+     * @return the coresponding list of ServiceAgents
+     * @throws ReferenceResolutionFailure if one of the agents doesn't exist
+     */
+    ArrayList<ServiceAgent> retrieveServiceAgentsByInfraAgentReferences(ArrayList<InfraAgentReference> infraAgents) throws ReferenceResolutionFailure;
+
+    /**
+     * Resolve the logical adresse (ServiceAgent) of the InfraAgentReference
+     * @param infraAgent the refrence of the infrastructure agent
+     * @return the coresponding ServiceAgent
+     * @throws ReferenceResolutionFailure if the agent doesn't exist
+     */
+    ServiceAgent retrieveServiceAgentByInfraAgentReference(InfraAgentReference infraAgent) throws ReferenceResolutionFailure;
 }

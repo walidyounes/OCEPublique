@@ -4,15 +4,13 @@
 
 package OCE.Medium.Communication;
 
-import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
-import MASInfrastructure.Communication.IMessage;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
+import OCE.Messages.Message;
 import OCE.ServiceAgent;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 /**
  * this class acts as a communication intermediary between the engine's serviceAgents and the infrastructure communication component
@@ -38,7 +36,7 @@ public class CommunicationAdapter implements ICommunicationAdapter {
      * @param recievers  : the recievers of the message
      */
     @Override
-    public void sendMessageBroadcast(IMessage message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public void sendMessageBroadcast(Message message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
         try {
             // Resolving the reference for the transmitter
             message.setEmitter(this.mediumRecorder.resolveAgentReference(emitter));
@@ -58,7 +56,7 @@ public class CommunicationAdapter implements ICommunicationAdapter {
      * @param recievers  : the recievers of the message
      */
     @Override
-    public void sendMessage(IMessage message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public void sendMessage(Message message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
 
         try {
             // Resolving the reference of the emitter of the message

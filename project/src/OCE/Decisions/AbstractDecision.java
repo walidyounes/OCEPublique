@@ -4,7 +4,8 @@
 
 package OCE.Decisions;
 
-import MASInfrastructure.Agent.InfraAgentReference;
+import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.ServiceAgent;
 
 import java.util.ArrayList;
 /**
@@ -14,15 +15,15 @@ import java.util.ArrayList;
  */
 public abstract class AbstractDecision {
 
-    protected InfraAgentReference emitter; // The transmitter of the message
-    protected ArrayList<InfraAgentReference> recievers; // The list of the recipients of the message, if == null -> message is in broadcast
+    protected ServiceAgent emitter; // The transmitter of the message
+    protected ArrayList<ServiceAgent> recievers; // The list of the recipients of the message, if == null -> message is in broadcast
 
     /**
      * get the transmitter of the message
      * @return the reference of the transmitter of the message
      */
 
-    public final InfraAgentReference getEmitter() {
+    public final ServiceAgent getEmitter() {
         return this.emitter;
     }
 
@@ -30,7 +31,7 @@ public abstract class AbstractDecision {
      *  set the refernece of the transmitter of the message
      * @param emitter : the reference of the transmitter
      */
-    public final void setEmitter(InfraAgentReference emitter) {
+    public final void setEmitter(ServiceAgent emitter) {
         this.emitter = emitter;
     }
 
@@ -38,7 +39,7 @@ public abstract class AbstractDecision {
      * get the list of the recievers of the message
      * @return the recievers of the message
      */
-    public final ArrayList<InfraAgentReference> getRecievers() {
+    public final ArrayList<ServiceAgent> getRecievers() {
         return this.recievers;
     }
 
@@ -46,8 +47,13 @@ public abstract class AbstractDecision {
      * set the list of recievers for this message
      * @param recievers : the list of recievers
      */
-    public final void setRecievers(ArrayList<InfraAgentReference> recievers) {
+    public final void setRecievers(ArrayList<ServiceAgent> recievers) {
         this.recievers = recievers;
     }
 
+    /**
+     * Execute the decision that has been made by the engine
+     * @param communicationAdapter : the communication component of the engine
+     */
+    public abstract void toSelfTreat(ICommunicationAdapter communicationAdapter);
 }

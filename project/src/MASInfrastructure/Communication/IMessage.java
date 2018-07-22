@@ -4,8 +4,12 @@
 
 package MASInfrastructure.Communication;
 
+import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Decisions.AbstractDecision;
+import OCE.Medium.Recorder.IRecord;
+import OCE.Perceptions.AbstractPerception;
+import OCE.ServiceAgentConnexionState;
 
 import java.util.ArrayList;
 
@@ -42,8 +46,11 @@ public interface IMessage {
 
     /**
      * treat the message and make the suitable decision
+     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param serviceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @return the deicision made by the engine
      */
-    AbstractDecision toSelfTreat();
+   // AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef, OCService localService);
+
 
 }

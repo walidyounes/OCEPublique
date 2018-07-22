@@ -4,9 +4,13 @@
 
 package OCE.Messages;
 
+import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.IMessage;
 import OCE.Decisions.AbstractDecision;
+import OCE.Medium.Recorder.IRecord;
+import OCE.Perceptions.AbstractPerception;
+import OCE.ServiceAgentConnexionState;
 
 import java.util.ArrayList;
 
@@ -57,7 +61,18 @@ public abstract class Message implements IMessage {
     }
 
     /**
-     * treat the message according to it's type
+     * treat the message and make the suitable decision
+     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param serviceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
+     * @param localService : the information of the service of the agent that's treating this message
+     * @return the deicision made by the engine
      */
-    public abstract AbstractDecision toSelfTreat();
+   //  public abstract AbstractDecision toSelfTreat( ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef, OCService localService);
+
+    /**
+     * Transfome the message into perception (this method is useful because in the OCE engine we deal with ServiceAgent reference not InfraAgent reference)
+     * @param referenceResolver : the component used to resolv the adress ServiceAgent <> InfraAgentReference
+     * @return the perception equivalent to the message
+     */
+    public abstract AbstractPerception toPerception(IRecord referenceResolver);
 }

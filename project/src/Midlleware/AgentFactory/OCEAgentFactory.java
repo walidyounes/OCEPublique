@@ -13,6 +13,7 @@ import MASInfrastructure.Infrastructure;
 import Midlleware.ThreeState.*;
 import OCE.*;
 import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.Medium.Medium;
 import OCE.Selection.IMessageSelection;
 import OCE.Selection.RandomSelection;
 
@@ -28,11 +29,11 @@ import java.util.logging.Level;
 public class OCEAgentFactory implements IOCEAgentFactory {
 
     private Infrastructure infrastructure;
-    private ICommunicationAdapter communicationManager;
+    private Medium medium; // it's stand for communicationManager and recordManager
 
-    public OCEAgentFactory(Infrastructure infrastructure, ICommunicationAdapter communicationManager) {
+    public OCEAgentFactory(Infrastructure infrastructure, Medium communicationManager) {
         this.infrastructure = infrastructure;
-        this.communicationManager = communicationManager;
+        this.medium = communicationManager;
     }
 
     /**
@@ -43,14 +44,23 @@ public class OCEAgentFactory implements IOCEAgentFactory {
     public Map.Entry<ServiceAgent, InfraAgentReference> createServiceAgent(OCService attachedService) {
         MyLogger.log(Level.INFO, "Creating the agent for the service * " + attachedService.toString() + " *");
         //Create the attributes of service InfraAgent
+        //Create the perception component
         IPerceptionState myWayOfPerception = new AgentPerception();
-        //Create the strategy of message selection
-        IMessageSelection messageSelectionStrategy = new RandomSelection(Integer.MAX_VALUE);
 
-        IDecisionState myWayOfDecision = new ServiceAgentDecision(messageSelectionStrategy);
+        //Create the decision component
         IActionState myWayOfAction = new ServiceAgentAction();
         // Create The service InfraAgent
-        ServiceAgent serviceAgent = new ServiceAgent(attachedService, myWayOfPerception, myWayOfDecision, myWayOfAction);
+        ServiceAgent serviceAgent = new ServiceAgent(attachedService, myWayOfPerception, null, myWayOfAction);
+
+        //Create the strategy of message selection
+        IMessageSelection messageSelectionStrategy = new RandomSelection(Integer.MAX_VALUE);
+        //Create the decision component And Update the referenceResolver (Record) of the decision component of the agent
+        IDecisionState myWayOfDecision = new ServiceAgentDecision(messageSelectionStrategy, serviceAgent, this.medium);
+
+        //update the decision component in the service Agent
+        serviceAgent.setMyWayOfDecision(myWayOfDecision);
+        //Update the communication component of the action component of the agent
+        myWayOfAction.setCommunicationManager(this.medium);
 
         //Create the cycle : perception -> decision -> action
         PerceptionState perceptionState = new PerceptionState(null,myWayOfPerception );

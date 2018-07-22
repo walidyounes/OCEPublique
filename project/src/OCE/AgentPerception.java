@@ -6,13 +6,13 @@ package OCE;
 
 import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgent;
-import MASInfrastructure.Communication.IMessage;
 import Midlleware.ThreeState.IPerceptionState;
-import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Messages.EmptyMessage;
+import OCE.Messages.Message;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * This class represent one way hwo we can perceive the environnement, it's used both by the ServiceAgent and the BindingAgent
@@ -46,14 +46,15 @@ public class AgentPerception implements IPerceptionState {
      * Implement the perception process of the agent, which consist in reading the received messages
      */
     @Override
-    public ArrayList<IMessage> percept() {
+    public ArrayList<Message> percept() {
         MyLogger.log(Level.INFO, "The service agent is percepting the envirnment !");
-        // Read the messages from the mail-Box
-        ArrayList<IMessage> messages = this.myInfraAgent.readMessages();
+        // Read the messages from the mail-Box and convert them from IMessage to Message
+        ArrayList<Message> messages = new ArrayList<>(this.myInfraAgent.readMessages().stream().map(x -> (Message)x).collect(Collectors.toList()));
+
         MyLogger.log(Level.INFO, "The recieved messages are = "+ messages.toString());
 
         if (messages.isEmpty()){ // If the agent didn't recieve any messages he send a EmptyMessage (equivalent to an Empty Perception)
-            messages.add(new EmptyMessage());
+            messages.add(new EmptyMessage(myInfraAgent.getInfraAgentReference()));
         }
         return messages;
     }

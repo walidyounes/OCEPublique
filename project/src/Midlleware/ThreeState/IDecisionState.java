@@ -5,10 +5,12 @@
 package Midlleware.ThreeState;
 
 import MASInfrastructure.Communication.IMessage;
+import OCE.Decisions.AbstractDecision;
+import OCE.Messages.Message;
 
 import java.util.ArrayList;
 
 public interface IDecisionState {
 
-    void decide(ArrayList<IMessage> perceptions);
+    ArrayList<AbstractDecision> decide(ArrayList<Message> perceptions);
 }

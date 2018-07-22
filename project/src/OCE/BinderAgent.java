@@ -4,16 +4,9 @@
 
 package OCE;
 
-import Logger.MyLogger;
-import MASInfrastructure.Agent.InfraAgent;
-import MASInfrastructure.Communication.IMessage;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
-import OCE.Medium.Communication.ICommunicationAdapter;
-
-import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
  * This class implement the agent responsable of binding the services associated to two ServiceAgent

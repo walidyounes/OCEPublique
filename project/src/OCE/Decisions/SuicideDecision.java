@@ -5,9 +5,7 @@
 package OCE.Decisions;
 
 
-import MASInfrastructure.Agent.InfraAgentReference;
-
-import java.util.ArrayList;
+import OCE.Medium.Communication.ICommunicationAdapter;
 
 /**
  * This class represent a suicide decision (i.e. the serivce that's attached to the agent is no longer avaible)
@@ -23,5 +21,10 @@ public class SuicideDecision extends AbstractDecision {
     public SuicideDecision() {
         this.emitter= null;
         this.recievers = null;
+    }
+
+    @Override
+    public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
+
     }
 }
