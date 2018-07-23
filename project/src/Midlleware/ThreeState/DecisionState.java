@@ -31,6 +31,8 @@ public class DecisionState implements IEtat {
         ArrayList<Message> messages = c.getSharedData("ListPerceptions");
         // execute the decision method of the agent
         ArrayList<AbstractDecision> myListOfDecisions= myWayOfDecision.decide(messages);
+
+        MyLogger.log(Level.INFO, "List of decisions " + myListOfDecisions);
         //send the data to the next state
         c.shareVariable("ListDecisions", myListOfDecisions);
         //Move forward to the next state "Action state"

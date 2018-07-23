@@ -56,4 +56,12 @@ public class ResponseMessage extends Message {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "ResponseMessage{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

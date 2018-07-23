@@ -16,18 +16,24 @@ import java.util.ArrayList;
 
 public class AdMessage extends Message {
 
-    private OCService distantService; // the information about the service of the agent that send this advertisement
+    private OCService myService; // the information about the service of the agent that send this advertisement
     /**
      * Create an advertise message
      * @param emitter    reference of the advertising agent
-     * @param recievers the references of the recievers of the ad, if null == Broadcast
+     * @param recievers the references of the recievers of the ad, if empty == Broadcast
      */
     public AdMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter= emitter;
         this.recievers = recievers;
     }
 
-/*
+    public AdMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers, OCService myService) {
+        this.emitter = emitter;
+        this.recievers = recievers;
+        this.myService = myService;
+    }
+
+    /*
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef, OCService localService) {
         MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
@@ -36,7 +42,7 @@ public class AdMessage extends Message {
             //Verify the matching between the services Todo use the matching in the future
             //todo here we are casting the type to MockupService
             MockupService service1 =  (MockupService)localService;
-            MockupService service2 = (MockupService)this.distantService;
+            MockupService service2 = (MockupService)this.myService;
 
             //verify the matching
             if(service1.equals(service2)){
@@ -52,11 +58,23 @@ public class AdMessage extends Message {
     @Override
     public AbstractPerception toPerception(IRecord referenceResolver) {
         try {
-            return new AdPerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveServiceAgentsByInfraAgentReferences(this.recievers));
+            if( ! this.recievers.isEmpty()){ // If the message was send in broadcast the recievers would be empty
+                return new AdPerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveServiceAgentsByInfraAgentReferences(this.recievers), this.myService);
+            }else
+                return new AdPerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter), new ArrayList<>(), this.myService);
+
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
     }
 
+    @Override
+    public String toString() {
+        return "AdMessage{" +
+                "myService=" + myService +
+                ", emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

@@ -69,4 +69,13 @@ public class SondeMessage extends Message {
     public AbstractPerception toPerception(IRecord referenceResolver) {
             return new SondePerception();
     }
+
+    @Override
+    public String toString() {
+        return "SondeMessage{" +
+                "exist=" + exist +
+                ", emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

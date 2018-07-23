@@ -27,4 +27,12 @@ public class SuicideDecision extends AbstractDecision {
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
 
     }
+
+    @Override
+    public String toString() {
+        return "SuicideDecision{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

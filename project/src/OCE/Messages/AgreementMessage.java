@@ -45,4 +45,12 @@ public class AgreementMessage extends Message {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "AgreementMessage{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

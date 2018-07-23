@@ -40,8 +40,8 @@ public class CommunicationAdapter implements ICommunicationAdapter {
         try {
             // Resolving the reference for the transmitter
             message.setEmitter(this.mediumRecorder.resolveAgentReference(emitter));
-            // When sending a message in broadcast the list of recievers is "null" since every agent is receiving the message so no need to resolve recipients address
-            message.setRecievers(null);
+            // When sending a message in broadcast the list of recievers is "empty" since every agent is receiving the message so no need to resolve recipients address
+            message.setRecievers(new ArrayList<>());
             // Sending the message through the MAS-Infrastructure
             this.comunicationInfrastructure.sendMessageBroadcast(message);
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {

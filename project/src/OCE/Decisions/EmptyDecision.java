@@ -25,4 +25,12 @@ public class EmptyDecision extends AbstractDecision {
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
 
     }
+
+    @Override
+    public String toString() {
+        return "EmptyDecision{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

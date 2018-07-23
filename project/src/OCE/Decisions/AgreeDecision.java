@@ -30,6 +30,14 @@ public class AgreeDecision extends AbstractDecision {
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
 
     }
+
+    @Override
+    public String toString() {
+        return "AgreeDecision{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }
 
 

@@ -13,6 +13,8 @@ import OCE.Decisions.EmptyDecision;
 import OCE.Decisions.ReplyDecision;
 import OCE.ServiceAgent;
 import OCE.ServiceAgentConnexionState;
+import OCE.Unifieur.IMatching;
+import OCE.Unifieur.Matching;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -25,9 +27,10 @@ public class AdPerception extends AbstractPerception {
      * @param emitter    reference of the advertising agent
      * @param recievers the references of the recievers of the ad, if null == Broadcast
      */
-    public AdPerception(ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public AdPerception(ServiceAgent emitter, ArrayList<ServiceAgent> recievers, OCService distantService) {
         this.emitter= emitter;
         this.recievers = recievers;
+        this.distantService = distantService;
     }
 
     /**
@@ -42,13 +45,18 @@ public class AdPerception extends AbstractPerception {
         MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
+            MyLogger.log(Level.INFO, "The agent is free ! ");
             //Verify the matching between the services Todo use the matching in the future
             //todo here we are casting the type to MockupService
             MockupService service1 =  (MockupService)localService;
             MockupService service2 = (MockupService)this.distantService;
+            MyLogger.log(Level.INFO, "service local = " + service1.toString());
+            MyLogger.log(Level.INFO, "service distant = " + service2.toString());
+            //verify the matching // TODO à améliorer
+            IMatching matching = new Matching();
 
-            //verify the matching
-            if(service1.equals(service2)){
+            if(matching.match(service1, service2)){
+                MyLogger.log(Level.INFO, "The two services matchs ! ");
                 // Send a reply message to the emitter of this message
                 ArrayList<ServiceAgent> replyRecievers = new ArrayList<>();
                 replyRecievers.add(this.emitter);

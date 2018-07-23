@@ -132,10 +132,11 @@ public class Annuaire implements IAnnuaire {
     @Override
     public void sendMessageBroadcast(IMessage message) {
         agentsMessagesQueues.keySet().forEach(this::lockAgentLecture);
+        // The message should not be sended to the same agent
         agentsMessagesQueues.entrySet().forEach(referenceAgentEntry -> {
-            referenceAgentEntry.getValue().add(message);
+            if(referenceAgentEntry.getKey()!= message.getEmitter()){ referenceAgentEntry.getValue().add(message);
             notifierMessageAgentListeners(message.getEmitter(), message, referenceAgentEntry.getKey());
-        });
+        }});
         agentsMessagesQueues.keySet().forEach(this::unlockAgentLecture);
 
         // System.out.println("liste sendMessageBroadcast" + getAgentsMessagesQueues()); // tarce

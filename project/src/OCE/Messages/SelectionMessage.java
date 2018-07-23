@@ -72,4 +72,13 @@ public class SelectionMessage extends Message {
             return new SelectionPerception(); // TOdO : retravailler cette partie
 
     }
+
+    @Override
+    public String toString() {
+        return "SelectionMessage{" +
+                "binderAgent=" + binderAgent +
+                ", emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

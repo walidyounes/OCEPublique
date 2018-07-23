@@ -75,4 +75,5 @@ public abstract class Message implements IMessage {
      * @return the perception equivalent to the message
      */
     public abstract AbstractPerception toPerception(IRecord referenceResolver);
+
 }

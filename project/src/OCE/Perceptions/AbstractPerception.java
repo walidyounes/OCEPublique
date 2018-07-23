@@ -65,4 +65,12 @@ public abstract class AbstractPerception {
      * @return the deicision made by the engine
      */
     public abstract AbstractDecision toSelfTreat( ServiceAgentConnexionState stateConnexionAgent, ServiceAgent serviceAgentRef, OCService localService);
+
+    @Override
+    public String toString() {
+        return "AbstractPerception{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

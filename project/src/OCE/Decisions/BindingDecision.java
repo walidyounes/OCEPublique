@@ -12,4 +12,12 @@ public class BindingDecision extends AbstractDecision {
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
 
     }
+
+    @Override
+    public String toString() {
+        return "BindingDecision{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }

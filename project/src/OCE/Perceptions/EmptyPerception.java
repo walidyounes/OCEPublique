@@ -14,6 +14,7 @@ import OCE.Decisions.EmptyDecision;
 import OCE.ServiceAgent;
 import OCE.ServiceAgentConnexionState;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class EmptyPerception extends AbstractPerception {
@@ -38,7 +39,7 @@ public class EmptyPerception extends AbstractPerception {
         MyLogger.log(Level.INFO, "Treating an empty message ! ");
         if(stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){ // if the agent was created ->
             //send a advertisement message todo "this could be enhaced later on
-            return new AdvertiseDecision(this.emitter, null);
+            return new AdvertiseDecision(this.emitter, new ArrayList<>(), localService);
         }else return new EmptyDecision();
 
     }

@@ -43,7 +43,7 @@ public class ResponsePerception extends AbstractPerception {
      */
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, ServiceAgent serviceAgentRef,  OCService localService) {
-        MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
+        MyLogger.log(Level.INFO, "Treating a reply message ! ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
             // Send a selection message to the emitter of this message

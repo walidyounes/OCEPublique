@@ -5,20 +5,11 @@
 package OCE.Messages;
 
 
-import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
-import OCE.Decisions.AbstractDecision;
-import OCE.Decisions.AdvertiseDecision;
-import OCE.Decisions.EmptyDecision;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.AdPerception;
 import OCE.Perceptions.EmptyPerception;
-import OCE.ServiceAgentConnexionState;
-
-import java.util.logging.Level;
 
 public class EmptyMessage extends Message {
 
@@ -53,5 +44,13 @@ public class EmptyMessage extends Message {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "EmptyMessage{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
     }
 }

@@ -4,10 +4,13 @@
 
 package OCE.Decisions;
 
+import Logger.MyLogger;
 import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.Messages.ResponseMessage;
 import OCE.ServiceAgent;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * This class represent a reply decision (i.e. send a reply message to the agent who send the ad)
@@ -28,6 +31,16 @@ public class ReplyDecision extends AbstractDecision {
 
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
+        MyLogger.log(Level.INFO, "Treating an reply decision ! ");
+        ResponseMessage responseMessage = new ResponseMessage(null, null );
+        communicationAdapter.sendMessage(responseMessage, this.emitter, this.recievers);
+    }
 
+    @Override
+    public String toString() {
+        return "ReplyDecision{" +
+                "emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
     }
 }

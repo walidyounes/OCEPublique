@@ -46,7 +46,7 @@ public class ServiceAgentAction implements IActionState {
     public void act(ArrayList<AbstractDecision> decisionsList) {
         MyLogger.log(Level.INFO, "The service agent is acting upon the environment !");
         for (AbstractDecision decision : decisionsList) {
-
+            decision.toSelfTreat(communicationManager);
         }
     }
 }

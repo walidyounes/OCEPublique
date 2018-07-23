@@ -56,4 +56,5 @@ public abstract class AbstractDecision {
      * @param communicationAdapter : the communication component of the engine
      */
     public abstract void toSelfTreat(ICommunicationAdapter communicationAdapter);
+
 }

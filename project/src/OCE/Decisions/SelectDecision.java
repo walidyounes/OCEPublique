@@ -32,4 +32,13 @@ public class SelectDecision extends AbstractDecision {
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
 
     }
+
+    @Override
+    public String toString() {
+        return "SelectDecision{" +
+                "myBinderAgent=" + myBinderAgent +
+                ", emitter=" + emitter +
+                ", recievers=" + recievers +
+                '}';
+    }
 }
