@@ -1,0 +1,32 @@
+graph {
+    fill-color: white;
+}
+
+node {
+    size: 60px, 25px;
+    shape: rounded-box;
+    fill-mode: gradient-diagonal1;
+    fill-color: #f50057; // light red
+//stroke-mode: plain;
+//stroke-width : 2px;
+//stroke-color: #607D8B;
+    text-mode : normal;
+    text-style : bold;
+    text-size : 12;
+    text-background-mode : rounded-box;
+    text-background-color : #33bfff; // light blue
+text-alignment : at-right;
+    text-padding : 10px,5px;
+    text-offset : 16px, 0px;
+}
+
+edge {
+    size: 2px;
+    shape: cubic-curve;
+    fill-color: #607D8B; // dark blue grey
+}
+
+node.Required {
+    fill-color: #3F51B5; // light red
+    text-background-color : #0097A7; // light blue
+}

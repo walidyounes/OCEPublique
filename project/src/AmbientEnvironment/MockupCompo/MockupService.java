@@ -33,6 +33,10 @@ public abstract class MockupService extends OCService {
         return myWay;
     }
 
+    public void setOwner(String owner){
+        this.owner = owner;
+    }
+
     public String toString() {
         // return "Service "+name+" of Component "+ownerComponentName+" Links :
         // "+linkedServices;

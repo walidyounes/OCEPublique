@@ -4,6 +4,12 @@
 
 package Logger;
 
+
+import UI.UIMockupController;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.control.TextArea;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +21,17 @@ import java.util.logging.SimpleFormatter;
 public class MyLogger {
     private final static Logger logger = Logger.getLogger(MyLogger.class.getName());
     private static FileHandler fh = null;
+    private static UIMockupController uiMockupController;
+    private static StringProperty uiLog;
+
+    public MyLogger(UIMockupController uiMockupController) {
+        this.uiMockupController = uiMockupController;
+    }
+
+    public MyLogger(){
+        this.uiMockupController = null;
+        this.uiLog = new SimpleStringProperty("");
+    }
 
     public static void init() {
         try {
@@ -34,6 +51,15 @@ public class MyLogger {
 
     public static void log(Level level, String message) {
         logger.log(level, message);
+        uiLog.set(getStrLog()+" "+level.toString()+" "+message+"\n");
+    }
+
+    public static String getStrLog(){
+        return uiLog.getValue();
+    }
+
+    public StringProperty uiLogProperty() {
+        return uiLog;
     }
 
     public static void close() {

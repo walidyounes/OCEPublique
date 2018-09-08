@@ -14,6 +14,7 @@ import Midlleware.AgentFactory.IOCEAgentFactory;
 import OCE.Medium.Medium;
 import OCE.Unifieur.Matching;
 import OCE.sonde.Sonde;
+import javafx.scene.control.TextArea;
 
 import java.util.ArrayList;
 

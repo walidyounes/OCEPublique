@@ -15,8 +15,8 @@ public class MockupComponent extends OCComponent {
 
     public MockupComponent(String name, ArrayList<OCService> providedservices, ArrayList<OCService> requiredServices) {
         this.name = name;
-        this.providedServices = providedservices;
-        this.requiredServices = requiredServices;
+        this.providedServices = new ArrayList<>(providedservices);
+        this.requiredServices = new ArrayList<>(requiredServices);
     }
 
     public String getName() {
