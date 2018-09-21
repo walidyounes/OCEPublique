@@ -8,28 +8,25 @@ import AmbientEnvironment.MockupCompo.*;
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
-import MASInfrastructure.Infrastructure;
-import Midlleware.AgentFactory.IOCEAgentFactory;
-import Midlleware.AgentFactory.OCEAgentFactory;
-import OCE.Medium.Medium;
-import OCE.Unifieur.Matching;
-import OCE.sonde.Sonde;
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -58,6 +55,7 @@ public class UIMockupController implements Initializable {
     private Graph ServiceGraphe;
     private TextArea UILog;
     private Thread simulation;
+    private JFXPopup popup;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,6 +76,8 @@ public class UIMockupController implements Initializable {
         this.providedByC = new ArrayList<>();
 
         this.simulation = new Thread( new Simulation(this.mockupFacadeAdapter));
+        // Initialise popUp
+        initPopup();
 
         //Initilise the graphe
         initGraphe();
@@ -303,5 +303,45 @@ public class UIMockupController implements Initializable {
     public synchronized void updateLog(String message){
         String pastContent = this.UILog.getText();
         this.UILog.setText(pastContent+""+ message+"\n");
+    }
+    @FXML
+    private void showPopup(MouseEvent event){
+        if(event.getButton().equals(MouseButton.SECONDARY)){// Detect right button click
+            this.popup.show(servicesList, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT);
+            JFXListView list = (JFXListView) event.getSource();
+        }
+
+    }
+
+    /**
+     *  Create a PopUp with delete / update
+     */
+    private void initPopup(){
+        this.popup = new JFXPopup();
+        JFXButton deleteButton = new JFXButton("Delete");
+        JFXButton updateButton = new JFXButton("Update");
+        deleteButton.setPadding(new Insets(10));
+        updateButton.setPadding(new Insets(10));
+        ImageView deleteImage = new ImageView("/delete.png");
+        ImageView updateImage = new ImageView("/update.png");
+        deleteButton.setGraphic(deleteImage);
+        updateButton.setGraphic(updateImage);
+
+        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+               servicesList.getItems().remove(servicesList.getSelectionModel().getSelectedIndex());
+            }
+        });
+
+        updateButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                servicesList.getItems().remove(servicesList.getSelectionModel().getSelectedIndex());
+            }
+        });
+
+        VBox popUpContent = new VBox(deleteButton, updateButton);
+        this.popup.setPopupContent(popUpContent);
     }
 }

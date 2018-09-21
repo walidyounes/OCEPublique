@@ -5,10 +5,8 @@
 package Logger;
 
 
-import UI.UIMockupController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.control.TextArea;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -21,15 +19,9 @@ import java.util.logging.SimpleFormatter;
 public class MyLogger {
     private final static Logger logger = Logger.getLogger(MyLogger.class.getName());
     private static FileHandler fh = null;
-    private static UIMockupController uiMockupController;
     private static StringProperty uiLog;
 
-    public MyLogger(UIMockupController uiMockupController) {
-        this.uiMockupController = uiMockupController;
-    }
-
     public MyLogger(){
-        this.uiMockupController = null;
         this.uiLog = new SimpleStringProperty("");
     }
 
