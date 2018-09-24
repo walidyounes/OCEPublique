@@ -6,6 +6,7 @@ package UI;
 
 import AmbientEnvironment.MockupCompo.*;
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
+import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import com.jfoenix.controls.*;
@@ -38,7 +39,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class UIMockupController implements Initializable {
     @FXML private JFXTextField designationComponent;
@@ -51,7 +54,6 @@ public class UIMockupController implements Initializable {
     private MockupFacadeAdapter mockupFacadeAdapter;
     private ArrayList<OCService> providedByC;
     private ArrayList<OCService> requiredByC;
-    private ImageView requiredImage,providedImage;
     private Graph ServiceGraphe;
     private TextArea UILog;
     private Thread simulation;
@@ -110,21 +112,18 @@ public class UIMockupController implements Initializable {
         if(this.designationComponent.getText().length()>0) {
             if (this.nameService.getText().length() > 0) {
                 String textToAdd = "Name = " + this.nameService.getText();
-                try {
                     if (this.providedR.isSelected()) {
-                        providedImage = new ImageView(new Image(new FileInputStream("C:\\Users\\wyounes\\Desktop\\provided.png")));
-                        label.setGraphic(providedImage);
+                        // providedImage = new ImageView(new Image(new FileInputStream("/provided.png")));
+                        label.setGraphic(new ImageView("/provided.png"));
                         providedORrequired = 0; //ProvideService
                     } else {
                         if (this.requiredR.isSelected()) {
-                            requiredImage = new ImageView(new Image(new FileInputStream("C:\\Users\\wyounes\\Desktop\\required.png")));
-                            label.setGraphic(requiredImage);
+                            // requiredImage = new ImageView(new Image(new FileInputStream("/required.png")));
+                            label.setGraphic(new ImageView("/provided.png"));
                             providedORrequired = 1; //RequiredService
                         }
                     }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+
                 if (this.singleR.isSelected()) {
                     textToAdd += " -- Type = SINGLE";
                     singleORmultiple = 0; // Single Service
@@ -185,7 +184,7 @@ public class UIMockupController implements Initializable {
 
         if(this.designationComponent.getText().length()>0) {
             if(!this.servicesList.getItems().isEmpty()) {
-                String textToAdd = "Designation = " + this.designationComponent.getText();
+                String textToAdd = "Component : " + this.designationComponent.getText();
                 label.setText(textToAdd);
                 this.componentsList.getItems().add(label);
                 //Add component to mockup
@@ -224,6 +223,9 @@ public class UIMockupController implements Initializable {
         this.nameService.setText("");
     }
 
+    /**
+     *
+     */
     private void addComponentToMockup(){
         // Creation of the composant "C"
         MockupComponent C1 = new MockupComponent(this.designationComponent.getText(), this.providedByC, this.requiredByC);
@@ -236,6 +238,23 @@ public class UIMockupController implements Initializable {
         // clear the provided and required services list
         this.providedByC.clear();
         this.requiredByC.clear();
+    }
+
+    private void deleteComponentFromMockup(String nameComp){
+        // search for the component
+        List<OCComponent> components = this.mockupFacadeAdapter.getComponents().stream()
+                                            .filter(p -> ((MockupComponent)p).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toList());
+
+        //get the component
+        MockupComponent C1 = (MockupComponent) components.get(0);
+        // Add the compoenent to the mockup container
+        this.mockupFacadeAdapter.addComponent(C1);
+        System.out.println("Removing : " + this.mockupFacadeAdapter.getComponents().toString());
+        // Update the graphe visulisation
+        deleteProvidedServiceFromGraphe(C1.getProvidedServices());
+        deleteRequiredServiceFromGraphe(C1.getRequiredServices());
+        // remove component from the Mockup
+        this.mockupFacadeAdapter.removeComponent(C1);
     }
 
     private void initGraphe(){
@@ -299,6 +318,21 @@ public class UIMockupController implements Initializable {
         this.ServiceGraphe.addEdge(""+idS1+idS2, idS1, idS2);
     }
 
+    private void deleteProvidedServiceFromGraphe(ArrayList<OCService> providedServices) {
+
+        for (OCService service : providedServices) {
+            MockupService myMService = (MockupService)service;
+            this.ServiceGraphe.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+        }
+
+    }
+
+    private void deleteRequiredServiceFromGraphe(ArrayList<OCService> requiredServices) {
+        for (OCService service : requiredServices) {
+            MockupService myMService = (MockupService)service;
+            this.ServiceGraphe.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+        }
+    }
 
     public synchronized void updateLog(String message){
         String pastContent = this.UILog.getText();
@@ -307,8 +341,8 @@ public class UIMockupController implements Initializable {
     @FXML
     private void showPopup(MouseEvent event){
         if(event.getButton().equals(MouseButton.SECONDARY)){// Detect right button click
-            this.popup.show(servicesList, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT);
-            JFXListView list = (JFXListView) event.getSource();
+            this.popup.show(componentsList, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT);
+            //JFXListView list = (JFXListView) event.getSource();
         }
 
     }
@@ -330,14 +364,17 @@ public class UIMockupController implements Initializable {
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               servicesList.getItems().remove(servicesList.getSelectionModel().getSelectedIndex());
+               String nameComp = componentsList.getSelectionModel().getSelectedItem().getText().split(":")[1];
+               System.out.println(nameComp);
+               deleteComponentFromMockup(nameComp);
+               componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
             }
         });
 
         updateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                servicesList.getItems().remove(servicesList.getSelectionModel().getSelectedIndex());
+                componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
             }
         });
 
