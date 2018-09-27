@@ -4,12 +4,7 @@
 
 package MASInfrastructure.Communication;
 
-import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgentReference;
-import OCE.Decisions.AbstractDecision;
-import OCE.Medium.Recorder.IRecord;
-import OCE.Perceptions.AbstractPerception;
-import OCE.ServiceAgentConnexionState;
 
 import java.util.ArrayList;
 
@@ -33,16 +28,16 @@ public interface IMessage {
     void setEmitter(InfraAgentReference emitter);
 
     /**
-     * get the list of the recievers of the message
-     * @return the recievers of the message
+     * get the list of the receivers of the message
+     * @return the receivers of the message
      */
-    ArrayList<InfraAgentReference> getRecievers();
+    ArrayList<InfraAgentReference> getReceivers();
 
     /**
-     * set the list of recievers for this message
-     * @param recievers : the list of recievers
+     * set the list of receivers for this message
+     * @param receivers : the list of receivers
      */
-    void setRecievers(ArrayList<InfraAgentReference> recievers);
+    void setReceivers(ArrayList<InfraAgentReference> receivers);
 
     /**
      * treat the message and make the suitable decision

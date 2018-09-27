@@ -18,7 +18,7 @@ public class EmptyMessage extends Message {
      */
     public EmptyMessage(InfraAgentReference myInfraAgentRef) {
         this.emitter = myInfraAgentRef; // Here the emitter is the agent who recieved this empty message --> it's usuful to have the reference Of the Agent
-        this.recievers = null;
+        this.receivers = null;
     }
 
 /*
@@ -39,7 +39,7 @@ public class EmptyMessage extends Message {
     @Override
     public AbstractPerception toPerception(IRecord referenceResolver) {
         try {
-            return new EmptyPerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter));
+            return new EmptyPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter));
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;
@@ -50,7 +50,7 @@ public class EmptyMessage extends Message {
     public String toString() {
         return "EmptyMessage{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

@@ -4,19 +4,12 @@
 
 package OCE.Messages;
 
-import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
-import OCE.Decisions.AbstractDecision;
 import OCE.Medium.Recorder.IRecord;
-import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.AdPerception;
 import OCE.Perceptions.SondePerception;
-import OCE.ServiceAgentConnexionState;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class SondeMessage extends Message {
 
@@ -25,12 +18,12 @@ public class SondeMessage extends Message {
     /**
      * Create A Sonde Message
      * @param exist :  boolean value informing if the service attached to the agent is still existing in the environement or not
-     * @param recievers : the references of the recievers of the ad, if null == Broadcast
+     * @param recievers : the references of the receivers of the ad, if null == Broadcast
      */
     public SondeMessage(Boolean exist, ArrayList<InfraAgentReference> recievers) {
         this.exist = exist;
         this.emitter = null; // The sonde has no reference
-        this.recievers = recievers;
+        this.receivers = recievers;
     }
 
     /**
@@ -39,7 +32,7 @@ public class SondeMessage extends Message {
     public SondeMessage() {
         this.exist = false;
         this.emitter = null;
-        this.recievers = null;
+        this.receivers = null;
     }
 
     /**
@@ -75,7 +68,7 @@ public class SondeMessage extends Message {
         return "SondeMessage{" +
                 "exist=" + exist +
                 ", emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

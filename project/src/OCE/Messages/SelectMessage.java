@@ -5,41 +5,36 @@
 package OCE.Messages;
 
 
-import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
-import OCE.Decisions.AbstractDecision;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.AdPerception;
-import OCE.Perceptions.SelectionPerception;
-import OCE.ServiceAgentConnexionState;
+import OCE.Perceptions.ReplyPerception;
+import OCE.Perceptions.SelectPerception;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
-public class SelectionMessage extends Message {
+public class SelectMessage extends Message {
     private InfraAgentReference binderAgent; // The reference of the binding InfraAgent
 
     /**
      * create a selection message
      * @param emitter    reference of the agent sending the selection message
-     * @param recievers the references of the recievers of the selection message
+     * @param recievers the references of the receivers of the selection message
      * @param bindingAgent the agent responsible of executing the physical binding
      */
-    public SelectionMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers, InfraAgentReference bindingAgent) {
+    public SelectMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers, InfraAgentReference bindingAgent) {
         this.emitter = emitter;
-        this.recievers = recievers;
+        this.receivers = recievers;
         this.binderAgent = bindingAgent;
     }
 
     /**
      * create a Selection message (empty)
      */
-    public SelectionMessage() {
+    public SelectMessage() {
         this.emitter = null;
-        this.recievers= null;
+        this.receivers = null;
         this.binderAgent = null;
     }
 
@@ -68,17 +63,20 @@ public class SelectionMessage extends Message {
 
     @Override
     public AbstractPerception toPerception(IRecord referenceResolver) {
-
-            return new SelectionPerception(); // TOdO : retravailler cette partie
-
+        try {
+            return new SelectPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers),null);
+        } catch (ReferenceResolutionFailure referenceResolutionFailure) {
+            referenceResolutionFailure.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public String toString() {
-        return "SelectionMessage{" +
+        return "SelectMessage{" +
                 "binderAgent=" + binderAgent +
                 ", emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

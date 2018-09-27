@@ -4,10 +4,13 @@
 
 package OCE.Decisions;
 
+import Logger.MyLogger;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.ServiceAgent;
+import OCE.Messages.AgreeMessage;
+import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * This class represent an agreement decision send by the agent when he accept the decision of binding
@@ -19,23 +22,25 @@ public class AgreeDecision extends AbstractDecision {
     /**
      * Create an agreement decision
      * @param emitter    reference of the agent that agrees
-     * @param recievers the references of the recievers of the ad, if null == Broadcast
+     * @param receivers the references of the receivers of the ad, if null == Broadcast
      */
-    public AgreeDecision(ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public AgreeDecision(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter= emitter;
-        this.recievers = recievers;
+        this.receivers = receivers;
     }
 
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
-
+        MyLogger.log(Level.INFO, "Treating an agree decision ! ");
+        AgreeMessage agreeMessage = new AgreeMessage(null, null);
+        communicationAdapter.sendMessage(agreeMessage, this.emitter, this.receivers);
     }
 
     @Override
     public String toString() {
         return "AgreeDecision{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

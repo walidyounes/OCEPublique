@@ -6,7 +6,7 @@ package OCE.Medium.Communication;
 
 
 import OCE.Messages.Message;
-import OCE.ServiceAgent;
+import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
 
@@ -17,18 +17,18 @@ public interface ICommunicationAdapter {
      *
      * @param message the message to be sent
      * @param emitter the sender of the message
-     * @param recievers  : the recievers of the message
+     * @param receivers  : the receivers of the message
      */
-    void sendMessageBroadcast(Message message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers);
+    void sendMessageBroadcast(Message message, OCEAgent emitter, ArrayList<OCEAgent> receivers);
 
     /**
      * sends a message from one agent to another (point to point communication)
      *
      * @param message the message to be sent
      * @param emitter the sender of the message
-     * @param recievers  : the recievers of the message
+     * @param receivers  : the receivers of the message
      */
-    void sendMessage(Message message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers);
+    void sendMessage(Message message, OCEAgent emitter, ArrayList<OCEAgent> receivers);
 
     /**
      * allows an agent to receive One message (the first in it's mail box)

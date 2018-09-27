@@ -54,7 +54,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
         InfraAgent infraAgentCourant;
         /// while (run) {
         int i = 0; // Walid : fixer le itérations
-        while (i < 18) {
+        while (i < 28) {
             infraAgentCourant = listOrdonnancement.get(0);
             //LifeCycle(infraAgentCourant.getInfraAgentReference(), infraAgentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
             infraAgentCourant.run(); // walid : On actionne le changment d'etat de l'agent

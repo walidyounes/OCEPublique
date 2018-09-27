@@ -2,11 +2,11 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE;
+package OCE.Agents.ServiceAgentPack;
 
 import Logger.MyLogger;
-import MASInfrastructure.Communication.IMessage;
 import Midlleware.ThreeState.IDecisionState;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Decisions.AbstractDecision;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Messages.Message;

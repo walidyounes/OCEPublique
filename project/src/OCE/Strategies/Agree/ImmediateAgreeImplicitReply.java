@@ -42,7 +42,7 @@ public class ImmediateAgreeImplicitReply implements IAgreeStrategy {
 
 //		Message bestSelection = best(selections);
       //  MessageAgent bestSelection = selections.get(0); // to remove
-      //  ReferenceAgent refBinder = ((SelectionMessage) bestSelection).getAgentBinder();
+      //  ReferenceAgent refBinder = ((SelectMessage) bestSelection).getAgentBinder();
 
         //MessageAgent binding = new BindingMessage("", "", "", "", 0);
         // comm.envoyerMessage(binding);

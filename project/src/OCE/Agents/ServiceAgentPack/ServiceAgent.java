@@ -2,13 +2,14 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE;
+package OCE.Agents.ServiceAgentPack;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.InfraAgent;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
+import OCE.Agents.IDAgent;
+import OCE.Agents.OCEAgent;
 
 /**
  * This class implement the agent responsable of a physical service
@@ -16,13 +17,9 @@ import Midlleware.ThreeState.IPerceptionState;
  * @version 1.0
  */
 
-public class ServiceAgent  {
-    private IDAgent myID;
-    private IPerceptionState myWayOfPerception;
-    private IDecisionState myWayOfDecision;
-    private IActionState myWayOfAction;
+public class ServiceAgent extends OCEAgent {
+
     private OCService handledService;
-    private InfraAgent myInfraAgent;
     private ServiceAgentConnexionState myConnexionState;
 
     public ServiceAgent(OCService handledService, IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
@@ -35,13 +32,8 @@ public class ServiceAgent  {
         this.myConnexionState = ServiceAgentConnexionState.Created;
     }
 
-    /**
-     * Get the unique identifier of this agent
-     * @return the ID of this InfraAgent
-     */
-    public IDAgent getMyID() {
-        return myID;
-    }
+
+
 
     /**
      * get the service handled by the agent
@@ -51,45 +43,6 @@ public class ServiceAgent  {
         return handledService;
     }
 
-    /**
-     * set the perception mechanism of this agent
-     * @param myWayOfPerception the perception mechanism
-     */
-    public void setMyWayOfPerception(IPerceptionState myWayOfPerception) {
-        this.myWayOfPerception = myWayOfPerception;
-    }
-
-    /**
-     * set the decision mechanism of the agent
-     * @param myWayOfDecision  the decision mechanism
-     */
-    public void setMyWayOfDecision(IDecisionState myWayOfDecision) {
-        this.myWayOfDecision = myWayOfDecision;
-    }
-
-    /**
-     * set the action mechanism of the agent
-     * @param myWayOfAction the action mechanism
-     */
-    public void setMyWayOfAction(IActionState myWayOfAction) {
-        this.myWayOfAction = myWayOfAction;
-    }
-
-    /**
-     * set the agent (in the infrastructure) which is associated to this service agent
-     * @param myInfraAgent : the associated agent
-     */
-    public void setMyInfraAgent(InfraAgent myInfraAgent) {
-        this.myInfraAgent = myInfraAgent;
-    }
-
-    /**
-     * get the associated agent (un the infrastructure) to this serviceAgent
-     * @return the associated agent
-     */
-    public InfraAgent getMyInfraAgent() {
-        return myInfraAgent;
-    }
 
     /**
      * Get the current connexion state of this agent

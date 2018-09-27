@@ -8,7 +8,7 @@ import MASInfrastructure.Communication.ICommunication;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Messages.Message;
-import OCE.ServiceAgent;
+import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
 
@@ -33,15 +33,15 @@ public class CommunicationAdapter implements ICommunicationAdapter {
      *
      * @param message the message to be sent
      * @param emitter the sender of the message
-     * @param recievers  : the recievers of the message
+     * @param receivers  : the receivers of the message
      */
     @Override
-    public void sendMessageBroadcast(Message message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public void sendMessageBroadcast(Message message, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         try {
             // Resolving the reference for the transmitter
             message.setEmitter(this.mediumRecorder.resolveAgentReference(emitter));
-            // When sending a message in broadcast the list of recievers is "empty" since every agent is receiving the message so no need to resolve recipients address
-            message.setRecievers(new ArrayList<>());
+            // When sending a message in broadcast the list of receivers is "empty" since every agent is receiving the message so no need to resolve recipients address
+            message.setReceivers(new ArrayList<>());
             // Sending the message through the MAS-Infrastructure
             this.comunicationInfrastructure.sendMessageBroadcast(message);
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
@@ -53,16 +53,16 @@ public class CommunicationAdapter implements ICommunicationAdapter {
      * sends a message from one agent to another (point to point communication)
      * @param message the message to be sent
      * @param emitter the sender of the message
-     * @param recievers  : the recievers of the message
+     * @param receivers  : the receivers of the message
      */
     @Override
-    public void sendMessage(Message message, ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public void sendMessage(Message message, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
 
         try {
             // Resolving the reference of the emitter of the message
             message.setEmitter(this.mediumRecorder.resolveAgentReference(emitter));
-            // Resolving the references of the recievers of the message
-            message.setRecievers(this.mediumRecorder.resolveAgentsReferences(recievers));
+            // Resolving the references of the receivers of the message
+            message.setReceivers(this.mediumRecorder.resolveAgentsReferences(receivers));
             // Sending the message through the MAS-Infrastructure
             this.comunicationInfrastructure.sendMessage(message);
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {

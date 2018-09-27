@@ -5,29 +5,23 @@
 package OCE.Messages;
 
 
-import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
-import OCE.Decisions.AbstractDecision;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.AdPerception;
-import OCE.Perceptions.AgreementPerception;
-import OCE.ServiceAgentConnexionState;
+import OCE.Perceptions.AgreePerception;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
-public class AgreementMessage extends Message {
+public class AgreeMessage extends Message {
 
     /**
      * Creer un message d'acceptation
      *
      */
-    public AgreementMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
+    public AgreeMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter = emitter;
-        this.recievers = recievers;
+        this.receivers = recievers;
     }
 
 /*    @Override
@@ -39,7 +33,7 @@ public class AgreementMessage extends Message {
     @Override
     public AbstractPerception toPerception(IRecord referenceResolver) {
         try {
-            return new AgreementPerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveServiceAgentsByInfraAgentReferences(this.recievers));
+            return new AgreePerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;
@@ -48,9 +42,9 @@ public class AgreementMessage extends Message {
 
     @Override
     public String toString() {
-        return "AgreementMessage{" +
+        return "AgreeMessage{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

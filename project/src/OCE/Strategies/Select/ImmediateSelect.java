@@ -10,7 +10,7 @@ import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
 import OCE.Messages.Message;
-import OCE.Messages.SelectionMessage;
+import OCE.Messages.SelectMessage;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -53,7 +53,7 @@ public class ImmediateSelect implements ISelectStrategy {
 
     //    ArrayList<ReferenceAgent> recipient = new ArrayList<>();
     //    recipient.add(bestTransmitter);
-        Message selection = new SelectionMessage(agent, recipients, refBinder);
+        Message selection = new SelectMessage(agent, recipients, refBinder);
 
         // comm.envoyerMessage(binding);
         comm.sendMessage(selection);

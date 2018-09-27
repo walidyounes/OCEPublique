@@ -5,10 +5,9 @@
 package OCE.Perceptions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Decisions.AbstractDecision;
-import OCE.ServiceAgent;
-import OCE.ServiceAgentConnexionState;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 
 import java.util.ArrayList;
 
@@ -19,15 +18,15 @@ import java.util.ArrayList;
  */
 public abstract class AbstractPerception {
 
-    protected ServiceAgent emitter; // The transmitter of the message
-    protected ArrayList<ServiceAgent> recievers; // The list of the recipients of the message, if == null -> message is in broadcast
+    protected OCEAgent emitter; // The transmitter of the message
+    protected ArrayList<OCEAgent> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
 
     /**
      * get the transmitter of the message
      * @return the reference of the transmitter of the message
      */
 
-    public ServiceAgent getEmitter() {
+    public OCEAgent getEmitter() {
         return this.emitter;
     }
 
@@ -36,41 +35,41 @@ public abstract class AbstractPerception {
      * @param emitter : the reference of the transmitter
      */
 
-    public void setEmitter(ServiceAgent emitter) {
+    public void setEmitter(OCEAgent emitter) {
         this.emitter = emitter;
     }
 
     /**
-     * get the list of the recievers of the message
-     * @return the recievers of the message
+     * get the list of the receivers of the message
+     * @return the receivers of the message
      */
 
-    public ArrayList<ServiceAgent> getRecievers() {
-        return this.recievers;
+    public ArrayList<OCEAgent> getReceivers() {
+        return this.receivers;
     }
 
     /**
-     * set the list of recievers for this message
-     * @param recievers : the list of recievers
+     * set the list of receivers for this message
+     * @param receivers : the list of receivers
      */
-    public void setRecievers(ArrayList<ServiceAgent> recievers) {
-        this.recievers = recievers;
+    public void setReceivers(ArrayList<OCEAgent> receivers) {
+        this.receivers = receivers;
     }
 
     /**
      * treat the message and make the suitable decision
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
-     * @param serviceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
+     * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
      * @return the deicision made by the engine
      */
-    public abstract AbstractDecision toSelfTreat( ServiceAgentConnexionState stateConnexionAgent, ServiceAgent serviceAgentRef, OCService localService);
+    public abstract AbstractDecision toSelfTreat( ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService);
 
     @Override
     public String toString() {
         return "AbstractPerception{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

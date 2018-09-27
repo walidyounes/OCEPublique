@@ -9,7 +9,7 @@ import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.ResponsePerception;
+import OCE.Perceptions.ReplyPerception;
 
 import java.util.ArrayList;
 
@@ -18,17 +18,17 @@ import java.util.ArrayList;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class ResponseMessage extends Message {
+public class ReplyMessage extends Message {
 
     /**
      * Create a Response message
      *
      * @param emitter    reference of the responding agent
-     * @param recievers the references of the recievers of the response, if null == Broadcast
+     * @param recievers the references of the receivers of the response, if null == Broadcast
      */
-    public ResponseMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
+    public ReplyMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter= emitter;
-        this.recievers = recievers;
+        this.receivers = recievers;
     }
 
 
@@ -50,7 +50,7 @@ public class ResponseMessage extends Message {
     @Override
     public AbstractPerception toPerception(IRecord referenceResolver) {
         try {
-            return new ResponsePerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveServiceAgentsByInfraAgentReferences(this.recievers));
+            return new ReplyPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;
@@ -59,9 +59,9 @@ public class ResponseMessage extends Message {
 
     @Override
     public String toString() {
-        return "ResponseMessage{" +
+        return "ReplyMessage{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

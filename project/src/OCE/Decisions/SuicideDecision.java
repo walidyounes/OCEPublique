@@ -16,11 +16,11 @@ public class SuicideDecision extends AbstractDecision {
 
     /**
      * Create a suicide decision
-     * the emetteur is the sonde component and no recievers (the agent itself)
+     * the emetteur is the sonde component and no receivers (the agent itself)
      */
     public SuicideDecision() {
         this.emitter= null;
-        this.recievers = null;
+        this.receivers = null;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class SuicideDecision extends AbstractDecision {
     public String toString() {
         return "SuicideDecision{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

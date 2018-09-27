@@ -9,7 +9,7 @@ import MASInfrastructure.Agent.InfraAgentReference;
 import Logger.MyLogger;
 import Midlleware.AgentFactory.IOCEAgentFactory;
 import OCE.Medium.Recorder.IRecord;
-import OCE.ServiceAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +36,7 @@ public class ServiceManager implements INotification {
             Map.Entry<ServiceAgent, InfraAgentReference> agentS_referenceAgent_Association = agentFactory.createServiceAgent(service);
 
             // Register the association between the ServiceAgent and it's reference in the infrastructure into the recording component of the medium
-            agentRecorder.registerServiceAgent(agentS_referenceAgent_Association.getKey(), agentS_referenceAgent_Association.getValue());
+            agentRecorder.registerOCEAgent(agentS_referenceAgent_Association.getKey(), agentS_referenceAgent_Association.getValue());
         }
     }
 
@@ -47,7 +47,7 @@ public class ServiceManager implements INotification {
             // tget the serviceAgent associated to this service
             ServiceAgent serviceAgent = this.agentRecorder.retrieveSAgentByPService(service);
             // Unregister the association between the ServiceAgent and it's reference in the infrastructure from the recording component of the medium
-            agentRecorder.unregisterServiceAgent(serviceAgent);
+            agentRecorder.unregisterOCEAgent(serviceAgent);
 
             // get the physical reference of the agent
             InfraAgentReference refAgent = serviceAgent.getMyInfraAgent().getInfraAgentReference(); // Todo : check if it's useful now

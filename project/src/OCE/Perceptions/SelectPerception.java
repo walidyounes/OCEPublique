@@ -7,36 +7,36 @@ package OCE.Perceptions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
-import MASInfrastructure.Agent.InfraAgentReference;
-import OCE.BinderAgent;
+import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Decisions.AbstractDecision;
-import OCE.ServiceAgent;
-import OCE.ServiceAgentConnexionState;
+import OCE.Decisions.AgreeDecision;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class SelectionPerception extends AbstractPerception {
+public class SelectPerception extends AbstractPerception {
     private BinderAgent binderAgent; // The reference of the binding InfraAgent
 
     /**
      * create a selection message
      * @param emitter    reference of the agent sending the selection message
-     * @param recievers the references of the recievers of the selection message
-     * @param bindingAgent the agent responsible of executing the physical binding
+     * @param receivers the references of the receivers of the selection message
+     * @param binderAgent the agent responsible of executing the physical binding
      */
-    public SelectionPerception(ServiceAgent emitter, ArrayList<ServiceAgent> recievers, BinderAgent bindingAgent) {
+    public SelectPerception(OCEAgent emitter, ArrayList<OCEAgent> receivers, BinderAgent binderAgent) {
         this.emitter = emitter;
-        this.recievers = recievers;
-        this.binderAgent = bindingAgent;
+        this.receivers = receivers;
+        this.binderAgent = binderAgent;
     }
 
     /**
      * create a Selection message (empty)
      */
-    public SelectionPerception() {
+    public SelectPerception() {
         this.emitter = null;
-        this.recievers= null;
+        this.receivers = null;
         this.binderAgent = null;
     }
 
@@ -59,13 +59,23 @@ public class SelectionPerception extends AbstractPerception {
     /**
      * treat the selection message and make the suitable decision
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
-     * @param serviceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
+     * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
      * @return the deicision made by the engine
      */
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, ServiceAgent serviceAgentRef,  OCService localService) {
+    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef,  OCService localService) {
         MyLogger.log(Level.INFO, "Treating a selection message ! ");
+        //Verify the connexion state of the agent
+        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
+            // Send a agree message to the emitter of this message and also to the binder agent
+            ArrayList<OCEAgent> agreeReceivers = new ArrayList<>();
+            agreeReceivers.add(this.emitter);
+            //agreeReceivers.add(this.binderAgent);
+            System.out.println("Contacter l'agent Binder");
+            return new AgreeDecision(OCEAgentRef, agreeReceivers);
+        }
+
         return null;
     }
 }

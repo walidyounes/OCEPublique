@@ -5,7 +5,7 @@
 package OCE.Decisions;
 
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.ServiceAgent;
+import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
 /**
@@ -15,15 +15,15 @@ import java.util.ArrayList;
  */
 public abstract class AbstractDecision {
 
-    protected ServiceAgent emitter; // The transmitter of the message
-    protected ArrayList<ServiceAgent> recievers; // The list of the recipients of the message, if == null -> message is in broadcast
+    protected OCEAgent emitter; // The transmitter of the message
+    protected ArrayList<OCEAgent> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
 
     /**
      * get the transmitter of the message
      * @return the reference of the transmitter of the message
      */
 
-    public final ServiceAgent getEmitter() {
+    public final OCEAgent getEmitter() {
         return this.emitter;
     }
 
@@ -31,24 +31,24 @@ public abstract class AbstractDecision {
      *  set the refernece of the transmitter of the message
      * @param emitter : the reference of the transmitter
      */
-    public final void setEmitter(ServiceAgent emitter) {
+    public final void setEmitter(OCEAgent emitter) {
         this.emitter = emitter;
     }
 
     /**
-     * get the list of the recievers of the message
-     * @return the recievers of the message
+     * get the list of the receivers of the message
+     * @return the receivers of the message
      */
-    public final ArrayList<ServiceAgent> getRecievers() {
-        return this.recievers;
+    public final ArrayList<OCEAgent> getReceivers() {
+        return this.receivers;
     }
 
     /**
-     * set the list of recievers for this message
-     * @param recievers : the list of recievers
+     * set the list of receivers for this message
+     * @param receivers : the list of receivers
      */
-    public final void setRecievers(ArrayList<ServiceAgent> recievers) {
-        this.recievers = recievers;
+    public final void setReceivers(ArrayList<OCEAgent> receivers) {
+        this.receivers = receivers;
     }
 
     /**

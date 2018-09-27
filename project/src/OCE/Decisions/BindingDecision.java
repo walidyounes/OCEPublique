@@ -17,7 +17,7 @@ public class BindingDecision extends AbstractDecision {
     public String toString() {
         return "BindingDecision{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

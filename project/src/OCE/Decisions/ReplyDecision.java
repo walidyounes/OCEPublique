@@ -6,8 +6,8 @@ package OCE.Decisions;
 
 import Logger.MyLogger;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.Messages.ResponseMessage;
-import OCE.ServiceAgent;
+import OCE.Messages.ReplyMessage;
+import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -22,25 +22,25 @@ public class ReplyDecision extends AbstractDecision {
     /**
      * Create a reply decision
      * @param emitter    reference of the replying agent
-     * @param recievers the references of the recievers of the ad, if null == Broadcast
+     * @param receivers the references of the receivers of the ad, if null == Broadcast
      */
-    public ReplyDecision(ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public ReplyDecision(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter= emitter;
-        this.recievers = recievers;
+        this.receivers = receivers;
     }
 
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         MyLogger.log(Level.INFO, "Treating an reply decision ! ");
-        ResponseMessage responseMessage = new ResponseMessage(null, null );
-        communicationAdapter.sendMessage(responseMessage, this.emitter, this.recievers);
+        ReplyMessage replyMessage = new ReplyMessage(null, null );
+        communicationAdapter.sendMessage(replyMessage, this.emitter, this.receivers);
     }
 
     @Override
     public String toString() {
         return "ReplyDecision{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

@@ -20,16 +20,16 @@ public class AdMessage extends Message {
     /**
      * Create an advertise message
      * @param emitter    reference of the advertising agent
-     * @param recievers the references of the recievers of the ad, if empty == Broadcast
+     * @param recievers the references of the receivers of the ad, if empty == Broadcast
      */
     public AdMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter= emitter;
-        this.recievers = recievers;
+        this.receivers = recievers;
     }
 
-    public AdMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers, OCService myService) {
+    public AdMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers, OCService myService) {
         this.emitter = emitter;
-        this.recievers = recievers;
+        this.receivers = receivers;
         this.myService = myService;
     }
 
@@ -58,10 +58,10 @@ public class AdMessage extends Message {
     @Override
     public AbstractPerception toPerception(IRecord referenceResolver) {
         try {
-            if( ! this.recievers.isEmpty()){ // If the message was send in broadcast the recievers would be empty
-                return new AdPerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveServiceAgentsByInfraAgentReferences(this.recievers), this.myService);
+            if( ! this.receivers.isEmpty()){ // If the message was send in broadcast the receivers would be empty
+                return new AdPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers), this.myService);
             }else
-                return new AdPerception(referenceResolver.retrieveServiceAgentByInfraAgentReference(this.emitter), new ArrayList<>(), this.myService);
+                return new AdPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), new ArrayList<>(), this.myService);
 
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
@@ -74,7 +74,7 @@ public class AdMessage extends Message {
         return "AdMessage{" +
                 "myService=" + myService +
                 ", emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

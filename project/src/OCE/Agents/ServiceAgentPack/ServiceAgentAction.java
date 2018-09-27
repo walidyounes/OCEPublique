@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE;
+package OCE.Agents.ServiceAgentPack;
 
 import Logger.MyLogger;
 import Midlleware.ThreeState.IActionState;

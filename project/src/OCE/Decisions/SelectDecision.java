@@ -4,11 +4,14 @@
 
 package OCE.Decisions;
 
-import OCE.BinderAgent;
+import Logger.MyLogger;
+import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.ServiceAgent;
+import OCE.Messages.SelectMessage;
+import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * This class represent a selection decision (i.e. send a selection message to an agent to inform hi that it has been choosed as suitable connexion)
@@ -21,16 +24,18 @@ public class SelectDecision extends AbstractDecision {
     /**
      * Create a selection decision
      * @param emitter    reference of the selecting agent
-     * @param recievers the references of the recievers of the ad, if null == Broadcast
+     * @param receivers the references of the receivers of the ad, if null == Broadcast
      */
-    public SelectDecision(ServiceAgent emitter, ArrayList<ServiceAgent> recievers) {
+    public SelectDecision(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter= emitter;
-        this.recievers = recievers;
+        this.receivers = receivers;
     }
 
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
-
+        MyLogger.log(Level.INFO, "Treating an agree decision ! ");
+        SelectMessage selectMessage = new SelectMessage(null, null, null);
+        communicationAdapter.sendMessage(selectMessage, this.emitter, this.receivers);
     }
 
     @Override
@@ -38,7 +43,7 @@ public class SelectDecision extends AbstractDecision {
         return "SelectDecision{" +
                 "myBinderAgent=" + myBinderAgent +
                 ", emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

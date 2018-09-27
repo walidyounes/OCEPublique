@@ -4,13 +4,10 @@
 
 package OCE.Messages;
 
-import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.IMessage;
-import OCE.Decisions.AbstractDecision;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Perceptions.AbstractPerception;
-import OCE.ServiceAgentConnexionState;
 
 import java.util.ArrayList;
 
@@ -22,7 +19,7 @@ import java.util.ArrayList;
 public abstract class Message implements IMessage {
 
     protected InfraAgentReference emitter; // The transmitter of the message
-    protected ArrayList<InfraAgentReference> recievers; // The list of the recipients of the message, if == null -> message is in broadcast
+    protected ArrayList<InfraAgentReference> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
 
     /**
      * get the transmitter of the message
@@ -43,21 +40,21 @@ public abstract class Message implements IMessage {
     }
 
     /**
-     * get the list of the recievers of the message
-     * @return the recievers of the message
+     * get the list of the receivers of the message
+     * @return the receivers of the message
      */
     @Override
-    public ArrayList<InfraAgentReference> getRecievers() {
-        return this.recievers;
+    public ArrayList<InfraAgentReference> getReceivers() {
+        return this.receivers;
     }
 
     /**
-     * set the list of recievers for this message
-     * @param recievers : the list of recievers
+     * set the list of receivers for this message
+     * @param receivers : the list of receivers
      */
     @Override
-    public void setRecievers(ArrayList<InfraAgentReference> recievers) {
-        this.recievers = recievers;
+    public void setReceivers(ArrayList<InfraAgentReference> receivers) {
+        this.receivers = receivers;
     }
 
     /**

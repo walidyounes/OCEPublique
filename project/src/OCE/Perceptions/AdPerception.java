@@ -11,8 +11,8 @@ import Logger.MyLogger;
 import OCE.Decisions.AbstractDecision;
 import OCE.Decisions.EmptyDecision;
 import OCE.Decisions.ReplyDecision;
-import OCE.ServiceAgent;
-import OCE.ServiceAgentConnexionState;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Unifieur.IMatching;
 import OCE.Unifieur.Matching;
 
@@ -25,23 +25,23 @@ public class AdPerception extends AbstractPerception {
     /**
      * Create an advertise message
      * @param emitter    reference of the advertising agent
-     * @param recievers the references of the recievers of the ad, if null == Broadcast
+     * @param receivers the references of the receivers of the ad, if null == Broadcast
      */
-    public AdPerception(ServiceAgent emitter, ArrayList<ServiceAgent> recievers, OCService distantService) {
+    public AdPerception(OCEAgent emitter, ArrayList<OCEAgent> receivers, OCService distantService) {
         this.emitter= emitter;
-        this.recievers = recievers;
+        this.receivers = receivers;
         this.distantService = distantService;
     }
 
     /**
      * treat the advertising message and make the suitable decision
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
-     * @param serviceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
+     * @param oceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
      * @return the deicision made by the engine
      */
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, ServiceAgent serviceAgentRef, OCService localService) {
+    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
         MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
@@ -58,9 +58,9 @@ public class AdPerception extends AbstractPerception {
             if(matching.match(service1, service2)){
                 MyLogger.log(Level.INFO, "The two services matchs ! ");
                 // Send a reply message to the emitter of this message
-                ArrayList<ServiceAgent> replyRecievers = new ArrayList<>();
-                replyRecievers.add(this.emitter);
-                return new ReplyDecision(serviceAgentRef, replyRecievers);
+                ArrayList<OCEAgent> replyReceivers = new ArrayList<>();
+                replyReceivers.add(this.emitter);
+                return new ReplyDecision(oceAgentRef, replyReceivers);
             }
             else return new EmptyDecision();
         }else return new EmptyDecision();

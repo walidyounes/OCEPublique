@@ -8,7 +8,7 @@ import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Messages.AdMessage;
-import OCE.ServiceAgent;
+import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -23,11 +23,11 @@ public class AdvertiseDecision extends AbstractDecision {
     /**
      * Create an advertise decision
      * @param emitter    reference of the advertising agent
-     * @param recievers the references of the recievers of the ad, if null == Broadcast
+     * @param receivers the references of the receivers of the ad, if null == Broadcast
      */
-    public AdvertiseDecision(ServiceAgent emitter, ArrayList<ServiceAgent> recievers, OCService myService) {
+    public AdvertiseDecision(OCEAgent emitter, ArrayList<OCEAgent> receivers, OCService myService) {
         this.emitter= emitter;
-        this.recievers = recievers;
+        this.receivers = receivers;
         this.myService = myService;
     }
 
@@ -35,7 +35,7 @@ public class AdvertiseDecision extends AbstractDecision {
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         MyLogger.log(Level.INFO, "Treating an advertisement decision ! ");
         AdMessage adMessage = new AdMessage(null, null, this.myService);
-        communicationAdapter.sendMessageBroadcast(adMessage, this.emitter, this.recievers);
+        communicationAdapter.sendMessageBroadcast(adMessage, this.emitter, this.receivers);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AdvertiseDecision extends AbstractDecision {
         return "AdvertiseDecision{" +
                 "myService=" + myService +
                 ", emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

@@ -5,10 +5,7 @@
 package Midlleware.ThreeState;
 
 import MASInfrastructure.Agent.InfraAgent;
-import MASInfrastructure.Communication.IMessage;
-import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Messages.Message;
-import OCE.ServiceAgent;
 
 import java.util.ArrayList;
 

@@ -119,7 +119,7 @@ public class UIMockupController implements Initializable {
                     } else {
                         if (this.requiredR.isSelected()) {
                             // requiredImage = new ImageView(new Image(new FileInputStream("/required.png")));
-                            label.setGraphic(new ImageView("/provided.png"));
+                            label.setGraphic(new ImageView("/required.png"));
                             providedORrequired = 1; //RequiredService
                         }
                     }

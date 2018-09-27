@@ -18,7 +18,7 @@ public class EmptyDecision extends AbstractDecision {
      */
     public EmptyDecision() {
         this.emitter = null;
-        this.recievers = null;
+        this.receivers = null;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class EmptyDecision extends AbstractDecision {
     public String toString() {
         return "EmptyDecision{" +
                 "emitter=" + emitter +
-                ", recievers=" + recievers +
+                ", receivers=" + receivers +
                 '}';
     }
 }

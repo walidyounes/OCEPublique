@@ -7,39 +7,40 @@ package OCE.Medium.Recorder;
 import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Medium.ReferenceResolutionFailure;
-import OCE.ServiceAgent;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
 import java.util.ArrayList;
 
 public interface IRecord {
 
     /**
-     * Register in the recording list the mapping between a serviceAgent and it's associated referenceAgent
-     * @param serviceAgent : the serviceAgent
+     * Register in the recording list the mapping between an OCEAgent and it's associated referenceAgent
+     * @param oceAgent : the agent
      * @param infraAgentReference : the agent's Reference in the infrastructure which is associated to the serviceAgent
      */
-    void registerServiceAgent(ServiceAgent serviceAgent, InfraAgentReference infraAgentReference);
+    void registerOCEAgent(OCEAgent oceAgent, InfraAgentReference infraAgentReference);
 
     /**
-     * Unregister from the recording list the mapping between a serviceAgent and it's associated referenceAgent
-     * @param serviceAgent : the serviceAgent ( we use only this parameter because it's enaugh)
+     * Unregister from the recording list the mapping between an OCEAgent and it's associated referenceAgent
+     * @param oceAgent : the agent ( we use only this parameter because it's enaugh)
      *
      */
-    void unregisterServiceAgent(ServiceAgent serviceAgent);
+    void unregisterOCEAgent(OCEAgent oceAgent);
 
     /**
-     * Resolve the physical adresse (InfraAgentReference) of ONE ServiceAgent
-     * @param serviceAgent : the service InfraAgent in question
+     * Resolve the physical adresse (InfraAgentReference) of ONE OCEAgent
+     * @param oceAgent : the agent
      * @return his physical reference
      */
-    InfraAgentReference resolveAgentReference(ServiceAgent serviceAgent) throws ReferenceResolutionFailure;
+    InfraAgentReference resolveAgentReference(OCEAgent oceAgent) throws ReferenceResolutionFailure;
 
     /**
-     * Resolve the physical adresse (InfraAgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
-     * @param serviceAgents : the list of the serviceAgents
+     * Resolve the physical adresse (InfraAgentReference) of a list of OCEAgents (usually used in the case of more thant one recipient)
+     * @param oceAgents : the list of the oceAgents
      * @return the list of corresponding physical references
      */
-    ArrayList<InfraAgentReference> resolveAgentsReferences(ArrayList<ServiceAgent> serviceAgents) throws ReferenceResolutionFailure;
+    ArrayList<InfraAgentReference> resolveAgentsReferences(ArrayList<OCEAgent> oceAgents) throws ReferenceResolutionFailure;
 
     /**
      * Retrieve and return the ServiceAgent which is attached to the physical service
@@ -49,18 +50,18 @@ public interface IRecord {
     ServiceAgent retrieveSAgentByPService(OCService attachedService);
 
     /**
-     * Resolve the logical adresse (ServiceAgent) of a list of InfraAgentReference
+     * Resolve the logical adresse (OCEAgent) of a list of InfraAgentReference
      * @param infraAgents the liste of the refrence of the infrastructure agent
-     * @return the coresponding list of ServiceAgents
+     * @return the coresponding list of OCEAgent
      * @throws ReferenceResolutionFailure if one of the agents doesn't exist
      */
-    ArrayList<ServiceAgent> retrieveServiceAgentsByInfraAgentReferences(ArrayList<InfraAgentReference> infraAgents) throws ReferenceResolutionFailure;
+    ArrayList<OCEAgent> retrieveOCEAgentsByInfraAgentReferences(ArrayList<InfraAgentReference> infraAgents) throws ReferenceResolutionFailure;
 
     /**
      * Resolve the logical adresse (ServiceAgent) of the InfraAgentReference
      * @param infraAgent the refrence of the infrastructure agent
-     * @return the coresponding ServiceAgent
+     * @return the coresponding OCEAgent
      * @throws ReferenceResolutionFailure if the agent doesn't exist
      */
-    ServiceAgent retrieveServiceAgentByInfraAgentReference(InfraAgentReference infraAgent) throws ReferenceResolutionFailure;
+    OCEAgent retrieveOCEAgentByInfraAgentReference(InfraAgentReference infraAgent) throws ReferenceResolutionFailure;
 }
