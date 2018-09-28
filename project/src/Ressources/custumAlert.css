@@ -1,0 +1,42 @@
+/*
+ * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ */
+
+.myAlert{
+    -fx-border-color:white;
+    -fx-border-width:2.0px;
+}
+
+/**Costumization of DialogPane Header**/
+.myAlert:header .header-panel {
+    -fx-background-color: #EEEEEE;
+}
+
+.myAlert:header .header-panel .label{
+    -fx-text-fill: #0097A7 ;
+    -fx-font-size:18.0px;
+}
+
+/**Costumization of DialogPane content**/
+.myAlert > .content.label {
+    -fx-padding: 0.5em 0.5em 0.5em 0.5em;
+    -fx-background-color: white;
+    -fx-text-fill:black;
+    -fx-font-size:15.0px;
+}
+
+/**Costumization of The Bar where the buttons are located**/
+.myAlert > .button-bar > .container {
+    -fx-background-color: #EEEEEE;
+}
+
+/**Costumization of Buttons**/
+.myAlert .button{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -jfx-button-type: RAISED;
+    -fx-background-color: #4CAF50;
+    -fx-pref-width: 100;
+    -fx-text-fill: WHITE;
+    -fx-text-style: bold;
+}

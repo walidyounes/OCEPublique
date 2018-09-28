@@ -5,16 +5,17 @@ graph {
 node {
     size: 60px, 25px;
     shape: rounded-box;
-    fill-mode: gradient-diagonal1;
-    fill-color: #f50057; // light red
-//stroke-mode: plain;
-//stroke-width : 2px;
-//stroke-color: #607D8B;
+    fill-image : url('Ressources//provided.png');
+    fill-mode: image-scaled;
+    //fill-color: #f50057; // light red
+    //stroke-mode: plain;
+    //stroke-width : 2px;
+    //stroke-color: #607D8B;
     text-mode : normal;
     text-style : bold;
     text-size : 12;
     text-background-mode : rounded-box;
-    text-background-color : #33bfff; // light blue
+    text-background-color : #E0E0E0; // light grey
 text-alignment : at-right;
     text-padding : 10px,5px;
     text-offset : 16px, 0px;
@@ -27,6 +28,7 @@ edge {
 }
 
 node.Required {
-    fill-color: #3F51B5; // light red
-    text-background-color : #0097A7; // light blue
+    fill-color: #3F51B5; // violet
+    fill-image : url('Ressources//required.png');
+    text-background-color : #E0E0E0; // light grey
 }

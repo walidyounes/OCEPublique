@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -41,6 +42,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UIMockupController implements Initializable {
@@ -297,7 +299,8 @@ public class UIMockupController implements Initializable {
         for (OCService service : providedServices) {
             MockupService myMService = (MockupService)service;
             Node node = this.ServiceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
-            node.addAttribute("ui.label"," Service "+myMService.getName()+" ");
+
+            node.addAttribute("ui.label"," "+myMService.getName()+" Of " + myMService.getOwner());
         }
 
     }
@@ -306,7 +309,7 @@ public class UIMockupController implements Initializable {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
             Node node = this.ServiceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
-            node.addAttribute("ui.label"," Service "+myMService.getName()+" ");
+            node.addAttribute("ui.label"," "+myMService.getName()+" Of " + myMService.getOwner());
             node.addAttribute("ui.class","Required");
         }
     }
@@ -353,32 +356,62 @@ public class UIMockupController implements Initializable {
     private void initPopup(){
         this.popup = new JFXPopup();
         JFXButton deleteButton = new JFXButton("Delete");
-        JFXButton updateButton = new JFXButton("Update");
+        JFXButton detailButton = new JFXButton("Detail");
         deleteButton.setPadding(new Insets(10));
-        updateButton.setPadding(new Insets(10));
+        detailButton.setPadding(new Insets(10));
         ImageView deleteImage = new ImageView("/delete.png");
-        ImageView updateImage = new ImageView("/update.png");
+        ImageView detailImage = new ImageView("/detail.png");
         deleteButton.setGraphic(deleteImage);
-        updateButton.setGraphic(updateImage);
+        detailButton.setGraphic(detailImage);
 
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               String nameComp = componentsList.getSelectionModel().getSelectedItem().getText().split(":")[1];
+               String nameComp = componentsList.getSelectionModel().getSelectedItem().getText().split(" : ")[1];
                System.out.println(nameComp);
                deleteComponentFromMockup(nameComp);
                componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
             }
         });
 
-        updateButton.setOnAction(new EventHandler<ActionEvent>() {
+        detailButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
+                String nameComp = componentsList.getSelectionModel().getSelectedItem().getText().split(" : ")[1];
+                System.out.println(nameComp);
+                Set<OCComponent> mycomponents = mockupFacadeAdapter.getComponents().stream().filter(c -> ((MockupComponent)c).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toSet());
+                // Display the component's detail on a window
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                //customise CSS of the new window
+                DialogPane dialogPane = alert.getDialogPane();
+                dialogPane.getStylesheets().add("/custumAlert.css");
+                dialogPane.getStyleClass().add("myAlert");
+
+                alert.setTitle("Component's Detail");
+                alert.setHeaderText("The component * " + nameComp + " * contains ");
+                String content="";
+                for (OCComponent compo : mycomponents) {
+                    content = content + "Provided services : \n";
+                    // Concat the content of all services of the component in a single string
+                    content = content + ((MockupComponent)compo).getProvidedServices().stream()
+                                                                                        .map(s -> "\t - "+((MockupService)s).toString()+"\n")
+                                                                                            .collect(Collectors.joining());
+                    // content = content + ""+((MockupComponent)compo).getProvidedServices()+"\n";
+                    content = content + "Required services : \n";
+                    // content = content + ""+((MockupComponent)compo).getRequiredServices();
+                    content = content + ((MockupComponent)compo).getRequiredServices().stream()
+                                                                                        .map(s -> "\t - "+((MockupService)s).toString()+"\n")
+                                                                                            .collect(Collectors.joining());
+                    System.out.println("Provided services = "+ ((MockupComponent)compo).getProvidedServices()+"\n");
+                    System.out.println(" Required services = "+ ((MockupComponent)compo).getRequiredServices()+"\n");
+                }
+                alert.setContentText(content);
+                alert.show();
+                //componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
             }
         });
 
-        VBox popUpContent = new VBox(deleteButton, updateButton);
+        VBox popUpContent = new VBox( detailButton,deleteButton);
         this.popup.setPopupContent(popUpContent);
     }
 }

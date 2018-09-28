@@ -40,7 +40,7 @@ public abstract class MockupService extends OCService {
     public String toString() {
         // return "Service "+name+" of Component "+ownerComponentName+" Links :
         // "+linkedServices;
-        return "Service " + name + " of Component " + owner;
+        return "Service " + name + " of " + owner;
     }
 
     @Override
