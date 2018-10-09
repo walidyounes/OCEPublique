@@ -16,6 +16,8 @@ node {
     text-size : 12;
     text-background-mode : rounded-box;
     text-background-color : #E0E0E0; // light grey
+    icon-mode: at-left;
+    icon: url('Ressources/AgentNC.png');
 text-alignment : at-right;
     text-padding : 10px,5px;
     text-offset : 16px, 0px;

@@ -62,7 +62,7 @@ public class SondePerception extends AbstractPerception {
      */
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef,  OCService localService) {
-        MyLogger.log(Level.INFO, "Treating a sonde message ! ");
+        MyLogger.log(Level.INFO, OCEAgentRef + " treats a sonde message ");
         return null;
     }
 }

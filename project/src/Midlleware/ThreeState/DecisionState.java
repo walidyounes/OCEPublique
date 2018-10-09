@@ -26,13 +26,13 @@ public class DecisionState implements IEtat {
 
     @Override
     public void execute(LifeCycle c) {
-        MyLogger.log(Level.INFO, " InfraAgent is in Decision state " );
+        //MyLogger.log(Level.INFO, " InfraAgent is in Decision state " );
         // Retrive the list of perceptions initialized in the previous state
         ArrayList<Message> messages = c.getSharedData("ListPerceptions");
         // execute the decision method of the agent
         ArrayList<AbstractDecision> myListOfDecisions= myWayOfDecision.decide(messages);
 
-        MyLogger.log(Level.INFO, "List of decisions " + myListOfDecisions);
+       // MyLogger.log(Level.INFO, "List of decisions " + myListOfDecisions);
         //send the data to the next state
         c.shareVariable("ListDecisions", myListOfDecisions);
         //Move forward to the next state "Action state"

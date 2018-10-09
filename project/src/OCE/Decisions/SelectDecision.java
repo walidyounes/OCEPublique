@@ -5,7 +5,9 @@
 package OCE.Decisions;
 
 import Logger.MyLogger;
+import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Agents.BinderAgentPack.BinderAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Messages.SelectMessage;
 import OCE.Agents.OCEAgent;
@@ -29,12 +31,16 @@ public class SelectDecision extends AbstractDecision {
     public SelectDecision(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter= emitter;
         this.receivers = receivers;
+        this.myBinderAgent = instanciateBinderAgent(((ServiceAgent)emitter).getMyBinderAgentFactory());
     }
 
+    private BinderAgent instanciateBinderAgent(IOCEBinderAgentFactory binderAgentFactory){
+        return binderAgentFactory.createBinderAgent().getKey();
+    }
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         MyLogger.log(Level.INFO, "Treating an agree decision ! ");
-        SelectMessage selectMessage = new SelectMessage(null, null, null);
+        SelectMessage selectMessage = new SelectMessage(null, null, this.myBinderAgent.getMyInfraAgent().getInfraAgentReference());
         communicationAdapter.sendMessage(selectMessage, this.emitter, this.receivers);
     }
 

@@ -7,9 +7,12 @@ package OCE.Perceptions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Decisions.AbstractDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.Decisions.AgreeDecision;
+import OCE.Decisions.EmptyDecision;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -34,7 +37,14 @@ public class AgreePerception extends AbstractPerception {
      */
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef,  OCService localService) {
-        MyLogger.log(Level.INFO, "Treating a agreement message ! ");
+        MyLogger.log(Level.INFO, oceAgentRef + " treats an agreement message ");
+        //Verify the connexion state of the agent
+        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
+            // change the connexion's state of the agent
+            ((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.Waiting);
+            MyLogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
+            return new EmptyDecision();
+        }
         return null;
     }
 }

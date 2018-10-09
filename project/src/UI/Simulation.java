@@ -7,8 +7,8 @@ package UI;
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import Logger.MyLogger;
 import MASInfrastructure.Infrastructure;
-import Midlleware.AgentFactory.IOCEAgentFactory;
-import Midlleware.AgentFactory.OCEAgentFactory;
+import Midlleware.AgentFactory.IOCEServiceAgentFactory;
+import Midlleware.AgentFactory.OCEServiceAgentFactory;
 import OCE.Medium.Medium;
 import OCE.Unifieur.Matching;
 import OCE.sonde.Sonde;
@@ -27,7 +27,7 @@ public class Simulation implements Runnable {
         Matching alwaysTrueMatching = new Matching();
         Medium medium = new Medium(infrastructure);
 
-        IOCEAgentFactory agentFactory = new OCEAgentFactory(infrastructure, medium);
+        IOCEServiceAgentFactory agentFactory = new OCEServiceAgentFactory(infrastructure, medium);
 
 
         Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 1000);

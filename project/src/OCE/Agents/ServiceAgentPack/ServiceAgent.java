@@ -5,6 +5,7 @@
 package OCE.Agents.ServiceAgentPack;
 
 import AmbientEnvironment.OCPlateforme.OCService;
+import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
@@ -21,6 +22,7 @@ public class ServiceAgent extends OCEAgent {
 
     private OCService handledService;
     private ServiceAgentConnexionState myConnexionState;
+    private IOCEBinderAgentFactory myBinderAgentFactory;
 
     public ServiceAgent(OCService handledService, IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
         this.myID = new IDAgent();
@@ -34,9 +36,8 @@ public class ServiceAgent extends OCEAgent {
 
 
 
-
     /**
-     * get the service handled by the agent
+     * Get the service handled by the agent
      * @return the handled service
      */
     public OCService getHandledService() {
@@ -58,6 +59,22 @@ public class ServiceAgent extends OCEAgent {
      */
     public void setMyConnexionState(ServiceAgentConnexionState myConnexionState) {
         this.myConnexionState = myConnexionState;
+    }
+
+    /**
+     * Get the Factory wich allow th creation of a Binder Agent
+     * @return the BinderAgent Factory
+     */
+    public IOCEBinderAgentFactory getMyBinderAgentFactory() {
+        return myBinderAgentFactory;
+    }
+
+    /**
+     * Set the reference of the BinderAgent factory of this agent
+     * @param myBinderAgentFactory : the reference of the BinderAgentFactory
+     */
+    public void setMyBinderAgentFactory(IOCEBinderAgentFactory myBinderAgentFactory) {
+        this.myBinderAgentFactory = myBinderAgentFactory;
     }
 
     @Override

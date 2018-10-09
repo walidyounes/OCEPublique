@@ -25,7 +25,7 @@ public class PerceptionState implements IEtat{
 
     @Override
     public void execute(LifeCycle c) {
-        MyLogger.log(Level.INFO, " InfraAgent is in Perception state " );
+        //MyLogger.log(Level.INFO, " InfraAgent is in Perception state " );
         // Execute the perception method of the agent
         ArrayList<Message> messages = myWayOfPerception.percept();
         // Passe the list of messages to the next state

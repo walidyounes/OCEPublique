@@ -35,7 +35,7 @@ public class EmptyPerception extends AbstractPerception {
      */
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
-        MyLogger.log(Level.INFO, "Treating an empty message ! ");
+        MyLogger.log(Level.INFO, OCEAgentRef + " treats an empty message ");
         if(stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){ // if the agent was created ->
             //send a advertisement message todo "this could be enhaced later on
             return new AdvertiseDecision(this.emitter, new ArrayList<>(), localService);

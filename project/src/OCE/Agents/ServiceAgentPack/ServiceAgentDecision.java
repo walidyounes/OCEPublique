@@ -63,7 +63,6 @@ public class ServiceAgentDecision implements IDecisionState {
      */
     @Override
     public ArrayList<AbstractDecision> decide(ArrayList<Message> perceptions) {
-        MyLogger.log(Level.INFO, "The service agent is making decisions !");
         //Call the selection method to select the messages to treat
         Message messageSelected = this.selectionMessageStrategy.singleSelect(perceptions);
         //Treat the selected message
@@ -71,6 +70,7 @@ public class ServiceAgentDecision implements IDecisionState {
         AbstractDecision myDecision = perceptionSelected.toSelfTreat(myServiceAgent.getMyConnexionState(), myServiceAgent, myServiceAgent.getHandledService());
         ArrayList<AbstractDecision> mylistOfDecisions = new ArrayList<>();
         mylistOfDecisions.add(myDecision);
+        MyLogger.log(Level.INFO, "Agent : Decision -> List of decisions = "+ mylistOfDecisions.toString() );
         return mylistOfDecisions;
     }
 }

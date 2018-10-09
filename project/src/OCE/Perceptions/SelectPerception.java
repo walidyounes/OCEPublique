@@ -32,15 +32,6 @@ public class SelectPerception extends AbstractPerception {
     }
 
     /**
-     * create a Selection message (empty)
-     */
-    public SelectPerception() {
-        this.emitter = null;
-        this.receivers = null;
-        this.binderAgent = null;
-    }
-
-    /**
      * get the reference of the binding agent
      * @return the reference
      */
@@ -65,14 +56,14 @@ public class SelectPerception extends AbstractPerception {
      */
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef,  OCService localService) {
-        MyLogger.log(Level.INFO, "Treating a selection message ! ");
+        MyLogger.log(Level.INFO, OCEAgentRef + " treats a selection message ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
             // Send a agree message to the emitter of this message and also to the binder agent
             ArrayList<OCEAgent> agreeReceivers = new ArrayList<>();
             agreeReceivers.add(this.emitter);
             //agreeReceivers.add(this.binderAgent);
-            System.out.println("Contacter l'agent Binder");
+            // Todo : System.out.println("Contacter l'agent Binder");
             return new AgreeDecision(OCEAgentRef, agreeReceivers);
         }
 

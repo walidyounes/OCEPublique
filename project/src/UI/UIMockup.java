@@ -26,7 +26,6 @@ public class UIMockup extends Application {
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.setOnCloseRequest(e -> {Platform.exit(); System.exit(0);});
         primaryStage.show();
-
     }
 
     public static void main(String[] args) {

@@ -9,12 +9,11 @@ import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Infrastructure;
 import Logger.MyLogger;
-import Midlleware.AgentFactory.OCEAgentFactory;
-import Midlleware.AgentFactory.IOCEAgentFactory;
+import Midlleware.AgentFactory.OCEServiceAgentFactory;
+import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Medium.Medium;
 import OCE.Unifieur.Matching;
 import OCE.sonde.Sonde;
-import javafx.scene.control.TextArea;
 
 import java.util.ArrayList;
 
@@ -32,7 +31,7 @@ public class Tests {
         Matching alwaysTrueMatching = new Matching();
         Medium medium = new Medium(infrastructure);
 
-        IOCEAgentFactory agentFactory = new OCEAgentFactory(infrastructure, medium);
+        IOCEServiceAgentFactory agentFactory = new OCEServiceAgentFactory(infrastructure, medium);
 
 
         Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 1000);

@@ -301,6 +301,7 @@ public class UIMockupController implements Initializable {
             Node node = this.ServiceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
 
             node.addAttribute("ui.label"," "+myMService.getName()+" Of " + myMService.getOwner());
+
         }
 
     }

@@ -16,7 +16,7 @@ import java.util.Map;
  * @author Walid YOUNES
  * @version 1.0
  */
-public interface IOCEAgentFactory {
+public interface IOCEServiceAgentFactory {
 
     /**
      * Create an agent attached to a service
@@ -24,10 +24,5 @@ public interface IOCEAgentFactory {
      */
     Map.Entry<ServiceAgent, InfraAgentReference> createServiceAgent(OCService attachedService);
 
-    /**
-     * Create a binding agent
-     * @return the binding agent created and its InfrastructureReference
-     */
-    Map.Entry<ServiceAgent, InfraAgentReference> createBinderAgent();
 
 }

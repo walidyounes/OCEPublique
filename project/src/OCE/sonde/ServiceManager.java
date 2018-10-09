@@ -7,7 +7,7 @@ package OCE.sonde;
 import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgentReference;
 import Logger.MyLogger;
-import Midlleware.AgentFactory.IOCEAgentFactory;
+import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
@@ -19,12 +19,12 @@ import java.util.logging.Level;
 
 public class ServiceManager implements INotification {
 
-    private IOCEAgentFactory agentFactory;
+    private IOCEServiceAgentFactory agentFactory;
     private IRecord agentRecorder;
 
     private Map<InfraAgentReference, OCService> listAssocAgentServiceDisparus = new HashMap<>(); //  TODO walid : ça sert à quoi ???
 
-    public ServiceManager(IOCEAgentFactory agentFactory, IRecord agentRecorder) {
+    public ServiceManager(IOCEServiceAgentFactory agentFactory, IRecord agentRecorder) {
         this.agentFactory = agentFactory;
         this.agentRecorder = agentRecorder;
     }

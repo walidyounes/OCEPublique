@@ -7,7 +7,7 @@ package OCE.sonde;
 
 import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
 import AmbientEnvironment.FacadeAdapter.IAcquisition;
-import Midlleware.AgentFactory.IOCEAgentFactory;
+import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Medium.Recorder.IRecord;
 
 import java.util.Timer;
@@ -25,7 +25,7 @@ public class Sonde {
     private long periodicity; // the periodicity of the task of souding the environement
 
 
-    public Sonde(IAcquisition acquisition, IRecord agentRecorder, IOCEAgentFactory agentFactory, long periodicity) {
+    public Sonde(IAcquisition acquisition, IRecord agentRecorder, IOCEServiceAgentFactory agentFactory, long periodicity) {
         this.periodicity = periodicity;
         // Instanciation of the serviceManager
         ServiceManager serviceManager = new ServiceManager(agentFactory, agentRecorder);

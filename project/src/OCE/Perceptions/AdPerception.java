@@ -42,16 +42,16 @@ public class AdPerception extends AbstractPerception {
      */
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
-        MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
+        MyLogger.log(Level.INFO, oceAgentRef + " treats an advertisement message ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
-            MyLogger.log(Level.INFO, "The agent is free ! ");
+            MyLogger.log(Level.INFO, oceAgentRef +" is not connected  ");
             //Verify the matching between the services Todo use the matching in the future
             //todo here we are casting the type to MockupService
             MockupService service1 =  (MockupService)localService;
             MockupService service2 = (MockupService)this.distantService;
-            MyLogger.log(Level.INFO, "service local = " + service1.toString());
-            MyLogger.log(Level.INFO, "service distant = " + service2.toString());
+           // MyLogger.log(Level.INFO, "service local = " + service1.toString());
+           // MyLogger.log(Level.INFO, "service distant = " + service2.toString());
             //verify the matching // TODO à améliorer
             IMatching matching = new Matching();
 
