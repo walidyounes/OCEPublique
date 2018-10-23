@@ -5,9 +5,11 @@
 package OCE.Decisions;
 
 import Logger.MyLogger;
+import OCE.Agents.BinderAgentPack.BinderAgent;
+import OCE.Agents.OCEAgent;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Messages.AgreeMessage;
-import OCE.Agents.OCEAgent;
+import OCE.Messages.BindMessage;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,6 +21,7 @@ import java.util.logging.Level;
  */
 public class AgreeDecision extends AbstractDecision {
 
+    private BinderAgent binderAgent;
     /**
      * Create an agreement decision
      * @param emitter    reference of the agent that agrees
@@ -29,11 +32,22 @@ public class AgreeDecision extends AbstractDecision {
         this.receivers = receivers;
     }
 
+    public void setBinderAgent(BinderAgent binderAgent) {
+        this.binderAgent = binderAgent;
+    }
+
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         MyLogger.log(Level.INFO, "Treating an agree decision ! ");
+        //send the agree message
         AgreeMessage agreeMessage = new AgreeMessage(null, null);
         communicationAdapter.sendMessage(agreeMessage, this.emitter, this.receivers);
+        //Send a message to the Binder Agent
+        BindMessage bindMessage = new BindMessage(null, null);
+        ArrayList<OCEAgent> bindReceiver = new ArrayList<>();
+        bindReceiver.add(this.binderAgent);
+        communicationAdapter.sendMessage(bindMessage, this.emitter, bindReceiver);
+
     }
 
     @Override

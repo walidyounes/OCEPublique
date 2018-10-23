@@ -31,8 +31,8 @@ public class ServiceAgentAction implements IActionState {
     private IAgreeStrategy myAgreeStrategy;
 
     /**
-     * Update the communication componennt
-     * @param communicationManager : the componenent whic is in charge of the communication between the agent
+     * Update the communication component
+     * @param communicationManager : the component which is in charge of the communication between the agent
      */
     @Override
     public void setCommunicationManager(ICommunicationAdapter communicationManager) {

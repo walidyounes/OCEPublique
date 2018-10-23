@@ -12,8 +12,10 @@ import OCE.Decisions.AbstractDecision;
 import OCE.Decisions.AgreeDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.Decisions.BindDecision;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Level;
 
 public class SelectPerception extends AbstractPerception {
@@ -52,19 +54,21 @@ public class SelectPerception extends AbstractPerception {
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
      * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
-     * @return the deicision made by the engine
+     * @return the decision made by the engine
      */
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef,  OCService localService) {
         MyLogger.log(Level.INFO, OCEAgentRef + " treats a selection message ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
-            // Send a agree message to the emitter of this message and also to the binder agent
+            // Send a agree message to the emitter of this message
             ArrayList<OCEAgent> agreeReceivers = new ArrayList<>();
             agreeReceivers.add(this.emitter);
-            //agreeReceivers.add(this.binderAgent);
-            // Todo : System.out.println("Contacter l'agent Binder");
-            return new AgreeDecision(OCEAgentRef, agreeReceivers);
+            AgreeDecision agreeDecision=  new AgreeDecision(OCEAgentRef, agreeReceivers);
+            // Add the reference contact of the Binder Agent
+            agreeDecision.setBinderAgent(binderAgent);
+
+            return agreeDecision;
         }
 
         return null;

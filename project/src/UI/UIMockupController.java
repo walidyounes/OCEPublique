@@ -9,6 +9,7 @@ import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.DeviceBinder.PhysicalDeviceBinder;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -102,6 +103,20 @@ public class UIMockupController implements Initializable {
                                                }
                                            });
         MyLogger.init();
+        PhysicalDeviceBinder physicalDeviceBinder = new PhysicalDeviceBinder();
+        physicalDeviceBinder.UIBinderServicesProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] idServices = newValue.split("-");
+                        System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+                        addEdge(idServices[0], idServices[1]);
+                    }
+                });
+            }
+        });
     }
 
     @FXML
@@ -310,16 +325,14 @@ public class UIMockupController implements Initializable {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
             Node node = this.ServiceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
-            node.addAttribute("ui.label"," "+myMService.getName()+" Of " + myMService.getOwner());
+            node.addAttribute("ui.label",""+myMService.getName()+" Of " + myMService.getOwner());
             node.addAttribute("ui.class","Required");
         }
     }
 
-    private void addEdge(MockupService service1, MockupService service2){
-        String idS1 = "" + service1.getName()+service1.getOwner()+service1.getWay();
-        String idS2 = "" + service2.getName()+service2.getOwner()+service2.getWay();
+    private void addEdge(String idService1, String idService2){
 
-        this.ServiceGraphe.addEdge(""+idS1+idS2, idS1, idS2);
+        this.ServiceGraphe.addEdge(""+idService1+idService2, idService1, idService2);
     }
 
     private void deleteProvidedServiceFromGraphe(ArrayList<OCService> providedServices) {

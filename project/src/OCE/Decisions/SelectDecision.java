@@ -9,6 +9,7 @@ import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Medium.Communication.ICommunicationAdapter;
+import OCE.Messages.BindMessage;
 import OCE.Messages.SelectMessage;
 import OCE.Agents.OCEAgent;
 
@@ -42,6 +43,11 @@ public class SelectDecision extends AbstractDecision {
         MyLogger.log(Level.INFO, "Treating an agree decision ! ");
         SelectMessage selectMessage = new SelectMessage(null, null, this.myBinderAgent.getMyInfraAgent().getInfraAgentReference());
         communicationAdapter.sendMessage(selectMessage, this.emitter, this.receivers);
+        // Send a message to the binder agent
+        BindMessage bindMessage = new BindMessage(null, null);
+        ArrayList<OCEAgent> bindReceivers = new ArrayList<>();
+        bindReceivers.add(this.myBinderAgent);
+        communicationAdapter.sendMessage(bindMessage, this.emitter,bindReceivers);
     }
 
     @Override

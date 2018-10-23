@@ -13,6 +13,7 @@ import OCE.Decisions.EmptyDecision;
 import OCE.Decisions.ReplyDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.DeviceBinder.PhysicalDeviceBinder;
 import OCE.Unifieur.IMatching;
 import OCE.Unifieur.Matching;
 
@@ -60,6 +61,7 @@ public class AdPerception extends AbstractPerception {
                 // Send a reply message to the emitter of this message
                 ArrayList<OCEAgent> replyReceivers = new ArrayList<>();
                 replyReceivers.add(this.emitter);
+                PhysicalDeviceBinder.bindServices(service1,service2);
                 return new ReplyDecision(oceAgentRef, replyReceivers);
             }
             else return new EmptyDecision();

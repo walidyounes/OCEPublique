@@ -72,7 +72,8 @@ public class OCEBinderAgentFactory implements IOCEBinderAgentFactory {
 
         // Update the attributes of the perception with the reference of the Infrastructure Agent
         myWayOfPerception.setInfraAgent(associatedInfraAgent);
-
+        // Register the binder Agent in the Record
+        medium.registerOCEAgent(binderAgent, associatedInfraAgent.getInfraAgentReference());
         AbstractMap.SimpleEntry agentB_referenceAgent_Association = new AbstractMap.SimpleEntry(binderAgent, associatedInfraAgent.getInfraAgentReference());
         return agentB_referenceAgent_Association;
     }

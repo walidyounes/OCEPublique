@@ -6,6 +6,7 @@ package OCE.Messages;
 
 
 import MASInfrastructure.Agent.InfraAgentReference;
+import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Perceptions.AbstractPerception;
@@ -64,7 +65,7 @@ public class SelectMessage extends Message {
     @Override
     public AbstractPerception toPerception(IRecord referenceResolver) {
         try {
-            return new SelectPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers),null);
+            return new SelectPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers), (BinderAgent) referenceResolver.retrieveOCEAgentByInfraAgentReference(this.binderAgent));
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;

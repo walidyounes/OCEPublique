@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
- * This class represent one way hwo we can perceive the environnement, it's used both by the ServiceAgent and the BindingAgent
+ * This class represent one way hwo we can perceive the environment, it's used both by the ServiceAgent and the BindingAgent
  * @author Walid YOUNES
  * @version 1.0
  */
