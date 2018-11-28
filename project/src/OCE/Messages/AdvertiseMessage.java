@@ -31,6 +31,7 @@ public class AdvertiseMessage extends Message {
         this.emitter = emitter;
         this.receivers = receivers;
         this.myService = myService;
+        this.myType = MessageTypes.ADVERTISE;
     }
 
     /*
@@ -67,6 +68,15 @@ public class AdvertiseMessage extends Message {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public MessageTypes getMyType() {
+        return this.myType;
+    }
+
+    public OCService getMyService() {
+        return myService;
     }
 
     @Override

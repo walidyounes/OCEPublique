@@ -29,6 +29,7 @@ public class ReplyMessage extends Message {
     public ReplyMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter= emitter;
         this.receivers = recievers;
+        this.myType = MessageTypes.REPLY;
     }
 
 
@@ -55,6 +56,15 @@ public class ReplyMessage extends Message {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Get the type of the message
+     * @return : the type of this message
+     */
+    @Override
+    public MessageTypes getMyType() {
+        return this.myType;
     }
 
     @Override

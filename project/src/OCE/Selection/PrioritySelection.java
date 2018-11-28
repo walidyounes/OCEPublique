@@ -4,15 +4,30 @@
 
 package OCE.Selection;
 
+import AmbientEnvironment.OCPlateforme.OCService;
 import OCE.Messages.Message;
+import OCE.Tools.Criteria;
+import OCE.Tools.FilterTool.AgreeCriteria;
+import OCE.Tools.FilterTool.MatchingAdvertiseCriteria;
+import OCE.Tools.FilterTool.ReplyCriteria;
+import OCE.Tools.FilterTool.SelectCriteria;
+import OCE.Unifieur.IMatching;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class PrioritySelection implements IMessageSelection {
 
     private float alpha; // threshold
+    private OCService myservice; // The service that we handle (used when searching for
+    private IMatching matching; // The matching method between the service used when selecting advertisement
+
+    public PrioritySelection(OCService myservice, IMatching matching) {
+        this.myservice = myservice;
+        this.matching = matching;
+    }
 
     /** The priority is fixed as follow (0 higher)
      *  Others = 4 (Bind message and EmptyMessage)
@@ -28,32 +43,48 @@ public class PrioritySelection implements IMessageSelection {
      */
     @Override
     public Message singleSelect(ArrayList<Message> perceptions) {
-    /*    //Check fo agree messages
-        List<Message> messagesList = perceptions.stream();//.filter().collect(Collectors.toList());
+        //Todo For now when we selet a message from a sublist we do it randomly -> after we have to choose the right one (witch confidence or learning)
+        Criteria myCriteria;
+        //Check fo agree messages
+        myCriteria = new AgreeCriteria();
+        List<Message> messagesList = myCriteria.meetCriteria(perceptions);
         if (messagesList.size()>0){ // We have at least an agree message
-
+            Random r = new Random();
+            int index = r.nextInt(messagesList.size());
+            return messagesList.get(index);
         }else{
             //Check fo select messages
-            messagesList = perceptions.stream();//.filter().collect(Collectors.toList());
+            myCriteria = new SelectCriteria();
+            messagesList = myCriteria.meetCriteria(perceptions);//.filter().collect(Collectors.toList());
             if(messagesList.size()>0){ // we have at least a select message
-
+                Random r = new Random();
+                int index = r.nextInt(messagesList.size());
+                return messagesList.get(index);
             }else{
                 //Check fo reply messages
-                messagesList = perceptions.stream().filter().collect(Collectors.toList());
+                myCriteria = new ReplyCriteria();
+                messagesList = myCriteria.meetCriteria(perceptions);
                 if(messagesList.size()>0){ // we have at least a response message
-
+                    Random r = new Random();
+                    int index = r.nextInt(messagesList.size());
+                    return messagesList.get(index);
                 }else{
                     //Check fo advertise messages
-                    messagesList = perceptions.stream().filter().collect(Collectors.toList());
+                    myCriteria = new MatchingAdvertiseCriteria(myservice, matching);
+                    messagesList = myCriteria.meetCriteria(perceptions);
                     if(messagesList.size()>0) { // we have at least an advertisement message
-
-                    }else{
-
+                        Random r = new Random();
+                        int index = r.nextInt(messagesList.size());
+                        return messagesList.get(index);
+                    }else{ // others messages
+                        Random r = new Random();
+                        int index = r.nextInt(perceptions.size());
+                        return perceptions.get(index);
                     }
                 }
             }
-        }*/
-    return null;
+        }
+
     }
 
     @Override

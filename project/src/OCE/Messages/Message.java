@@ -20,7 +20,7 @@ public abstract class Message implements IMessage {
 
     protected InfraAgentReference emitter; // The transmitter of the message
     protected ArrayList<InfraAgentReference> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
-
+    protected MessageTypes myType; // The type of the message (Advertise, reply ..etc.)
     /**
      * get the transmitter of the message
      * @return the reference of the transmitter of the message
@@ -73,4 +73,5 @@ public abstract class Message implements IMessage {
      */
     public abstract AbstractPerception toPerception(IRecord referenceResolver);
 
+    public abstract MessageTypes getMyType();
 }

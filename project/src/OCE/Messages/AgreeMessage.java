@@ -22,6 +22,7 @@ public class AgreeMessage extends Message {
     public AgreeMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter = emitter;
         this.receivers = recievers;
+        this.myType = MessageTypes.AGREE;
     }
 
 /*    @Override
@@ -38,6 +39,15 @@ public class AgreeMessage extends Message {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Get the type of this message
+     * @return the type of the message
+     */
+    @Override
+    public MessageTypes getMyType() {
+        return myType;
     }
 
     @Override

@@ -10,6 +10,7 @@ import OCE.Perceptions.AbstractPerception;
 import OCE.Perceptions.SondePerception;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class SondeMessage extends Message {
 
@@ -18,12 +19,13 @@ public class SondeMessage extends Message {
     /**
      * Create A Sonde Message
      * @param exist :  boolean value informing if the service attached to the agent is still existing in the environement or not
-     * @param recievers : the references of the receivers of the ad, if null == Broadcast
+     * @param receivers : the references of the receivers of the ad, if null == Broadcast
      */
-    public SondeMessage(Boolean exist, ArrayList<InfraAgentReference> recievers) {
+    public SondeMessage(Boolean exist, ArrayList<InfraAgentReference> receivers) {
         this.exist = exist;
         this.emitter = null; // The sonde has no reference
-        this.receivers = recievers;
+        this.receivers = receivers;
+        this.myType = MessageTypes.SONDE;
     }
 
     /**
@@ -61,6 +63,15 @@ public class SondeMessage extends Message {
     @Override
     public AbstractPerception toPerception(IRecord referenceResolver) {
             return new SondePerception();
+    }
+
+    /**
+     * Get the type of the message
+     * @return : the type of this message
+     */
+    @Override
+    public MessageTypes getMyType() {
+        return this.myType;
     }
 
     @Override

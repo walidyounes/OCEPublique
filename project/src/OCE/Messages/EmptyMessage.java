@@ -19,6 +19,7 @@ public class EmptyMessage extends Message {
     public EmptyMessage(InfraAgentReference myInfraAgentRef) {
         this.emitter = myInfraAgentRef; // Here the emitter is the agent who recieved this empty message --> it's usuful to have the reference Of the Agent
         this.receivers = null;
+        this.myType = MessageTypes.EMPTY;
     }
 
 /*
@@ -33,7 +34,7 @@ public class EmptyMessage extends Message {
     }
 */
     /**
-     * Transfome this empty message into an empty perception (this action is useful because in the OCE engine we deal with ServiceAgent reference not InfraAgent reference)
+     * Transform this empty message into an empty perception (this action is useful because in the OCE engine we deal with ServiceAgent reference not InfraAgent reference)
      * @return the perception equivalent to the message
      */
     @Override
@@ -44,6 +45,15 @@ public class EmptyMessage extends Message {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Get the type of the message
+     * @return : the type of this message
+     */
+    @Override
+    public MessageTypes getMyType() {
+        return this.myType;
     }
 
     @Override

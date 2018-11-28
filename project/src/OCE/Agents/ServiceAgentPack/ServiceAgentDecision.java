@@ -6,21 +6,19 @@ package OCE.Agents.ServiceAgentPack;
 
 import Logger.MyLogger;
 import Midlleware.ThreeState.IDecisionState;
-import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Decisions.AbstractDecision;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Messages.Message;
 import OCE.Perceptions.AbstractPerception;
 import OCE.Selection.IMessageSelection;
+import OCE.Selection.PrioritySelection;
+import OCE.Tools.Criteria;
+import OCE.Tools.FilterTool.MatchingAdvertiseCriteria;
 import OCE.Unifieur.IMatching;
 import OCE.Unifieur.Matching;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Level;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 /**
  * This class implements the decision process of a ServiceAgent
@@ -40,7 +38,7 @@ public class ServiceAgentDecision implements IDecisionState {
     }
 
     /**
-     * get the service Agent that this component is part of
+     * Get the service Agent that this component is part of
      * @return
      */
     public ServiceAgent getMyServiceAgent() {
@@ -71,13 +69,25 @@ public class ServiceAgentDecision implements IDecisionState {
     public ArrayList<AbstractDecision> decide(ArrayList<Message> perceptions) {
         // Filter the advertisement (if they exist) and keep only those who matches
         IMatching matching = new Matching();
-       // List<AbstractPerception> filtredPerceptions = perceptions.parallelStream().map(m -> m.toPerception(referenceResolver)).filter(p -> p.toSelfFilterAdvertise()).filter(p -> matching.match(p.getEmitter().getMyInfraAgent().getHandledService(),myServiceAgent.getHandledService())).collect(Collectors.toList());
+         /* Criteria matchingAdvertiseCriteria = new MatchingAdvertiseCriteria(myServiceAgent.getHandledService(), matching);
 
-        //Call the selection method to select the messages to treat
-        Message messageSelected = this.selectionMessageStrategy.singleSelect(perceptions);
+        ArrayList<Message> filtredMessages = matchingAdvertiseCriteria.meetCriteria(perceptions);
+
+        // Todo  walid il faut la chnager pour la mettre au propre
+        Message messageSelected;
+        if(filtredMessages.size()>0){
+            //Call the selection method to select the messages to treat
+            messageSelected = this.selectionMessageStrategy.singleSelect(filtredMessages);
+        }else{
+            //Call the selection method to select the messages to treat
+            messageSelected = this.selectionMessageStrategy.singleSelect(perceptions);
+        }
+        */
+        Message messageSelected;
+        IMessageSelection messageSelection = new PrioritySelection(myServiceAgent.getHandledService(), matching);
+        messageSelected = messageSelection.singleSelect(perceptions);
         //Treat the selected message
         AbstractPerception perceptionSelected = messageSelected.toPerception(referenceResolver);
-
        // perceptionSelected = filtredPerceptions.get(0);
 
         AbstractDecision myDecision = perceptionSelected.toSelfTreat(myServiceAgent.getMyConnexionState(), myServiceAgent, myServiceAgent.getHandledService());

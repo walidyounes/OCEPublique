@@ -28,6 +28,7 @@ public class SelectMessage extends Message {
         this.emitter = emitter;
         this.receivers = recievers;
         this.binderAgent = bindingAgent;
+        this.myType = MessageTypes.SELECT;
     }
 
     /**
@@ -70,6 +71,15 @@ public class SelectMessage extends Message {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Get the type of the message
+     * @return : the type of this message
+     */
+    @Override
+    public MessageTypes getMyType() {
+        return this.myType;
     }
 
     @Override

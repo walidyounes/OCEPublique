@@ -6,11 +6,11 @@ package OCE.Tools;
 
 import OCE.Messages.Message;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface Criteria {
     /**
      * Function used to filter a list of messages according to a certain criteria
      */
-     List<Message> meetCriteria();
+     ArrayList<Message> meetCriteria(ArrayList<Message> messages);
 }

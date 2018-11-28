@@ -22,6 +22,7 @@ public class BindMessage extends Message {
     public BindMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers) {
         this.emitter = emitter;
         this.receivers = receivers;
+        this.myType = MessageTypes.BIND;
     }
 
 
@@ -34,6 +35,15 @@ public class BindMessage extends Message {
             referenceResolutionFailure.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Get the type of the message
+     * @return : The type of this message
+     */
+    @Override
+    public MessageTypes getMyType() {
+        return this.myType;
     }
 
     @Override
