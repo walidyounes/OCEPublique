@@ -10,11 +10,11 @@ import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.AdPerception;
+import OCE.Perceptions.AdvertisePerception;
 
 import java.util.ArrayList;
 
-public class AdMessage extends Message {
+public class AdvertiseMessage extends Message {
 
     private OCService myService; // the information about the service of the agent that send this advertisement
     /**
@@ -22,12 +22,12 @@ public class AdMessage extends Message {
      * @param emitter    reference of the advertising agent
      * @param recievers the references of the receivers of the ad, if empty == Broadcast
      */
-    public AdMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
+    public AdvertiseMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter= emitter;
         this.receivers = recievers;
     }
 
-    public AdMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers, OCService myService) {
+    public AdvertiseMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers, OCService myService) {
         this.emitter = emitter;
         this.receivers = receivers;
         this.myService = myService;
@@ -59,9 +59,9 @@ public class AdMessage extends Message {
     public AbstractPerception toPerception(IRecord referenceResolver) {
         try {
             if( ! this.receivers.isEmpty()){ // If the message was send in broadcast the receivers would be empty
-                return new AdPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers), this.myService);
+                return new AdvertisePerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers), this.myService);
             }else
-                return new AdPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), new ArrayList<>(), this.myService);
+                return new AdvertisePerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), new ArrayList<>(), this.myService);
 
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
@@ -71,7 +71,7 @@ public class AdMessage extends Message {
 
     @Override
     public String toString() {
-        return "AdMessage{" +
+        return "AdvertiseMessage{" +
                 "myService=" + myService +
                 ", emitter=" + emitter +
                 ", receivers=" + receivers +

@@ -53,4 +53,13 @@ public class ReplyPerception extends AbstractPerception {
         }
         return null;
     }
+
+    /**
+     * This function is called to filter a list of messages depending on their types
+     * @return true if this message is an advertisement message
+     */
+    @Override
+    public Boolean toSelfFilterAdvertise() {
+        return false;
+    }
 }

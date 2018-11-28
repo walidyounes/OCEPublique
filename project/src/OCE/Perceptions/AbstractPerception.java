@@ -65,6 +65,12 @@ public abstract class AbstractPerception {
      */
     public abstract AbstractDecision toSelfTreat( ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService);
 
+    /**
+     * This function is called to filter a list of messages depending on their types
+     * @return true if this message is an advertisement message
+     */
+    public abstract Boolean toSelfFilterAdvertise();
+
     @Override
     public String toString() {
         return "AbstractPerception{" +

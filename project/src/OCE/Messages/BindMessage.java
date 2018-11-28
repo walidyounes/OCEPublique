@@ -35,4 +35,12 @@ public class BindMessage extends Message {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "BindMessage{" +
+                "emitter=" + emitter +
+                ", receivers=" + receivers +
+                '}';
+    }
 }

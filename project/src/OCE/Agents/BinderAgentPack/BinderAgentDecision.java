@@ -76,21 +76,20 @@ public class BinderAgentDecision implements IDecisionState {
                                                                              );
         if(bindingPerceptions.size()> 0){ // The binder agent received at least one bindMessage
             //Check if  the binder agent received the two messages that he supposed to receive from both agents
-            this.nbMessages += bindingPerceptions.size();
-            if (this.nbMessages <2){ // we didn't receive all the message
-                MyLogger.log(Level.INFO,"Waiting for the second message - nbMessage " + nbMessages);
+            //this.nbMessages += bindingPerceptions.size();
+            //if (this.nbMessages <2){ // we didn't receive all the message
+             //   MyLogger.log(Level.INFO,"Waiting for the second message - nbMessage " + nbMessages);
 
                 // myListOfDecisions.add(new EmptyDecision());
-            }else{ // launch the physical binding
+           // }else{ // launch the physical binding
                 bindingPerceptions.stream()
                                     .map(p -> (BindPerception) p)
                                     .collect(Collectors.toList())
                                     .forEach(p -> myListOfDecisions.add(new BindDecision(p.getEmitter(), p.getReceivers())));
-                this.nbMessages = 0; // reinitialise the counter
-            }
-        }else{ // No Bind Message were received
+             //   this.nbMessages = 0; // reinitialise the counter
+            }else{ // No Bind Message were received
             // myListOfDecisions.add(new EmptyDecision());
-        }
+       }
 
         return myListOfDecisions;
     }

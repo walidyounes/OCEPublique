@@ -12,9 +12,15 @@ import OCE.Medium.Recorder.IRecord;
 import OCE.Messages.Message;
 import OCE.Perceptions.AbstractPerception;
 import OCE.Selection.IMessageSelection;
+import OCE.Unifieur.IMatching;
+import OCE.Unifieur.Matching;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * This class implements the decision process of a ServiceAgent
@@ -63,10 +69,17 @@ public class ServiceAgentDecision implements IDecisionState {
      */
     @Override
     public ArrayList<AbstractDecision> decide(ArrayList<Message> perceptions) {
+        // Filter the advertisement (if they exist) and keep only those who matches
+        IMatching matching = new Matching();
+       // List<AbstractPerception> filtredPerceptions = perceptions.parallelStream().map(m -> m.toPerception(referenceResolver)).filter(p -> p.toSelfFilterAdvertise()).filter(p -> matching.match(p.getEmitter().getMyInfraAgent().getHandledService(),myServiceAgent.getHandledService())).collect(Collectors.toList());
+
         //Call the selection method to select the messages to treat
         Message messageSelected = this.selectionMessageStrategy.singleSelect(perceptions);
         //Treat the selected message
         AbstractPerception perceptionSelected = messageSelected.toPerception(referenceResolver);
+
+       // perceptionSelected = filtredPerceptions.get(0);
+
         AbstractDecision myDecision = perceptionSelected.toSelfTreat(myServiceAgent.getMyConnexionState(), myServiceAgent, myServiceAgent.getHandledService());
         ArrayList<AbstractDecision> mylistOfDecisions = new ArrayList<>();
         mylistOfDecisions.add(myDecision);

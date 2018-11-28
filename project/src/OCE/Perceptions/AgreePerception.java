@@ -20,7 +20,7 @@ import java.util.logging.Level;
 public class AgreePerception extends AbstractPerception {
 
     /**
-     * Creer un message d'acceptation
+     * create an agreement message
      *
      */
     public AgreePerception(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
@@ -38,13 +38,21 @@ public class AgreePerception extends AbstractPerception {
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef,  OCService localService) {
         MyLogger.log(Level.INFO, oceAgentRef + " treats an agreement message ");
-        //Verify the connexion state of the agent
-        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
+        //Verify the connexion state of the agent Todo: walid : il y a un probleme lorsque l'agent se met en attente
+        // if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
             // change the connexion's state of the agent
             ((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.Waiting);
             MyLogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
             return new EmptyDecision();
-        }
-        return null;
+       //  }
+        //return null;
+    }
+    /**
+     * This function is called to filter a list of messages depending on their types
+     * @return true if this message is an advertisement message
+     */
+    @Override
+    public Boolean toSelfFilterAdvertise() {
+        return false;
     }
 }

@@ -24,7 +24,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -37,8 +36,6 @@ import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
 import javax.swing.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +54,7 @@ public class UIMockupController implements Initializable {
     private MockupFacadeAdapter mockupFacadeAdapter;
     private ArrayList<OCService> providedByC;
     private ArrayList<OCService> requiredByC;
-    private Graph ServiceGraphe;
+    private Graph serviceGraphe;
     private TextArea UILog;
     private Thread simulation;
     private JFXPopup popup;
@@ -277,21 +274,21 @@ public class UIMockupController implements Initializable {
     private void initGraphe(){
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
-        this.ServiceGraphe = new MultiGraph("ServiceGraphe");
+        this.serviceGraphe = new MultiGraph("serviceGraphe");
         // ...
-        this.ServiceGraphe.removeAttribute("ui.stylesheet");
-        this.ServiceGraphe.addAttribute("ui.stylesheet", "url('UI\\grapheStyleSheet.css')");
+        this.serviceGraphe.removeAttribute("ui.stylesheet");
+        this.serviceGraphe.addAttribute("ui.stylesheet", "url('UI\\grapheStyleSheet.css')");
 
     }
 
     private void previewGraph(){
         // It informs the viewer that it can use rendering algorithms that are more time consuming to favor quality instead of speed
-        this.ServiceGraphe.addAttribute("ui.quality");
+        this.serviceGraphe.addAttribute("ui.quality");
 
         // Adding label to each node done by walid ^^
-        //this.ServiceGraphe.getEachNode().forEach(n -> n.addAttribute("ui.label"," Service "+n.getId()+" "));
+        //this.serviceGraphe.getEachNode().forEach(n -> n.addAttribute("ui.label"," Service "+n.getId()+" "));
 
-        Viewer viewer = new Viewer( this.ServiceGraphe, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        Viewer viewer = new Viewer( this.serviceGraphe, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewer.enableAutoLayout();
 
         // create a view *without* a JFrame
@@ -313,7 +310,7 @@ public class UIMockupController implements Initializable {
 
         for (OCService service : providedServices) {
             MockupService myMService = (MockupService)service;
-            Node node = this.ServiceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            Node node = this.serviceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
 
             node.addAttribute("ui.label"," "+myMService.getName()+" Of " + myMService.getOwner());
 
@@ -324,22 +321,25 @@ public class UIMockupController implements Initializable {
     private void addRequiredServiceToGraphe(ArrayList<OCService> requiredServices) {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
-            Node node = this.ServiceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            Node node = this.serviceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
             node.addAttribute("ui.label",""+myMService.getName()+" Of " + myMService.getOwner());
             node.addAttribute("ui.class","Required");
         }
     }
 
     private void addEdge(String idService1, String idService2){
+        if(this.serviceGraphe.getEdge(""+idService1+idService2)==null && this.serviceGraphe.getEdge(""+idService2+idService1)==null ) {
+            // We add only one time the edge between two services
+            this.serviceGraphe.addEdge(""+idService1+idService2, idService1, idService2);
+        }
 
-        this.ServiceGraphe.addEdge(""+idService1+idService2, idService1, idService2);
     }
 
     private void deleteProvidedServiceFromGraphe(ArrayList<OCService> providedServices) {
 
         for (OCService service : providedServices) {
             MockupService myMService = (MockupService)service;
-            this.ServiceGraphe.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            this.serviceGraphe.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
         }
 
     }
@@ -347,7 +347,7 @@ public class UIMockupController implements Initializable {
     private void deleteRequiredServiceFromGraphe(ArrayList<OCService> requiredServices) {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
-            this.ServiceGraphe.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            this.serviceGraphe.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
         }
     }
 

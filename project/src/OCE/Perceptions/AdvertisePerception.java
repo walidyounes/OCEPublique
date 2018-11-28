@@ -20,7 +20,7 @@ import OCE.Unifieur.Matching;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class AdPerception extends AbstractPerception {
+public class AdvertisePerception extends AbstractPerception {
 
     private OCService distantService; // the information about the service of the agent that send this advertisement
     /**
@@ -28,7 +28,7 @@ public class AdPerception extends AbstractPerception {
      * @param emitter    reference of the advertising agent
      * @param receivers the references of the receivers of the ad, if null == Broadcast
      */
-    public AdPerception(OCEAgent emitter, ArrayList<OCEAgent> receivers, OCService distantService) {
+    public AdvertisePerception(OCEAgent emitter, ArrayList<OCEAgent> receivers, OCService distantService) {
         this.emitter= emitter;
         this.receivers = receivers;
         this.distantService = distantService;
@@ -61,10 +61,18 @@ public class AdPerception extends AbstractPerception {
                 // Send a reply message to the emitter of this message
                 ArrayList<OCEAgent> replyReceivers = new ArrayList<>();
                 replyReceivers.add(this.emitter);
-                PhysicalDeviceBinder.bindServices(service1,service2);
                 return new ReplyDecision(oceAgentRef, replyReceivers);
             }
             else return new EmptyDecision();
         }else return new EmptyDecision();
+    }
+
+    /**
+     * This function is called to filter a list of messages depending on their types
+     * @return true if this message is an advertisement message
+     */
+    @Override
+    public Boolean toSelfFilterAdvertise() {
+        return true;
     }
 }
