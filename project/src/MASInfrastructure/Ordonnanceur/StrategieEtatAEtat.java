@@ -33,7 +33,6 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
         listEtatAgent = new HashMap<>();
         // listOrdonnancement.forEach(agent -> listEtatAgent.put(agent, agent.getEtatInitial())); // todo : Walid
         changerVitesse(EnumVitesse.CENT);
-
     }
 
     @Override

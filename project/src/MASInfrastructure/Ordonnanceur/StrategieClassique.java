@@ -53,15 +53,15 @@ public class StrategieClassique implements IStratOrdonnanceur {
         run = true;
         InfraAgent infraAgentCourant;
         /// while (run) {
-        int i = 0; // Walid : fixer le itérations
-        while (i < 200) {
+        int i = 0; // Walid : fixer le nbr itérations
+        while (i<200) {
             infraAgentCourant = listOrdonnancement.get(0);
             //LifeCycle(infraAgentCourant.getInfraAgentReference(), infraAgentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
             infraAgentCourant.run(); // walid : On actionne le changment d'etat de l'agent
             listOrdonnancement.remove(infraAgentCourant);
             listOrdonnancement.add(infraAgentCourant);
 
-            //System.out.println("listOrdonnancement" + getListOrdonnancement());
+            //System.out.println("listOrdonnancement****" + getListOrdonnancement());
             i++;
         }
     }
@@ -123,6 +123,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
     @Override
     public void agentAjoute(InfraAgent infraAgent) {
         listOrdonnancement.add(infraAgent);
+       // System.out.println("listOrdonnancement****" + getListOrdonnancement());
     }
 
     public List<IReferenceAgentListener> getReferenceAgentListeners() {

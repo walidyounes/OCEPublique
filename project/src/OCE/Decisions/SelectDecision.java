@@ -8,6 +8,7 @@ import Logger.MyLogger;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Messages.BindMessage;
 import OCE.Messages.SelectMessage;
@@ -48,6 +49,10 @@ public class SelectDecision extends AbstractDecision {
         ArrayList<OCEAgent> bindReceivers = new ArrayList<>();
         bindReceivers.add(this.myBinderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter,bindReceivers);
+        // Change the state of the agent to "Waiting state" //Todo: I put connected, change it to wainting when implementing the replyMessage from the binder
+        ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.Waiting);
+        //Set the selectedAgent ot be verified later
+        this.emitter.setMySelectedAgent(this.receivers.get(0));
     }
 
     @Override

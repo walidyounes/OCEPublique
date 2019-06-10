@@ -8,6 +8,7 @@ package OCE.Perceptions;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import OCE.Decisions.AbstractDecision;
+import OCE.Decisions.EmptyDecision;
 import OCE.Decisions.SelectDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
@@ -51,7 +52,9 @@ public class ReplyPerception extends AbstractPerception {
             SelectionReceivers.add(this.emitter);
             return new SelectDecision(OCEAgentRef, SelectionReceivers);
         }
-        return null;
+        else{
+            return new EmptyDecision();
+        }
     }
 
     /**

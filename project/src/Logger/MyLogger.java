@@ -43,7 +43,7 @@ public class MyLogger {
 
     public static void log(Level level, String message) {
         logger.log(level, message);
-        uiLog.set(getStrLog()+" "+level.toString()+" "+message+"\n");
+        //uiLog.set(getStrLog()+" "+level.toString()+" "+message+"\n"); //ToDo walid : quand je met boucle d'ordonnancement infinie -> outofmemoryProblem
     }
 
     public static String getStrLog(){

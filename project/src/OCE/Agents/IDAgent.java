@@ -4,9 +4,10 @@
 
 package OCE.Agents;
 
+import java.util.Comparator;
 import java.util.UUID;
 
-public class IDAgent {
+public class IDAgent implements Comparable{
     private final UUID internalReference;
 
     public IDAgent() {
@@ -14,13 +15,13 @@ public class IDAgent {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
+    public boolean equals(Object athat) {
+        if (this == athat)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (athat == null || getClass() != athat.getClass())
             return false;
 
-        IDAgent that = (IDAgent) o;
+        IDAgent that = (IDAgent) athat;
 
         return internalReference.equals(that.internalReference);
     }
@@ -34,5 +35,16 @@ public class IDAgent {
     public String toString() {
         return "OCE.InfraAgent{" +
                 "ID=" + internalReference;
+    }
+
+    @Override
+    public int compareTo(Object athat) {
+        IDAgent that = (IDAgent) athat;
+        int result = this.internalReference.compareTo(that.internalReference);
+        if (result == 0) {
+            assert this.equals(that) :
+                    this.getClass().getSimpleName() + ": compareTo inconsistent with equals.";
+        }
+        return result;
     }
 }

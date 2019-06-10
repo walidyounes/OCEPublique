@@ -5,6 +5,8 @@
 package OCE.Perceptions;
 
 
+import AmbientEnvironment.MockupCompo.MockupService;
+import AmbientEnvironment.MockupCompo.Way;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
@@ -13,6 +15,7 @@ import OCE.Decisions.AgreeDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Decisions.BindDecision;
+import OCE.Decisions.EmptyDecision;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,8 +62,24 @@ public class SelectPerception extends AbstractPerception {
     @Override
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef,  OCService localService) {
         MyLogger.log(Level.INFO, OCEAgentRef + " treats a selection message ");
-        //Verify the connexion state of the agent
-        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
+        boolean mutualSelection=false;
+        try{
+            //Verify if the current agent selected in the previous cycles the the emitter agent that we received a select from him
+            if (OCEAgentRef.getMySelectedAgent().getMyID().toString().equals(this.emitter.getMyID().toString())){
+                MyLogger.log(Level.INFO, OCEAgentRef + "************"+ this.emitter +" selected each other ");
+                //get the type (Way) of the service that the current agent handle
+                Way myServiceWay=((MockupService)localService).getWay();
+                // If the agent handle a provided service, it ignores this selection message. Which means when mutual selection happen, we give the choice to the required service (it's a choice not important)
+                if(myServiceWay.equals(Way.PROVIDED)){
+                    mutualSelection = true;
+                }
+            }
+        }
+        catch (NullPointerException e){
+            MyLogger.log(Level.WARNING, "the selected agent reference is NULL (no agent was selected !) ");
+        }
+        //Verify the connexion state of the agent and if their is mutual selection
+        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created) || !mutualSelection ){
             // Send a agree message to the emitter of this message
             ArrayList<OCEAgent> agreeReceivers = new ArrayList<>();
             agreeReceivers.add(this.emitter);
@@ -69,9 +88,11 @@ public class SelectPerception extends AbstractPerception {
             agreeDecision.setBinderAgent(binderAgent);
 
             return agreeDecision;
+        }else{
+            return new EmptyDecision();
         }
 
-        return null;
+
     }
 
     /**

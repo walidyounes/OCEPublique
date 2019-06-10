@@ -7,11 +7,13 @@ package OCE.sonde;
 
 import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
 import AmbientEnvironment.FacadeAdapter.IAcquisition;
+import Logger.MyLogger;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Medium.Recorder.IRecord;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
 
 
 /**
@@ -22,7 +24,7 @@ import java.util.TimerTask;
 public class Sonde {
 
     private ComponentManager componentsManager;
-    private long periodicity; // the periodicity of the task of souding the environement
+    private long periodicity; // the periodicity of the task of sensing the environment
 
 
     public Sonde(IAcquisition acquisition, IRecord agentRecorder, IOCEServiceAgentFactory agentFactory, long periodicity) {
@@ -47,7 +49,7 @@ public class Sonde {
         }
     }
     /**
-     * This thread call the ScheduledSounding task periodicly to probe the ambient environement for new appearing and disapearing services
+     * This thread call the ScheduledSounding task periodicly to probe the ambient environment for new appearing and disapearing services
      */
     private Thread t = new Thread() {
         @Override
@@ -57,6 +59,8 @@ public class Sonde {
             ScheduledSounding st = new ScheduledSounding();
             // Create Repetitively task for every "Periodicity" secs with a delay 0 secs between two executions
             time.schedule(st, 0, periodicity);
+
+            MyLogger.log(Level.INFO, "*************************** Sondage *******************");
         }
     };
 
@@ -69,7 +73,7 @@ public class Sonde {
     }
 
     /**
-     * Run the thread responsible of sounding the environement
+     * Run the thread responsible of sounding the environment
      */
     public void run() {
         t.start();

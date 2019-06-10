@@ -53,7 +53,7 @@ public class AdvertisePerception extends AbstractPerception {
             MockupService service2 = (MockupService)this.distantService;
            // MyLogger.log(Level.INFO, "service local = " + service1.toString());
            // MyLogger.log(Level.INFO, "service distant = " + service2.toString());
-            //verify the matching // TODO à améliorer
+            //verify the matching // TODO à améliorer le matching
             IMatching matching = new Matching();
 
             if(matching.match(service1, service2)){

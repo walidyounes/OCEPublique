@@ -205,7 +205,7 @@ public class UIMockupController implements Initializable {
                 addComponentToMockup();
                 //Reset UI Elements
                 deleteUIElements();
-
+                //Display the services and agents in the graph view
                 previewGraph();
             }
             else{

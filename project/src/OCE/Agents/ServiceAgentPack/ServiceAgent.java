@@ -18,7 +18,7 @@ import OCE.Agents.OCEAgent;
  * @version 1.0
  */
 
-public class ServiceAgent extends OCEAgent {
+public class ServiceAgent extends OCEAgent implements Comparable {
 
     private OCService handledService;
     private ServiceAgentConnexionState myConnexionState;
@@ -90,5 +90,11 @@ public class ServiceAgent extends OCEAgent {
     @Override
     public int hashCode() {
         return myID.hashCode();
+    }
+
+
+    @Override
+    public int compareTo(Object athat) {
+        return this.myID.compareTo(athat);
     }
 }

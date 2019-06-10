@@ -25,7 +25,7 @@ public class ComponentManager {
     }
 
     /**
-     * Get, store the list of appearing componentns
+     * Get, store the list of appearing components
      * and send the list of the services of these components to the ServiceManager
      * @throws AcquisitionFailure raised when there is a failure in the acquisition of the components from the environement
      */
