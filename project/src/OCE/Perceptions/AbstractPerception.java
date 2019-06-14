@@ -5,9 +5,11 @@
 package OCE.Perceptions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
+import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Decisions.AbstractDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.Messages.MessageTypes;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,7 @@ public abstract class AbstractPerception {
 
     protected OCEAgent emitter; // The transmitter of the message
     protected ArrayList<OCEAgent> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
+    //protected MessageTypes messageType; // The type of the message corresponding to this perception
 
     /**
      * get the transmitter of the message
@@ -43,7 +46,6 @@ public abstract class AbstractPerception {
      * get the list of the receivers of the message
      * @return the receivers of the message
      */
-
     public ArrayList<OCEAgent> getReceivers() {
         return this.receivers;
     }
@@ -70,6 +72,12 @@ public abstract class AbstractPerception {
      * @return true if this message is an advertisement message
      */
     public abstract Boolean toSelfFilterAdvertise();
+
+    /**
+     * This function transform the perception to a situation entry used by the agent in the decision process (learning)
+     * @return the situation entry corresponding to the message
+     */
+    public abstract SituationEntry toSituationEntry();
 
     @Override
     public String toString() {

@@ -9,7 +9,7 @@ import AmbientEnvironment.OCPlateforme.OCService;
 
 import java.util.ArrayList;
 
-public abstract class MockupService extends OCService {
+public abstract class MockupService extends OCService implements Comparable {
     protected String name;
     private String owner;
     private Way myWay;
@@ -54,10 +54,37 @@ public abstract class MockupService extends OCService {
         return myWay == that.myWay;
     }
 
+
     @Override
     public int hashCode() {
         int result = name.hashCode();
         result = 31 * result + myWay.hashCode();
         return result;
+    }
+
+
+
+    @Override
+    public void addLink(OCService s) throws AddLinkException {
+        //TODO : Complete the code
+    }
+
+    @Override
+    public void removeLink(OCService s) throws RemoveLinkException {
+        //TODO : Complete the code
+    }
+
+    // TODO : recode "equal" function
+    /**
+     *  Compare two MockupService (the comparison is compute
+     * @param o the object to compare this to
+     * @return 0 if the two object are equal
+     */
+    @Override
+    public int compareTo(Object o) {
+        MockupService athat = (MockupService) o;
+        String sThat = ""+athat.getName()+athat.getOwner()+athat.getWay();
+        String sThis = ""+ this.getName()+this.getOwner()+this.getWay();
+        return sThis.compareTo(sThat);
     }
 }

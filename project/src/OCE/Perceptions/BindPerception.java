@@ -6,8 +6,11 @@ package OCE.Perceptions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Decisions.AbstractDecision;
+import OCE.Messages.MessageTypes;
 
 import java.util.ArrayList;
 
@@ -45,6 +48,15 @@ public class BindPerception extends AbstractPerception {
     @Override
     public Boolean toSelfFilterAdvertise() {
         return false;
+    }
+
+    /**
+     * This function transform the perception to a situation entry used by the agent in the decision process (learning)
+     * @return the situation entry corresponding to the message
+     */
+    @Override
+    public SituationEntry toSituationEntry() {
+        return new SituationEntry((ServiceAgent) this.emitter, MessageTypes.BIND);
     }
 
     @Override

@@ -7,12 +7,14 @@ package OCE.Perceptions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Decisions.AbstractDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Decisions.AgreeDecision;
 import OCE.Decisions.EmptyDecision;
+import OCE.Messages.MessageTypes;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -54,5 +56,14 @@ public class AgreePerception extends AbstractPerception {
     @Override
     public Boolean toSelfFilterAdvertise() {
         return false;
+    }
+
+    /**
+     * This function transform the perception to a situation entry used by the agent in the decision process (learning)
+     * @return the situation entry corresponding to the message
+     */
+    @Override
+    public SituationEntry toSituationEntry() {
+        return new SituationEntry((ServiceAgent) this.emitter, MessageTypes.AGREE);
     }
 }

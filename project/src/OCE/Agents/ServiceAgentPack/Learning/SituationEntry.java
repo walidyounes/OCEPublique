@@ -48,4 +48,11 @@ public class SituationEntry {
     public void setScore(float score) {
         this.score = score;
     }
+
+    @Override
+    public String toString() {
+        return "( "+ this.agent.toString() +
+                ", "+ this.messageType.toString()+
+                ", "+ this.score +")";
+    }
 }

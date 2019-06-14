@@ -7,11 +7,14 @@ package OCE.Perceptions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Decisions.AbstractDecision;
 import OCE.Decisions.AdvertiseDecision;
 import OCE.Decisions.EmptyDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.Messages.MessageTypes;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -22,7 +25,7 @@ public class EmptyPerception extends AbstractPerception {
      * Create an empty message
      */
     public EmptyPerception(OCEAgent myInfraAgentRef) {
-        this.emitter = myInfraAgentRef; // Here the emitter is the agent who recieved this empty message --> it's usuful to have the reference Of the Agent
+        this.emitter = myInfraAgentRef; // Here the emitter is the agent who received this empty message --> it's useful to have the reference Of the Agent
         this.receivers = null;
     }
 
@@ -37,7 +40,7 @@ public class EmptyPerception extends AbstractPerception {
     public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
         MyLogger.log(Level.INFO, OCEAgentRef + " treats an empty message ");
         if(stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){ // if the agent was created ->
-            //send a advertisement message todo "this could be enhaced later on
+            //send a advertisement message todo : this could be enhaced later on
             return new AdvertiseDecision(this.emitter, new ArrayList<>(), localService);
         }else return new EmptyDecision();
 
@@ -50,5 +53,14 @@ public class EmptyPerception extends AbstractPerception {
     @Override
     public Boolean toSelfFilterAdvertise() {
         return false;
+    }
+
+    /**
+     * This function transform the perception to a situation entry used by the agent in the decision process (learning)
+     * @return the situation entry corresponding to the message
+     */
+    @Override
+    public SituationEntry toSituationEntry() {
+        return new SituationEntry((ServiceAgent) this.emitter, MessageTypes.EMPTY);
     }
 }
