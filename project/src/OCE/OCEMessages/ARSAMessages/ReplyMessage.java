@@ -1,20 +1,21 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Perceptions;
+package OCE.OCEMessages.ARSAMessages;
 
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Decisions.AbstractDecision;
-import OCE.Decisions.EmptyDecision;
-import OCE.Decisions.SelectDecision;
-import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Messages.MessageTypes;
+import OCE.Decisions.DoNothingDecision;
+import OCE.Decisions.OCEDecision;
+import OCE.Decisions.SelectDecision;
+import OCE.OCEMessages.MessageTypes;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class ReplyPerception extends AbstractPerception {
+public class ReplyMessage extends ARSAMessage {
 
     /**
      * Create a Response message
@@ -32,7 +33,7 @@ public class ReplyPerception extends AbstractPerception {
      * @param emitter    reference of the responding agent
      * @param receivers the references of the receivers of the response, if null == Broadcast
      */
-    public ReplyPerception(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+    public ReplyMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter= emitter;
         this.receivers = receivers;
     }
@@ -46,7 +47,7 @@ public class ReplyPerception extends AbstractPerception {
      * @return the deicision made by the engine
      */
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef,  OCService localService) {
+    public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
         MyLogger.log(Level.INFO, OCEAgentRef + " treats a reply message");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
@@ -56,7 +57,7 @@ public class ReplyPerception extends AbstractPerception {
             return new SelectDecision(OCEAgentRef, SelectionReceivers);
         }
         else{
-            return new EmptyDecision();
+            return new DoNothingDecision();
         }
     }
 
@@ -74,7 +75,7 @@ public class ReplyPerception extends AbstractPerception {
      * @return the situation entry corresponding to the message
      */
     @Override
-    public SituationEntry toSituationEntry() {
-        return new SituationEntry((ServiceAgent) this.emitter, MessageTypes.REPLY);
+    public SituationEntry toEntrySituation() {
+        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.REPLY);
     }
 }

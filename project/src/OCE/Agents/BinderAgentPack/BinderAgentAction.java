@@ -8,7 +8,7 @@ import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import Midlleware.ThreeState.IActionState;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Decisions.AbstractDecision;
+import OCE.Decisions.OCEDecision;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
 import OCE.Medium.Communication.ICommunicationAdapter;
 
@@ -31,7 +31,7 @@ public class BinderAgentAction implements IActionState {
         this.communicationManager = communicationManager;
     }
     @Override
-    public void act(ArrayList<AbstractDecision> decisionsList) {
+    public void act(ArrayList<OCEDecision> decisionsList) {
         MyLogger.log(Level.INFO, "The Binder agent is acting upon the environment !");
         if(decisionsList.size()>0){
             if(decisionsList.size()==2){ // We received the two messages that we were waiting for

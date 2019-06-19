@@ -2,36 +2,36 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Messages;
+package OCE.InfrastructureMessages;
 
 import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Medium.Recorder.IRecord;
-import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.SondePerception;
+import OCE.OCEMessages.MessageTypes;
+import OCE.OCEMessages.OCEMessage;
+import OCE.OCEMessages.SuicideMessage;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
-public class SondeMessage extends Message {
+public class SuicideInfraMessage extends InfraMessage {
 
     private Boolean exist; // Boolean attribute used to inform the agent if it's service still exsit or not
 
     /**
-     * Create A Sonde Message
+     * Create A Sonde InfraMessage
      * @param exist :  boolean value informing if the service attached to the agent is still existing in the environement or not
      * @param receivers : the references of the receivers of the ad, if null == Broadcast
      */
-    public SondeMessage(Boolean exist, ArrayList<InfraAgentReference> receivers) {
+    public SuicideInfraMessage(Boolean exist, ArrayList<InfraAgentReference> receivers) {
         this.exist = exist;
         this.emitter = null; // The sonde has no reference
         this.receivers = receivers;
-        this.myType = MessageTypes.SONDE;
+        this.myType = MessageTypes.SUICIDE;
     }
 
     /**
      * Create a Sonde message (empty message)
      */
-    public SondeMessage() {
+    public SuicideInfraMessage() {
         this.exist = false;
         this.emitter = null;
         this.receivers = null;
@@ -54,15 +54,15 @@ public class SondeMessage extends Message {
     }
 /*
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
+    public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
         MyLogger.log(Level.INFO, "Treating a sonde message ! ");
         return null;
     }
     */
 
     @Override
-    public AbstractPerception toPerception(IRecord referenceResolver) {
-            return new SondePerception();
+    public OCEMessage toOCEMessage(IRecord referenceResolver) {
+            return new SuicideMessage();
     }
 
     /**
@@ -76,7 +76,7 @@ public class SondeMessage extends Message {
 
     @Override
     public String toString() {
-        return "SondeMessage{" +
+        return "SuicideInfraMessage{" +
                 "exist=" + exist +
                 ", emitter=" + emitter +
                 ", receivers=" + receivers +

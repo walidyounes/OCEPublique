@@ -9,8 +9,8 @@ import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
-import OCE.Messages.Message;
-import OCE.Messages.SelectMessage;
+import OCE.InfrastructureMessages.InfraMessage;
+import OCE.InfrastructureMessages.InfraARSAMessages.SelectInfraMessage;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -42,7 +42,7 @@ public class ImmediateSelect implements ISelectStrategy {
         System.out.println("immediate-Select");
         MyLogger.log(Level.INFO, "Strategy{ Name= immediate-Select, Phase= SELECT}");
 
-//		Message bestReply = best(replies);
+//		InfraMessage bestReply = best(replies);
      //   MessageAgent bestReply = responses.get(0); // to remove
     //    ReferenceAgent bestTransmitter = bestReply.getExpediteur();
 
@@ -53,7 +53,7 @@ public class ImmediateSelect implements ISelectStrategy {
 
     //    ArrayList<ReferenceAgent> recipient = new ArrayList<>();
     //    recipient.add(bestTransmitter);
-        Message selection = new SelectMessage(agent, recipients, refBinder);
+        InfraMessage selection = new SelectInfraMessage(agent, recipients, refBinder);
 
         // comm.envoyerMessage(binding);
         comm.sendMessage(selection);

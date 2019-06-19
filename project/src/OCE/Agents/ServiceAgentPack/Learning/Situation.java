@@ -5,8 +5,8 @@
 package OCE.Agents.ServiceAgentPack.Learning;
 
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Messages.MessageTypes;
-import OCE.Perceptions.AbstractPerception;
+import OCE.OCEMessages.MessageTypes;
+import OCE.OCEMessages.OCEMessage;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -36,33 +36,33 @@ public class Situation {
      * Create the situation from a list of messages
      * @param listMessages : the list of received messages
      */
-    public  Situation(ArrayList<AbstractPerception> listMessages){
+    public  Situation(ArrayList<OCEMessage> listMessages){
 
-        //Transform the list of messages (Perceptions) to a list of Situation Entries
+        //Transform the list of messages (OCEMessages) to a list of Situation Entries
         List<SituationEntry> myListSituationEntries = new ArrayList<>(listMessages.stream()
-                .map(m -> m.toSituationEntry())
+                .map(m -> m.toEntrySituation())
                 .collect(Collectors.toList())
         );
         System.out.println("Situation Entries" + myListSituationEntries);
 
-//        for (AbstractPerception message : listMessages){
+//        for (OCEMessage message : listMessages){
 //            //Convert the message (perception) to a situationEntry
-//            SituationEntry situationEntry = message.toSituationEntry();
+//            SituationEntry situationEntry = message.toEntrySituation();
 //            //Add the situation entry to the list
 //            myListSituationEntries.add(situationEntry);
 //        }
 
-        //Filtering to omit EmptyMessage
-        List<SituationEntry> myListSituationEntriesFiltered = myListSituationEntries.stream()
-                .filter(m -> m.getMessageType() != MessageTypes.EMPTY)
-                .collect(Collectors.toList());
+//        //Filtering to omit EmptyInfraMessage
+//        List<SituationEntry> myListSituationEntriesFiltered = myListSituationEntries.stream()
+//                .filter(m -> m.getMessageType() != MessageTypes.EMPTY)
+//                .collect(Collectors.toList());
 
-        System.out.println("Filtred Situation Entries" + myListSituationEntriesFiltered);
+//        System.out.println("Filtred Situation Entries" + myListSituationEntriesFiltered);
 
         //Transform the filtered list of situation entries to a Situation
         //The third parameter of Collector.toMap function is used when a duplicate key is detected, i.e: a service agent exist before with 'value 'x' : we keep the new value 'y' of the one just added
 
-        this.mySetAgents = myListSituationEntriesFiltered.stream().collect(Collectors.toMap(SituationEntry::getAgent, s->s, (x, y) ->  y));
+        this.mySetAgents = myListSituationEntries.stream().collect(Collectors.toMap(SituationEntry::getAgent, s->s, (x, y) ->  y));
     }
 
     /**

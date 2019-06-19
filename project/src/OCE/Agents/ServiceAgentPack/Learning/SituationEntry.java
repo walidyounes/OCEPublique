@@ -5,54 +5,25 @@
 package OCE.Agents.ServiceAgentPack.Learning;
 
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Messages.MessageTypes;
 
 /**
- * This class represent a 3-uplet representing a service agent in a situation
+ * This class represent an entry of the service agent situation
  */
-public class SituationEntry {
-    private ServiceAgent agent; // The agent emitter of the message
-    private MessageTypes messageType; // The type of the message send by the agent "agent"
-    private float score; // The score of the agent "agent" in the current situation (initially equal to à or None, we affect the value in the scoring step)
+public abstract class SituationEntry {
+
+    protected ServiceAgent agent; // The agent emitter of the message
 
     /**
-     * Construct a new situation entry
-     * @param agent : the agent emitter of the message
-     * @param messageType : the type of the message send
+     * Get the agent represented in this  entry
+     * @return the reference of the agent represented by this  entry
      */
-    public SituationEntry(ServiceAgent agent, MessageTypes messageType) {
-        this.agent = agent;
-        this.messageType = messageType;
-    }
+    public abstract ServiceAgent getAgent();
 
-    public ServiceAgent getAgent() {
-        return agent;
-    }
+    /**
+     * Set the agent represented in this entry
+     * @param agent : the reference of the agent represented in this  entry
+     */
+    public abstract void setAgent(ServiceAgent agent);
 
-    public void setAgent(ServiceAgent agent) {
-        this.agent = agent;
-    }
 
-    public MessageTypes getMessageType() {
-        return messageType;
-    }
-
-    public void setMessageType(MessageTypes messageType) {
-        this.messageType = messageType;
-    }
-
-    public float getScore() {
-        return score;
-    }
-
-    public void setScore(float score) {
-        this.score = score;
-    }
-
-    @Override
-    public String toString() {
-        return "( "+ this.agent.toString() +
-                ", "+ this.messageType.toString()+
-                ", "+ this.score +")";
-    }
 }

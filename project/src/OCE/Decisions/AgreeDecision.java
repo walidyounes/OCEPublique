@@ -7,9 +7,9 @@ package OCE.Decisions;
 import Logger.MyLogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
+import OCE.InfrastructureMessages.InfraARSAMessages.AgreeInfraMessage;
+import OCE.InfrastructureMessages.BindInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.Messages.AgreeMessage;
-import OCE.Messages.BindMessage;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,7 +19,7 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class AgreeDecision extends AbstractDecision {
+public class AgreeDecision extends OCEDecision {
 
     private BinderAgent binderAgent;
     /**
@@ -40,10 +40,10 @@ public class AgreeDecision extends AbstractDecision {
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         MyLogger.log(Level.INFO, "Treating an agree decision ! ");
         //send the agree message
-        AgreeMessage agreeMessage = new AgreeMessage(null, null);
+        AgreeInfraMessage agreeMessage = new AgreeInfraMessage(null, null);
         communicationAdapter.sendMessage(agreeMessage, this.emitter, this.receivers);
         //Send a message to the Binder Agent
-        BindMessage bindMessage = new BindMessage(null, null);
+        BindInfraMessage bindMessage = new BindInfraMessage(null, null);
         ArrayList<OCEAgent> bindReceiver = new ArrayList<>();
         bindReceiver.add(this.binderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter, bindReceiver);

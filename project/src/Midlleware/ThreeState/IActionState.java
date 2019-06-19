@@ -4,13 +4,13 @@
 
 package Midlleware.ThreeState;
 
-import OCE.Decisions.AbstractDecision;
+import OCE.Decisions.OCEDecision;
 import OCE.Medium.Communication.ICommunicationAdapter;
 
 import java.util.ArrayList;
 
 public interface IActionState {
 
-    void act(ArrayList<AbstractDecision> decisionsList);
+    void act(ArrayList<OCEDecision> decisionsList);
     void setCommunicationManager(ICommunicationAdapter communicationManager);
 }

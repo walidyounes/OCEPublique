@@ -4,14 +4,11 @@
 
 package Midlleware.ThreeState;
 
-import Logger.MyLogger;
-import MASInfrastructure.Communication.IMessage;
 import MASInfrastructure.Etat.IEtat;
 import MASInfrastructure.Etat.LifeCycle;
-import OCE.Decisions.AbstractDecision;
+import OCE.Decisions.OCEDecision;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class ActionState implements IEtat {
 
@@ -27,7 +24,7 @@ public class ActionState implements IEtat {
     public void execute(LifeCycle c) {
         //MyLogger.log(Level.INFO, " InfraAgent is in Action state " );
         // Retrive the list of decisions made by the engine in the previous state
-        ArrayList<AbstractDecision> decisions = c.getSharedData("ListDecisions");
+        ArrayList<OCEDecision> decisions = c.getSharedData("ListDecisions");
         // execute the action method of the agent
         myWayOfAction.act(decisions);
         c.setCurrentState(this.nextState);

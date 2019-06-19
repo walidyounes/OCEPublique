@@ -5,7 +5,7 @@
 package OCE.Selection;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import OCE.Messages.Message;
+import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Tools.Criteria;
 import OCE.Tools.FilterTool.AgreeCriteria;
 import OCE.Tools.FilterTool.MatchingAdvertiseCriteria;
@@ -16,7 +16,6 @@ import OCE.Unifieur.IMatching;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class PrioritySelection implements IMessageSelection {
 
@@ -30,7 +29,7 @@ public class PrioritySelection implements IMessageSelection {
     }
 
     /** The priority is fixed as follow (0 higher)
-     *  Others = 4 (Bind message and EmptyMessage)
+     *  Others = 4 (Bind message and EmptyInfraMessage)
      *  Advertise = 3
      *  Reply = 2
      *  Select = 1
@@ -42,12 +41,12 @@ public class PrioritySelection implements IMessageSelection {
      * @return the selected priority message
      */
     @Override
-    public Message singleSelect(ArrayList<Message> perceptions) {
+    public InfraMessage singleSelect(ArrayList<InfraMessage> perceptions) {
         //Todo For now when we selet a message from a sublist we do it randomly -> after we have to choose the right one (witch confidence or learning)
         Criteria myCriteria;
         //Check fo agree messages
         myCriteria = new AgreeCriteria();
-        List<Message> messagesList = myCriteria.meetCriteria(perceptions);
+        List<InfraMessage> messagesList = myCriteria.meetCriteria(perceptions);
         if (messagesList.size()>0){ // We have at least an agree message
             Random r = new Random();
             int index = r.nextInt(messagesList.size());
@@ -88,7 +87,7 @@ public class PrioritySelection implements IMessageSelection {
     }
 
     @Override
-    public ArrayList<Message> multipleSelect(ArrayList<Message> perceptions) {
+    public ArrayList<InfraMessage> multipleSelect(ArrayList<InfraMessage> perceptions) {
         return null;
     }
 }

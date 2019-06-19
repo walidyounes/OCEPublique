@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Messages;
+package OCE.OCEMessages;
 
 public enum MessageTypes {
     ADVERTISE,
@@ -11,5 +11,5 @@ public enum MessageTypes {
     AGREE,
     BIND,
     EMPTY,
-    SONDE;
+    SUICIDE;
 }

@@ -9,7 +9,7 @@ import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
-import OCE.Messages.ReplyMessage;
+import OCE.InfrastructureMessages.InfraARSAMessages.ReplyInfraMessage;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -42,12 +42,12 @@ public class NonBlockingIndvImmReply implements IReplyStrategy {
         System.out.println("non-Blocking-Targeted-Immediate-Response");
         MyLogger.log(Level.INFO, "Strategy{ Name= non-Blocking-Targeted-Immediate-Response, Phase= Reply}");
 
-//		Message bestAd = best(ads);
+//		InfraMessage bestAd = best(ads);
         //	MessageAgent bestAd = ads.get(0); // to remove
         //	ArrayList<ReferenceAgent> bestTransmitter = new ArrayList<>();
         //	bestTransmitter.addAll(bestAd.getDestinataires());
 
-        IMessage reply = new ReplyMessage(agent, destinataires);
+        IMessage reply = new ReplyInfraMessage(agent, destinataires);
         comm.sendMessage(reply);
 
         // S <- S

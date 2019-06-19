@@ -7,8 +7,7 @@ package OCE.Agents;
 import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgent;
 import Midlleware.ThreeState.IPerceptionState;
-import OCE.Messages.EmptyMessage;
-import OCE.Messages.Message;
+import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -46,16 +45,16 @@ public class AgentPerception implements IPerceptionState {
      * Implement the perception process of the agent, which consist in reading the received messages
      */
     @Override
-    public ArrayList<Message> percept() {
+    public ArrayList<InfraMessage> percept() {
 
-        // Read the messages from the mail-Box and convert them from IMessage to Message
-        ArrayList<Message> messages = new ArrayList<>(this.myInfraAgent.readMessages().stream().map(x -> (Message)x).collect(Collectors.toList()));
+        // Read the infraMessages from the mail-Box and convert them from IMessage to InfraMessage
+        ArrayList<InfraMessage> infraMessages = new ArrayList<>(this.myInfraAgent.readMessages().stream().map(x -> (InfraMessage)x).collect(Collectors.toList()));
 
-        MyLogger.log(Level.INFO, "Agent : Perception -> Received messages = "+ messages.toString());
+        MyLogger.log(Level.INFO, "Agent : Perception -> Received infraMessages = "+ infraMessages.toString());
 
-        if (messages.isEmpty()){ // If the agent didn't receive any messages he send a EmptyMessage (equivalent to an Empty Perception)
-            messages.add(new EmptyMessage(myInfraAgent.getInfraAgentReference()));
-        }
-        return messages;
+//        if (infraMessages.isEmpty()){ // If the agent didn't receive any infraMessages he send a EmptyInfraMessage (equivalent to an Empty Perception)
+//            infraMessages.add(new EmptyInfraMessage(myInfraAgent.getInfraAgentReference()));
+//        }
+        return infraMessages;
     }
 }

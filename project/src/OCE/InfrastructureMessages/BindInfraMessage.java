@@ -2,24 +2,25 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Messages;
+package OCE.InfrastructureMessages;
 
 import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
-import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.BindPerception;
+import OCE.OCEMessages.MessageTypes;
+import OCE.OCEMessages.OCEMessage;
+import OCE.OCEMessages.BindMessage;
 
 import java.util.ArrayList;
 
-public class BindMessage extends Message {
+public class BindInfraMessage extends InfraMessage {
 
     /**
      * create a bind message
      * @param emitter    reference of the agent sending the selection message
      * @param receivers the references of the receivers of the selection message
      */
-    public BindMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers) {
+    public BindInfraMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers) {
         this.emitter = emitter;
         this.receivers = receivers;
         this.myType = MessageTypes.BIND;
@@ -28,9 +29,9 @@ public class BindMessage extends Message {
 
 
     @Override
-    public AbstractPerception toPerception(IRecord referenceResolver) {
+    public OCEMessage toOCEMessage(IRecord referenceResolver) {
         try {
-            return new BindPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
+            return new BindMessage(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;
@@ -48,7 +49,7 @@ public class BindMessage extends Message {
 
     @Override
     public String toString() {
-        return "BindMessage{" +
+        return "BindInfraMessage{" +
                 "emitter=" + emitter +
                 ", receivers=" + receivers +
                 '}';

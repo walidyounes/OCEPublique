@@ -40,9 +40,9 @@ public class ImmediateAgreeImplicitReply implements IAgreeStrategy {
         System.out.println("immediate-Agreement-Implicit-Response");
         MyLogger.log(Level.INFO, "Strategy{ Name= immediate-Agreement-Implicit-Response, Phase= AGREE}");
 
-//		Message bestSelection = best(selections);
+//		InfraMessage bestSelection = best(selections);
       //  MessageAgent bestSelection = selections.get(0); // to remove
-      //  ReferenceAgent refBinder = ((SelectMessage) bestSelection).getAgentBinder();
+      //  ReferenceAgent refBinder = ((SelectInfraMessage) bestSelection).getAgentBinder();
 
         //MessageAgent binding = new BindingMessage("", "", "", "", 0);
         // comm.envoyerMessage(binding);

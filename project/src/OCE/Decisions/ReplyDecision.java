@@ -5,8 +5,8 @@
 package OCE.Decisions;
 
 import Logger.MyLogger;
+import OCE.InfrastructureMessages.InfraARSAMessages.ReplyInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.Messages.ReplyMessage;
 import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class ReplyDecision extends AbstractDecision {
+public class ReplyDecision extends OCEDecision {
 
     /**
      * Create a reply decision
@@ -32,7 +32,7 @@ public class ReplyDecision extends AbstractDecision {
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         MyLogger.log(Level.INFO, "Treating an reply decision ! ");
-        ReplyMessage replyMessage = new ReplyMessage(null, null );
+        ReplyInfraMessage replyMessage = new ReplyInfraMessage(null, null );
         communicationAdapter.sendMessage(replyMessage, this.emitter, this.receivers);
     }
 

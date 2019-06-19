@@ -4,7 +4,7 @@
 
 package OCE.Selection;
 
-import OCE.Messages.Message;
+import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;
 
@@ -12,12 +12,12 @@ public class WeightedPriorityChoice implements IMessageSelection {
     private float alpha; // Le seuil d'interêt
 
     @Override
-    public Message singleSelect(ArrayList<Message> perceptions) {
+    public InfraMessage singleSelect(ArrayList<InfraMessage> perceptions) {
         return null;
     }
 
     @Override
-    public ArrayList<Message> multipleSelect(ArrayList<Message> perceptions) {
+    public ArrayList<InfraMessage> multipleSelect(ArrayList<InfraMessage> perceptions) {
         return null;
     }
 }

@@ -1,29 +1,34 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Perceptions;
+package OCE.OCEMessages.ARSAMessages;
 
 
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Decisions.AbstractDecision;
-import OCE.Decisions.EmptyDecision;
-import OCE.Decisions.ReplyDecision;
-import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.DeviceBinder.PhysicalDeviceBinder;
-import OCE.Messages.MessageTypes;
+import OCE.Decisions.DoNothingDecision;
+import OCE.Decisions.OCEDecision;
+import OCE.Decisions.ReplyDecision;
+import OCE.OCEMessages.MessageTypes;
 import OCE.Unifieur.IMatching;
 import OCE.Unifieur.Matching;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class AdvertisePerception extends AbstractPerception {
+/**
+ * This class represents the advertise message sent in the first step of the ARSA protocol, it allows the agent to announce its availability to others service agents
+ * @author Walid YOUNES
+ * @version 1.0
+ */
+public class AdvertiseMessage extends ARSAMessage {
 
     private OCService distantService; // the information about the service of the agent that send this advertisement
     /**
@@ -31,7 +36,7 @@ public class AdvertisePerception extends AbstractPerception {
      * @param emitter    reference of the advertising agent
      * @param receivers the references of the receivers of the ad, if null == Broadcast
      */
-    public AdvertisePerception(OCEAgent emitter, ArrayList<OCEAgent> receivers, OCService distantService) {
+    public AdvertiseMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers, OCService distantService) {
         this.emitter= emitter;
         this.receivers = receivers;
         this.distantService = distantService;
@@ -45,7 +50,7 @@ public class AdvertisePerception extends AbstractPerception {
      * @return the deicision made by the engine
      */
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
+    public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
         MyLogger.log(Level.INFO, oceAgentRef + " treats an advertisement message ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
@@ -66,8 +71,8 @@ public class AdvertisePerception extends AbstractPerception {
                 replyReceivers.add(this.emitter);
                 return new ReplyDecision(oceAgentRef, replyReceivers);
             }
-            else return new EmptyDecision();
-        }else return new EmptyDecision();
+            else return new DoNothingDecision();
+        }else return new DoNothingDecision();
     }
 
     /**
@@ -84,7 +89,7 @@ public class AdvertisePerception extends AbstractPerception {
      * @return the situation entry corresponding to the message
      */
     @Override
-    public SituationEntry toSituationEntry() {
-        return new SituationEntry((ServiceAgent) this.emitter, MessageTypes.ADVERTISE);
+    public SituationEntry toEntrySituation() {
+        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.ADVERTISE);
     }
 }

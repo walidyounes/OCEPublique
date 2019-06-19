@@ -12,7 +12,7 @@ import OCE.Medium.Communication.ICommunicationAdapter;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class SuicideDecision extends AbstractDecision {
+public class SuicideDecision extends OCEDecision {
 
     /**
      * Create a suicide decision

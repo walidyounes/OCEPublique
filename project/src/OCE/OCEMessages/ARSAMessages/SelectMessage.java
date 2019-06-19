@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Perceptions;
+package OCE.OCEMessages.ARSAMessages;
 
 
 import AmbientEnvironment.MockupCompo.MockupService;
@@ -10,21 +10,25 @@ import AmbientEnvironment.MockupCompo.Way;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Decisions.AbstractDecision;
-import OCE.Decisions.AgreeDecision;
-import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.BindDecision;
-import OCE.Decisions.EmptyDecision;
-import OCE.Messages.MessageTypes;
+import OCE.Decisions.AgreeDecision;
+import OCE.Decisions.DoNothingDecision;
+import OCE.Decisions.OCEDecision;
+import OCE.OCEMessages.MessageTypes;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.logging.Level;
 
-public class SelectPerception extends AbstractPerception {
+/**
+ * This class represents the select message sent in the third step of the ARSA protocol
+ * @author Walid YOUNES
+ * @version 1.0
+ */
+public class SelectMessage extends ARSAMessage {
     private BinderAgent binderAgent; // The reference of the binding InfraAgent
 
     /**
@@ -33,7 +37,7 @@ public class SelectPerception extends AbstractPerception {
      * @param receivers the references of the receivers of the selection message
      * @param binderAgent the agent responsible of executing the physical binding
      */
-    public SelectPerception(OCEAgent emitter, ArrayList<OCEAgent> receivers, BinderAgent binderAgent) {
+    public SelectMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers, BinderAgent binderAgent) {
         this.emitter = emitter;
         this.receivers = receivers;
         this.binderAgent = binderAgent;
@@ -63,7 +67,7 @@ public class SelectPerception extends AbstractPerception {
      * @return the decision made by the engine
      */
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef,  OCService localService) {
+    public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
         MyLogger.log(Level.INFO, OCEAgentRef + " treats a selection message ");
         boolean mutualSelection=false;
         try{
@@ -92,7 +96,7 @@ public class SelectPerception extends AbstractPerception {
 
             return agreeDecision;
         }else{
-            return new EmptyDecision();
+            return new DoNothingDecision();
         }
 
 
@@ -112,7 +116,7 @@ public class SelectPerception extends AbstractPerception {
      * @return the situation entry corresponding to the message
      */
     @Override
-    public SituationEntry toSituationEntry() {
-        return new SituationEntry((ServiceAgent) this.emitter, MessageTypes.SELECT);
+    public SituationEntry toEntrySituation() {
+        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.SELECT);
     }
 }

@@ -1,24 +1,25 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Messages;
+package OCE.InfrastructureMessages.InfraARSAMessages;
 
 
 import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
-import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.ReplyPerception;
+import OCE.OCEMessages.MessageTypes;
+import OCE.OCEMessages.OCEMessage;
+import OCE.OCEMessages.ARSAMessages.ReplyMessage;
 
 import java.util.ArrayList;
 
 /**
- * This class represents the response message sent in the second step of the ARSA protocol (it tells the agent that send the ad that i'm interested)
+ * This class represents the response message (Infrastructure level) sent in the second step of the ARSA protocol
  * @author Walid YOUNES
  * @version 1.0
  */
-public class ReplyMessage extends Message {
+public class ReplyInfraMessage extends ARSAInfraMessage {
 
     /**
      * Create a Response message
@@ -26,7 +27,7 @@ public class ReplyMessage extends Message {
      * @param emitter    reference of the responding agent
      * @param recievers the references of the receivers of the response, if null == Broadcast
      */
-    public ReplyMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
+    public ReplyInfraMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
         this.emitter= emitter;
         this.receivers = recievers;
         this.myType = MessageTypes.REPLY;
@@ -35,7 +36,7 @@ public class ReplyMessage extends Message {
 
 /*
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
+    public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
         MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
@@ -49,9 +50,9 @@ public class ReplyMessage extends Message {
     */
 
     @Override
-    public AbstractPerception toPerception(IRecord referenceResolver) {
+    public OCEMessage toOCEMessage(IRecord referenceResolver) {
         try {
-            return new ReplyPerception(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
+            return new ReplyMessage(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;
@@ -69,7 +70,7 @@ public class ReplyMessage extends Message {
 
     @Override
     public String toString() {
-        return "ReplyMessage{" +
+        return "ReplyInfraMessage{" +
                 "emitter=" + emitter +
                 ", receivers=" + receivers +
                 '}';

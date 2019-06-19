@@ -9,8 +9,8 @@ import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
-import OCE.Messages.AgreeMessage;
-import OCE.Messages.SelectMessage;
+import OCE.InfrastructureMessages.InfraARSAMessages.AgreeInfraMessage;
+import OCE.InfrastructureMessages.InfraARSAMessages.SelectInfraMessage;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -58,7 +58,7 @@ public class ImmediateAgreeExplicitReply implements IAgreeStrategy {
 
 //		MessageAgent bestSelection = best(selections)
         IMessage bestSelection = selections.get(0); // to remove
-        InfraAgentReference refBinder = ((SelectMessage) bestSelection).getBinderAgent();
+        InfraAgentReference refBinder = ((SelectInfraMessage) bestSelection).getBinderAgent();
         InfraAgentReference selectionTransmitter = bestSelection.getEmitter();
         ArrayList<InfraAgentReference> rejects = getRejectedSelectionTransmitters(selectionTransmitter);
 
@@ -66,10 +66,10 @@ public class ImmediateAgreeExplicitReply implements IAgreeStrategy {
 
         ArrayList<InfraAgentReference> recipients = new ArrayList<>();
         recipients.add(selectionTransmitter);
-        IMessage agreement = new AgreeMessage(selectionTransmitter, recipients);
+        IMessage agreement = new AgreeInfraMessage(selectionTransmitter, recipients);
 
 //		No agree message sent to all rejects
-        IMessage noAgreement = new AgreeMessage(selectionTransmitter, rejects);
+        IMessage noAgreement = new AgreeInfraMessage(selectionTransmitter, rejects);
         comm.sendMessage(noAgreement);
         //comm.envoyerMessage(binding);
         comm.sendMessage(agreement);

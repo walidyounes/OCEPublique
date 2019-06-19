@@ -11,7 +11,7 @@ import OCE.Medium.Communication.CommunicationAdapter;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.Recorder.Record;
-import OCE.Messages.Message;
+import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
@@ -30,27 +30,27 @@ public class Medium implements IRecord, ICommunicationAdapter {
     }
 
     /**
-     * sends a message from one agent to all the other agents in broadcast
+     * sends a infraMessage from one agent to all the other agents in broadcast
      *
-     * @param message the message to be sent
-     * @param emitter the sender of the message
-     * @param receivers  : the receivers of the message
+     * @param infraMessage the infraMessage to be sent
+     * @param emitter the sender of the infraMessage
+     * @param receivers  : the receivers of the infraMessage
      */
     @Override
-    public void sendMessageBroadcast(Message message, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
-        this.mycomunnicationAdapter.sendMessageBroadcast(message, emitter, receivers);
+    public void sendMessageBroadcast(InfraMessage infraMessage, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+        this.mycomunnicationAdapter.sendMessageBroadcast(infraMessage, emitter, receivers);
     }
 
     /**
-     * sends a message from one agent to another (point to point communication)
+     * sends a infraMessage from one agent to another (point to point communication)
      *
-     * @param message the message to be sent
-     * @param emitter the sender of the message
-     * @param receivers  : the receivers of the message
+     * @param infraMessage the infraMessage to be sent
+     * @param emitter the sender of the infraMessage
+     * @param receivers  : the receivers of the infraMessage
      */
     @Override
-    public void sendMessage(Message message, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
-        this.mycomunnicationAdapter.sendMessage(message, emitter,  receivers);
+    public void sendMessage(InfraMessage infraMessage, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+        this.mycomunnicationAdapter.sendMessage(infraMessage, emitter,  receivers);
     }
 
     /**

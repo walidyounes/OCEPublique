@@ -6,18 +6,16 @@ package OCE.Agents.BinderAgentPack;
 
 import Logger.MyLogger;
 import Midlleware.ThreeState.IDecisionState;
-import OCE.Decisions.AbstractDecision;
+import OCE.Decisions.OCEDecision;
 import OCE.Decisions.BindDecision;
-import OCE.Decisions.EmptyDecision;
+import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Medium.Recorder.IRecord;
-import OCE.Messages.BindMessage;
-import OCE.Messages.Message;
-import OCE.Perceptions.AbstractPerception;
-import OCE.Perceptions.BindPerception;
+import OCE.InfrastructureMessages.BindInfraMessage;
+import OCE.OCEMessages.OCEMessage;
+import OCE.OCEMessages.BindMessage;
 import OCE.Selection.IMessageSelection;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -62,16 +60,16 @@ public class BinderAgentDecision implements IDecisionState {
 
 
     @Override
-    public ArrayList<AbstractDecision> decide(ArrayList<Message> perceptions) {
+    public ArrayList<OCEDecision> decide(ArrayList<InfraMessage> perceptions) {
         MyLogger.log(Level.INFO, "The Binder agent is making decisions !");
 
 
         // The list of decisions mad by the binder agent
-        ArrayList<AbstractDecision> myListOfDecisions = new ArrayList<>();
-        //Transform the messages to perceptions and filter to leave only the Bind Message (until now we have only two types of message that the binder agent can treat : Empty and Bind)
-        ArrayList<AbstractPerception> bindingPerceptions = new ArrayList<>( perceptions.stream()
-                                                                                        .filter(m -> m instanceof BindMessage)
-                                                                                        .map(p -> p.toPerception(referenceResolver))
+        ArrayList<OCEDecision> myListOfDecisions = new ArrayList<>();
+        //Transform the messages to perceptions and filter to leave only the Bind InfraMessage (until now we have only two types of message that the binder agent can treat : Empty and Bind)
+        ArrayList<OCEMessage> bindingPerceptions = new ArrayList<>( perceptions.stream()
+                                                                                        .filter(m -> m instanceof BindInfraMessage)
+                                                                                        .map(p -> p.toOCEMessage(referenceResolver))
                                                                                         .collect(Collectors.toList())
                                                                              );
         if(bindingPerceptions.size()> 0){ // The binder agent received at least one bindMessage
@@ -80,15 +78,15 @@ public class BinderAgentDecision implements IDecisionState {
             //if (this.nbMessages <2){ // we didn't receive all the message
              //   MyLogger.log(Level.INFO,"Waiting for the second message - nbMessage " + nbMessages);
 
-                // myListOfDecisions.add(new EmptyDecision());
+                // myListOfDecisions.add(new DoNothingDecision());
            // }else{ // launch the physical binding
                 bindingPerceptions.stream()
-                                    .map(p -> (BindPerception) p)
+                                    .map(p -> (BindMessage) p)
                                     .collect(Collectors.toList())
                                     .forEach(p -> myListOfDecisions.add(new BindDecision(p.getEmitter(), p.getReceivers())));
              //   this.nbMessages = 0; // reinitialise the counter
-            }else{ // No Bind Message were received
-            // myListOfDecisions.add(new EmptyDecision());
+            }else{ // No Bind InfraMessage were received
+            // myListOfDecisions.add(new DoNothingDecision());
        }
 
         return myListOfDecisions;

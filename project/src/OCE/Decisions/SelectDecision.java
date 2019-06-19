@@ -9,9 +9,9 @@ import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.InfrastructureMessages.BindInfraMessage;
+import OCE.InfrastructureMessages.InfraARSAMessages.SelectInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.Messages.BindMessage;
-import OCE.Messages.SelectMessage;
 import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class SelectDecision extends AbstractDecision {
+public class SelectDecision extends OCEDecision {
     private BinderAgent myBinderAgent;
 
     /**
@@ -42,10 +42,10 @@ public class SelectDecision extends AbstractDecision {
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         MyLogger.log(Level.INFO, "Treating an agree decision ! ");
-        SelectMessage selectMessage = new SelectMessage(null, null, this.myBinderAgent.getMyInfraAgent().getInfraAgentReference());
+        SelectInfraMessage selectMessage = new SelectInfraMessage(null, null, this.myBinderAgent.getMyInfraAgent().getInfraAgentReference());
         communicationAdapter.sendMessage(selectMessage, this.emitter, this.receivers);
         // Send a message to the binder agent
-        BindMessage bindMessage = new BindMessage(null, null);
+        BindInfraMessage bindMessage = new BindInfraMessage(null, null);
         ArrayList<OCEAgent> bindReceivers = new ArrayList<>();
         bindReceivers.add(this.myBinderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter,bindReceivers);

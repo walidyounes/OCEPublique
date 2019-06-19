@@ -5,9 +5,9 @@
 package OCE.Tools.FilterTool;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import OCE.Messages.AdvertiseMessage;
-import OCE.Messages.Message;
-import OCE.Messages.MessageTypes;
+import OCE.InfrastructureMessages.InfraARSAMessages.AdvertiseInfraMessage;
+import OCE.InfrastructureMessages.InfraMessage;
+import OCE.OCEMessages.MessageTypes;
 import OCE.Tools.Criteria;
 import OCE.Unifieur.IMatching;
 
@@ -30,14 +30,14 @@ public class MatchingAdvertiseCriteria implements Criteria {
     }
 
     /**
-     * This function is used to filter a list of messages to keep only the advertisement message that matches a service
-     * @param messages : the list of messages to filter
-     * @return the filtered list containing only the advertisement messages that match to "service"
+     * This function is used to filter a list of infraMessages to keep only the advertisement message that matches a service
+     * @param infraMessages : the list of infraMessages to filter
+     * @return the filtered list containing only the advertisement infraMessages that match to "service"
      */
     @Override
-    public ArrayList<Message> meetCriteria(ArrayList<Message> messages) {
-       return new ArrayList<Message>( messages.stream().filter(m -> m.getMyType()== MessageTypes.ADVERTISE)
-                                                            .map(m -> (AdvertiseMessage) m)
+    public ArrayList<InfraMessage> meetCriteria(ArrayList<InfraMessage> infraMessages) {
+       return new ArrayList<InfraMessage>( infraMessages.stream().filter(m -> m.getMyType()== MessageTypes.ADVERTISE)
+                                                            .map(m -> (AdvertiseInfraMessage) m)
                                                                 .filter(am -> matching.match(service,am.getMyService()))
                                                                     .collect(Collectors.toList())
                                     );

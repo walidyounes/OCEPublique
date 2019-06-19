@@ -11,12 +11,12 @@ import OCE.Medium.Communication.ICommunicationAdapter;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class EmptyDecision extends AbstractDecision {
+public class DoNothingDecision extends OCEDecision {
 
     /**
      * Create an empty Decision
      */
-    public EmptyDecision() {
+    public DoNothingDecision() {
         this.emitter = null;
         this.receivers = null;
     }
@@ -28,7 +28,7 @@ public class EmptyDecision extends AbstractDecision {
 
     @Override
     public String toString() {
-        return "EmptyDecision{" +
+        return "DoNothingDecision{" +
                 "emitter=" + emitter +
                 ", receivers=" + receivers +
                 '}';

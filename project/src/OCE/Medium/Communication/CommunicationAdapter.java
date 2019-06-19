@@ -7,7 +7,7 @@ package OCE.Medium.Communication;
 import MASInfrastructure.Communication.ICommunication;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
-import OCE.Messages.Message;
+import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
@@ -29,42 +29,42 @@ public class CommunicationAdapter implements ICommunicationAdapter {
     }
 
     /**
-     * sends a message from one agent to all the other agents in broadcast
+     * sends a infraMessage from one agent to all the other agents in broadcast
      *
-     * @param message the message to be sent
-     * @param emitter the sender of the message
-     * @param receivers  : the receivers of the message
+     * @param infraMessage the infraMessage to be sent
+     * @param emitter the sender of the infraMessage
+     * @param receivers  : the receivers of the infraMessage
      */
     @Override
-    public void sendMessageBroadcast(Message message, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+    public void sendMessageBroadcast(InfraMessage infraMessage, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         try {
             // Resolving the reference for the transmitter
-            message.setEmitter(this.mediumRecorder.resolveAgentReference(emitter));
-            // When sending a message in broadcast the list of receivers is "empty" since every agent is receiving the message so no need to resolve recipients address
-            message.setReceivers(new ArrayList<>());
-            // Sending the message through the MAS-Infrastructure
-            this.comunicationInfrastructure.sendMessageBroadcast(message);
+            infraMessage.setEmitter(this.mediumRecorder.resolveAgentReference(emitter));
+            // When sending a infraMessage in broadcast the list of receivers is "empty" since every agent is receiving the infraMessage so no need to resolve recipients address
+            infraMessage.setReceivers(new ArrayList<>());
+            // Sending the infraMessage through the MAS-Infrastructure
+            this.comunicationInfrastructure.sendMessageBroadcast(infraMessage);
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
         }
     }
 
     /**
-     * sends a message from one agent to another (point to point communication)
-     * @param message the message to be sent
-     * @param emitter the sender of the message
-     * @param receivers  : the receivers of the message
+     * sends a infraMessage from one agent to another (point to point communication)
+     * @param infraMessage the infraMessage to be sent
+     * @param emitter the sender of the infraMessage
+     * @param receivers  : the receivers of the infraMessage
      */
     @Override
-    public void sendMessage(Message message, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+    public void sendMessage(InfraMessage infraMessage, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
 
         try {
-            // Resolving the reference of the emitter of the message
-            message.setEmitter(this.mediumRecorder.resolveAgentReference(emitter));
-            // Resolving the references of the receivers of the message
-            message.setReceivers(this.mediumRecorder.resolveAgentsReferences(receivers));
-            // Sending the message through the MAS-Infrastructure
-            this.comunicationInfrastructure.sendMessage(message);
+            // Resolving the reference of the emitter of the infraMessage
+            infraMessage.setEmitter(this.mediumRecorder.resolveAgentReference(emitter));
+            // Resolving the references of the receivers of the infraMessage
+            infraMessage.setReceivers(this.mediumRecorder.resolveAgentsReferences(receivers));
+            // Sending the infraMessage through the MAS-Infrastructure
+            this.comunicationInfrastructure.sendMessage(infraMessage);
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
         }

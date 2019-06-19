@@ -4,13 +4,12 @@
 
 package Midlleware.ThreeState;
 
-import MASInfrastructure.Communication.IMessage;
-import OCE.Decisions.AbstractDecision;
-import OCE.Messages.Message;
+import OCE.Decisions.OCEDecision;
+import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;
 
 public interface IDecisionState {
 
-    ArrayList<AbstractDecision> decide(ArrayList<Message> perceptions);
+    ArrayList<OCEDecision> decide(ArrayList<InfraMessage> perceptions);
 }

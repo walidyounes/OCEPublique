@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Walid YOUNES
  * @version 1.0
  */
-public abstract class AbstractDecision {
+public abstract class OCEDecision {
 
     protected OCEAgent emitter; // The transmitter of the message
     protected ArrayList<OCEAgent> receivers; // The list of the recipients of the message, if == null -> message is in broadcast

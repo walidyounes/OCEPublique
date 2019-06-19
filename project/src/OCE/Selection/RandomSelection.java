@@ -4,7 +4,7 @@
 
 package OCE.Selection;
 
-import OCE.Messages.Message;
+import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,7 +21,7 @@ public class RandomSelection implements IMessageSelection {
     * Sélectionner aléatoirement un messsage (Perception)
      */
     @Override
-    public Message singleSelect(ArrayList<Message> perceptions) {
+    public InfraMessage singleSelect(ArrayList<InfraMessage> perceptions) {
         Random r = new Random();
         int index = r.nextInt(perceptions.size());
         //System.out.println(" Index généré = "+index);
@@ -29,7 +29,7 @@ public class RandomSelection implements IMessageSelection {
     }
 
     @Override
-    public ArrayList<Message> multipleSelect(ArrayList<Message> perceptions) {
+    public ArrayList<InfraMessage> multipleSelect(ArrayList<InfraMessage> perceptions) {
         // TOdO Compléter la procédure
         return null;
     }

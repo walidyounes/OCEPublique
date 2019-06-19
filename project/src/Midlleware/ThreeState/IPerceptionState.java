@@ -5,12 +5,12 @@
 package Midlleware.ThreeState;
 
 import MASInfrastructure.Agent.InfraAgent;
-import OCE.Messages.Message;
+import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;
 
 public interface IPerceptionState {
 
-    ArrayList<Message> percept();
+    ArrayList<InfraMessage> percept();
     void setInfraAgent(InfraAgent infraAgent);
 }

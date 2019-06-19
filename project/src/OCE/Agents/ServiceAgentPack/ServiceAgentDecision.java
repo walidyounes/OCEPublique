@@ -6,14 +6,14 @@ package OCE.Agents.ServiceAgentPack;
 
 import Logger.MyLogger;
 import Midlleware.ThreeState.IDecisionState;
-import OCE.Decisions.AbstractDecision;
+import OCE.Decisions.OCEDecision;
+import OCE.Decisions.AdvertiseDecision;
+import OCE.Decisions.DoNothingDecision;
+import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Medium.Recorder.IRecord;
-import OCE.Messages.Message;
-import OCE.Perceptions.AbstractPerception;
+import OCE.OCEMessages.OCEMessage;
 import OCE.Selection.IMessageSelection;
 import OCE.Selection.PrioritySelection;
-import OCE.Tools.Criteria;
-import OCE.Tools.FilterTool.MatchingAdvertiseCriteria;
 import OCE.Unifieur.IMatching;
 import OCE.Unifieur.Matching;
 
@@ -66,33 +66,48 @@ public class ServiceAgentDecision implements IDecisionState {
      *  Impelment the decision mechanisme of the binder agent, and produce a list of decisions
      */
     @Override
-    public ArrayList<AbstractDecision> decide(ArrayList<Message> perceptions) {
+    public ArrayList<OCEDecision> decide(ArrayList<InfraMessage> perception) {
         // Filter the advertisement (if they exist) and keep only those who matches
         IMatching matching = new Matching();
          /* Criteria matchingAdvertiseCriteria = new MatchingAdvertiseCriteria(myServiceAgent.getHandledService(), matching);
 
-        ArrayList<Message> filtredMessages = matchingAdvertiseCriteria.meetCriteria(perceptions);
+        ArrayList<InfraMessage> filtredMessages = matchingAdvertiseCriteria.meetCriteria(perception);
 
         // Todo  walid il faut la chnager pour la mettre au propre
-        Message messageSelected;
+        InfraMessage infraMessageSelected;
         if(filtredMessages.size()>0){
             //Call the selection method to select the messages to treat
-            messageSelected = this.selectionMessageStrategy.singleSelect(filtredMessages);
+            infraMessageSelected = this.selectionMessageStrategy.singleSelect(filtredMessages);
         }else{
             //Call the selection method to select the messages to treat
-            messageSelected = this.selectionMessageStrategy.singleSelect(perceptions);
+            infraMessageSelected = this.selectionMessageStrategy.singleSelect(perception);
         }
         */
-        Message messageSelected;
-        IMessageSelection messageSelection = new PrioritySelection(myServiceAgent.getHandledService(), matching);
-        messageSelected = messageSelection.singleSelect(perceptions);
-        //Treat the selected message
-        AbstractPerception perceptionSelected = messageSelected.toPerception(referenceResolver);
-       // perceptionSelected = filtredPerceptions.get(0);
+         //Create a list of decisions
+        ArrayList<OCEDecision> mylistOfDecisions = new ArrayList<>();
 
-        AbstractDecision myDecision = perceptionSelected.toSelfTreat(myServiceAgent.getMyConnexionState(), myServiceAgent, myServiceAgent.getHandledService());
-        ArrayList<AbstractDecision> mylistOfDecisions = new ArrayList<>();
-        mylistOfDecisions.add(myDecision);
+        // Check if the service agent didn't receive any messages (empty perception)
+        if(perception.isEmpty()){
+            if(this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.Created)){ // if the service agent was just created -> it advertises
+                //Create an advertisement decision todo : this could be enhanced later on
+                OCEDecision myDecision = new AdvertiseDecision(this.myServiceAgent, new ArrayList<>(), this.myServiceAgent.getHandledService());
+                mylistOfDecisions.add(myDecision);
+            }else{
+                // the agent will do nothing Todo: this part also can be enhanced later no
+                mylistOfDecisions.add(new DoNothingDecision());
+            }
+        }else{
+            //Select a message to treat
+            InfraMessage infraMessageSelected;
+            IMessageSelection messageSelection = new PrioritySelection(myServiceAgent.getHandledService(), matching);
+            infraMessageSelected = messageSelection.singleSelect(perception);
+            //Treat the selected message
+            OCEMessage perceptionSelected = infraMessageSelected.toOCEMessage(referenceResolver);
+            OCEDecision myDecision = perceptionSelected.toSelfTreat(myServiceAgent.getMyConnexionState(), myServiceAgent, myServiceAgent.getHandledService());
+            mylistOfDecisions.add(myDecision);
+        }
+
+
         MyLogger.log(Level.INFO, "Agent : Decision -> List of decisions = "+ mylistOfDecisions.toString() );
         return mylistOfDecisions;
     }

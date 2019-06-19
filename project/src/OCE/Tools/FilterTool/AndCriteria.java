@@ -4,7 +4,7 @@
 
 package OCE.Tools.FilterTool;
 
-import OCE.Messages.Message;
+import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Tools.Criteria;
 
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ public class AndCriteria implements Criteria {
 
     /**
      * It runs the logical "and" operation between the two attributes "criteria" and "otherCriteria" specified in the construction of the class
-     * @param messages : the list of messages to filter
-     * @return the filtered list of messages
+     * @param infraMessages : the list of infraMessages to filter
+     * @return the filtered list of infraMessages
      */
     @Override
-    public ArrayList<Message> meetCriteria(ArrayList<Message> messages) {
+    public ArrayList<InfraMessage> meetCriteria(ArrayList<InfraMessage> infraMessages) {
         return null;
     }
 }

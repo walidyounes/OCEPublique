@@ -2,19 +2,19 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Perceptions;
+package OCE.OCEMessages;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.AbstractDecision;
-import OCE.Messages.MessageTypes;
+import OCE.Decisions.OCEDecision;
 
 import java.util.ArrayList;
 
-public class BindPerception extends AbstractPerception {
+public class BindMessage extends OCEMessage {
 
 
     /**
@@ -23,7 +23,7 @@ public class BindPerception extends AbstractPerception {
      * @param receivers the references of the receivers of the selection message
 
      */
-    public BindPerception(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+    public BindMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter = emitter;
         this.receivers = receivers;
     }
@@ -37,7 +37,7 @@ public class BindPerception extends AbstractPerception {
      * @return the decision made by the engine
      */
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
+    public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
         return null;
     }
 
@@ -55,13 +55,13 @@ public class BindPerception extends AbstractPerception {
      * @return the situation entry corresponding to the message
      */
     @Override
-    public SituationEntry toSituationEntry() {
-        return new SituationEntry((ServiceAgent) this.emitter, MessageTypes.BIND);
+    public SituationEntry toEntrySituation() {
+        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.BIND);
     }
 
     @Override
     public String toString() {
-        return "BindPerception{" +
+        return "BindMessage{" +
                 "emitter=" + emitter +
                 ", receivers=" + receivers +
                 '}';

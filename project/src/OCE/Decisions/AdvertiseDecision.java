@@ -6,8 +6,8 @@ package OCE.Decisions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.InfrastructureMessages.InfraARSAMessages.AdvertiseInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.Messages.AdvertiseMessage;
 import OCE.Agents.OCEAgent;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.logging.Level;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class AdvertiseDecision extends AbstractDecision {
+public class AdvertiseDecision extends OCEDecision {
     private OCService myService;
     /**
      * Create an advertise decision
@@ -34,7 +34,7 @@ public class AdvertiseDecision extends AbstractDecision {
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         MyLogger.log(Level.INFO, "Treating an advertisement decision ! ");
-        AdvertiseMessage advertiseMessage = new AdvertiseMessage(null, null, this.myService);
+        AdvertiseInfraMessage advertiseMessage = new AdvertiseInfraMessage(null, null, this.myService);
         communicationAdapter.sendMessageBroadcast(advertiseMessage, this.emitter, this.receivers);
     }
 

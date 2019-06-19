@@ -2,12 +2,13 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Messages;
+package OCE.InfrastructureMessages;
 
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.IMessage;
 import OCE.Medium.Recorder.IRecord;
-import OCE.Perceptions.AbstractPerception;
+import OCE.OCEMessages.MessageTypes;
+import OCE.OCEMessages.OCEMessage;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * @author Walid YOUNES
  * @version 1.0
  */
-public abstract class Message implements IMessage {
+public abstract class InfraMessage implements IMessage {
 
     protected InfraAgentReference emitter; // The transmitter of the message
     protected ArrayList<InfraAgentReference> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
@@ -31,7 +32,7 @@ public abstract class Message implements IMessage {
     }
 
     /**
-     *  set the refernece of the transmitter of the message
+     *  set the reference of the transmitter of the message
      * @param emitter : the reference of the transmitter
      */
     @Override
@@ -58,20 +59,17 @@ public abstract class Message implements IMessage {
     }
 
     /**
-     * treat the message and make the suitable decision
-     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
-     * @param serviceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
-     * @param localService : the information of the service of the agent that's treating this message
-     * @return the deicision made by the engine
+     * get the type of message,  which can be : Advertise, reply, select, agree...
+     * @return the type of the message
      */
-   //  public abstract AbstractDecision toSelfTreat( ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef, OCService localService);
+    public abstract MessageTypes getMyType();
 
     /**
-     * Transfome the message into perception (this method is useful because in the OCE engine we deal with ServiceAgent reference not InfraAgent reference)
+     * Transform the message into perception (this method is useful because in the OCE engine we deal with ServiceAgent reference not InfraAgent reference)
      * @param referenceResolver : the component used to resolv the adress ServiceAgent <> InfraAgentReference
      * @return the perception equivalent to the message
      */
-    public abstract AbstractPerception toPerception(IRecord referenceResolver);
+    public abstract OCEMessage toOCEMessage(IRecord referenceResolver);
 
-    public abstract MessageTypes getMyType();
+
 }

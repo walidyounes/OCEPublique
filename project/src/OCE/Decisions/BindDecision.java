@@ -9,7 +9,7 @@ import OCE.Medium.Communication.ICommunicationAdapter;
 
 import java.util.ArrayList;
 
-public class BindDecision extends AbstractDecision {
+public class BindDecision extends OCEDecision {
 
     /**
      * Create a Bind decision

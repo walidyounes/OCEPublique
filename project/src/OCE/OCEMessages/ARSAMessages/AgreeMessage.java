@@ -1,31 +1,36 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Perceptions;
+package OCE.OCEMessages.ARSAMessages;
 
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Decisions.AbstractDecision;
-import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.AgreeDecision;
-import OCE.Decisions.EmptyDecision;
-import OCE.Messages.MessageTypes;
+import OCE.Decisions.DoNothingDecision;
+import OCE.Decisions.OCEDecision;
+import OCE.OCEMessages.MessageTypes;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class AgreePerception extends AbstractPerception {
+/**
+ * This class represents the agree message sent in the fourth and last step of the ARSA protocol (at this step the physical connection can be triggered)
+ * @author Walid YOUNES
+ * @version 1.0
+ */
+public class AgreeMessage extends ARSAMessage {
 
     /**
      * create an agreement message
      *
      */
-    public AgreePerception(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+    public AgreeMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter = emitter;
         this.receivers = receivers;
     }
@@ -38,14 +43,14 @@ public class AgreePerception extends AbstractPerception {
      * @return the deicision made by the engine
      */
     @Override
-    public AbstractDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef,  OCService localService) {
+    public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
         MyLogger.log(Level.INFO, oceAgentRef + " treats an agreement message ");
         //Verify the connexion state of the agent Todo: walid : il y a un probleme lorsque l'agent se met en attente
         // if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
             // change the connexion's state of the agent
             ((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.Waiting);
             MyLogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
-            return new EmptyDecision();
+            return new DoNothingDecision();
        //  }
         //return null;
     }
@@ -63,7 +68,7 @@ public class AgreePerception extends AbstractPerception {
      * @return the situation entry corresponding to the message
      */
     @Override
-    public SituationEntry toSituationEntry() {
-        return new SituationEntry((ServiceAgent) this.emitter, MessageTypes.AGREE);
+    public SituationEntry toEntrySituation() {
+        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.AGREE);
     }
 }

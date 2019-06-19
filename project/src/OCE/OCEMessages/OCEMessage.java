@@ -2,14 +2,13 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Perceptions;
+package OCE.OCEMessages;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
-import OCE.Decisions.AbstractDecision;
+import OCE.Decisions.OCEDecision;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Messages.MessageTypes;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,7 @@ import java.util.ArrayList;
  * @author Walid YOUNES
  * @version 1.0
  */
-public abstract class AbstractPerception {
+public abstract class OCEMessage {
 
     protected OCEAgent emitter; // The transmitter of the message
     protected ArrayList<OCEAgent> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
@@ -65,7 +64,7 @@ public abstract class AbstractPerception {
      * @param localService : the information of the service of the agent that's treating this message
      * @return the deicision made by the engine
      */
-    public abstract AbstractDecision toSelfTreat( ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService);
+    public abstract OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService);
 
     /**
      * This function is called to filter a list of messages depending on their types
@@ -77,11 +76,11 @@ public abstract class AbstractPerception {
      * This function transform the perception to a situation entry used by the agent in the decision process (learning)
      * @return the situation entry corresponding to the message
      */
-    public abstract SituationEntry toSituationEntry();
+    public abstract SituationEntry toEntrySituation();
 
     @Override
     public String toString() {
-        return "AbstractPerception{" +
+        return "OCEMessage{" +
                 "emitter=" + emitter +
                 ", receivers=" + receivers +
                 '}';
