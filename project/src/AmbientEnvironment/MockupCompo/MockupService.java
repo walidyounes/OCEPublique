@@ -43,6 +43,22 @@ public abstract class MockupService extends OCService implements Comparable {
         return "Service " + name + " of " + owner;
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof MockupService)) return false;
+//
+//        MockupService that = (MockupService) o;
+//
+//        if (!name.equals(that.name)) return false;
+//        return myWay == that.myWay;
+//    }
+
+    /**
+     *  Compare two MockupService (the comparison is compute on thr combination "NameOwnerWay")
+     * @param o the object to compare this to
+     * @return true if the two object are equal, else false
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,7 +66,7 @@ public abstract class MockupService extends OCService implements Comparable {
 
         MockupService that = (MockupService) o;
 
-        if (!name.equals(that.name)) return false;
+        if (!name.equals(that.name) && !owner.equals(that.owner)) return false;
         return myWay == that.myWay;
     }
 
@@ -62,6 +78,23 @@ public abstract class MockupService extends OCService implements Comparable {
         return result;
     }
 
+    /**
+     *  Compare two MockupService (the comparison is compute on the combination of "NameOwnerWay")
+     * @param o the object to compare this to
+     * @return 0 if the two object are equal
+     */
+    @Override
+    public int compareTo(Object o) {
+        MockupService that = (MockupService) o;
+        String strThis = this.name+this.owner+this.myWay;
+        String strThat = that.name+that.owner+that.myWay;
+        int result = strThis.compareTo(strThat);
+        if (result == 0) {
+            assert this.equals(that) :
+                    this.getClass().getSimpleName() + ": compareTo inconsistent with equals.";
+        }
+        return result;
+    }
 
 
     @Override
@@ -72,19 +105,5 @@ public abstract class MockupService extends OCService implements Comparable {
     @Override
     public void removeLink(OCService s) throws RemoveLinkException {
         //TODO : Complete the code
-    }
-
-    // TODO : recode "equal" function
-    /**
-     *  Compare two MockupService (the comparison is compute
-     * @param o the object to compare this to
-     * @return 0 if the two object are equal
-     */
-    @Override
-    public int compareTo(Object o) {
-        MockupService athat = (MockupService) o;
-        String sThat = ""+athat.getName()+athat.getOwner()+athat.getWay();
-        String sThis = ""+ this.getName()+this.getOwner()+this.getWay();
-        return sThis.compareTo(sThat);
     }
 }

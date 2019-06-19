@@ -4,6 +4,7 @@
 
 package OCE.Agents.ServiceAgentPack;
 
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import Midlleware.ThreeState.IActionState;
@@ -77,14 +78,29 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myBinderAgentFactory = myBinderAgentFactory;
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof ServiceAgent)) return false;
+//
+//        ServiceAgent that = (ServiceAgent) o;
+//
+//        return myID.equals(that.myID);
+//    }
+
+    /**
+     *  Compare two Service Agents (the comparison is compute on the handled Service)
+     * @param obj the service agent to compare this to
+     * @return true if the two object are equal, false else
+     */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ServiceAgent)) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof ServiceAgent)) return false;
 
-        ServiceAgent that = (ServiceAgent) o;
+        ServiceAgent that = (ServiceAgent) obj;
 
-        return myID.equals(that.myID);
+        return handledService.equals(that.handledService);
     }
 
     @Override
@@ -93,8 +109,18 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     }
 
 
+//    @Override
+//    public int compareTo(Object athat) {
+//        return this.myID.compareTo(athat);
+//    }
+
+    /**
+     *  Compare two Service Agents (the comparison is compute on the handled Service)
+     * @param obj the service Agent to compare this to
+     * @return 0 if the two object are equal
+     */
     @Override
-    public int compareTo(Object athat) {
-        return this.myID.compareTo(athat);
+    public int compareTo(Object obj) {
+        return ((MockupService)this.handledService).compareTo(obj);
     }
 }
