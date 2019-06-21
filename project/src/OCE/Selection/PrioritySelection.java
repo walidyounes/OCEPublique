@@ -42,7 +42,7 @@ public class PrioritySelection implements IMessageSelection {
      */
     @Override
     public InfraMessage singleSelect(ArrayList<InfraMessage> perceptions) {
-        //Todo For now when we selet a message from a sublist we do it randomly -> after we have to choose the right one (witch confidence or learning)
+        //Todo For now when we select a message from a sublist we do it randomly -> after we have to choose the right one (witch learning)
         Criteria myCriteria;
         //Check fo agree messages
         myCriteria = new AgreeCriteria();

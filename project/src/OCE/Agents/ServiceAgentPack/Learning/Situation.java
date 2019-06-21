@@ -20,9 +20,10 @@ import java.util.stream.Collectors;
 /**
  * Class implementing the situation (current or reference) of a service agent
  */
-public class Situation {
+public class Situation < T extends SituationEntry> {
 
-    private Map<ServiceAgent, SituationEntry> mySetAgents; // the situation representing the current environment
+
+    private Map<ServiceAgent, T> mySetAgents; // the situation representing the current environment
 
     /**
      * Create a new situation
@@ -33,16 +34,17 @@ public class Situation {
 
 
     /**
-     * Create the situation from a list of messages
+     * Create the situation from a list of messages, here we create a current situation only
      * @param listMessages : the list of received messages
      */
     public  Situation(ArrayList<OCEMessage> listMessages){
-
+        this.mySetAgents = new TreeMap<>();
         //Transform the list of messages (OCEMessages) to a list of Situation Entries
-        List<SituationEntry> myListSituationEntries = new ArrayList<>(listMessages.stream()
+        ArrayList<SituationEntry> myListSituationEntries = new ArrayList<>(listMessages.stream()
                 .map(m -> m.toEntrySituation())
                 .collect(Collectors.toList())
         );
+
         System.out.println("Situation Entries" + myListSituationEntries);
 
 //        for (OCEMessage message : listMessages){
@@ -62,14 +64,21 @@ public class Situation {
         //Transform the filtered list of situation entries to a Situation
         //The third parameter of Collector.toMap function is used when a duplicate key is detected, i.e: a service agent exist before with 'value 'x' : we keep the new value 'y' of the one just added
 
-        this.mySetAgents = myListSituationEntries.stream().collect(Collectors.toMap(SituationEntry::getAgent, s->s, (x, y) ->  y));
+        this.mySetAgents = myListSituationEntries.stream().collect(Collectors.toMap(SituationEntry::getAgent, s->(T)s, (x, y) ->  y));
+//        for(SituationEntry sitE : myListSituationEntries){
+//            this.addElement(sitE.getAgent(), (T) sitE);
+//        }
     }
+
+//    private void addElement(ServiceAgent key, T value){
+//        this.mySetAgents.put(key,value);
+//    }
 
     /**
      * Get the list of situation entries representing the current situation
      * @return the set of situation entries
      */
-    public Map<ServiceAgent, SituationEntry> getMySetAgents() {
+    public Map<ServiceAgent, T> getMySetAgents() {
         return mySetAgents;
     }
 
@@ -77,30 +86,26 @@ public class Situation {
      * Set the list of situation entries representing the current situation
      * @param mySetAgents : the new list of situation entries
      */
-    public void setMySetAgents(Map<ServiceAgent, SituationEntry> mySetAgents) {
+    public void setMySetAgents(Map<ServiceAgent, T> mySetAgents) {
         this.mySetAgents = mySetAgents;
     }
 
-
     /**
-     * Compute the intersection set of this situation and the other situation given as parameter
-     * @param otherSituation : the other situation
-     * @return Situation representing the intersection between this situation and the one send as a parameter
+     * Add a situationEntry to the situation
+     * @param key   : the reference of the service agent
+     * @param value : the situation entry corresponding the the service agent with the reference "key"
      */
-    public Map<ServiceAgent, SituationEntry> intersection(Map<ServiceAgent, SituationEntry> otherSituation){
-        Map<ServiceAgent, SituationEntry> intersect = new TreeMap<>(this.mySetAgents);
-        //this.getMySetAgents().
-        // .filter(setB::contains)
-        return null;
+    public void addSituationEntry(ServiceAgent key, T value){
+        this.mySetAgents.put(key,value);
     }
 
     /**
-     * Compute the union set of this situation and the other situation given as parameter
-     * @param otherSituation : the other situation
-     * @return Situation representing the union set of this situation and the one send as a parameter
+     * Test if the agent is in the situation
+     * @param serviceAgent : the service agent to test its existence
+     * @return true if the service agent exists in the situation, else return false
      */
-    public Map<ServiceAgent, SituationEntry> union(Map<ServiceAgent, SituationEntry> otherSituation){
-        return null;
+    public boolean containServiceAgent(ServiceAgent serviceAgent){
+        return this.mySetAgents.containsKey(serviceAgent);
     }
 
     @Override

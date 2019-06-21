@@ -78,30 +78,31 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myBinderAgentFactory = myBinderAgentFactory;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof ServiceAgent)) return false;
-//
-//        ServiceAgent that = (ServiceAgent) o;
-//
-//        return myID.equals(that.myID);
-//    }
-
     /**
      *  Compare two Service Agents (the comparison is compute on the handled Service)
-     * @param obj the service agent to compare this to
+     * @param o the service agent to compare this to
      * @return true if the two object are equal, false else
      */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof ServiceAgent)) return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServiceAgent)) return false;
 
-        ServiceAgent that = (ServiceAgent) obj;
+        ServiceAgent that = (ServiceAgent) o;
 
-        return handledService.equals(that.handledService);
+        return myID.equals(that.myID);
     }
+
+
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) return true;
+//        if (!(obj instanceof ServiceAgent)) return false;
+//
+//        ServiceAgent that = (ServiceAgent) obj;
+//
+//        return handledService.equals(that.handledService);
+//    }
 
     @Override
     public int hashCode() {
@@ -109,18 +110,26 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     }
 
 
-//    @Override
-//    public int compareTo(Object athat) {
-//        return this.myID.compareTo(athat);
-//    }
-
     /**
      *  Compare two Service Agents (the comparison is compute on the handled Service)
-     * @param obj the service Agent to compare this to
+     * @param athat the service Agent to compare this to
      * @return 0 if the two object are equal
      */
     @Override
-    public int compareTo(Object obj) {
-        return ((MockupService)this.handledService).compareTo(obj);
+    public int compareTo(Object athat) {
+        ServiceAgent that = (ServiceAgent) athat;
+
+        return this.myID.compareTo(that.getMyID());
+    }
+
+//    @Override
+//    public int compareTo(Object obj) {
+//        return ((MockupService)this.handledService).compareTo(obj);
+//    }
+
+
+    @Override
+    public String toString() {
+        return this.myID.toString();
     }
 }

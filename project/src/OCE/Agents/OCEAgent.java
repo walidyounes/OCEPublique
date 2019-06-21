@@ -72,4 +72,5 @@ public abstract class OCEAgent {
     public void setMySelectedAgent(OCEAgent mySelectedAgent) {
         this.mySelectedAgent = mySelectedAgent;
     }
+
 }

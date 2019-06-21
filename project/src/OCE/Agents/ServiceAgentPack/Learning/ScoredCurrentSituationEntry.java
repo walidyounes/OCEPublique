@@ -5,18 +5,20 @@
 package OCE.Agents.ServiceAgentPack.Learning;
 
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
+import OCE.OCEMessages.MessageTypes;
 
-public class ReferenceSituationEntry extends SituationEntry {
+public class ScoredCurrentSituationEntry extends CurrentSituationEntry {
 
-    private double score; // The score of the agent "agent" in the reference situation stored in the agent knowledge base
-
+    private double score; // The score of the agent "agent" in the current situation (initially equal to à or None, we affect the value in the scoring step)
     /**
      * Construct a new scored current situation entry
-     * @param agent : the reference of the agent
-     * @param score : the value of the score of the agent
+     *
+     * @param agent       : the agent emitter of the message
+     * @param messageType : the type of the message send
+     * @param score       : the score of the agent
      */
-    public ReferenceSituationEntry(ServiceAgent agent, double score) {
-        this.agent = agent;
+    public ScoredCurrentSituationEntry(ServiceAgent agent, MessageTypes messageType, double score) {
+        super(agent, messageType);
         this.score = score;
     }
 
@@ -50,27 +52,27 @@ public class ReferenceSituationEntry extends SituationEntry {
      * Set the value of the score of the agent in the current situation
      * @param score : the new value of the score of the agent
      */
-    public void setScore(double score) {
+    public void setScore(float score) {
         this.score = score;
     }
 
     /**
-     * Test if two reference situation entries are equals
-     * @param obj : the other reference situation entry to compare to this
-     * @return : true if the two object are equals (the same agent and the same score value), else false
+     * Test if two scored current situation entries are equals
+     * @param obj : the other scored current situation entry to compare to this
+     * @return : true if the two object are equals (the same agent and the same message type), else false
      */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof ReferenceSituationEntry)) return false;
+        if (!(obj instanceof ScoredCurrentSituationEntry)) return false;
 
-        ReferenceSituationEntry that = (ReferenceSituationEntry) obj;
+        ScoredCurrentSituationEntry that = (ScoredCurrentSituationEntry) obj;
 
-        return this.agent.equals(that.agent) && this.score == that.score;
+        return this.agent.equals(that.agent) && this.messageType.equals(that.messageType) && this.score==that.score;
     }
 
     @Override
     public String toString() {
-        return "( " + this.agent.toString() + " , " + this.score + ")";
+        return "( " + this.agent.toString() + " , " + this.messageType.toString() + " , " + this.score + ")";
     }
 }

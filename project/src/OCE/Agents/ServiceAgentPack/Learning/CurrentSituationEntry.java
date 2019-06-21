@@ -19,8 +19,8 @@ public class CurrentSituationEntry extends SituationEntry {
      * @param messageType : the type of the message send
      */
     public CurrentSituationEntry(ServiceAgent agent, MessageTypes messageType) {
-       this.agent = agent;
-       this.messageType = messageType;
+        this.agent = agent;
+        this.messageType = messageType;
     }
 
     /**
@@ -55,5 +55,25 @@ public class CurrentSituationEntry extends SituationEntry {
      */
     public void setMessageType(MessageTypes messageType) {
         this.messageType = messageType;
+    }
+
+    /**
+     * Test if two current situation entries are equals
+     * @param obj : the other current situation entry to compare to this
+     * @return : true if the two object are equals (the same agent and the same message type), else false
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof CurrentSituationEntry)) return false;
+
+        CurrentSituationEntry that = (CurrentSituationEntry) obj;
+
+        return this.agent.equals(that.agent) && this.messageType.equals(that.messageType);
+    }
+
+    @Override
+    public String toString() {
+        return "( " + this.agent.toString() + " , " + this.messageType.toString() + ")";
     }
 }
