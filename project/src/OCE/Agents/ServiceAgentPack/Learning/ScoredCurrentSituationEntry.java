@@ -52,7 +52,7 @@ public class ScoredCurrentSituationEntry extends CurrentSituationEntry {
      * Set the value of the score of the agent in the current situation
      * @param score : the new value of the score of the agent
      */
-    public void setScore(float score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

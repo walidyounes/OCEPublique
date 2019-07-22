@@ -8,12 +8,36 @@ import java.util.Comparator;
 import java.util.UUID;
 
 public class IDAgent implements Comparable{
-    private final UUID internalReference;
+    private  UUID internalReference;
+
 
     public IDAgent() {
-        internalReference = UUID.randomUUID();
+        this.internalReference = UUID.randomUUID();
     }
 
+    /**
+     * Constructor of the IdAgent with a custom ID value
+     * @param uuid : the valeu of the ID
+     */
+    public IDAgent(String uuid){
+        this.internalReference = UUID.fromString(uuid);
+    }
+
+    /**
+     * Get the value of the ID
+     * @return the random generated ID
+     */
+    public UUID getInternalReference() {
+        return internalReference;
+    }
+
+    /**
+     * Set the value of the ID
+     * @param internalReference : The new value of the ID;
+     */
+    public void setInternalReference(UUID internalReference) {
+        this.internalReference = internalReference;
+    }
     @Override
     public boolean equals(Object athat) {
         if (this == athat)
