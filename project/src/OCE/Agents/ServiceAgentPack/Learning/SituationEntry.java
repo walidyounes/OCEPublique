@@ -4,6 +4,7 @@
 
 package OCE.Agents.ServiceAgentPack.Learning;
 
+import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
 /**
@@ -11,19 +12,20 @@ import OCE.Agents.ServiceAgentPack.ServiceAgent;
  */
 public abstract class SituationEntry {
 
-    protected ServiceAgent agent; // The agent emitter of the message
+    protected IDAgent agent; // The agent emitter of the message
 
     /**
      * Get the agent represented in this  entry
      * @return the reference of the agent represented by this  entry
      */
-    public abstract ServiceAgent getAgent();
+    public abstract IDAgent getAgent();
+
 
     /**
      * Set the agent represented in this entry
      * @param agent : the reference of the agent represented in this  entry
      */
-    public abstract void setAgent(ServiceAgent agent);
+    public abstract void setAgent(IDAgent agent);
 
 
 }

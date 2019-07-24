@@ -83,6 +83,6 @@ public class SuicideMessage extends OCEMessage {
      */
     @Override
     public SituationEntry toEntrySituation() {
-        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.SUICIDE);
+        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.SUICIDE);
     }
 }

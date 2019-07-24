@@ -90,6 +90,6 @@ public class AdvertiseMessage extends ARSAMessage {
      */
     @Override
     public SituationEntry toEntrySituation() {
-        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.ADVERTISE);
+        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.ADVERTISE);
     }
 }

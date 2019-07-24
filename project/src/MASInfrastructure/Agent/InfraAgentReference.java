@@ -25,6 +25,14 @@ public class InfraAgentReference {
         return referenceInterne.equals(that.referenceInterne);
     }
 
+    /**
+     * Get the value of the reference of the agent
+     * @return the UUID value of the reference of the agent
+     */
+    public UUID getReferenceInterne() {
+        return referenceInterne;
+    }
+
     @Override
     public int hashCode() {
         return referenceInterne.hashCode();

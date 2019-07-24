@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Strategies.Reply;
+package OCE.ARSAStrategies.Reply;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;

@@ -4,6 +4,7 @@
 
 package OCE.Agents.ServiceAgentPack.Learning;
 
+import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.OCEMessages.MessageTypes;
 import OCE.OCEMessages.OCEMessage;
@@ -22,8 +23,7 @@ import java.util.stream.Collectors;
  */
 public class Situation < T extends SituationEntry> {
 
-
-    private Map<ServiceAgent, T> mySetAgents; // the situation representing the current environment
+    private Map<IDAgent, T> mySetAgents; // the situation representing the current environment
 
     /**
      * Create a new situation
@@ -32,12 +32,11 @@ public class Situation < T extends SituationEntry> {
         this.mySetAgents = new TreeMap<>();
     }
 
-
     /**
      * Create the situation from a list of messages, here we create a current situation only
      * @param listMessages : the list of received messages
      */
-    public  Situation(ArrayList<OCEMessage> listMessages){
+    public  Situation(List<OCEMessage> listMessages){
         this.mySetAgents = new TreeMap<>();
         //Transform the list of messages (OCEMessages) to a list of Situation Entries
         ArrayList<SituationEntry> myListSituationEntries = new ArrayList<>(listMessages.stream()
@@ -70,15 +69,11 @@ public class Situation < T extends SituationEntry> {
 //        }
     }
 
-//    private void addElement(ServiceAgent key, T value){
-//        this.mySetAgents.put(key,value);
-//    }
-
     /**
      * Get the list of situation entries representing the current situation
      * @return the set of situation entries
      */
-    public Map<ServiceAgent, T> getMySetAgents() {
+    public Map<IDAgent, T> getMySetAgents() {
         return mySetAgents;
     }
 
@@ -86,7 +81,7 @@ public class Situation < T extends SituationEntry> {
      * Set the list of situation entries representing the current situation
      * @param mySetAgents : the new list of situation entries
      */
-    public void setMySetAgents(Map<ServiceAgent, T> mySetAgents) {
+    public void setMySetAgents(Map<IDAgent, T> mySetAgents) {
         this.mySetAgents = mySetAgents;
     }
 
@@ -95,17 +90,17 @@ public class Situation < T extends SituationEntry> {
      * @param key   : the reference of the service agent
      * @param value : the situation entry corresponding the the service agent with the reference "key"
      */
-    public void addSituationEntry(ServiceAgent key, T value){
+    public void addSituationEntry(IDAgent key, T value){
         this.mySetAgents.put(key,value);
     }
 
     /**
      * Test if the agent is in the situation
-     * @param serviceAgent : the service agent to test its existence
+     * @param idServiceAgent : the id of the service agent to test its existence
      * @return true if the service agent exists in the situation, else return false
      */
-    public boolean containServiceAgent(ServiceAgent serviceAgent){
-        return this.mySetAgents.containsKey(serviceAgent);
+    public boolean containServiceAgent(IDAgent idServiceAgent){
+        return this.mySetAgents.containsKey(idServiceAgent);
     }
 
     @Override
@@ -123,4 +118,5 @@ public class Situation < T extends SituationEntry> {
         }
         return values.toString();
     }
+
 }

@@ -8,10 +8,10 @@ import Logger.MyLogger;
 import Midlleware.ThreeState.IActionState;
 import OCE.Decisions.OCEDecision;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.Strategies.Advertise.IAdvertiseStrategy;
-import OCE.Strategies.Agree.IAgreeStrategy;
-import OCE.Strategies.Reply.IReplyStrategy;
-import OCE.Strategies.Select.ISelectStrategy;
+import OCE.ARSAStrategies.Advertise.IAdvertiseStrategy;
+import OCE.ARSAStrategies.Agree.IAgreeStrategy;
+import OCE.ARSAStrategies.Reply.IReplyStrategy;
+import OCE.ARSAStrategies.Select.ISelectStrategy;
 
 import java.util.ArrayList;
 import java.util.logging.Level;

@@ -4,6 +4,7 @@
 
 package OCE.Agents.ServiceAgentPack.Learning;
 
+import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
 public class ReferenceSituationEntry extends SituationEntry {
@@ -15,7 +16,7 @@ public class ReferenceSituationEntry extends SituationEntry {
      * @param agent : the reference of the agent
      * @param score : the value of the score of the agent
      */
-    public ReferenceSituationEntry(ServiceAgent agent, double score) {
+    public ReferenceSituationEntry(IDAgent agent, double score) {
         this.agent = agent;
         this.score = score;
     }
@@ -25,7 +26,7 @@ public class ReferenceSituationEntry extends SituationEntry {
      * @return the reference of the agent represented by this  entry
      */
     @Override
-    public ServiceAgent getAgent() {
+    public IDAgent getAgent() {
         return super.agent;
     }
 
@@ -34,7 +35,7 @@ public class ReferenceSituationEntry extends SituationEntry {
      * @param agent : the reference of the agent represented in this  entry
      */
     @Override
-    public void setAgent(ServiceAgent agent) {
+    public void setAgent(IDAgent agent) {
         setAgent(agent);
     }
 

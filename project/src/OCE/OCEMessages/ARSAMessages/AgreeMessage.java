@@ -69,6 +69,6 @@ public class AgreeMessage extends ARSAMessage {
      */
     @Override
     public SituationEntry toEntrySituation() {
-        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.AGREE);
+        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.AGREE);
     }
 }

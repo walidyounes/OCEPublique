@@ -4,20 +4,22 @@
 
 package OCE.Agents;
 
-import java.util.Comparator;
 import java.util.UUID;
 
 public class IDAgent implements Comparable{
     private  UUID internalReference;
 
 
+    /**
+     * Constructor of the IDAgent with a random ID value
+     */
     public IDAgent() {
         this.internalReference = UUID.randomUUID();
     }
 
     /**
      * Constructor of the IdAgent with a custom ID value
-     * @param uuid : the valeu of the ID
+     * @param uuid : the value of the ID
      */
     public IDAgent(String uuid){
         this.internalReference = UUID.fromString(uuid);

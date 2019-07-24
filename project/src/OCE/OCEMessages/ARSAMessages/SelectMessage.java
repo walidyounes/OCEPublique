@@ -117,6 +117,6 @@ public class SelectMessage extends ARSAMessage {
      */
     @Override
     public SituationEntry toEntrySituation() {
-        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.SELECT);
+        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.SELECT);
     }
 }

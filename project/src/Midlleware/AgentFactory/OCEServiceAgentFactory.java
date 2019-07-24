@@ -86,6 +86,9 @@ public class OCEServiceAgentFactory implements IOCEServiceAgentFactory {
         IOCEBinderAgentFactory myBinderAgentFactory = new OCEBinderAgentFactory(this.infrastructure,this.medium);
         serviceAgent.setMyBinderAgentFactory(myBinderAgentFactory);
 
+        //Make the ID of the service Agent the same as the associated infrastructure agent
+        serviceAgent.setMyIDAgent(new IDAgent(""+associatedInfraAgent.getInfraAgentReference().getReferenceInterne()));
+
         AbstractMap.SimpleEntry agentS_referenceAgent_Association = new AbstractMap.SimpleEntry(serviceAgent, associatedInfraAgent.getInfraAgentReference());
         return agentS_referenceAgent_Association;
     }

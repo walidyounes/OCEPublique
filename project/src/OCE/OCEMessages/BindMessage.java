@@ -56,7 +56,7 @@ public class BindMessage extends OCEMessage {
      */
     @Override
     public SituationEntry toEntrySituation() {
-        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.BIND);
+        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.BIND);
     }
 
     @Override

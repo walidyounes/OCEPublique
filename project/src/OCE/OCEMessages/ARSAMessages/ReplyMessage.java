@@ -76,6 +76,6 @@ public class ReplyMessage extends ARSAMessage {
      */
     @Override
     public SituationEntry toEntrySituation() {
-        return new CurrentSituationEntry((ServiceAgent) this.emitter, MessageTypes.REPLY);
+        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.REPLY);
     }
 }

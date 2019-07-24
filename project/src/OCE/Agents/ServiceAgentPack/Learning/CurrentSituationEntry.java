@@ -4,6 +4,7 @@
 
 package OCE.Agents.ServiceAgentPack.Learning;
 
+import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.OCEMessages.MessageTypes;
 
@@ -18,7 +19,7 @@ public class CurrentSituationEntry extends SituationEntry {
      * @param agent       : the agent emitter of the message
      * @param messageType : the type of the message send
      */
-    public CurrentSituationEntry(ServiceAgent agent, MessageTypes messageType) {
+    public CurrentSituationEntry(IDAgent agent, MessageTypes messageType) {
         this.agent = agent;
         this.messageType = messageType;
     }
@@ -28,16 +29,17 @@ public class CurrentSituationEntry extends SituationEntry {
      * @return the reference of the agent represented by this  entry
      */
     @Override
-    public ServiceAgent getAgent() {
+    public IDAgent getAgent() {
         return this.agent;
     }
+
 
     /**
      * Set the agent represented in this entry
      * @param agent : the reference of the agent represented in this  entry
      */
     @Override
-    public void setAgent(ServiceAgent agent) {
+    public void setAgent(IDAgent agent) {
         this.agent = agent;
     }
 

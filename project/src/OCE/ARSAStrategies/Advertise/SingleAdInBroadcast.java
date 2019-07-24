@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Strategies.Advertise;
+package OCE.ARSAStrategies.Advertise;
 
 import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;

@@ -4,6 +4,7 @@
 
 package OCE.Agents.ServiceAgentPack.Learning;
 
+import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.OCEMessages.MessageTypes;
 
@@ -17,7 +18,7 @@ public class ScoredCurrentSituationEntry extends CurrentSituationEntry {
      * @param messageType : the type of the message send
      * @param score       : the score of the agent
      */
-    public ScoredCurrentSituationEntry(ServiceAgent agent, MessageTypes messageType, double score) {
+    public ScoredCurrentSituationEntry(IDAgent agent, MessageTypes messageType, double score) {
         super(agent, messageType);
         this.score = score;
     }
@@ -27,7 +28,7 @@ public class ScoredCurrentSituationEntry extends CurrentSituationEntry {
      * @return the reference of the agent represented by this  entry
      */
     @Override
-    public ServiceAgent getAgent() {
+    public IDAgent getAgent() {
         return super.agent;
     }
 
@@ -36,7 +37,7 @@ public class ScoredCurrentSituationEntry extends CurrentSituationEntry {
      * @param agent : the reference of the agent represented in this  entry
      */
     @Override
-    public void setAgent(ServiceAgent agent) {
+    public void setAgent(IDAgent agent) {
         setAgent(agent);
     }
 
