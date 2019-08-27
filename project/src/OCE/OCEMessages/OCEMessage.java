@@ -5,10 +5,11 @@
 package OCE.OCEMessages;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
-import OCE.Decisions.OCEDecision;
+import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.Decisions.OCEDecision;
 
 import java.util.ArrayList;
 
@@ -25,13 +26,21 @@ public abstract class OCEMessage {
 
     /**
      * get the transmitter of the message
-     * @return the reference of the transmitter of the message
+     * @return the emitter of the message
      */
 
     public OCEAgent getEmitter() {
         return this.emitter;
     }
 
+    /**
+     * get the id of the emitter of the message
+     * @return the id of the transmitter of the message
+     */
+
+    public IDAgent getIDEmitter() {
+        return this.emitter.getMyID();
+    }
     /**
      *  set the reference of the transmitter of the message
      * @param emitter : the reference of the transmitter

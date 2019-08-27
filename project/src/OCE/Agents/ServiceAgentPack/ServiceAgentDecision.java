@@ -23,6 +23,7 @@ import OCE.Unifieur.Matching;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -116,6 +117,9 @@ public class ServiceAgentDecision implements IDecisionState {
             // ********** Version After Learning
             //transform the Infrastructure messages to OCEMessages
             List<OCEMessage> OCEPerception = perception.stream().map(m -> m.toOCEMessage(referenceResolver)).collect(Collectors.toList());
+            //Create a mapping of the agent's id and their messages
+            Map<IDAgent,OCEMessage> OCEPerceptionSortedByID = OCEPerception.stream().collect(Collectors.toMap(OCEMessage::getIDEmitter, s->s, (x, y) ->  y));
+
             //Create the current situation
                 //Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
                 //check if it's the start of the agent cycle
@@ -147,7 +151,11 @@ public class ServiceAgentDecision implements IDecisionState {
                 Map.Entry<IDAgent, ScoredCurrentSituationEntry> bestAgent = SituationUtility.selectBestAgent(myScoredCurrentSituation,agentSelectionStrategy);
                 MyLogger.log(Level.INFO," Agent : Decision -> Using the maximum score and epsilon greedy strategy ("+epsilon+"), the best agent = " + bestAgent);
                 //Todo : convert the situation entry selected to OCE message
-            myListOfDecisions.add(new DoNothingDecision()); // Todo : delete just for test
+                //Get from the map the corresponding OCEMessage corresponding to the agent that has been selected
+                OCEMessage bestOCEMessage = OCEPerceptionSortedByID.get(bestAgent.getKey());
+                OCEDecision myDecision = bestOCEMessage.toSelfTreat(myServiceAgent.getMyConnexionState(), myServiceAgent, myServiceAgent.getHandledService());
+            // myListOfDecisions.add(new DoNothingDecision()); // Todo : delete just for test
+            myListOfDecisions.add(myDecision); // Todo : delete just for test
         }
 
 

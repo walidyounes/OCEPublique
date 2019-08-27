@@ -62,7 +62,6 @@ public class Situation < T extends SituationEntry> {
 
         //Transform the filtered list of situation entries to a Situation
         //The third parameter of Collector.toMap function is used when a duplicate key is detected, i.e: a service agent exist before with 'value 'x' : we keep the new value 'y' of the one just added
-
         this.mySetAgents = myListSituationEntries.stream().collect(Collectors.toMap(SituationEntry::getAgent, s->(T)s, (x, y) ->  y));
 //        for(SituationEntry sitE : myListSituationEntries){
 //            this.addElement(sitE.getAgent(), (T) sitE);
