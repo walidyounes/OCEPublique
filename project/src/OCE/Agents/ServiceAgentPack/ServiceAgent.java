@@ -14,6 +14,7 @@ import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
+import OCE.Agents.ServiceAgentPack.Learning.ScoredCurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     private ServiceAgentConnexionState myConnexionState;
     private IOCEBinderAgentFactory myBinderAgentFactory;
     private Situation<CurrentSituationEntry> myCurrentSituation;
+    private Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation;
     private int myCurrentCycleNumber; // Todo just for the test of the presentation issue of an assembly
     private List<Situation<ReferenceSituationEntry>> myKnowledgeBase;
     /**
@@ -49,6 +51,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myConnexionState = ServiceAgentConnexionState.Created;
         //Initialise at null it means that it's the start of an engine cycle
         this.myCurrentSituation = null;
+        this.myScoredCurrentSituation = null;
         this.myCurrentCycleNumber = 0;
         //Todo : change implementation to add uploading of old knowledge
         myKnowledgeBase = new ArrayList<>();
@@ -72,6 +75,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myConnexionState = ServiceAgentConnexionState.Created;
         //Initialise at null it means that it's the start of an engine cycle
         this.myCurrentSituation = null;
+        this.myScoredCurrentSituation = null;
         this.myCurrentCycleNumber = 0;
         //Todo : change implementation to add uploading of old knowledge
         myKnowledgeBase = new ArrayList<>();
@@ -129,7 +133,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
 
     /**
      * Get the current situation of the agent in its current cycle
-     * @return the reference of the current situation or null if it's the begining of an engine cycle
+     * @return the reference of the current situation or null if it's the beginning of an engine cycle
      */
     public Situation<CurrentSituationEntry> getMyCurrentSituation() {
         return myCurrentSituation;
@@ -141,6 +145,22 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      */
     public void setMyCurrentSituation(Situation<CurrentSituationEntry> myCurrentSituation) {
         this.myCurrentSituation = myCurrentSituation;
+    }
+
+    /**
+     * Get the scored current situation
+     * @return the reference of the scored current situation or null if it's the beginning of an engine cycle
+     */
+    public Situation<ScoredCurrentSituationEntry> getMyScoredCurrentSituation() {
+        return myScoredCurrentSituation;
+    }
+
+    /**
+     * set a new scored current situation for the agent
+     * @param myScoredCurrentSituation : the new scored current situation
+     */
+    public void setMyScoredCurrentSituation(Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation) {
+        this.myScoredCurrentSituation = myScoredCurrentSituation;
     }
 
     /**
