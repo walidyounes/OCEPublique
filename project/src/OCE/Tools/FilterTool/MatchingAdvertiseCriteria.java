@@ -38,21 +38,21 @@ public class MatchingAdvertiseCriteria implements Criteria {
     public ArrayList<InfraMessage> meetCriteria(ArrayList<InfraMessage> infraMessages) {
         //Todo : check if it is relevant to do this
         //Filter the advertise message to keep Only the matching ones
-//        ArrayList<InfraMessage> myListAdvertiseFiltered = new ArrayList<>( infraMessages.stream().filter(m -> m.getMyType()== MessageTypes.ADVERTISE)
-//                                                            .map(m -> (AdvertiseInfraMessage) m)
-//                                                                .filter(am -> matching.match(service,am.getMyService()))
-//                                                                    .collect(Collectors.toList())
-//                                                            );
-//        //Get the other messages (those which are not an advertise message)
-//        ArrayList<InfraMessage> myListMessagesFiltered = new ArrayList<>(infraMessages.stream().filter(m -> m.getMyType()!= MessageTypes.ADVERTISE).collect(Collectors.toList()));
-//        //Add the list of matching advertise messages
-//        myListMessagesFiltered.addAll(myListAdvertiseFiltered);
-//
-//        return myListMessagesFiltered;
-        return new ArrayList<InfraMessage> ( infraMessages.stream().filter(m -> m.getMyType()== MessageTypes.ADVERTISE)
-                                                           .map(m -> (AdvertiseInfraMessage) m)
-                                                               .filter(am -> matching.match(service,am.getMyService()))
-                                                                  .collect(Collectors.toList())
+        ArrayList<InfraMessage> myListAdvertiseFiltered = new ArrayList<>( infraMessages.stream().filter(m -> m.getMyType()== MessageTypes.ADVERTISE)
+                                                            .map(m -> (AdvertiseInfraMessage) m)
+                                                                .filter(am -> matching.match(service,am.getMyService()))
+                                                                    .collect(Collectors.toList())
                                                             );
+        //Get the other messages (those which are not an advertise message)
+        ArrayList<InfraMessage> myListMessagesFiltered = new ArrayList<>(infraMessages.stream().filter(m -> m.getMyType()!= MessageTypes.ADVERTISE).collect(Collectors.toList()));
+        //Add the list of matching advertise messages
+        myListMessagesFiltered.addAll(myListAdvertiseFiltered);
+
+        return myListMessagesFiltered;
+//        return new ArrayList<InfraMessage> ( infraMessages.stream().filter(m -> m.getMyType()== MessageTypes.ADVERTISE)
+//                                                           .map(m -> (AdvertiseInfraMessage) m)
+//                                                               .filter(am -> matching.match(service,am.getMyService()))
+//                                                                  .collect(Collectors.toList())
+//                                                            );
     }
 }

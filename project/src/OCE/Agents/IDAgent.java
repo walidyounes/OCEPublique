@@ -59,8 +59,7 @@ public class IDAgent implements Comparable{
 
     @Override
     public String toString() {
-        return "OCE.InfraAgent{" +
-                "ID=" + internalReference;
+        return "OCE.IDAgent{" + internalReference + "}";
     }
 
     @Override

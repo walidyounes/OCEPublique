@@ -7,6 +7,9 @@ package OCE.Agents.ServiceAgentPack.Learning;
 import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.IAgentSelectionStrategy;
 import OCE.OCEMessages.MessageTypes;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -173,6 +176,48 @@ public class SituationUtility {
      */
     public static Situation<ReferenceSituationEntry> updateScore(Situation<ScoredCurrentSituationEntry> scoredCS, String xmlFeedbackFileName){
         return null;
+    }
+
+    /**
+     * Update the score of the agent in the scored current situation depending on the value of the feedback
+     * @param scoredCurrentSituation    : the scored situation to be updated
+     * @param agentRef                  : the reference  of the agent or which the score will be updated
+     * @param alpha                     : the learning rate
+     * @param reinforcement                      : A numerical value used to update the score
+     * @return the updated scored current situation
+     */
+    public static Situation<ScoredCurrentSituationEntry> updateScoreCurrentSituation(Situation<ScoredCurrentSituationEntry> scoredCurrentSituation, IDAgent agentRef, double alpha, double reinforcement){
+
+        ScoredCurrentSituationEntry agentSituationEntryToUpdate = scoredCurrentSituation.getSituationEntryByIDAgent(agentRef); // get the situation entry to update corresponding to the agent
+        //Update the score using the bandit algorithm formula : newScore = OldScore + alpha(reinforcement - oldScore)
+        double oldScore = agentSituationEntryToUpdate.getScore();
+        //System.out.println("Old Score = "+ oldScore);
+        double newScore = oldScore + alpha*(reinforcement - oldScore);
+        //System.out.println("New Score = "+ newScore);
+        //Update the score in the situationEntry
+        agentSituationEntryToUpdate.setScore(newScore);
+
+        return scoredCurrentSituation;
+    }
+
+    /**
+     * Normalize the value of the scores in scored current situation so that the sum of scores will be equal to 1
+     * @param scoredCurrentSituation : the scored current situations to be normalized
+     */
+    public static void normalizeScoresSCS(Situation<ScoredCurrentSituationEntry> scoredCurrentSituation) {
+
+        //Create the formatter for round the values of scores
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        otherSymbols.setDecimalSeparator('.');
+        DecimalFormat df = new DecimalFormat("###.###", otherSymbols);
+        //Get the list of scores
+        //Compute the min of all scores
+        Double sumValue = scoredCurrentSituation.getMySetAgents().values().stream().map(e -> ((ScoredCurrentSituationEntry) e).getScore()).mapToDouble(d -> (double) d).sum();
+        //normalize the scores
+        if (sumValue != 0) {
+            scoredCurrentSituation.getMySetAgents().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(Double.parseDouble(df.format((((ScoredCurrentSituationEntry) e).getScore() / sumValue)))));
+        }
     }
 
 }

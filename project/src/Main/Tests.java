@@ -39,7 +39,7 @@ public class Tests {
 
         // Construction du composant "C1"
         ArrayList<OCService> providedByC1 = new ArrayList<OCService>();
-        MockupService JdeC1 = new MultiLinkMockupService("J", "C1", Way.PROVIDED);
+        MockupService JdeC1 = new MultiLinkMockupService("J","J" ,"C1", Way.PROVIDED);
         providedByC1.add(JdeC1);
         ArrayList<OCService> requiredByC1 = new ArrayList<OCService>();
         MockupComponent C1 = new MockupComponent("C1", providedByC1, requiredByC1);
@@ -48,7 +48,7 @@ public class Tests {
 
         // Construction du composant "C2"
         ArrayList<OCService> requiredByC2 = new ArrayList<OCService>();
-        MockupService JdeC2 = new MultiLinkMockupService("J", "C2", Way.REQUIRED);
+        MockupService JdeC2 = new MultiLinkMockupService("J", "J","C2", Way.REQUIRED);
         requiredByC2.add(JdeC2);
         ArrayList<OCService> providedByC2 = new ArrayList<OCService>();
         MockupComponent C2 = new MockupComponent("C2", providedByC2, requiredByC2);

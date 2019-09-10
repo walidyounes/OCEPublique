@@ -61,7 +61,7 @@ public class AdvertiseMessage extends ARSAMessage {
             MockupService service2 = (MockupService)this.distantService;
            // MyLogger.log(Level.INFO, "service local = " + service1.toString());
            // MyLogger.log(Level.INFO, "service distant = " + service2.toString());
-            //verify the matching // TODO à améliorer le matching
+            //verify the matching
             IMatching matching = new Matching();
 
             if(matching.match(service1, service2)){

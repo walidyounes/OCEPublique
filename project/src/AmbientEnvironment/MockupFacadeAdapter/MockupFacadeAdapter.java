@@ -138,14 +138,17 @@ public class MockupFacadeAdapter extends MockupContainer implements IBinding, IA
 		*/
         // Code Walid
         disappearedComponentSet.add(component);
+        System.out.println("Disappearing " + component);
         existingComponentSet.remove(component);
         super.removeComponent(component);
 
-        disappearedServiceSet.removeAll(component.getProvidedServices());
+        disappearedServiceSet.addAll(component.getProvidedServices());
+        //System.out.println("Disappearing provided services " + component.getProvidedServices() + "of the component " + component);
         existingServiceSet.removeAll(component.getProvidedServices());
         serviceList.removeAll(component.getProvidedServices());
 
-        disappearedServiceSet.removeAll(component.getRequiredServices());
+        disappearedServiceSet.addAll(component.getRequiredServices());
+        //System.out.println("Disappearing required services " + component.getRequiredServices() + "of the component " + component);
         existingServiceSet.removeAll(component.getRequiredServices());
         serviceList.removeAll(component.getRequiredServices());
 
@@ -162,4 +165,5 @@ public class MockupFacadeAdapter extends MockupContainer implements IBinding, IA
 			serviceList.remove(index);
 		}*/
     }
+
 }

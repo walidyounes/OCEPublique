@@ -9,6 +9,7 @@ import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import MASInfrastructure.Infrastructure;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
@@ -29,6 +30,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -36,6 +38,7 @@ import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
 import javax.swing.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,18 +49,21 @@ import java.util.stream.Collectors;
 public class UIMockupController implements Initializable {
     @FXML private JFXTextField designationComponent;
     @FXML private JFXTextField nameService;
+    @FXML private JFXTextField typeService;
     @FXML private JFXListView<Label> servicesList;
     @FXML private JFXListView<Label> componentsList;
     @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
     @FXML private AnchorPane visualisationPane;
     @FXML private AnchorPane Terminal;
+    private TextArea UILog;
+    private JFXPopup popup;
     private MockupFacadeAdapter mockupFacadeAdapter;
+    private Infrastructure infrastructure;
+    private Thread simulation;
+    private boolean runExecution;
     private ArrayList<OCService> providedByC;
     private ArrayList<OCService> requiredByC;
-    private Graph serviceGraphe;
-    private TextArea UILog;
-    private Thread simulation;
-    private JFXPopup popup;
+    private Graph serviceGraph;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -72,17 +78,24 @@ public class UIMockupController implements Initializable {
         this.Terminal.setRightAnchor( this.UILog, 0d);
         this.Terminal.setLeftAnchor( this.UILog, 0d);
         this.Terminal.getChildren().add( this.UILog);
-        // Initialise the Mockup
+        // Initialize the Mockup
         this.mockupFacadeAdapter = new MockupFacadeAdapter();
+        //Initialize the MAS Infrastructure
+        this.infrastructure = new Infrastructure();
+        // Initialize the boolean variable for pause and resume
+        this.runExecution = true;
+
+        //Create the list of services
         this.requiredByC = new ArrayList<>();
         this.providedByC = new ArrayList<>();
 
-        this.simulation = new Thread( new Simulation(this.mockupFacadeAdapter));
+        //Create the thread for the execution
+        this.simulation = new Thread( new Simulation(this.mockupFacadeAdapter, this.infrastructure));
         // Initialise popUp
         initPopup();
 
-        //Initilise the graphe
-        initGraphe();
+        //Initialise the graph
+        initGraph();
         previewGraph();
 
         //Init log
@@ -118,14 +131,15 @@ public class UIMockupController implements Initializable {
 
     @FXML
     private void addService(ActionEvent event){
-        System.out.println("adding services " + this.nameService.getText().length());
+        //System.out.println("adding services " + this.nameService.getText().length());
         Label label = new Label();
         OCService serviceToAdd;
         int providedORrequired = -1;
         int singleORmultiple = -1;
         if(this.designationComponent.getText().length()>0) {
             if (this.nameService.getText().length() > 0) {
-                String textToAdd = "Name = " + this.nameService.getText();
+                if(this.typeService.getText().length() > 0) {
+                    String textToAdd = "Name = " + this.nameService.getText() +"-"+this.typeService.getText();
                     if (this.providedR.isSelected()) {
                         // providedImage = new ImageView(new Image(new FileInputStream("/provided.png")));
                         label.setGraphic(new ImageView("/provided.png"));
@@ -138,43 +152,49 @@ public class UIMockupController implements Initializable {
                         }
                     }
 
-                if (this.singleR.isSelected()) {
-                    textToAdd += " -- Type = SINGLE";
-                    singleORmultiple = 0; // Single Service
-                } else {
-                    if (this.multipleR.isSelected()) {
-                        textToAdd += " -- Type = MULTIPLE";
-                        singleORmultiple = 1; // Multiple Service
-                    }
-                }
-                if (singleORmultiple == 0) {
-                    if (providedORrequired == 0) {
-                        serviceToAdd = new SingleLinkMockupService(this.nameService.getText(), this.designationComponent.getText(), Way.PROVIDED);
-                        this.providedByC.add(serviceToAdd);
+                    if (this.singleR.isSelected()) {
+                        textToAdd += " -- = SINGLE";
+                        singleORmultiple = 0; // Single Service
                     } else {
-                        if (providedORrequired == 1) {
-                            serviceToAdd = new SingleLinkMockupService(this.nameService.getText(), this.designationComponent.getText(), Way.REQUIRED);
-                            this.requiredByC.add(serviceToAdd);
+                        if (this.multipleR.isSelected()) {
+                            textToAdd += " -- = MULTIPLE";
+                            singleORmultiple = 1; // Multiple Service
                         }
                     }
-
-                } else {
-                    if (singleORmultiple == 1) {
+                    if (singleORmultiple == 0) {
                         if (providedORrequired == 0) {
-                            serviceToAdd = new MultiLinkMockupService(this.nameService.getText(), this.designationComponent.getText(), Way.PROVIDED);
+                            serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.PROVIDED);
                             this.providedByC.add(serviceToAdd);
                         } else {
                             if (providedORrequired == 1) {
-                                serviceToAdd = new MultiLinkMockupService(this.nameService.getText(), this.designationComponent.getText(), Way.REQUIRED);
+                                serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.REQUIRED);
                                 this.requiredByC.add(serviceToAdd);
                             }
                         }
+
+                    } else {
+                        if (singleORmultiple == 1) {
+                            if (providedORrequired == 0) {
+                                serviceToAdd = new MultiLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.PROVIDED);
+                                this.providedByC.add(serviceToAdd);
+                            } else {
+                                if (providedORrequired == 1) {
+                                    serviceToAdd = new MultiLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.REQUIRED);
+                                    this.requiredByC.add(serviceToAdd);
+                                }
+                            }
+                        }
                     }
+                    label.getStyleClass().add("label-list");
+                    label.setText(textToAdd);
+                    this.servicesList.getItems().add(label);
+                    this.nameService.setText("");
+                    this.typeService.setText("");
                 }
-                label.getStyleClass().add("label-list");
-                label.setText(textToAdd);
-                this.servicesList.getItems().add(label);
-                this.nameService.setText("");
+                else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill the type of the service first !!");
+                    alert.show();
+                }
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill the name of the service first !!");
                 alert.show();
@@ -192,6 +212,7 @@ public class UIMockupController implements Initializable {
         this.requiredByC.clear();
         this.providedByC.clear();
     }
+
     @FXML
     private void addComponent(ActionEvent event){
         Label label = new Label();
@@ -200,9 +221,11 @@ public class UIMockupController implements Initializable {
             if(!this.servicesList.getItems().isEmpty()) {
                 String textToAdd = "Component : " + this.designationComponent.getText();
                 label.setText(textToAdd);
+                label.getStyleClass().add("label-list");
+                label.setGraphic(new ImageView("/component.png"));
                 this.componentsList.getItems().add(label);
                 //Add component to mockup
-                addComponentToMockup();
+                addComponentToMockup(this.designationComponent.getText(), this.providedByC, this.requiredByC);
                 //Reset UI Elements
                 deleteUIElements();
                 //Display the services and agents in the graph view
@@ -220,13 +243,28 @@ public class UIMockupController implements Initializable {
 
     @FXML
     private void lunchSimulation(ActionEvent event){
-
        this.simulation.start();
+        ((JFXButton)event.getSource()).setDisable(true);
     }
 
     @FXML
-    private void stopSimulation(ActionEvent event){
-        this.simulation.interrupt();
+    private void pauseResumeExecution(ActionEvent event){
+        this.runExecution = !this.runExecution;
+        System.out.println("Run Execution = " + this.runExecution);
+        if(!this.runExecution){
+            this.infrastructure.pauseOrdonnancement();
+            ((JFXButton)event.getSource()).setText("Reprise");
+        }else{
+            this.infrastructure.repriseOrdonnancement();
+            ((JFXButton)event.getSource()).setText("Pause");
+        }
+
+    }
+
+
+    @FXML
+    private void stopExecution(ActionEvent event){
+        this.infrastructure.arreterOrdonnancement();
     }
 
     private void deleteUIElements(){
@@ -235,23 +273,25 @@ public class UIMockupController implements Initializable {
         this.providedByC.clear();
         this.designationComponent.setText("");
         this.nameService.setText("");
+        this.typeService.setText("");
     }
 
     /**
-     *
+     * Add a component to the mockup environment
+     * @param componentName : the component name of the component
      */
-    private void addComponentToMockup(){
-        // Creation of the composant "C"
-        MockupComponent C1 = new MockupComponent(this.designationComponent.getText(), this.providedByC, this.requiredByC);
-        // Add the compoenent to the mockup container
+    private void addComponentToMockup(String componentName, ArrayList<OCService> providedServices, ArrayList<OCService> requiredServices){
+        // Creation of the component "C"
+        MockupComponent C1 = new MockupComponent(componentName, providedServices, requiredServices);
+        // Add the component to the mockup container
         this.mockupFacadeAdapter.addComponent(C1);
         System.out.println(this.mockupFacadeAdapter.getComponents().toString());
-        // Update the graphe visulisation
-        addProvidedServiceToGraphe(this.providedByC);
-        addRequiredServiceToGraphe(this.requiredByC);
-        // clear the provided and required services list
-        this.providedByC.clear();
-        this.requiredByC.clear();
+        // Update the graph visualisation
+        addProvidedServiceToGraphe(providedServices);
+        addRequiredServiceToGraphe(requiredServices);
+        //Clear the provided and required services list
+        providedServices.clear();
+        requiredServices.clear();
     }
 
     private void deleteComponentFromMockup(String nameComp){
@@ -261,34 +301,64 @@ public class UIMockupController implements Initializable {
 
         //get the component
         MockupComponent C1 = (MockupComponent) components.get(0);
-        // Add the compoenent to the mockup container
-        this.mockupFacadeAdapter.addComponent(C1);
-        System.out.println("Removing : " + this.mockupFacadeAdapter.getComponents().toString());
-        // Update the graphe visulisation
+        // Delete the component from the mockup container
+        System.out.println("Removing : " + C1.getName());
+        this.mockupFacadeAdapter.removeComponent(C1);
+
+        // Update the graph visualisation
         deleteProvidedServiceFromGraphe(C1.getProvidedServices());
         deleteRequiredServiceFromGraphe(C1.getRequiredServices());
-        // remove component from the Mockup
-        this.mockupFacadeAdapter.removeComponent(C1);
+
     }
 
-    private void initGraphe(){
+    @FXML
+    public void addComponentsFromXMLFile(ActionEvent event){
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            String xmlFilePath = selectedFile.getAbsolutePath();
+            List<MockupComponent> listComponents = XMLFileTools.readXMLComponentFile(xmlFilePath);
+            for (MockupComponent component : listComponents){
+                addComponentToMockup(component.getName(),component.getProvidedServices(), component.getRequiredServices());
+                Label label = new Label();
+                String textToAdd = "Component : " + component.getName();
+                label.setText(textToAdd);
+                label.getStyleClass().add("label-list");
+                label.setGraphic(new ImageView("/component.png"));
+                this.componentsList.getItems().add(label);
+            }
+
+
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("No File selected !");
+            alert.show();
+        }
+
+    }
+
+    /**
+     * Initialize the graph visualizer
+     */
+    private void initGraph(){
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
-        this.serviceGraphe = new MultiGraph("serviceGraphe");
+        this.serviceGraph = new MultiGraph("serviceGraph");
         // ...
-        this.serviceGraphe.removeAttribute("ui.stylesheet");
-        this.serviceGraphe.addAttribute("ui.stylesheet", "url('UI\\grapheStyleSheet.css')");
+        this.serviceGraph.removeAttribute("ui.stylesheet");
+        this.serviceGraph.addAttribute("ui.stylesheet", "url('UI\\grapheStyleSheet.css')");
 
     }
 
     private void previewGraph(){
         // It informs the viewer that it can use rendering algorithms that are more time consuming to favor quality instead of speed
-        this.serviceGraphe.addAttribute("ui.quality");
+        this.serviceGraph.addAttribute("ui.quality");
 
         // Adding label to each node done by walid ^^
-        //this.serviceGraphe.getEachNode().forEach(n -> n.addAttribute("ui.label"," Service "+n.getId()+" "));
+        //this.serviceGraph.getEachNode().forEach(n -> n.addAttribute("ui.label"," Service "+n.getId()+" "));
 
-        Viewer viewer = new Viewer( this.serviceGraphe, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        Viewer viewer = new Viewer( this.serviceGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewer.enableAutoLayout();
 
         // create a view *without* a JFrame
@@ -310,9 +380,9 @@ public class UIMockupController implements Initializable {
 
         for (OCService service : providedServices) {
             MockupService myMService = (MockupService)service;
-            Node node = this.serviceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
 
-            node.addAttribute("ui.label"," "+myMService.getName()+" Of " + myMService.getOwner());
+            node.addAttribute("ui.label"," "+myMService.getName() +"-"+myMService.getType()+" Of " + myMService.getOwner());
 
         }
 
@@ -321,16 +391,16 @@ public class UIMockupController implements Initializable {
     private void addRequiredServiceToGraphe(ArrayList<OCService> requiredServices) {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
-            Node node = this.serviceGraphe.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
-            node.addAttribute("ui.label",""+myMService.getName()+" Of " + myMService.getOwner());
+            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            node.addAttribute("ui.label",""+myMService.getName()+"-"+myMService.getType()+" Of " + myMService.getOwner());
             node.addAttribute("ui.class","Required");
         }
     }
 
     private void addEdge(String idService1, String idService2){
-        if(this.serviceGraphe.getEdge(""+idService1+idService2)==null && this.serviceGraphe.getEdge(""+idService2+idService1)==null ) {
+        if(this.serviceGraph.getEdge(""+idService1+idService2)==null && this.serviceGraph.getEdge(""+idService2+idService1)==null ) {
             // We add only one time the edge between two services
-            this.serviceGraphe.addEdge(""+idService1+idService2, idService1, idService2);
+            this.serviceGraph.addEdge(""+idService1+idService2, idService1, idService2);
         }
 
     }
@@ -339,7 +409,7 @@ public class UIMockupController implements Initializable {
 
         for (OCService service : providedServices) {
             MockupService myMService = (MockupService)service;
-            this.serviceGraphe.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            this.serviceGraph.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
         }
 
     }
@@ -347,7 +417,7 @@ public class UIMockupController implements Initializable {
     private void deleteRequiredServiceFromGraphe(ArrayList<OCService> requiredServices) {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
-            this.serviceGraphe.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            this.serviceGraph.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
         }
     }
 
@@ -382,7 +452,7 @@ public class UIMockupController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                String nameComp = componentsList.getSelectionModel().getSelectedItem().getText().split(" : ")[1];
-               System.out.println(nameComp);
+               //System.out.println(nameComp);
                deleteComponentFromMockup(nameComp);
                componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
             }
@@ -428,4 +498,6 @@ public class UIMockupController implements Initializable {
         VBox popUpContent = new VBox( detailButton,deleteButton);
         this.popup.setPopupContent(popUpContent);
     }
+
+
 }

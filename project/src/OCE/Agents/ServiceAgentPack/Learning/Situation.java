@@ -102,6 +102,18 @@ public class Situation < T extends SituationEntry> {
         return this.mySetAgents.containsKey(idServiceAgent);
     }
 
+    /**
+     * Get the situation Entry corresponding of the specified agent
+     * @param idAgent : the id of the agent
+     * @return the situation entry corresponding to the agent, if the agent does not exist, the function will return null
+     */
+    public T getSituationEntryByIDAgent(IDAgent idAgent){
+        if (this.containServiceAgent(idAgent)){
+            return this.mySetAgents.get(idAgent);
+        }else return null;
+    }
+
+
     @Override
     public String toString() {
         final Class<?> thisClass = getClass();

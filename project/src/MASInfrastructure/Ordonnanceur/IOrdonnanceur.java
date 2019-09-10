@@ -23,5 +23,8 @@ public interface IOrdonnanceur {
 
     void OrdagentRetire(InfraAgent infraAgent);
 
+    void pauseOrdonnancement();
+
+    void repriseOrdonnancement();
 
 }

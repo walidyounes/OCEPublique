@@ -16,12 +16,14 @@ import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.ScoredCurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
+import OCE.OCEMessages.FeedbackValues;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
- * This class implement the agent responsable of a physical service
+ * This class implement the agent responsible of a physical service
  * @author Walid YOUNES
  * @version 1.0
  */
@@ -32,7 +34,9 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     private IOCEBinderAgentFactory myBinderAgentFactory;
     private Situation<CurrentSituationEntry> myCurrentSituation;
     private Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation;
-    private int myCurrentCycleNumber; // Todo just for the test of the presentation issue of an assembly
+    private int myCurrentCycleNumber; // Todo just for the test of the presentation issue of an assembly to the user
+    private boolean feedbackReceived; // variable to indicate whether the agent received the feedback or not
+    private FeedbackValues feedbackValue;
     private List<Situation<ReferenceSituationEntry>> myKnowledgeBase;
     /**
      * Create a service Agent specifying a random ID
@@ -193,6 +197,57 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      */
     public void setMyKnowledgeBase(List<Situation<ReferenceSituationEntry>> myKnowledgeBase) {
         this.myKnowledgeBase = myKnowledgeBase;
+    }
+
+    /**
+     * Transform the scored current situation to a reference situation and store it in the database
+     */
+    public void updateMyKnowledgeBase(){
+        //If the scored current situation exist
+        if(this.myScoredCurrentSituation != null){
+            Situation<ReferenceSituationEntry> referenceSituation = new Situation<>();
+            Map<IDAgent, ScoredCurrentSituationEntry> setScoredCurrentSituationEntry = this.myScoredCurrentSituation.getMySetAgents();
+            // Transform the scored situation entry to a reference situation entry
+            for(IDAgent idAgent : setScoredCurrentSituationEntry.keySet()){
+                referenceSituation.addSituationEntry(idAgent, setScoredCurrentSituationEntry.get(idAgent).toReferenceSituationEntry());
+            }
+            //Add the reference situation to the database
+            this.myKnowledgeBase.add(referenceSituation);
+            //Reinitialise the situation attribute in the agent
+            this.myScoredCurrentSituation = null;
+        }
+
+    }
+    /**
+     * Check whether the feedback is received
+     * @return true if the agent received the feedback, false otherwise
+     */
+    public boolean isFeedbackReceived() {
+        return feedbackReceived;
+    }
+
+    /**
+     * Set the whether the feedback received or not
+     * @param feedbackReceived : true = feedback received, false = not received
+     */
+    public void setFeedbackReceived(boolean feedbackReceived) {
+        this.feedbackReceived = feedbackReceived;
+    }
+
+    /**
+     * Get the value of the last feedback received
+     * @return the value of the last received feedback
+     */
+    public FeedbackValues getFeedbackValue() {
+        return feedbackValue;
+    }
+
+    /**
+     * Set the value of the received feedback "VALIDATED" or "REJECTED"
+     * @param feedbackValue : the value of the feedback
+     */
+    public void setFeedbackValue(FeedbackValues feedbackValue) {
+        this.feedbackValue = feedbackValue;
     }
 
     /**

@@ -15,8 +15,11 @@ import OCE.Decisions.DoNothingDecision;
 import OCE.Decisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Medium.Recorder.IRecord;
+import OCE.OCEMessages.FeedbackValues;
 import OCE.OCEMessages.OCEMessage;
 import OCE.Selection.IMessageSelection;
+import OCE.Tools.Criteria;
+import OCE.Tools.FilterTool.MatchingAdvertiseCriteria;
 import OCE.Unifieur.IMatching;
 import OCE.Unifieur.Matching;
 
@@ -37,11 +40,13 @@ public class ServiceAgentDecision implements IDecisionState {
     private IMessageSelection selectionMessageStrategy;
     private ServiceAgent myServiceAgent;
     private IRecord referenceResolver;
+    private Map.Entry<IDAgent, ScoredCurrentSituationEntry> cycleBestAgent;
 
     public ServiceAgentDecision(IMessageSelection selectionMessageStrategy, ServiceAgent myServiceAgent, IRecord referenceResolver) {
         this.selectionMessageStrategy = selectionMessageStrategy;
         this.myServiceAgent = myServiceAgent;
         this.referenceResolver = referenceResolver;
+        this.cycleBestAgent = null;
     }
 
     /**
@@ -76,35 +81,56 @@ public class ServiceAgentDecision implements IDecisionState {
     public ArrayList<OCEDecision> decide(ArrayList<InfraMessage> perception) {
         // Filter the advertisement (if they exist) and keep only those who matches
         IMatching matching = new Matching();
-         /* Criteria matchingAdvertiseCriteria = new MatchingAdvertiseCriteria(myServiceAgent.getHandledService(), matching);
 
-        ArrayList<InfraMessage> filteredMessages = matchingAdvertiseCriteria.meetCriteria(perception);
+        Criteria matchingAdvertiseCriteria = new MatchingAdvertiseCriteria(myServiceAgent.getHandledService(), matching);
+        ArrayList<InfraMessage> filtredPerception = matchingAdvertiseCriteria.meetCriteria(perception);
 
-        // Todo  walid il faut la changer pour la mettre au propre
+        /*
         InfraMessage infraMessageSelected;
-        if(filteredMessages.size()>0){
+        if(filtredPerception.size()>0){
             //Call the selection method to select the messages to treat
-            infraMessageSelected = this.selectionMessageStrategy.singleSelect(filteredMessages);
+            infraMessageSelected = this.selectionMessageStrategy.singleSelect(filtredPerception);
         }else{
             //Call the selection method to select the messages to treat
             infraMessageSelected = this.selectionMessageStrategy.singleSelect(perception);
         }
         */
-         //Create a list of decisions
+
+        //Create a list of decisions
         ArrayList<OCEDecision> myListOfDecisions = new ArrayList<>();
 
-        // Check if the service agent didn't receive any messages (empty perception)
-        if(perception.isEmpty()){
-            if(this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.Created)){ // if the service agent was just created -> it advertises
-                //Create an advertisement decision todo : this could be enhanced later on
-                OCEDecision myDecision = new AdvertiseDecision(this.myServiceAgent, new ArrayList<>(), this.myServiceAgent.getHandledService());
-                myListOfDecisions.add(myDecision);
-            }else{
-                // the agent will do nothing Todo: this part also can be enhanced later no
-                myListOfDecisions.add(new DoNothingDecision());
-            }
-        }else{
-            // ********** Version before learning
+        //If the agent received the feedback and we already selected the best agent we update the score
+        if (this.myServiceAgent.isFeedbackReceived() && this.cycleBestAgent != null) {
+            MyLogger.log(Level.INFO, "Agent : Decision -> Updating Scored Current Situation = " + this.myServiceAgent.getMyScoredCurrentSituation().toString());
+            double reinforcement = 0.0;
+            double beta = 1;
+            double alpha = 0.4; // Learning rate
+            if (this.myServiceAgent.getFeedbackValue() == FeedbackValues.VALIDATED) reinforcement = +beta;
+            else reinforcement = -beta;
+            SituationUtility.updateScoreCurrentSituation(this.myServiceAgent.getMyScoredCurrentSituation(), this.cycleBestAgent.getKey(), alpha, reinforcement);
+            SituationUtility.normalizeScoresSCS(this.myServiceAgent.getMyScoredCurrentSituation());
+            // set the feedback received to false
+            this.myServiceAgent.setFeedbackReceived(false);
+            MyLogger.log(Level.INFO, "Agent : Decision -> Updated Scored Current Situation = " + this.myServiceAgent.getMyScoredCurrentSituation().toString());
+            //Update the agent Knowledge base
+            this.myServiceAgent.updateMyKnowledgeBase();
+            MyLogger.log(Level.INFO, "Agent : Decision -> Knowledge Base = " + this.myServiceAgent.getMyKnowledgeBase().toString());
+
+            // the agent will do nothing Todo: this part also can be enhanced later no
+            myListOfDecisions.add(new DoNothingDecision());
+        } else {
+            // Check if the service agent didn't receive any messages (empty perception)
+            if (filtredPerception.isEmpty()) {
+                if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.Created)) { // if the service agent was just created -> it advertises
+                    //Create an advertisement decision todo : this could be enhanced later on
+                    OCEDecision myDecision = new AdvertiseDecision(this.myServiceAgent, new ArrayList<>(), this.myServiceAgent.getHandledService());
+                    myListOfDecisions.add(myDecision);
+                } else {
+                    // the agent will do nothing Todo: this part also can be enhanced later no
+                    myListOfDecisions.add(new DoNothingDecision());
+                }
+            } else {
+                // ********** Version before learning
 //            //Select a message to treat
 //            InfraMessage infraMessageSelected;
 //            IMessageSelection messageSelection = new PrioritySelection(myServiceAgent.getHandledService(), matching);
@@ -114,52 +140,52 @@ public class ServiceAgentDecision implements IDecisionState {
 //            OCEDecision myDecision = perceptionSelected.toSelfTreat(myServiceAgent.getMyConnexionState(), myServiceAgent, myServiceAgent.getHandledService());
 //            myListOfDecisions.add(myDecision);
 
-            // ********** Version After Learning
-            //transform the Infrastructure messages to OCEMessages
-            List<OCEMessage> OCEPerception = perception.stream().map(m -> m.toOCEMessage(referenceResolver)).collect(Collectors.toList());
-            //Create a mapping of the agent's id and their messages
-            Map<IDAgent,OCEMessage> OCEPerceptionSortedByID = OCEPerception.stream().collect(Collectors.toMap(OCEMessage::getIDEmitter, s->s, (x, y) ->  y));
+                // ********** Version After Learning
+                //transform the Infrastructure messages to OCEMessages
+                List<OCEMessage> OCEPerception = filtredPerception.stream().map(m -> m.toOCEMessage(referenceResolver)).collect(Collectors.toList());
+                //Create a mapping of the agent's id and their messages
+                Map<IDAgent, OCEMessage> OCEPerceptionSortedByID = OCEPerception.stream().collect(Collectors.toMap(OCEMessage::getIDEmitter, s -> s, (x, y) -> y));
 
-            //Create the current situation
+                //Create the current situation
                 //Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
                 //check if it's the start of the agent cycle
-                if(this.myServiceAgent.getMyCurrentCycleNumber()==0){
+                if (this.myServiceAgent.getMyCurrentCycleNumber() == 0) {
                     // Start of the cycle
                     // We initialise a new current situation
                     this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
-                }else{
+                } else {
                     // we update the current one
                     Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
                     this.myServiceAgent.getMyCurrentSituation().getMySetAgents().putAll(myCurrentSituation.getMySetAgents());
                 }
-                MyLogger.log(Level.INFO,"Agent : Decision -> Current Situation = "+ this.myServiceAgent.getMyCurrentSituation().toString());
-            //Check for similar Reference Situation
+                MyLogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
+                //Check for similar Reference Situation
                 //Define the threshold for selecting similar reference situation
                 double threshold = 0.3;
-                Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation(),this.myServiceAgent.getMyKnowledgeBase(),threshold);
-                MyLogger.log(Level.INFO,"Agent : Decision -> The list of RS selected with a threshold '"+ threshold + "' = " +listSimilarRS.toString());
-            //Score the current situation
+                Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation(), this.myServiceAgent.getMyKnowledgeBase(), threshold);
+                MyLogger.log(Level.INFO, "Agent : Decision -> The list of RS selected with a threshold '" + threshold + "' = " + listSimilarRS.toString());
+                //Score the current situation
                 //The value used to initialise the score
                 double initialValue = 0.0;
                 //Using the similar reference situations score the current situation, if no RF similar found initialise the score to initialValue
-                Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation = SituationUtility.scoreCurrentSituation(this.myServiceAgent.getMyCurrentSituation(), listSimilarRS,initialValue);
-                MyLogger.log(Level.INFO,"Agent : Decision -> The scored current situation = " + myScoredCurrentSituation.toString());
+                Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation = SituationUtility.scoreCurrentSituation(this.myServiceAgent.getMyCurrentSituation(), listSimilarRS, initialValue);
+                this.myServiceAgent.setMyScoredCurrentSituation(myScoredCurrentSituation);
+                MyLogger.log(Level.INFO, "Agent : Decision -> The scored current situation = " + myScoredCurrentSituation.toString());
 
-            //Select the best agent to respond to from the scored current situation
-                double epsilon=0.2;
+                //Select the best agent to respond to from the scored current situation
+                double epsilon = 0.2;
                 IAgentSelectionStrategy agentSelectionStrategy = new BestScoreEpsilonGreedy(epsilon);
-                Map.Entry<IDAgent, ScoredCurrentSituationEntry> bestAgent = SituationUtility.selectBestAgent(myScoredCurrentSituation,agentSelectionStrategy);
-                MyLogger.log(Level.INFO," Agent : Decision -> Using the maximum score and epsilon greedy strategy ("+epsilon+"), the best agent = " + bestAgent);
+                this.cycleBestAgent = SituationUtility.selectBestAgent(myScoredCurrentSituation, agentSelectionStrategy);
+                MyLogger.log(Level.INFO, " Agent : Decision -> Using the maximum score and epsilon greedy strategy (" + epsilon + "), the best agent = " + this.cycleBestAgent);
                 //Todo : convert the situation entry selected to OCE message
                 //Get from the map the corresponding OCEMessage corresponding to the agent that has been selected
-                OCEMessage bestOCEMessage = OCEPerceptionSortedByID.get(bestAgent.getKey());
+                OCEMessage bestOCEMessage = OCEPerceptionSortedByID.get(this.cycleBestAgent.getKey());
                 OCEDecision myDecision = bestOCEMessage.toSelfTreat(myServiceAgent.getMyConnexionState(), myServiceAgent, myServiceAgent.getHandledService());
-            // myListOfDecisions.add(new DoNothingDecision()); // Todo : delete just for test
-            myListOfDecisions.add(myDecision); // Todo : delete just for test
+                // myListOfDecisions.add(new DoNothingDecision()); // Todo : delete just for test
+                myListOfDecisions.add(myDecision);
+            }
         }
-
-
-        MyLogger.log(Level.INFO, "Agent : Decision -> List of decisions = "+ myListOfDecisions.toString() );
+        MyLogger.log(Level.INFO, "Agent : Decision -> List of decisions = " + myListOfDecisions.toString());
         return myListOfDecisions;
     }
-}
+ }

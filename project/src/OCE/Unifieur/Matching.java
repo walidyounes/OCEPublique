@@ -30,7 +30,7 @@ public class Matching implements IMatching {
         if (serviceA instanceof MockupService && serviceB instanceof MockupService)
 
             return ((MockupService) serviceA).getWay() != ((MockupService) serviceB).getWay() &&
-                    ((MockupService) serviceA).getName().equals(((MockupService) serviceB).getName());
+                    ((MockupService) serviceA).getType().equals(((MockupService) serviceB).getType());
         else
             return false;
 

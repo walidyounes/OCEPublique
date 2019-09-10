@@ -14,6 +14,7 @@ import OCE.Agents.AgentPerception;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.BinderAgentPack.BinderAgentAction;
 import OCE.Agents.BinderAgentPack.BinderAgentDecision;
+import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Medium.Medium;
 import OCE.Selection.IMessageSelection;
@@ -69,9 +70,15 @@ public class OCEBinderAgentFactory implements IOCEBinderAgentFactory {
         InfraAgent associatedInfraAgent = this.infrastructure.creer(null, lifeCycle, this.infrastructure);
         // Associate the serviceAgent to the agent in the infrastructure
         binderAgent.setMyInfraAgent(associatedInfraAgent);
+        // Add the reference of the binder Agent in the Action state module
+        myWayOfAction.setBinderAgent(binderAgent);
 
         // Update the attributes of the perception with the reference of the Infrastructure Agent
         myWayOfPerception.setInfraAgent(associatedInfraAgent);
+
+        //Make the ID of the binder Agent the same as the associated infrastructure agent
+        binderAgent.setMyIDAgent(new IDAgent(""+associatedInfraAgent.getInfraAgentReference().getReferenceInterne()));
+
         // Register the binder Agent in the Record
         medium.registerOCEAgent(binderAgent, associatedInfraAgent.getInfraAgentReference());
         AbstractMap.SimpleEntry agentB_referenceAgent_Association = new AbstractMap.SimpleEntry(binderAgent, associatedInfraAgent.getInfraAgentReference());

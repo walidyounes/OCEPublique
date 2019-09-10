@@ -9,8 +9,8 @@ import AmbientEnvironment.OCPlateforme.OCService;
 
 public class MultiLinkMockupService extends MockupService {
 
-    public MultiLinkMockupService(String name, String owner, Way myWay) {
-        super(name, owner, myWay);
+    public MultiLinkMockupService(String name, String type, String owner, Way myWay) {
+        super(name, type, owner, myWay);
     }
 
     public void addLink(OCService s) throws AddLinkException {

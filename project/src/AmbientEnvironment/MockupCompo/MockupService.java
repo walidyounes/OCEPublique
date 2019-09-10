@@ -11,11 +11,13 @@ import java.util.ArrayList;
 
 public abstract class MockupService extends OCService implements Comparable {
     protected String name;
+    protected String type; // Used to check if two services match
     private String owner;
     private Way myWay;
 
-    public MockupService(String name, String ownerComponentName, Way myWay) {
+    public MockupService(String name, String type, String ownerComponentName, Way myWay) {
         this.name = name;
+        this.type = type;
         this.owner = ownerComponentName;
         this.myWay = myWay;
         this.linkedServices = new ArrayList<>();
@@ -40,7 +42,7 @@ public abstract class MockupService extends OCService implements Comparable {
     public String toString() {
         // return "Service "+name+" of Component "+ownerComponentName+" Links :
         // "+linkedServices;
-        return "Service " + name + " of " + owner;
+        return "Service " + name + "-"+ type + " of " + owner;
     }
 
 //    @Override
@@ -54,6 +56,23 @@ public abstract class MockupService extends OCService implements Comparable {
 //        return myWay == that.myWay;
 //    }
 
+
+    /**
+     * Get the type (signature) of the service
+     * @return the type value
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Set the value of type of the service
+     * @param type  : the new value
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
     /**
      *  Compare two MockupService (the comparison is compute on thr combination "NameOwnerWay")
      * @param o the object to compare this to
@@ -66,7 +85,7 @@ public abstract class MockupService extends OCService implements Comparable {
 
         MockupService that = (MockupService) o;
 
-        if (!name.equals(that.name) && !owner.equals(that.owner)) return false;
+        if (!name.equals(that.name) && !type.equals(that.type) && !owner.equals(that.owner)) return false;
         return myWay == that.myWay;
     }
 
@@ -86,8 +105,8 @@ public abstract class MockupService extends OCService implements Comparable {
     @Override
     public int compareTo(Object o) {
         MockupService that = (MockupService) o;
-        String strThis = this.name+this.owner+this.myWay;
-        String strThat = that.name+that.owner+that.myWay;
+        String strThis = this.name+this.type+this.owner+this.myWay;
+        String strThat = that.name+that.type+that.owner+that.myWay;
         int result = strThis.compareTo(strThat);
         if (result == 0) {
             assert this.equals(that) :

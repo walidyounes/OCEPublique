@@ -40,15 +40,15 @@ public class AgreeMessage extends ARSAMessage {
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
      * @param oceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
-     * @return the deicision made by the engine
+     * @return the decision made by the engine
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
         MyLogger.log(Level.INFO, oceAgentRef + " treats an agreement message ");
-        //Verify the connexion state of the agent Todo: walid : il y a un probleme lorsque l'agent se met en attente
+        //Verify the connexion state of the agent Todo: walid : il y a un probleme lorsque l'agent se met en attente  - walid  02/09/2019 : a vérifierça signife quoi
         // if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
             // change the connexion's state of the agent
-            ((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.Waiting);
+            ((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.Waiting); //  Todo Walid 02/09/2019 : je pense que c'est inutile de faire ça
             MyLogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
             return new DoNothingDecision();
        //  }

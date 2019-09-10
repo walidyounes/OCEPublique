@@ -34,8 +34,8 @@ public class ComponentManager {
         Set<OCComponent> componentsList = acquisition.getNewComponents();
         for (OCComponent component : componentsList) {
 
-            // logg the appearing components
-            String log = String.format("Provided=%s Required=%s - Apparition", component.getProvidedServices(), component.getRequiredServices());
+            // log in the appearing components
+            String log = String.format("Provided=%s Required=%s - Appearing", component.getProvidedServices(), component.getRequiredServices());
             MyLogger.log(Level.INFO, log);
             // Get both required and provided services for the component
             ArrayList<OCService> providedServices = component.getProvidedServices();
@@ -61,27 +61,27 @@ public class ComponentManager {
      */
     public void disappearingComponentsAcquisition() throws AcquisitionFailure {
 
-        Set<OCComponent> listComposants = acquisition.getDisappearedComponents();
-        //System.out.println("listComposants = " + listComposants);
-        for (OCComponent composant : listComposants) {
+        Set<OCComponent> componentsList = acquisition.getDisappearedComponents();
+        System.out.println(" Disappearing components = " + componentsList + "size = " + componentsList.size());
+        for (OCComponent component : componentsList) {
 
-            // Logger L'apparition des composants
-            String log = String.format("Provided=%s Required=%s - Dispparition", composant.getProvidedServices(), composant.getRequiredServices());
+            // Log in the disappearing of the component
+            String log = String.format("Provided = %s Required = %s - Disappearing", component.getProvidedServices(), component.getRequiredServices());
             MyLogger.log(Level.INFO, log);
 
-            ArrayList<OCService> servicesFournis = composant.getProvidedServices();
-            ArrayList<OCService> servicesRequis = composant.getRequiredServices();
+            ArrayList<OCService> providedServices = component.getProvidedServices();
+            ArrayList<OCService> requiredServices = component.getRequiredServices();
 
-            System.out.println("servicesFournis = " + servicesFournis);
-            System.out.println("servicesRequis = " + servicesRequis);
-            System.out.println("Notif  =" + serviceManager);
+            System.out.println("provided services = " + providedServices);
+            System.out.println("required services = " + requiredServices);
+            System.out.println("Notify serviceManager =" + serviceManager);
 
-            if (servicesFournis != null) {
-                serviceManager.disappearingServices(servicesFournis);
+            if (providedServices != null) {
+                serviceManager.disappearingServices(providedServices);
             }
 
-            if (servicesRequis != null) {
-                serviceManager.disappearingServices(servicesRequis);
+            if (requiredServices != null) {
+                serviceManager.disappearingServices(requiredServices);
             }
         }
     }

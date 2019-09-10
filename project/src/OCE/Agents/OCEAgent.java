@@ -15,7 +15,7 @@ public abstract class OCEAgent {
     protected IPerceptionState myWayOfPerception;
     protected IDecisionState myWayOfDecision;
     protected IActionState myWayOfAction;
-    protected OCEAgent mySelectedAgent; // The agent that i selected to connect with, it's used to prevent agents that choosed each other but they are blocked waiting for the answer
+    protected OCEAgent mySelectedAgent; // The agent that is selected to connect with, it's used to prevent agents that chooses each other but they are blocked waiting for the answer
 
     /**
      * Get the unique identifier of this agent

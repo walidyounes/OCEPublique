@@ -16,6 +16,10 @@ public interface IStratOrdonnanceur extends IAgentListener {
 
     List<InfraAgent> arreterOrdonnancement();
 
+    void pauseOrdonnancement();
+
+    void repriseOrdonnancement();
+
     void addOrdonnaceurListener(OrdonnanceurListener ordonnanceurListener);
 
     void agentAjoute(InfraAgent infraAgent);

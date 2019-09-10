@@ -6,6 +6,7 @@ package OCE.Agents.ServiceAgentPack;
 
 import Logger.MyLogger;
 import Midlleware.ThreeState.IActionState;
+import OCE.Agents.OCEAgent;
 import OCE.Decisions.OCEDecision;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.ARSAStrategies.Advertise.IAdvertiseStrategy;
@@ -40,7 +41,7 @@ public class ServiceAgentAction implements IActionState {
     }
 
     /**
-     * Execute the taken decisions and affect the environement acordingly
+     * Execute the taken decisions and affect the environment accordingly
      */
     @Override
     public void act(ArrayList<OCEDecision> decisionsList) {
@@ -48,5 +49,10 @@ public class ServiceAgentAction implements IActionState {
         for (OCEDecision decision : decisionsList) {
             decision.toSelfTreat(communicationManager);
         }
+    }
+
+    @Override
+    public void setBinderAgent(OCEAgent myBinderAgent) {
+        //todo : walid this is only for test, i need this fonction for the binder Agent and the feedback message
     }
 }

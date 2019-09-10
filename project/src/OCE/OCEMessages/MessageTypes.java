@@ -9,7 +9,7 @@ public enum MessageTypes {
     REPLY,
     SELECT,
     AGREE,
+    FEEDBACK,
     BIND,
-    EMPTY,
     SUICIDE;
 }

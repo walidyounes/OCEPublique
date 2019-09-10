@@ -4,6 +4,7 @@
 
 package Midlleware.ThreeState;
 
+import OCE.Agents.OCEAgent;
 import OCE.Decisions.OCEDecision;
 import OCE.Medium.Communication.ICommunicationAdapter;
 
@@ -13,4 +14,5 @@ public interface IActionState {
 
     void act(ArrayList<OCEDecision> decisionsList);
     void setCommunicationManager(ICommunicationAdapter communicationManager);
+    void setBinderAgent(OCEAgent myBinderAgent);
 }

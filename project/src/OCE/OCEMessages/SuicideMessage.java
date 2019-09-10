@@ -21,7 +21,7 @@ public class SuicideMessage extends OCEMessage {
     private Boolean exist; // Boolean attribute used to inform the agent if it's service still exists or not
 
     /**
-     * Create A Sonde InfraMessage
+     * Create A suicideMessage
      * @param exist :  boolean value informing if the service attached to the agent is still existing in the environment or not
      * @param receivers : the references of the receivers of the ad, if null == Broadcast
      */

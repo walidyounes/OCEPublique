@@ -49,10 +49,11 @@ public class ServiceManager implements INotification {
             // Unregister the association between the ServiceAgent and it's reference in the infrastructure from the recording component of the medium
             agentRecorder.unregisterOCEAgent(serviceAgent);
 
+            //Todo à voir ça sert à quoi et c'est utile
             // get the physical reference of the agent
-            InfraAgentReference refAgent = serviceAgent.getMyInfraAgent().getInfraAgentReference(); // Todo : check if it's useful now
-            //Todo à voir ça sert à quoi
-            listAssocAgentServiceDisparus.put(refAgent, service);
+           // InfraAgentReference refAgent = serviceAgent.getMyInfraAgent().getInfraAgentReference();
+
+           // listAssocAgentServiceDisparus.put(refAgent, service);
         }
     }
 

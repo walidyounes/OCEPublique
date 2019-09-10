@@ -22,11 +22,11 @@ public class Script3 {
         //Construction du composant "A"
         ArrayList<OCService> providedByA = new ArrayList<>();
         ArrayList<OCService> requiredByA = new ArrayList<>();
-        MockupService JdeA = new SingleLinkMockupService("J", "A", Way.REQUIRED);
+        MockupService JdeA = new SingleLinkMockupService("J", "J","A", Way.REQUIRED);
         requiredByA.add(JdeA);
-        MockupService KdeA = new SingleLinkMockupService("K", "A", Way.REQUIRED);
+        MockupService KdeA = new SingleLinkMockupService("K", "K","A", Way.REQUIRED);
         requiredByA.add(KdeA);
-        MockupService IdeA = new SingleLinkMockupService("I", "A", Way.PROVIDED);
+        MockupService IdeA = new SingleLinkMockupService("I", "I","A", Way.PROVIDED);
         providedByA.add(IdeA);
         MockupComponent A = new MockupComponent("A", providedByA, requiredByA);
         container.addComponent(A);
@@ -38,9 +38,9 @@ public class Script3 {
         ArrayList<OCService> providedByC = new ArrayList<>();
         ArrayList<OCService> requiredByC = new ArrayList<>();
 
-        MockupService JdeC = new SingleLinkMockupService("J", "C", Way.PROVIDED);
+        MockupService JdeC = new SingleLinkMockupService("J", "J","C", Way.PROVIDED);
         providedByC.add(JdeC);
-        MockupService KdeC = new SingleLinkMockupService("K", "C", Way.PROVIDED);
+        MockupService KdeC = new SingleLinkMockupService("K", "K", "C", Way.PROVIDED);
         providedByC.add(KdeC);
 
         MockupComponent C = new MockupComponent("C", providedByC, requiredByC);
@@ -53,7 +53,7 @@ public class Script3 {
         ArrayList<OCService> providedByD = new ArrayList<>();
         ArrayList<OCService> requiredByD = new ArrayList<>();
 
-        MockupService KdeD = new MultiLinkMockupService("K", "D", Way.PROVIDED);
+        MockupService KdeD = new MultiLinkMockupService("K", "K","D", Way.PROVIDED);
         providedByD.add(KdeD);
         MockupComponent D = new MockupComponent("D", providedByD, requiredByD);
         container.addComponent(D);
@@ -65,9 +65,9 @@ public class Script3 {
         ArrayList<OCService> providedByB = new ArrayList<>();
         ArrayList<OCService> requiredByB = new ArrayList<>();
 
-        MockupService KdeB = new SingleLinkMockupService("K", "B", Way.PROVIDED);
+        MockupService KdeB = new SingleLinkMockupService("K", "K","B", Way.PROVIDED);
         providedByB.add(KdeB);
-        MockupService IdeB = new SingleLinkMockupService("I", "B", Way.REQUIRED);
+        MockupService IdeB = new SingleLinkMockupService("I", "I","B", Way.REQUIRED);
         requiredByB.add(KdeA);
         MockupComponent B = new MockupComponent("B", providedByB, requiredByB);
         container.addComponent(B);

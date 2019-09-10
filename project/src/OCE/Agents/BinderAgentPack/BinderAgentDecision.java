@@ -61,8 +61,7 @@ public class BinderAgentDecision implements IDecisionState {
 
     @Override
     public ArrayList<OCEDecision> decide(ArrayList<InfraMessage> perceptions) {
-        MyLogger.log(Level.INFO, "The Binder agent is making decisions !");
-
+        MyLogger.log(Level.INFO, " Binder agent - "+ this.myBinderAgent +" - : Decision -> ");
 
         // The list of decisions mad by the binder agent
         ArrayList<OCEDecision> myListOfDecisions = new ArrayList<>();

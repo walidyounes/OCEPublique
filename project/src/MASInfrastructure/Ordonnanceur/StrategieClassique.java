@@ -4,19 +4,21 @@
 
 package MASInfrastructure.Ordonnanceur;
 
+import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Annuaire.IReferenceAgentListener;
 
 import java.util.List;
+import java.util.logging.Level;
 
 public class StrategieClassique implements IStratOrdonnanceur {
 
-    private List<InfraAgent> listOrdonnancement; // les agents observés
-    private List<OrdonnanceurListener> listListenerPourOrdonnanceur; // Liste
-    // des
-    // observateurs
+    private List<InfraAgent> listOrdonnancement; // list of observed agents
+    private List<OrdonnanceurListener> listListenerPourOrdonnanceur; // list of observers
     private int vitesse;
-    private boolean run = true;
+    private boolean run;
+    private boolean stop;
+
     // Etat1 etatInitial = new Etat1();
     // OCE.InfraAgent agent1 = new OCE.InfraAgent(etatInitial);
     // OCE.InfraAgent agent2 = new OCE.InfraAgent(etatInitial);
@@ -28,6 +30,8 @@ public class StrategieClassique implements IStratOrdonnanceur {
 		 * listInfraAgents.add(agent1); listInfraAgents.add(agent2);
 		 * listInfraAgents.add(agent3);
 		 */
+        this.run= true;
+        this.stop = false;
         listListenerPourOrdonnanceur = listListenerActuels;
         changerVitesse(EnumVitesse.CENT);
     }
@@ -49,20 +53,25 @@ public class StrategieClassique implements IStratOrdonnanceur {
 
     @Override
     public void ordonnancer() {
-        // Todo a compléter
-        run = true;
-        InfraAgent infraAgentCourant;
-        /// while (run) {
-        int i = 0; // Walid : fixer le nbr itérations
-        while (i<200) {
-            infraAgentCourant = listOrdonnancement.get(0);
-            //LifeCycle(infraAgentCourant.getInfraAgentReference(), infraAgentCourant.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
-            infraAgentCourant.run(); // walid : On actionne le changment d'etat de l'agent
-            listOrdonnancement.remove(infraAgentCourant);
-            listOrdonnancement.add(infraAgentCourant);
+        //Initialize the parameters for the execution
+        this.run = true;
+        this.stop = false;
 
-            //System.out.println("listOrdonnancement****" + getListOrdonnancement());
-            i++;
+        InfraAgent currentInfraAgent;
+        int i = 0; // Walid : fixer le nbr itérations
+        while(!stop) {
+            //System.out.println("boucle infinie  intentionnelle ! ");
+            while (run) {
+                currentInfraAgent = listOrdonnancement.get(0);
+                MyLogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfraAgent.getInfraAgentReference() + " ***********************************");
+                //LifeCycle(currentInfraAgent.getInfraAgentReference(), currentInfraAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
+                currentInfraAgent.run(); // change the state of the agent
+                listOrdonnancement.remove(currentInfraAgent);
+                listOrdonnancement.add(currentInfraAgent);
+
+                //System.out.println("listOrdonnancement****" + getListOrdonnancement());
+                i++;
+            }
         }
     }
 
@@ -111,7 +120,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
 
     @Override
     public List<InfraAgent> arreterOrdonnancement() {
-        run = false;
+        this.stop = true;
         return listOrdonnancement;
     }
 
@@ -133,5 +142,21 @@ public class StrategieClassique implements IStratOrdonnanceur {
     @Override
     public void agentRetire(InfraAgent infraAgent) {
         listOrdonnancement.remove(infraAgent);
+    }
+
+    /**
+     * Put pause to the scheduling process of the agents
+     */
+    @Override
+    public void pauseOrdonnancement() {
+        this.run = false;
+    }
+
+    /**
+     * Resume the execution of the scheduling process of the agents
+     */
+    @Override
+    public void repriseOrdonnancement() {
+        this.run = true;
     }
 }

@@ -36,7 +36,7 @@ public class InfraAgent {
     }
 
     /**
-     * run the agent's behavior charecterised by his life circle
+     * run the agent's behavior characterised by his life circle
      */
     public void run() {
         this.lifeCycle.run();
@@ -68,7 +68,7 @@ public class InfraAgent {
 
     /**
      * Read all the messages from the mailBox of this agent
-     * @return the list of the recieved messages
+     * @return the list of the received messages
      */
     public ArrayList<IMessage> readMessages(){
         return this.myMailBoxManager.receiveMessages(this.infraAgentReference);
@@ -84,8 +84,6 @@ public class InfraAgent {
 
     @Override
     public String toString() {
-        return "InfraAgent{" +
-                "infraAgentReference=" + infraAgentReference +
-                '}';
+        return "INFRA.IDAgent{" + infraAgentReference + '}';
     }
 }

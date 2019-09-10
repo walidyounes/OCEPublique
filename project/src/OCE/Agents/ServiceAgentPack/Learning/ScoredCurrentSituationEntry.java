@@ -58,6 +58,14 @@ public class ScoredCurrentSituationEntry extends CurrentSituationEntry {
     }
 
     /**
+     * Transform the situation entry to a reference situation entry to be stored in the knowledge database
+     * @return the corresponding reference situation entry
+     */
+    public ReferenceSituationEntry toReferenceSituationEntry(){
+        return new ReferenceSituationEntry(this.agent, this.score);
+    }
+
+    /**
      * Test if two scored current situation entries are equals
      * @param obj : the other scored current situation entry to compare to this
      * @return : true if the two object are equals (the same agent and the same message type), else false

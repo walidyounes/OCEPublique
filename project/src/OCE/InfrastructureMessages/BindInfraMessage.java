@@ -17,8 +17,8 @@ public class BindInfraMessage extends InfraMessage {
 
     /**
      * create a bind message
-     * @param emitter    reference of the agent sending the selection message
-     * @param receivers the references of the receivers of the selection message
+     * @param emitter    reference of the agent sending the bind message
+     * @param receivers the references of the receivers of the bind message
      */
     public BindInfraMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers) {
         this.emitter = emitter;

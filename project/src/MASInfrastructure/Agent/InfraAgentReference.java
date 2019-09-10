@@ -40,7 +40,6 @@ public class InfraAgentReference {
 
     @Override
     public String toString() {
-        return "OCE.InfraAgent{" +
-                "reference=" + referenceInterne;
+        return "INFRA.IDAgent{" + this.referenceInterne + '}';
     }
 }

@@ -115,4 +115,19 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
         listEtatAgent.remove(infraAgent);
     }
 
+    /**
+     * Put pause to the scheduling process of the agents
+     */
+    @Override
+    public void pauseOrdonnancement() {
+        this.run = false;
+    }
+
+    /**
+     * Resume the execution of the scheduling process of the agents
+     */
+    @Override
+    public void repriseOrdonnancement() {
+        this.run = true;
+    }
 }

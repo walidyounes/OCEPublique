@@ -13,9 +13,9 @@ import java.util.ArrayList;
 public class MockupComponent extends OCComponent {
     protected String name;
 
-    public MockupComponent(String name, ArrayList<OCService> providedservices, ArrayList<OCService> requiredServices) {
+    public MockupComponent(String name, ArrayList<OCService> providedServices, ArrayList<OCService> requiredServices) {
         this.name = name;
-        this.providedServices = new ArrayList<>(providedservices);
+        this.providedServices = new ArrayList<>(providedServices);
         this.requiredServices = new ArrayList<>(requiredServices);
     }
 

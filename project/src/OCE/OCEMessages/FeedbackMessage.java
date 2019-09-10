@@ -1,36 +1,41 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
 package OCE.OCEMessages;
 
 import AmbientEnvironment.OCPlateforme.OCService;
+import Logger.MyLogger;
+import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.Decisions.DoNothingDecision;
 import OCE.Decisions.OCEDecision;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
-public class BindMessage extends OCEMessage {
+public class FeedbackMessage extends OCEMessage {
 
+    private FeedbackValues feedbackValue; // the feedbackValue given for the feedback, to simplify it has two possible values "VALIDATED" "REJECTED"
 
     /**
-     * create a bind perception
-     * @param emitter    reference of the agent sending the bind message
-     * @param receivers the references of the receivers of the bind message
-
+     * create a feedback perception
+     * @param emitter   : reference of the agent sending the feedback message
+     * @param receivers : the references of the receivers of the feedback message
+     * @param feedbackValues : the type of the feedback
      */
-    public BindMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+    public FeedbackMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers, FeedbackValues feedbackValues) {
         this.emitter = emitter;
         this.receivers = receivers;
+        this.feedbackValue = feedbackValues;
     }
 
-
     /**
-     * treat the bind message and make the suitable decision
+     * treat the feedback message and make the suitable decision
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
      * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
@@ -38,7 +43,14 @@ public class BindMessage extends OCEMessage {
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
-        return null;
+        //Todo for now the agent doesn't do anything to treat this message
+        MyLogger.log(Level.INFO, OCEAgentRef + " treats a feedback message");
+        MyLogger.log(Level.INFO, OCEAgentRef + " is updating its knowledge");
+        //Set that the feedback is received
+        ((ServiceAgent)OCEAgentRef).setFeedbackReceived(true);
+        //Set the value of the received feedback
+        ((ServiceAgent)OCEAgentRef).setFeedbackValue(this.feedbackValue);
+        return new DoNothingDecision();
     }
 
     /**
@@ -56,12 +68,12 @@ public class BindMessage extends OCEMessage {
      */
     @Override
     public SituationEntry toEntrySituation() {
-        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.BIND);
+        return new CurrentSituationEntry(((BinderAgent) this.emitter).getMyID(), MessageTypes.FEEDBACK);
     }
 
     @Override
     public String toString() {
-        return "BindMessage{" +
+        return "FeedbackMessage{" +
                 "emitter=" + emitter +
                 ", receivers=" + receivers +
                 '}';

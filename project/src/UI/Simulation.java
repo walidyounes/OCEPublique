@@ -13,32 +13,39 @@ import OCE.Medium.Medium;
 import OCE.Unifieur.Matching;
 import OCE.sonde.Sonde;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Simulation implements Runnable {
     private MockupFacadeAdapter mockupFacadeAdapter;
-
+    private Infrastructure infrastructure;
     public Simulation(MockupFacadeAdapter mockupFacadeAdapter) {
+        this.infrastructure = new Infrastructure();
+        this.mockupFacadeAdapter = mockupFacadeAdapter;
+    }
+
+    public Simulation(MockupFacadeAdapter mockupFacadeAdapter, Infrastructure infrastructure) {
+        this.infrastructure = infrastructure;
         this.mockupFacadeAdapter = mockupFacadeAdapter;
     }
 
     @Override
     public void run() {
-        Infrastructure infrastructure = new Infrastructure();
-
-        Matching alwaysTrueMatching = new Matching();
+        //Matching alwaysTrueMatching = new Matching();
+        //Initialize the medium component
         Medium medium = new Medium(infrastructure);
-
+        //Create the agent Factory
         IOCEServiceAgentFactory agentFactory = new OCEServiceAgentFactory(infrastructure, medium);
-
-
+        // Create the Sonde component to probe the environment
         Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 1000);
         sonde.run();
-
-        pause(5000);
+        MyLogger.log(Level.INFO, "");
+        pause(3000);
+        //Start the scheduling process
         infrastructure.ordonnancer();
 
         MyLogger.close();
     }
-
 
 
     private void pause(long ms) {

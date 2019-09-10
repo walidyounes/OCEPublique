@@ -117,4 +117,19 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
         ordonnanceur.OrdagentRetire(infraAgent);
     }
 
+    /**
+     * Put pause to the scheduling process of the agents
+     */
+    @Override
+    public void pauseOrdonnancement() {
+        this.ordonnanceur.pauseOrdonnancement();
+    }
+
+    /**
+     * Resume the execution of the scheduling process of the agents
+     */
+    @Override
+    public void repriseOrdonnancement() {
+        this.ordonnanceur.repriseOrdonnancement();
+    }
 }

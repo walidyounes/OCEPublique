@@ -52,4 +52,19 @@ public class Ordonnanceur implements IOrdonnanceur {
     }
 
 
+    /**
+     * Put pause to the scheduling process of the agents
+     */
+    @Override
+    public void pauseOrdonnancement() {
+        this.stratOrdonnanceur.pauseOrdonnancement();
+    }
+
+    /**
+     * Resume the execution of the scheduling process of the agents
+     */
+    @Override
+    public void repriseOrdonnancement() {
+        this.stratOrdonnanceur.repriseOrdonnancement();
+    }
 }

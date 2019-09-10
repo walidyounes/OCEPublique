@@ -25,6 +25,14 @@ public class BinderAgent extends OCEAgent {
         this.myWayOfAction = myWayOfAction;
     }
 
+    /**
+     * Change the Id of the service agent, it's used so that the OCE agent have the same ID as the Infrastructure Agent's ID
+     * @param newIDAgent : the new ID
+     */
+    public void setMyIDAgent(IDAgent newIDAgent){
+        this.myID = newIDAgent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

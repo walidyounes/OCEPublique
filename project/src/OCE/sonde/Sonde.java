@@ -29,9 +29,9 @@ public class Sonde {
 
     public Sonde(IAcquisition acquisition, IRecord agentRecorder, IOCEServiceAgentFactory agentFactory, long periodicity) {
         this.periodicity = periodicity;
-        // Instanciation of the serviceManager
+        // Instantiation of the serviceManager
         ServiceManager serviceManager = new ServiceManager(agentFactory, agentRecorder);
-        //Instanciation of the ccomponentManager
+        //Instantiation of the componentManager
         this.componentsManager = new ComponentManager(serviceManager, acquisition);
     }
 
@@ -49,18 +49,17 @@ public class Sonde {
         }
     }
     /**
-     * This thread call the ScheduledSounding task periodicly to probe the ambient environment for new appearing and disapearing services
+     * This thread call the ScheduledSounding task periodically to probe the ambient environment for new appearing and disappearing components and their services
      */
     private Thread t = new Thread() {
         @Override
         public void run() {
             Timer time = new Timer(); // Instantiate Timer Object
-            // Instantiate SheduledTask class
+            // Instantiate ScheduledTask class
             ScheduledSounding st = new ScheduledSounding();
             // Create Repetitively task for every "Periodicity" secs with a delay 0 secs between two executions
             time.schedule(st, 0, periodicity);
-
-            MyLogger.log(Level.INFO, "*************************** Sondage *******************");
+            MyLogger.log(Level.INFO, "*************************** Probing *******************");
         }
     };
 
@@ -73,7 +72,7 @@ public class Sonde {
     }
 
     /**
-     * Run the thread responsible of sounding the environment
+     * Run the thread responsible of probing the environment
      */
     public void run() {
         t.start();
