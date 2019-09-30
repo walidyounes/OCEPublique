@@ -4,13 +4,16 @@
 
 package OCE.Medium.Recorder;
 
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
+import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgentReference;
-import OCE.Medium.ReferenceResolutionFailure;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
+import OCE.Medium.ReferenceResolutionFailure;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -105,9 +108,9 @@ public class Record implements IRecord{
     }
 
     /**
-     * Resolve the logical adresse (OCEAgent) of a list of InfraAgentReference
-     * @param infraAgents the liste of the refrence of the infrastructure agent
-     * @return the coresponding list of OCEAgents
+     * Resolve the logical address (OCEAgent) of a list of InfraAgentReference
+     * @param infraAgents the list of the reference of the infrastructure agent
+     * @return the corresponding list of OCEAgents
      * @throws ReferenceResolutionFailure if one of the agents doesn't exist
      */
     @Override
@@ -123,17 +126,36 @@ public class Record implements IRecord{
     }
 
     /**
-     * Retrieve and return the OCEAgent which is attached to the physical service
-     * @param attachedService : the physical service
-     * @return the agent which is attached to it
+     * Retrieve and return the OCEAgent which is associated to the  service
+     * @param attachedService : the associated service
+     * @return the serviceAgent if it exists, null otherwise
      */
     @Override
-    public ServiceAgent retrieveSAgentByPService(OCService attachedService) {
-        return null;
+    public Optional<ServiceAgent> retrieveSAgentByPService(OCService attachedService) {
+        //Cast the type of the object from OCEService to MockupService so we can check for equality
+        MockupService attachedMockupService = (MockupService) attachedService;
+        //The service agent returned by this function
+        Optional<ServiceAgent> serviceAgent = Optional.empty();
+        //Filter the list of agents to keep only Service Agent
+        List<ServiceAgent> listServiceAgent = this.agentsReferenceMap.keySet().stream().filter(m -> m instanceof ServiceAgent).map(m-> (ServiceAgent) m).collect(Collectors.toList());
+
+        Iterator<ServiceAgent> agentIterator = listServiceAgent.iterator() ; // for iterating over the set of serviceAgent
+        boolean found=false;
+        while(agentIterator.hasNext() && !found){
+            ServiceAgent currentServiceAgent = agentIterator.next();
+            //get the attached service of the agent "currentAgent" and cast th result to a mockup service
+            MockupService currentService = (MockupService) currentServiceAgent.getHandledService();
+            if(attachedMockupService.equals(currentService)){ // it's the service that we are looking for
+                found = true;
+                serviceAgent = Optional.of(currentServiceAgent);
+                MyLogger.log(Level.INFO, " Agent retrouvé est = "+serviceAgent.toString());
+            }
+        }
+        return serviceAgent;
     }
 
     /**
-     * private fonction used to get the corresponding keys from a value from a map
+     * private function used to get the corresponding keys from a value from a map
      * @param map : The map <OCEAgent, InfraAgentReference>
      * @param value : The InfraAgentReference that we are looking for the keys corresponding
      * @param <T> Objects

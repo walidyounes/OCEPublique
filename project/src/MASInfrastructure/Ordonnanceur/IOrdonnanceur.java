@@ -27,4 +27,8 @@ public interface IOrdonnanceur {
 
     void repriseOrdonnancement();
 
+    void setMaxCycleAgent(int maxCycleAgent);
+
+    void resetCurrentCycleAgent();
+
 }

@@ -29,5 +29,19 @@ public class SingleLinkMockupService extends MockupService {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return super.compareTo(o);
+    }
 }
 

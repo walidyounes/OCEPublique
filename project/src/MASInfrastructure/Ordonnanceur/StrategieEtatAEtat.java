@@ -19,18 +19,17 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
     private Map<InfraAgent, IEtat> listEtatAgent;
     private int vitesse;
     private boolean run = true;
-    /*Etat1 etatInitial = new Etat1();
-	OCE.InfraAgent agent1 = new OCE.InfraAgent(etatInitial);
-	OCE.InfraAgent agent2 = new OCE.InfraAgent(etatInitial);
-	OCE.InfraAgent agent3 = new OCE.InfraAgent(etatInitial);*/
+    private int currentAgentCycle;
+    private int maxCycleAgent;
+
 
     public StrategieEtatAEtat(List<InfraAgent> listInfraAgent, List<OrdonnanceurListener> listListenerActuels) {
         listOrdonnancement = listInfraAgent;
-		/*listInfraAgent.add(agent1);
-		listInfraAgent.add(agent2);
-		listInfraAgent.add(agent3);*/
         listListenerPourOrdonnanceur = listListenerActuels;
         listEtatAgent = new HashMap<>();
+        this.currentAgentCycle = 0;
+        this.maxCycleAgent = 300;
+        this.run = true;
         // listOrdonnancement.forEach(agent -> listEtatAgent.put(agent, agent.getEtatInitial())); // todo : Walid
         changerVitesse(EnumVitesse.CENT);
     }
@@ -129,5 +128,22 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
     @Override
     public void repriseOrdonnancement() {
         this.run = true;
+    }
+
+    /**
+     * Set the value of the number of agent cycle per OCE Cycle
+     * @param maxCycleAgent
+     */
+    @Override
+    public void setMaxCycleAgent(int maxCycleAgent) {
+        this.maxCycleAgent = maxCycleAgent;
+    }
+
+    /**
+     * restart the OCE Cycle (initialize the current cycle to 0)
+     */
+    @Override
+    public void resetCurrentCycleAgent() {
+        this.currentAgentCycle = 0;
     }
 }

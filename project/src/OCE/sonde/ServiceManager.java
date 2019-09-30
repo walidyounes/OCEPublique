@@ -8,12 +8,11 @@ import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgentReference;
 import Logger.MyLogger;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
+import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Medium.Recorder.IRecord;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 
@@ -22,7 +21,7 @@ public class ServiceManager implements INotification {
     private IOCEServiceAgentFactory agentFactory;
     private IRecord agentRecorder;
 
-    private Map<InfraAgentReference, OCService> listAssocAgentServiceDisparus = new HashMap<>(); //  TODO walid : ça sert à quoi ???
+    // private Map<InfraAgentReference, OCService> listAssocAgentServiceDisparus = new HashMap<>(); //  TODO walid : ça sert à quoi ???
 
     public ServiceManager(IOCEServiceAgentFactory agentFactory, IRecord agentRecorder) {
         this.agentFactory = agentFactory;
@@ -31,29 +30,45 @@ public class ServiceManager implements INotification {
 
     public void appearingServices(ArrayList<OCService> appearingServicesList) {
         for (OCService service : appearingServicesList) {
-
-            MyLogger.log(Level.INFO, " Creating the service agent associated to the service = " + service.toString());
             Map.Entry<ServiceAgent, InfraAgentReference> agentS_referenceAgent_Association = agentFactory.createServiceAgent(service);
-
+            MyLogger.log(Level.INFO, " Creating the service agent = " + agentS_referenceAgent_Association.getKey().toString() +  " associated to the service = " + service.toString());
             // Register the association between the ServiceAgent and it's reference in the infrastructure into the recording component of the medium
             agentRecorder.registerOCEAgent(agentS_referenceAgent_Association.getKey(), agentS_referenceAgent_Association.getValue());
         }
     }
 
     public void disappearingServices(ArrayList<OCService> disappearingServicesList) {
-        // for each disappearing service
+        // For each disappearing service
         for (OCService service : disappearingServicesList) {
             MyLogger.log(Level.INFO, " The service = " + service.toString()+ " has disappeared !");
-            // tget the serviceAgent associated to this service
-            ServiceAgent serviceAgent = this.agentRecorder.retrieveSAgentByPService(service);
-            // Unregister the association between the ServiceAgent and it's reference in the infrastructure from the recording component of the medium
-            agentRecorder.unregisterOCEAgent(serviceAgent);
+            // Get the serviceAgent associated to this service
+            Optional<ServiceAgent> serviceAgent = this.agentRecorder.retrieveSAgentByPService(service);
+            //Check if the service agent exist
+            if(serviceAgent.isPresent()){
+                //Put the serviceAgent tto sleep
+                System.out.println(" The agent = " + serviceAgent.toString() + " is put to SLEEP");
+//                try {
+//                    Thread.sleep(4000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                MyLogger.log(Level.INFO, " The agent = " + serviceAgent.toString() + " is put to SLEEP !");
+                serviceAgent.get().setMyConnexionState(ServiceAgentConnexionState.Sleep);
 
-            //Todo à voir ça sert à quoi et c'est utile
-            // get the physical reference of the agent
-           // InfraAgentReference refAgent = serviceAgent.getMyInfraAgent().getInfraAgentReference();
+                //Todo : check if this is necessary -> i think i should keep the association and don't unregister it
+                // Unregister the association between the ServiceAgent and it's reference in the infrastructure from the recording component of the medium
+                agentRecorder.unregisterOCEAgent(serviceAgent.get());
+                // Todo walid : delete the agent from the infrastructure
 
-           // listAssocAgentServiceDisparus.put(refAgent, service);
+                //Todo à voir ça sert à quoi et c'est utile
+                // get the physical reference of the agent
+                // InfraAgentReference refAgent = serviceAgent.getMyInfraAgent().getInfraAgentReference();
+
+                // listAssocAgentServiceDisparus.put(refAgent, service);
+            }else{
+                MyLogger.log(Level.INFO, " No Agent is attached to the service = " + service.toString() + " !");
+            }
+
         }
     }
 

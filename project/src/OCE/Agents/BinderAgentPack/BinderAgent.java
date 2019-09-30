@@ -43,4 +43,8 @@ public class BinderAgent extends OCEAgent {
         return myID.equals(that.myID);
     }
 
+    @Override
+    public String toString() {
+        return this.myID.toString();
+    }
 }

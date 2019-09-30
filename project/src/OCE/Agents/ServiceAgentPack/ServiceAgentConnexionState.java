@@ -5,5 +5,5 @@
 package OCE.Agents.ServiceAgentPack;
 
 public enum ServiceAgentConnexionState {
-    Created, NotConnected,Connected,Waiting
+    Created, NotConnected,Connected,Waiting, Sleep
 }

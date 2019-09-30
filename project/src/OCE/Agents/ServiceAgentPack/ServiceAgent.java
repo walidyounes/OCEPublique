@@ -82,7 +82,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myScoredCurrentSituation = null;
         this.myCurrentCycleNumber = 0;
         //Todo : change implementation to add uploading of old knowledge
-        myKnowledgeBase = new ArrayList<>();
+        this.myKnowledgeBase = new ArrayList<>();
     }
 
 
@@ -183,6 +183,12 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myCurrentCycleNumber = myCurrentCycleNumber;
     }
 
+    /**
+     * Increment by 1 the value of the current cycle number of this agent
+     */
+    public void incrementMyCurrentCycleNumber(){
+        this.myCurrentCycleNumber ++;
+    }
     /**
      * Get the content of the knowledge base of the service agent
      * @return the list of reference situation that construct the agent's knowledge base

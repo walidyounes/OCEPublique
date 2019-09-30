@@ -104,14 +104,17 @@ public class Annuaire implements IAnnuaire {
 
     @Override
     public void sendMessage(IMessage message) {
-
-        lockAgentLecture(message.getReceivers().get(0));
-        if (agentsMessagesQueues.containsKey(message.getReceivers().get(0))) {
-            agentsMessagesQueues.get(message.getReceivers().get(0)).add(message);
-            messageAgentListeners.forEach(messageAgentListener -> messageAgentListener.messageEnvoye(message.getEmitter(),
-                    message.getReceivers().get(0), message));
+        int index;
+        for(index=0; index < message.getReceivers().size(); index++){
+            lockAgentLecture(message.getReceivers().get(index));
+            if (agentsMessagesQueues.containsKey(message.getReceivers().get(index))) {
+                agentsMessagesQueues.get(message.getReceivers().get(index)).add(message);
+                int finalIndex = index;
+                messageAgentListeners.forEach(messageAgentListener -> messageAgentListener.messageEnvoye(message.getEmitter(),
+                        message.getReceivers().get(finalIndex), message));
+            }
+            unlockAgentLecture(message.getReceivers().get(index));
         }
-        unlockAgentLecture(message.getReceivers().get(0));
 
         //System.out.println("liste sendMessage" + getAgentsMessagesQueues()); // Trace
     }

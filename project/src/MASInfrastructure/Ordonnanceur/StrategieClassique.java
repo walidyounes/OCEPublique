@@ -16,21 +16,22 @@ public class StrategieClassique implements IStratOrdonnanceur {
     private List<InfraAgent> listOrdonnancement; // list of observed agents
     private List<OrdonnanceurListener> listListenerPourOrdonnanceur; // list of observers
     private int vitesse;
+    private int currentAgentCycle;
+    private int maxCycleAgent;
     private boolean run;
     private boolean stop;
+    private final int defaultMaxCycleAgent = 400;
 
-    // Etat1 etatInitial = new Etat1();
-    // OCE.InfraAgent agent1 = new OCE.InfraAgent(etatInitial);
-    // OCE.InfraAgent agent2 = new OCE.InfraAgent(etatInitial);
-    // OCE.InfraAgent agent3 = new OCE.InfraAgent(etatInitial);
-
+    /**
+     *
+     * @param listInfraAgents
+     * @param listListenerActuels
+     */
     public StrategieClassique(List<InfraAgent> listInfraAgents, List<OrdonnanceurListener> listListenerActuels) {
         listOrdonnancement = listInfraAgents;
-        /*
-		 * listInfraAgents.add(agent1); listInfraAgents.add(agent2);
-		 * listInfraAgents.add(agent3);
-		 */
         this.run= true;
+        this.currentAgentCycle = 0;
+        this.maxCycleAgent = defaultMaxCycleAgent;
         this.stop = false;
         listListenerPourOrdonnanceur = listListenerActuels;
         changerVitesse(EnumVitesse.CENT);
@@ -56,21 +57,21 @@ public class StrategieClassique implements IStratOrdonnanceur {
         //Initialize the parameters for the execution
         this.run = true;
         this.stop = false;
+        this.currentAgentCycle = 0;
 
         InfraAgent currentInfraAgent;
-        int i = 0; // Walid : fixer le nbr itérations
         while(!stop) {
-            //System.out.println("boucle infinie  intentionnelle ! ");
-            while (run) {
-                currentInfraAgent = listOrdonnancement.get(0);
-                MyLogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfraAgent.getInfraAgentReference() + " ***********************************");
-                //LifeCycle(currentInfraAgent.getInfraAgentReference(), currentInfraAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
-                currentInfraAgent.run(); // change the state of the agent
-                listOrdonnancement.remove(currentInfraAgent);
-                listOrdonnancement.add(currentInfraAgent);
+            synchronized (this) {
+                while (this.currentAgentCycle < this.maxCycleAgent) {
+                    currentInfraAgent = listOrdonnancement.get(0);
+                    MyLogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfraAgent.getInfraAgentReference() + " ***********************************");
+                    //LifeCycle(currentInfraAgent.getInfraAgentReference(), currentInfraAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
+                    currentInfraAgent.run(); // change the state of the agent
+                    listOrdonnancement.remove(currentInfraAgent);
+                    listOrdonnancement.add(currentInfraAgent);
 
-                //System.out.println("listOrdonnancement****" + getListOrdonnancement());
-                i++;
+                    this.currentAgentCycle++;
+                }
             }
         }
     }
@@ -158,5 +159,25 @@ public class StrategieClassique implements IStratOrdonnanceur {
     @Override
     public void repriseOrdonnancement() {
         this.run = true;
+    }
+
+    /**
+     * Set the value of the number of agent cycle per OCE Cycle
+     * @param maxCycleAgent
+     */
+    @Override
+    public void setMaxCycleAgent(int maxCycleAgent) {
+        MyLogger.log(Level.INFO,"Changement du nombre de cycles agent par cycle moteur, nouvelle valeur = "+ maxCycleAgent);
+        this.maxCycleAgent = maxCycleAgent;
+    }
+
+    /**
+     * restart the OCE Cycle (initialize the current cycle to 0)
+     */
+    @Override
+    public void resetCurrentCycleAgent() {
+        synchronized (this){
+            this.currentAgentCycle = 0;
+        }
     }
 }

@@ -11,6 +11,7 @@ import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public interface IRecord {
 
@@ -47,7 +48,7 @@ public interface IRecord {
      * @param attachedService : the physical service
      * @return the agent which is attached to it
      */
-    ServiceAgent retrieveSAgentByPService(OCService attachedService);
+    Optional<ServiceAgent> retrieveSAgentByPService(OCService attachedService);
 
     /**
      * Resolve the logical adresse (OCEAgent) of a list of InfraAgentReference

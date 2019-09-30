@@ -74,7 +74,7 @@ public abstract class MockupService extends OCService implements Comparable {
     }
 
     /**
-     *  Compare two MockupService (the comparison is compute on thr combination "NameOwnerWay")
+     *  Compare two MockupService (the comparison is compute on the combination "Name-Type-Owner-Way")
      * @param o the object to compare this to
      * @return true if the two object are equal, else false
      */
@@ -85,8 +85,10 @@ public abstract class MockupService extends OCService implements Comparable {
 
         MockupService that = (MockupService) o;
 
-        if (!name.equals(that.name) && !type.equals(that.type) && !owner.equals(that.owner)) return false;
-        return myWay == that.myWay;
+//        if (!name.equals(that.name) && !type.equals(that.type) && !owner.equals(that.owner)) return false;
+//        return myWay == that.myWay;
+        if (name.equals(that.name) && type.equals(that.type) && owner.equals(that.owner) &&  myWay == that.myWay) return true;
+        return false;
     }
 
 

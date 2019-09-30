@@ -67,4 +67,21 @@ public class Ordonnanceur implements IOrdonnanceur {
     public void repriseOrdonnancement() {
         this.stratOrdonnanceur.repriseOrdonnancement();
     }
+
+    /**
+     * Set the value of the number of agent cycle per OCE Cycle
+     * @param maxCycleAgent
+     */
+    @Override
+    public void setMaxCycleAgent(int maxCycleAgent) {
+        this.stratOrdonnanceur.setMaxCycleAgent(maxCycleAgent);
+    }
+
+    /**
+     * restart the OCE Cycle (initialize the current cycle to 0)
+     */
+    @Override
+    public void resetCurrentCycleAgent() {
+        this.stratOrdonnanceur.resetCurrentCycleAgent();
+    }
 }

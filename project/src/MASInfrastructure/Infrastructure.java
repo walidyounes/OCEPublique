@@ -132,4 +132,21 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     public void repriseOrdonnancement() {
         this.ordonnanceur.repriseOrdonnancement();
     }
+
+    /**
+     * Set the value of the number of agent cycle per OCE Cycle
+     * @param maxCycleAgent
+     */
+    @Override
+    public void setMaxCycleAgent(int maxCycleAgent) {
+       this.ordonnanceur.setMaxCycleAgent(maxCycleAgent);
+    }
+
+    /**
+     * restart the OCE Cycle (initialize the current cycle to 0)
+     */
+    @Override
+    public void resetCurrentCycleAgent() {
+        this.ordonnanceur.resetCurrentCycleAgent();
+    }
 }

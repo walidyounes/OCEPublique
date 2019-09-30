@@ -20,6 +20,10 @@ public interface IStratOrdonnanceur extends IAgentListener {
 
     void repriseOrdonnancement();
 
+    void setMaxCycleAgent(int maxCycleAgent);
+
+    void resetCurrentCycleAgent();
+
     void addOrdonnaceurListener(OrdonnanceurListener ordonnanceurListener);
 
     void agentAjoute(InfraAgent infraAgent);

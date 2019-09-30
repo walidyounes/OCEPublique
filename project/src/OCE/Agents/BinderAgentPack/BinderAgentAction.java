@@ -4,6 +4,7 @@
 
 package OCE.Agents.BinderAgentPack;
 
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import Midlleware.ThreeState.IActionState;
@@ -14,6 +15,7 @@ import OCE.DeviceBinder.PhysicalDeviceBinder;
 import OCE.InfrastructureMessages.FeedbackInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.OCEMessages.FeedbackValues;
+import OCE.ServiceConnexion.Connexion;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -27,6 +29,7 @@ public class BinderAgentAction implements IActionState {
     private OCEAgent secondServiceAgent;
     private OCService firstService =null;
     private OCService secondService =null;
+    private PhysicalDeviceBinder physicalDeviceBinder;
 
     /**
      * Update the communication component
@@ -46,8 +49,14 @@ public class BinderAgentAction implements IActionState {
                 this.secondServiceAgent = (ServiceAgent)decisionsList.get(1).getEmitter();
                 this.firstService = ((ServiceAgent)decisionsList.get(0).getEmitter()).getHandledService();
                 this.secondService =  ((ServiceAgent)decisionsList.get(1).getEmitter()).getHandledService();
+
                 //Launch the physical binging
-                PhysicalDeviceBinder.bindServices(firstService, secondService);
+                this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();
+                this.physicalDeviceBinder.bindServices(firstService, secondService);
+                //Register the connexion in the DeviceBinder
+                Connexion connexion = new Connexion((ServiceAgent) this.firstServiceAgent, (ServiceAgent) this.secondServiceAgent,(MockupService) this.firstService, (MockupService) this.secondService,(BinderAgent) this.myBinderAgent);
+                this.physicalDeviceBinder.addConnexion(connexion);
+
                 // reinitialise the number of received messages
                 this.nbMessages =0;
                 //Simulate the feedback : send to both agent an automatic response
@@ -72,7 +81,11 @@ public class BinderAgentAction implements IActionState {
                     this.secondService = ((ServiceAgent)decisionsList.get(0).getEmitter()).getHandledService();
                     this.secondServiceAgent = (ServiceAgent)decisionsList.get(0).getEmitter();
                     //Launch the physical binging
-                    PhysicalDeviceBinder.bindServices(firstService, secondService);
+                    this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();
+                    this.physicalDeviceBinder.bindServices(firstService, secondService);
+                    //Register the connexion in the DeviceBinder
+                    Connexion connexion = new Connexion((ServiceAgent) this.firstServiceAgent, (ServiceAgent) this.secondServiceAgent,(MockupService) this.firstService, (MockupService) this.secondService,(BinderAgent) this.myBinderAgent);
+                    this.physicalDeviceBinder.addConnexion(connexion);
                     // reinitialise the number of received messages
                     this.nbMessages =0;
                     //Simulate the feedback : send to both agent an automatic response

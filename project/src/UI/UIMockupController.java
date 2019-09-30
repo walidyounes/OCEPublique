@@ -26,6 +26,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class UIMockupController implements Initializable {
@@ -55,15 +57,20 @@ public class UIMockupController implements Initializable {
     @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
     @FXML private AnchorPane visualisationPane;
     @FXML private AnchorPane Terminal;
+    @FXML private JFXTextField NbCyclesAgent;
     private TextArea UILog;
     private JFXPopup popup;
+
+    private ArrayList<OCService> providedByC;
+    private ArrayList<OCService> requiredByC;
+    private Graph serviceGraph;
+
     private MockupFacadeAdapter mockupFacadeAdapter;
     private Infrastructure infrastructure;
     private Thread simulation;
     private boolean runExecution;
-    private ArrayList<OCService> providedByC;
-    private ArrayList<OCService> requiredByC;
-    private Graph serviceGraph;
+    private PhysicalDeviceBinder physicalDeviceBinder;
+    private final int defaultMaxCycleAgent = 400;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -113,20 +120,28 @@ public class UIMockupController implements Initializable {
                                                }
                                            });
         MyLogger.init();
-        PhysicalDeviceBinder physicalDeviceBinder = new PhysicalDeviceBinder();
-        physicalDeviceBinder.UIBinderServicesProperty().addListener(new ChangeListener<String>() {
+        this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();
+    /*    physicalDeviceBinder.UIBinderServicesProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
                         String[] idServices = newValue.split("-");
                         System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+                        MyLogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
                         addEdge(idServices[0], idServices[1]);
-                    }
-                });
             }
-        });
+        });*/
+        this.physicalDeviceBinder.UIBinderSProperty().setValueListener(new NotifySetStringProperty.OnSetValueListener() {
+                                                                           @Override
+                                                                           public void onValueSet(String value) {
+                                                                               System.out.println(value);
+                                                                               String[] idServices = value.split("-");
+                                                                               System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+                                                                               MyLogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+                                                                               addEdge(idServices[0], idServices[1]);
+                                                                           }
+                                                                       });
+
+        this.NbCyclesAgent.setOnKeyPressed((event) -> { if(event.getCode() == KeyCode.ENTER) { updateMaxCycleAgent(); } });
     }
 
     @FXML
@@ -352,20 +367,23 @@ public class UIMockupController implements Initializable {
     }
 
     private void previewGraph(){
-        // It informs the viewer that it can use rendering algorithms that are more time consuming to favor quality instead of speed
+        //It informs the viewer that it can use rendering algorithms that are more time consuming to favor quality instead of speed
         this.serviceGraph.addAttribute("ui.quality");
 
-        // Adding label to each node done by walid ^^
+        //Adding label to each node
         //this.serviceGraph.getEachNode().forEach(n -> n.addAttribute("ui.label"," Service "+n.getId()+" "));
 
         Viewer viewer = new Viewer( this.serviceGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewer.enableAutoLayout();
 
-        // create a view *without* a JFrame
+        //Create a view within a JFrame
         View view = viewer.addDefaultView(false);
+        //Add a custom mouse event manager
+        //view.setMouseManager(new Clicks());
+
         SwingNode swingNode = new SwingNode();
         swingNode.setContent((JComponent)view);
-        //swingNode.resize(400,400);
+        swingNode.resize(300,400);
 
         this.visualisationPane.setTopAnchor(swingNode, 0d);
         this.visualisationPane.setBottomAnchor(swingNode, 0d);
@@ -380,9 +398,9 @@ public class UIMockupController implements Initializable {
 
         for (OCService service : providedServices) {
             MockupService myMService = (MockupService)service;
-            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getType()+myMService.getOwner()+myMService.getWay());
 
-            node.addAttribute("ui.label"," "+myMService.getName() +"-"+myMService.getType()+" Of " + myMService.getOwner());
+            node.addAttribute("ui.label"," "+myMService.getName()+"-"+myMService.getType()+" Of " + myMService.getOwner());
 
         }
 
@@ -391,7 +409,7 @@ public class UIMockupController implements Initializable {
     private void addRequiredServiceToGraphe(ArrayList<OCService> requiredServices) {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
-            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getType()+myMService.getOwner()+myMService.getWay());
             node.addAttribute("ui.label",""+myMService.getName()+"-"+myMService.getType()+" Of " + myMService.getOwner());
             node.addAttribute("ui.class","Required");
         }
@@ -400,7 +418,7 @@ public class UIMockupController implements Initializable {
     private void addEdge(String idService1, String idService2){
         if(this.serviceGraph.getEdge(""+idService1+idService2)==null && this.serviceGraph.getEdge(""+idService2+idService1)==null ) {
             // We add only one time the edge between two services
-            this.serviceGraph.addEdge(""+idService1+idService2, idService1, idService2);
+            this.serviceGraph.addEdge(""+idService1+"-"+idService2, idService1, idService2);
         }
 
     }
@@ -409,7 +427,7 @@ public class UIMockupController implements Initializable {
 
         for (OCService service : providedServices) {
             MockupService myMService = (MockupService)service;
-            this.serviceGraph.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            this.serviceGraph.removeNode(myMService.getName()+myMService.getType()+myMService.getOwner()+myMService.getWay());
         }
 
     }
@@ -417,7 +435,7 @@ public class UIMockupController implements Initializable {
     private void deleteRequiredServiceFromGraphe(ArrayList<OCService> requiredServices) {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
-            this.serviceGraph.removeNode(myMService.getName()+myMService.getOwner()+myMService.getWay());
+            this.serviceGraph.removeNode(myMService.getName()+myMService.getType()+myMService.getOwner()+myMService.getWay());
         }
     }
 
@@ -500,4 +518,38 @@ public class UIMockupController implements Initializable {
     }
 
 
+    @FXML
+    public void deleteConnexion(ActionEvent event){
+        String edgeToDelete =  this.serviceGraph.getEdge(0).getId();
+        String[] idServices = edgeToDelete.split("-");
+        System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+        this.physicalDeviceBinder.deleteConnexion(idServices[0],idServices[1]);
+
+        this.serviceGraph.removeEdge(0);
+    }
+
+    /**
+     * Get the value typed in the textField corresponding to the number cycles agent per OCE cycle and update in the infrastructure
+     */
+    private void updateMaxCycleAgent(){
+        //Get the value typed in the textField
+        String stringValue = this.NbCyclesAgent.getText();
+        //convert the value to an integer
+        try {
+            int intValue = Integer.parseInt(stringValue);
+            this.infrastructure.setMaxCycleAgent(intValue);
+
+        }catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Parsing error !");
+            alert.setContentText("The value must be an integer ! ");
+            alert.show();
+        }
+    }
+
+    @FXML
+    public void oneStepExecution(ActionEvent event){
+        //Reset to 0 the value of the current agent cycle to restart the OCE cycle
+        this.infrastructure.resetCurrentCycleAgent();
+    }
 }
