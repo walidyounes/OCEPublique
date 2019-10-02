@@ -40,13 +40,13 @@ public class IDAgent implements Comparable{
     public void setInternalReference(UUID internalReference) {
         this.internalReference = internalReference;
     }
+
     @Override
     public boolean equals(Object athat) {
-        if (this == athat)
-            return true;
         if (athat == null || getClass() != athat.getClass())
             return false;
-
+        if (this == athat)
+            return true;
         IDAgent that = (IDAgent) athat;
 
         return internalReference.equals(that.internalReference);
@@ -64,6 +64,8 @@ public class IDAgent implements Comparable{
 
     @Override
     public int compareTo(Object athat) {
+        if(athat == null || getClass() != athat.getClass()) return -1;
+        if(this == athat) return 0;
         IDAgent that = (IDAgent) athat;
         int result = this.internalReference.compareTo(that.internalReference);
         if (result == 0) {

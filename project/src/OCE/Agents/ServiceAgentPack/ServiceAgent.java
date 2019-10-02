@@ -4,7 +4,6 @@
 
 package OCE.Agents.ServiceAgentPack;
 
-import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import Midlleware.ThreeState.IActionState;
@@ -18,9 +17,7 @@ import OCE.Agents.ServiceAgentPack.Learning.ScoredCurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
 import OCE.OCEMessages.FeedbackValues;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class implement the agent responsible of a physical service
@@ -37,7 +34,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     private int myCurrentCycleNumber; // Todo just for the test of the presentation issue of an assembly to the user
     private boolean feedbackReceived; // variable to indicate whether the agent received the feedback or not
     private FeedbackValues feedbackValue;
-    private List<Situation<ReferenceSituationEntry>> myKnowledgeBase;
+    private Set<Situation<ReferenceSituationEntry>> myKnowledgeBase;
     /**
      * Create a service Agent specifying a random ID
      * @param handledService    : the service handled by the agent
@@ -58,7 +55,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myScoredCurrentSituation = null;
         this.myCurrentCycleNumber = 0;
         //Todo : change implementation to add uploading of old knowledge
-        myKnowledgeBase = new ArrayList<>();
+        myKnowledgeBase = new HashSet<>();
     }
 
     /**
@@ -82,7 +79,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myScoredCurrentSituation = null;
         this.myCurrentCycleNumber = 0;
         //Todo : change implementation to add uploading of old knowledge
-        this.myKnowledgeBase = new ArrayList<>();
+        myKnowledgeBase = new HashSet<>();
     }
 
 
@@ -112,7 +109,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     }
 
     /**
-     * Get the Factory wich allow th creation of a Binder Agent
+     * Get the Factory which allow th creation of a Binder Agent
      * @return the BinderAgent Factory
      */
     public IOCEBinderAgentFactory getMyBinderAgentFactory() {
@@ -193,7 +190,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      * Get the content of the knowledge base of the service agent
      * @return the list of reference situation that construct the agent's knowledge base
      */
-    public List<Situation<ReferenceSituationEntry>> getMyKnowledgeBase() {
+    public Set<Situation<ReferenceSituationEntry>> getMyKnowledgeBase() {
         return myKnowledgeBase;
     }
 
@@ -201,7 +198,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      * Set a new content for the service agent"s knowledge base
      * @param myKnowledgeBase : the new knowledge base
      */
-    public void setMyKnowledgeBase(List<Situation<ReferenceSituationEntry>> myKnowledgeBase) {
+    public void setMyKnowledgeBase(Set<Situation<ReferenceSituationEntry>> myKnowledgeBase) {
         this.myKnowledgeBase = myKnowledgeBase;
     }
 
@@ -211,19 +208,53 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     public void updateMyKnowledgeBase(){
         //If the scored current situation exist
         if(this.myScoredCurrentSituation != null){
-            Situation<ReferenceSituationEntry> referenceSituation = new Situation<>();
+            //Transform the scored current situation to a reference situation
+            Situation<ReferenceSituationEntry> referenceSituationToAdd = new Situation<>();
             Map<IDAgent, ScoredCurrentSituationEntry> setScoredCurrentSituationEntry = this.myScoredCurrentSituation.getMySetAgents();
             // Transform the scored situation entry to a reference situation entry
             for(IDAgent idAgent : setScoredCurrentSituationEntry.keySet()){
-                referenceSituation.addSituationEntry(idAgent, setScoredCurrentSituationEntry.get(idAgent).toReferenceSituationEntry());
+                referenceSituationToAdd.addSituationEntry(idAgent, setScoredCurrentSituationEntry.get(idAgent).toReferenceSituationEntry());
             }
-            //Add the reference situation to the database
-            this.myKnowledgeBase.add(referenceSituation);
+            // If the reference situation doesn't exists in the database ( i.e : their is no RS in database with the same IDAgents and the same score)
+            if (!this.myKnowledgeBase.contains(referenceSituationToAdd)){
+                //Check if the reference situation exists in the database ( it exists a reference situation with the same agents BUT NOT THE SAME SCORES)
+                boolean found=false;
+                Situation<ReferenceSituationEntry> duplicatedReferenceSituation = null;
+                int iteratorIndex = 0;
+                Iterator<Situation<ReferenceSituationEntry>> customIterator  = this.myKnowledgeBase.iterator();
+                // Get the set of IDAgent of the reference situation to be added to the knowledgeDatabase
+                Set<IDAgent> referenceSIDAgentSet = referenceSituationToAdd.getMySetAgents().keySet();
+                while(iteratorIndex < this.myKnowledgeBase.size() && !found){
+                    Situation<ReferenceSituationEntry> currentReferenceSituation = customIterator.next();
+                    //Get the Set of IDAgents of the current RS and compare them
+                    Set<IDAgent> currentRSIDAgentSet = currentReferenceSituation.getMySetAgents().keySet();
+                    if (referenceSIDAgentSet.equals(currentRSIDAgentSet)){
+                        found=true;
+                        // Save the reference situation
+                        duplicatedReferenceSituation = currentReferenceSituation;
+                    }
+                    iteratorIndex++;
+                }
+                //If the duplicated reference situation was found
+                if(found){
+                    //We delete from the database the old reference Situation (which may have an old scores values)
+                    this.myKnowledgeBase.remove(duplicatedReferenceSituation);
+                    //Add the reference Situation containing the new score values
+                    this.myKnowledgeBase.add(referenceSituationToAdd);
+                }else {
+                    //Add the reference Situation containing the new score values
+                    this.myKnowledgeBase.add(referenceSituationToAdd);
+                }
+            }else{
+                //Add the reference situation to the database
+                this.myKnowledgeBase.add(referenceSituationToAdd);
+            }
             //Reinitialise the situation attribute in the agent
             this.myScoredCurrentSituation = null;
         }
 
     }
+
     /**
      * Check whether the feedback is received
      * @return true if the agent received the feedback, false otherwise
@@ -264,23 +295,10 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ServiceAgent)) return false;
-
+        if (o== null || getClass() != o.getClass()) return false;
         ServiceAgent that = (ServiceAgent) o;
-
         return myID.equals(that.myID);
     }
-
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj) return true;
-//        if (!(obj instanceof ServiceAgent)) return false;
-//
-//        ServiceAgent that = (ServiceAgent) obj;
-//
-//        return handledService.equals(that.handledService);
-//    }
 
     @Override
     public int hashCode() {
@@ -295,16 +313,11 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      */
     @Override
     public int compareTo(Object athat) {
+        if(athat == null || getClass() != athat.getClass()) return -1;
+        if(athat == this) return 0;
         ServiceAgent that = (ServiceAgent) athat;
-
         return this.myID.compareTo(that.getMyID());
     }
-
-//    @Override
-//    public int compareTo(Object obj) {
-//        return ((MockupService)this.handledService).compareTo(obj);
-//    }
-
 
     @Override
     public String toString() {

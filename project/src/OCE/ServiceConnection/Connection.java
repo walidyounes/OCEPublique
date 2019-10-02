@@ -2,7 +2,7 @@
  * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.ServiceConnexion;
+package OCE.ServiceConnection;
 
 
 import AmbientEnvironment.MockupCompo.MockupService;
@@ -14,7 +14,7 @@ import OCE.Agents.ServiceAgentPack.ServiceAgent;
  * @author Walid YOUNES
  * @version 1.0
  */
-public class Connexion implements Comparable {
+public class Connection implements Comparable {
 
     private ServiceAgent firstServiceAgent;
     private ServiceAgent secondServiceAgent;
@@ -27,7 +27,7 @@ public class Connexion implements Comparable {
      * @param firstServiceAgent     : the first service agent responsible of the first service
      * @param secondServiceAgent    : the second service agent responsible of the second service
      */
-    public Connexion(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent) {
+    public Connection(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent) {
         this.firstServiceAgent = firstServiceAgent;
         this.secondServiceAgent = secondServiceAgent;
     }
@@ -38,7 +38,7 @@ public class Connexion implements Comparable {
      * @param secondServiceAgent    : the second service agent responsible of the second service
      * @param binderAgent           : the binder agent witch is atached to this connexion
      */
-    public Connexion(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent, BinderAgent binderAgent) {
+    public Connection(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent, BinderAgent binderAgent) {
         this.firstServiceAgent = firstServiceAgent;
         this.secondServiceAgent = secondServiceAgent;
         this.binderAgent = binderAgent;
@@ -52,7 +52,7 @@ public class Connexion implements Comparable {
      * @param secondService         : the second service
      * @param binderAgent           : the binder agent witch is atached to this connexion
      */
-    public Connexion(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent, MockupService firstService, MockupService secondService, BinderAgent binderAgent) {
+    public Connection(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent, MockupService firstService, MockupService secondService, BinderAgent binderAgent) {
         this.firstServiceAgent = firstServiceAgent;
         this.secondServiceAgent = secondServiceAgent;
         this.firstService = firstService;
@@ -162,9 +162,9 @@ public class Connexion implements Comparable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Connexion)) return false;
+        if (!(o instanceof Connection)) return false;
 
-        Connexion that = (Connexion) o;
+        Connection that = (Connection) o;
         ServiceAgent thatFirstSserviceAgent = that.getFirstServiceAgent();
         ServiceAgent thatSecondSserviceAgent = that.getSecondServiceAgent();
         BinderAgent thatBinderAgent = that.getBinderAgent();
@@ -182,7 +182,7 @@ public class Connexion implements Comparable {
      */
     @Override
     public int compareTo(Object athat) {
-        Connexion that = (Connexion) athat;
+        Connection that = (Connection) athat;
         ServiceAgent thatFirstServiceAgent = that.getFirstServiceAgent();
         ServiceAgent thatSecondServiceAgent = that.getSecondServiceAgent();
         BinderAgent thatBinderAgent = that.getBinderAgent();
@@ -192,24 +192,7 @@ public class Connexion implements Comparable {
     }
 
     /**
-     * Returns a string representation of the object. In general, the
-     * {@code toString} method returns a string that
-     * "textually represents" this object. The result should
-     * be a concise but informative representation that is easy for a
-     * person to read.
-     * It is recommended that all subclasses override this method.
-     * <p>
-     * The {@code toString} method for class {@code Object}
-     * returns a string consisting of the name of the class of which the
-     * object is an instance, the at-sign character `{@code @}', and
-     * the unsigned hexadecimal representation of the hash code of the
-     * object. In other words, this method returns a string equal to the
-     * value of:
-     * <blockquote>
-     * <pre>
-     * getClass().getName() + '@' + Integer.toHexString(hashCode())
-     * </pre></blockquote>
-     *
+     * Returns a string representation of the object.
      * @return a string representation of the object.
      */
     @Override

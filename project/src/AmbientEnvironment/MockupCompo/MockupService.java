@@ -39,11 +39,7 @@ public abstract class MockupService extends OCService implements Comparable {
         this.owner = owner;
     }
 
-    public String toString() {
-        // return "Service "+name+" of Component "+ownerComponentName+" Links :
-        // "+linkedServices;
-        return "Service " + name + "-"+ type + " of " + owner;
-    }
+
 
 //    @Override
 //    public boolean equals(Object o) {
@@ -80,8 +76,8 @@ public abstract class MockupService extends OCService implements Comparable {
      */
     @Override
     public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
         if (this == o) return true;
-        if (!(o instanceof MockupService)) return false;
 
         MockupService that = (MockupService) o;
 
@@ -106,6 +102,8 @@ public abstract class MockupService extends OCService implements Comparable {
      */
     @Override
     public int compareTo(Object o) {
+        if(this == o) return 0;
+        if(o==null || getClass() != o.getClass()) return -1;
         MockupService that = (MockupService) o;
         String strThis = this.name+this.type+this.owner+this.myWay;
         String strThat = that.name+that.type+that.owner+that.myWay;
@@ -117,6 +115,10 @@ public abstract class MockupService extends OCService implements Comparable {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Service " + name + "-"+ type + " of " + owner;
+    }
 
     @Override
     public void addLink(OCService s) throws AddLinkException {

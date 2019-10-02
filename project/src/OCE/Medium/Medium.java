@@ -16,6 +16,7 @@ import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Medium implements IRecord, ICommunicationAdapter {
 
@@ -23,9 +24,9 @@ public class Medium implements IRecord, ICommunicationAdapter {
     private ICommunicationAdapter mycomunnicationAdapter;
 
     public Medium(ICommunication communicationInfrastructure) {
-        //Intanciate the recorder
+        //Instantiate the recorder
         this.myRecorder = new Record();
-        //Instanciate the communication adapter with the communication module from the infrastructure
+        //Instantiate the communication adapter with the communication module from the infrastructure
         this.mycomunnicationAdapter = new CommunicationAdapter(communicationInfrastructure, myRecorder);
     }
 
@@ -123,7 +124,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
      * @return the agent which is attached to it
      */
     @Override
-    public ServiceAgent retrieveSAgentByPService(OCService attachedService) {
+    public Optional<ServiceAgent> retrieveSAgentByPService(OCService attachedService) {
         return this.myRecorder.retrieveSAgentByPService(attachedService);
     }
 

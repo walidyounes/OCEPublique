@@ -7,7 +7,7 @@ package OCE.Agents.ServiceAgentPack.Learning;
 import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 
-public class ReferenceSituationEntry extends SituationEntry {
+public class ReferenceSituationEntry extends SituationEntry implements Comparable {
 
     private double score; // The score of the agent "agent" in the reference situation stored in the agent knowledge base
 
@@ -62,16 +62,43 @@ public class ReferenceSituationEntry extends SituationEntry {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof ReferenceSituationEntry)) return false;
-
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        if (this == obj)
+            return true;
         ReferenceSituationEntry that = (ReferenceSituationEntry) obj;
-
         return this.agent.equals(that.agent) && this.score == that.score;
     }
 
     @Override
     public String toString() {
         return "( " + this.agent.toString() + " , " + this.score + ")";
+    }
+
+    /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     * @param o the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object
+     * is less than, equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(Object o) {
+        if(o == null || getClass() != o.getClass()) return -1;
+        if(this == o) return 0;
+        else{
+            ReferenceSituationEntry that = (ReferenceSituationEntry) o;
+            return this.agent.compareTo(that.getAgent());
+        }
+    }
+
+    /**
+     * Returns a hash code value for the object.
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return (""+this.score).hashCode() + this.agent.hashCode();
     }
 }

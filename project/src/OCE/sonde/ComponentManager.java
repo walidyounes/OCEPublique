@@ -6,13 +6,21 @@ package OCE.sonde;
 
 import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
 import AmbientEnvironment.FacadeAdapter.IAcquisition;
+import AmbientEnvironment.MockupCompo.MockupComponent;
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import MOICE.MOICE;
+import MOICE.connectionManager.ConnectionManager;
+import MOICE.deploymentManager.DeploymentManager;
+import MOICE.feedbackManager.FeedbackManager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class ComponentManager {
 
@@ -27,11 +35,18 @@ public class ComponentManager {
     /**
      * Get, store the list of appearing components
      * and send the list of the services of these components to the ServiceManager
-     * @throws AcquisitionFailure raised when there is a failure in the acquisition of the components from the environement
+     * @throws AcquisitionFailure raised when there is a failure in the acquisition of the components from the environment
      */
     public void appearingComponentsAcquisition() throws AcquisitionFailure {
 
         Set<OCComponent> componentsList = acquisition.getNewComponents();
+
+        // TODO walid 30-09-2019 : Delete later this is just for test
+
+            ArrayList<MockupComponent> MOICEComponentsList = new ArrayList<>(componentsList.stream().map( e -> (MockupComponent) e).collect(Collectors.toList()));
+            MOICE middlewareMOICE = MOICE.getInstance();
+            MOICEComponentsList.forEach( c -> middlewareMOICE.registerComponent(c));
+
         for (OCComponent component : componentsList) {
 
             // log in the appearing components

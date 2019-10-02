@@ -73,7 +73,7 @@ public class SituationUtility {
      * @param threshold                 : the threshold used for selecting similar reference situations
      * @return if no reference situation is similar to the current situation we return an empty list, otherwise we return the list ordered by the degree of similarity
      */
-    public static Map<Situation<ReferenceSituationEntry>, Double> getSimilarReferenceSituations(Situation<CurrentSituationEntry> currentSituation, List<Situation<ReferenceSituationEntry>> listReferenceSituations, double threshold){
+    public static Map<Situation<ReferenceSituationEntry>, Double> getSimilarReferenceSituations(Situation<CurrentSituationEntry> currentSituation, Set<Situation<ReferenceSituationEntry>> listReferenceSituations, double threshold){
 
         //Create the list of similar reference situations
         Map<Situation<ReferenceSituationEntry>, Double> listSimilarRSituations = new HashMap<>();

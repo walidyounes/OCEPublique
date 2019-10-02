@@ -11,10 +11,7 @@ import OCE.OCEMessages.OCEMessage;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.stream.Collectors;
 
@@ -130,4 +127,37 @@ public class Situation < T extends SituationEntry> {
         return values.toString();
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     * Note that it is generally necessary to override the {@code hashCode}
+     * method whenever this method is overridden, so as to maintain the
+     * general contract for the {@code hashCode} method, which states
+     * that equal objects must have equal hash codes.
+     *
+     * @param obj the reference object with which to compare.
+     * @return {@code true} if this object is the same as the obj
+     * argument; {@code false} otherwise.
+     * @see #hashCode()
+     * @see HashMap
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null || getClass() != obj.getClass())
+            return false;
+        if (this == obj)
+            return true;
+
+        Situation<T> that = (Situation<T>) obj;
+        return this.mySetAgents.equals(that.getMySetAgents());
+    }
+
+    /**
+     * Returns a hash code value for the object. This method is
+     * supported for the benefit of hash tables such as those provided by
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return this.mySetAgents.hashCode();
+    }
 }
