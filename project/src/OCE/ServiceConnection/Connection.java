@@ -155,6 +155,15 @@ public class Connection implements Comparable {
     }
 
     /**
+     * Check if this connection concern the service send as parameter
+     * @param service : the service
+     * @return true if this connection contains the service "service"
+     */
+    public boolean containService(MockupService service){
+        return this.firstService.equals(service) || this.secondService.equals(service);
+    }
+
+    /**
      * Compare two connexions (the comparison is compute on all the attribute of the connexion)
      * @param o the connexion to compare this one
      * @return true if the two object are equal, false else

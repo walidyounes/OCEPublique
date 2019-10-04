@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions;
+package OCE.Decisions.ARSADecisions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
+import OCE.Decisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraARSAMessages.AdvertiseInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Agents.OCEAgent;

@@ -43,9 +43,7 @@ public class FeedbackMessage extends OCEMessage {
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
-        //Todo for now the agent doesn't do anything to treat this message
         MyLogger.log(Level.INFO, OCEAgentRef + " treats a feedback message");
-        MyLogger.log(Level.INFO, OCEAgentRef + " is updating its knowledge");
         //Set that the feedback is received
         ((ServiceAgent)OCEAgentRef).setFeedbackReceived(true);
         //Set the value of the received feedback

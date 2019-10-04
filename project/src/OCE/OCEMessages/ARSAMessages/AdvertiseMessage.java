@@ -15,7 +15,7 @@ import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Decisions.DoNothingDecision;
 import OCE.Decisions.OCEDecision;
-import OCE.Decisions.ReplyDecision;
+import OCE.Decisions.ARSADecisions.ReplyDecision;
 import OCE.OCEMessages.MessageTypes;
 import OCE.Unifieur.IMatching;
 import OCE.Unifieur.Matching;

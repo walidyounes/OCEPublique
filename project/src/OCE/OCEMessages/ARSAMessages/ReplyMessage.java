@@ -14,7 +14,7 @@ import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Decisions.DoNothingDecision;
 import OCE.Decisions.OCEDecision;
-import OCE.Decisions.SelectDecision;
+import OCE.Decisions.ARSADecisions.SelectDecision;
 import OCE.OCEMessages.MessageTypes;
 
 import java.util.ArrayList;

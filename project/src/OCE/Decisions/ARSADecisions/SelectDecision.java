@@ -1,14 +1,15 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions;
+package OCE.Decisions.ARSADecisions;
 
 import Logger.MyLogger;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.Decisions.OCEDecision;
 import OCE.InfrastructureMessages.BindInfraMessage;
 import OCE.InfrastructureMessages.InfraARSAMessages.SelectInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 /**
- * This class represent a selection decision (i.e. send a selection message to an agent to inform hi that it has been choosed as suitable connexion)
+ * This class represents a selection decision (i.e. send a selection message to an agent to inform hi that it has been choosed as suitable connexion)
  * @author Walid YOUNES
  * @version 1.0
  */
@@ -41,7 +42,7 @@ public class SelectDecision extends OCEDecision {
     }
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
-        MyLogger.log(Level.INFO, "Treating an agree decision ! ");
+        MyLogger.log(Level.INFO, "Treating a Select decision ! ");
         SelectInfraMessage selectMessage = new SelectInfraMessage(null, null, this.myBinderAgent.getMyInfraAgent().getInfraAgentReference());
         communicationAdapter.sendMessage(selectMessage, this.emitter, this.receivers);
         // Send a message to the binder agent
@@ -49,7 +50,7 @@ public class SelectDecision extends OCEDecision {
         ArrayList<OCEAgent> bindReceivers = new ArrayList<>();
         bindReceivers.add(this.myBinderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter,bindReceivers);
-        // Change the state of the agent to "Waiting state" //Todo: I put connected, change it to waiting when implementing the replyMessage from the binder
+        // Change the state of the agent to "Waiting state" //Todo: walid 04/02/2019 : I deleted this _> 04/09 ça provoque un bug -> i put it back
         ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.Waiting);
         //Set the selectedAgent ot be verified later
         this.emitter.setMySelectedAgent(this.receivers.get(0));

@@ -15,7 +15,7 @@ import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.AgreeDecision;
+import OCE.Decisions.ARSADecisions.AgreeDecision;
 import OCE.Decisions.DoNothingDecision;
 import OCE.Decisions.OCEDecision;
 import OCE.OCEMessages.MessageTypes;
@@ -85,8 +85,8 @@ public class SelectMessage extends ARSAMessage {
         catch (NullPointerException e){
             MyLogger.log(Level.WARNING, "the selected agent reference is NULL (no agent was selected !) ");
         }
-        //Verify the connexion state of the agent and if their is mutual selection
-        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created) || !mutualSelection ){
+        //Verify if their is mutual selection
+        if ( !mutualSelection ){
             // Send a agree message to the emitter of this message
             ArrayList<OCEAgent> agreeReceivers = new ArrayList<>();
             agreeReceivers.add(this.emitter);

@@ -85,10 +85,10 @@ public class BinderAgentAction implements IActionState {
                     this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();
                     //Register the connection in the DeviceBinder
                     Connection connection = new Connection((ServiceAgent) this.firstServiceAgent, (ServiceAgent) this.secondServiceAgent,(MockupService) this.firstService, (MockupService) this.secondService,(BinderAgent) this.myBinderAgent);
+                    this.physicalDeviceBinder.addConnexion(connection);
                     //Launch the bindings
                     this.physicalDeviceBinder.bindServices(firstService, secondService);
 
-                    this.physicalDeviceBinder.addConnexion(connection);
                     // reinitialise the number of received messages
                     this.nbMessages =0;
                     //Simulate the feedback : send to both agent an automatic response

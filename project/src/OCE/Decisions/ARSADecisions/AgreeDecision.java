@@ -1,14 +1,15 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions;
+package OCE.Decisions.ARSADecisions;
 
 import Logger.MyLogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
+import OCE.Decisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraARSAMessages.AgreeInfraMessage;
 import OCE.InfrastructureMessages.BindInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
@@ -49,7 +50,7 @@ public class AgreeDecision extends OCEDecision {
         ArrayList<OCEAgent> bindReceiver = new ArrayList<>();
         bindReceiver.add(this.binderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter, bindReceiver);
-        // Change the state of the agent to "Waiting state" //Todo: I put connected, change it to waiting when implementing the replyMessage from the binder
+        // Change the state of the agent to "Waiting state"
         ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.Waiting);
     }
 

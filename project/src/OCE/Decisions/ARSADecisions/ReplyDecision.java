@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions;
+package OCE.Decisions.ARSADecisions;
 
 import Logger.MyLogger;
+import OCE.Decisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraARSAMessages.ReplyInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Agents.OCEAgent;
@@ -31,7 +32,7 @@ public class ReplyDecision extends OCEDecision {
 
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
-        MyLogger.log(Level.INFO, "Treating an reply decision ! ");
+        MyLogger.log(Level.INFO, "Treating a reply decision ! ");
         ReplyInfraMessage replyMessage = new ReplyInfraMessage(null, null );
         communicationAdapter.sendMessage(replyMessage, this.emitter, this.receivers);
     }
