@@ -13,6 +13,8 @@ import MOICE.feedbackManager.FeedbackManager;
 import MOICE.feedbackManager.IFeedbackManager;
 import OCE.ServiceConnection.Connection;
 
+import java.io.File;
+
 public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentManager {
 
     private IConnectionManager myConnectionManager;
@@ -27,7 +29,7 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     }
 
     /**
-     * Acces point to the unique instance of the singleton MOICE
+     * Access point to the unique instance of the singleton MOICE
      **/
     public static MOICE getInstance()
     {
@@ -77,8 +79,8 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     }
 
     @Override
-    public void registerFeedback() {
-        this.myFeedbackManager.registerFeedback();
+    public void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration) {
+        this.myFeedbackManager.registerUserConfiguration(OCEConfiguration, ICEUserConfiguration);
     }
 
     @Override

@@ -57,7 +57,6 @@ public class ICEXMLFormatter implements IFileFormatter {
             this.listComponents     = listComponents;
             this.listConnections    = listConnections;
             // Open the model XML file
-            //BufferedWriter bw = new BufferedWriter(new FileWriter("C:/Users/koussaifi/Desktop/Model_Test.xml"));
             BufferedWriter bw = new BufferedWriter(new FileWriter("MyLogFiles/editor.ice_editor"));
             //write the first line
             bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <iCE_Editor:Environment xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" "
@@ -104,7 +103,6 @@ public class ICEXMLFormatter implements IFileFormatter {
             bw.close();
         } catch (Exception e){
             System.out.println("Error : ");
-            // System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -126,127 +124,8 @@ public class ICEXMLFormatter implements IFileFormatter {
                 }
             }
             return new AbstractMap.SimpleEntry<Integer, Integer>(indexComponent, indexService);
-
-//            for (int i = 0; i< listComponents.size(); i++){
-//                if (!listComponents.get(i).equals(comp)){
-//                    switch (serviceType) {
-//                        case "Required":
-//                            for(int j = 0; j< listComponents.get(i).getProvidedServices().size(); j++){
-//                                MockupService provService = (MockupService) listComponents.get(i).getProvidedServices().get(j);
-//                                if(
-//                                        && connectedTo(provService).equalsIgnoreCase(comp.getName())){
-//                                    switch (findIndexOfWhat) {
-//                                        case "Comp":
-//                                            index = i;
-//                                            break;
-//
-//                                        case "Serv":
-//                                            index = j;
-//                                            break;
-//                                    }
-//                                }
-//                            }
-//                            break;
-//                        case "Provided":
-//                            for(int j = 0; j< listComponents.get(i).getRequiredServices().size(); j++){
-//                                MockupService reqServ = (MockupService) listComponents.get(i).getRequiredServices().get(j);
-//                                if(reqServ.getName().equalsIgnoreCase(serv.getName())
-//                                        && connectedTo(reqServ).equalsIgnoreCase(comp.getName())){
-//                                    switch (findIndexOfWhat) {
-//                                        case "Comp":
-//                                            index = i;
-//                                            break;
-//
-//                                        case "Serv":
-//                                            int incrementIndex = 0;
-//                                            if(!listComponents.get(i).getProvidedServices().isEmpty()){
-//                                                incrementIndex = listComponents.get(i).getProvidedServices().size();
-//                                            }
-//                                            index = j + incrementIndex;
-//                                            break;
-//                                    }
-//                                }
-//                            }
-//                            break;
-//                    }
-//                }
-//            }
-//
-//            return index;
         }
 
-//    // Walid version
-//    private int findIndexes(MockupComponent comp, MockupService serv, String serviceType, String findIndexOfWhat){
-//        int index = 0;
-//        for (int i = 0; i< listComponents.size(); i++){
-//            if (!listComponents.get(i).getName().equalsIgnoreCase(comp.getName())){
-//                switch (serviceType) {
-//                    case "Required":
-//                        for(int j = 0; j< listComponents.get(i).getProvidedServices().size(); j++){
-//                            MockupService provServ = (MockupService) listComponents.get(i).getProvidedServices().get(j);
-//                            if(provServ.equals(serv)
-//                                    && connectedTo(provServ).equalsIgnoreCase(comp.getName())){
-//                                switch (findIndexOfWhat) {
-//                                    case "Comp":
-//                                        index = i;
-//                                        break;
-//
-//                                    case "Serv":
-//                                        index = j;
-//                                        break;
-//                                }
-//                            }
-//                        }
-//                        break;
-//                    case "Provided":
-//                        for(int j = 0; j< listComponents.get(i).getRequiredServices().size(); j++){
-//                            MockupService reqServ = (MockupService) listComponents.get(i).getRequiredServices().get(j);
-//                            if(reqServ.equals(serv)
-//                                    && connectedTo(reqServ).equalsIgnoreCase(comp.getName())){
-//                                switch (findIndexOfWhat) {
-//                                    case "Comp":
-//                                        index = i;
-//                                        break;
-//
-//                                    case "Serv":
-//                                        int incrementIndex = 0;
-//                                        if(!listComponents.get(i).getProvidedServices().isEmpty()){
-//                                            incrementIndex = listComponents.get(i).getProvidedServices().size();
-//                                        }
-//                                        index = j + incrementIndex;
-//                                        break;
-//                                }
-//                            }
-//                        }
-//                        break;
-//                }
-//            }
-//        }
-//
-//        return index;
-//    }
-//
-//        private boolean isBindedWithAnotherComponent(MockupComponent comp){
-//            boolean isBinded = false;
-//            int numberOfBindedProvidedServices = 0, numberOfBindedRequiredServices = 0;
-//            for(int i=0; i<comp.getProvidedServices().size(); i++){
-//                MockupService serv = (MockupService) comp.getProvidedServices().get(i);
-//                if(isConnected(serv)){
-//                    numberOfBindedProvidedServices++;
-//                }
-//            }
-//            for(int i=0; i<comp.getRequiredServices().size(); i++){
-//                MockupService serv = (MockupService) comp.getRequiredServices().get(i);
-//                if(isConnected(serv)){
-//                    numberOfBindedRequiredServices++;
-//                }
-//            }
-//            if(numberOfBindedProvidedServices > 0
-//                    || numberOfBindedRequiredServices > 0){
-//                isBinded = true;
-//            }
-//            return isBinded;
-//        }
 
     private Map.Entry<Optional<MockupService>,Optional<MockupService>> isConnected(MockupService service){
         Optional<MockupService> mockupService = Optional.empty();
@@ -267,17 +146,5 @@ public class ICEXMLFormatter implements IFileFormatter {
         }
         return new AbstractMap.SimpleEntry(mockupService, mockupServiceConnectedTo);
     }
-
-
-//        private String connectedTo(MockupService serv){
-//            for(int i = 0; i< listConnections.size(); i++){
-//                if(serv.getName().equalsIgnoreCase(listConnections.get(i).getFirstService().getName())){
-//                    return listConnections.get(i).getFirstService().getOwner();
-//                }else if(serv.getName().equalsIgnoreCase(listConnections.get(i).getSecondService().getName())){
-//                    return listConnections.get(i).getSecondService().getOwner();
-//                }
-//            }
-//            return "";
-//        }
 
 }

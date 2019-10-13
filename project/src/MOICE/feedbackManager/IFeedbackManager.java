@@ -4,9 +4,11 @@
 
 package MOICE.feedbackManager;
 
+import java.io.File;
+
 public interface IFeedbackManager {
 
-    void registerFeedback();
+    void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration);
 
     void collectFeedback();
 }

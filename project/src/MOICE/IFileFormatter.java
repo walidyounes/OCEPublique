@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface IFileFormatter {
 
-    public void convertFormat(List<MockupComponent> listComponents, List<Connection> listConnections);
+     void convertFormat(List<MockupComponent> listComponents, List<Connection> listConnections);
 }
