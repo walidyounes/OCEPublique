@@ -2,19 +2,19 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Ordonnanceur;
+package MASInfrastructure.Scheduler;
 
 import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgent;
-import MASInfrastructure.Annuaire.IReferenceAgentListener;
+import MASInfrastructure.Directory.IReferenceAgentListener;
 
 import java.util.List;
 import java.util.logging.Level;
 
-public class StrategieClassique implements IStratOrdonnanceur {
+public class ClassicStrategy implements ISchedulingStrategies {
 
     private List<InfraAgent> listOrdonnancement; // list of observed agents
-    private List<OrdonnanceurListener> listListenerPourOrdonnanceur; // list of observers
+    private List<SchedulerListener> listListenerPourOrdonnanceur; // list of observers
     private int vitesse;
     private int currentAgentCycle;
     private int maxCycleAgent;
@@ -27,18 +27,18 @@ public class StrategieClassique implements IStratOrdonnanceur {
      * @param listInfraAgents
      * @param listListenerActuels
      */
-    public StrategieClassique(List<InfraAgent> listInfraAgents, List<OrdonnanceurListener> listListenerActuels) {
+    public ClassicStrategy(List<InfraAgent> listInfraAgents, List<SchedulerListener> listListenerActuels) {
         listOrdonnancement = listInfraAgents;
         this.run= true;
         this.currentAgentCycle = 0;
         this.maxCycleAgent = defaultMaxCycleAgent;
         this.stop = false;
         listListenerPourOrdonnanceur = listListenerActuels;
-        changerVitesse(EnumVitesse.CENT);
+        changerVitesse(EnumSpeed.CENT);
     }
 
 /*	@Override
-	public void ordonnancer() {
+	public void startScheduling() {
 		run = true;
 		OCE.InfraAgent agentCourant;
 		while (run) {
@@ -94,7 +94,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
         }
     */
     @Override
-    public void changerVitesse(EnumVitesse vitesse) {
+    public void changerVitesse(EnumSpeed vitesse) {
         switch (vitesse) {
             case CENT:
                 this.vitesse = 10;
@@ -115,7 +115,7 @@ public class StrategieClassique implements IStratOrdonnanceur {
 
     }
 
-    public List<OrdonnanceurListener> getListListenerPourOrdonnanceur() {
+    public List<SchedulerListener> getListListenerPourOrdonnanceur() {
         return listListenerPourOrdonnanceur;
     }
 
@@ -126,8 +126,8 @@ public class StrategieClassique implements IStratOrdonnanceur {
     }
 
     @Override
-    public void addOrdonnaceurListener(OrdonnanceurListener ordonnanceurListener) {
-        listListenerPourOrdonnanceur.add(ordonnanceurListener);
+    public void addOrdonnaceurListener(SchedulerListener schedulerListener) {
+        listListenerPourOrdonnanceur.add(schedulerListener);
     }
 
     @Override

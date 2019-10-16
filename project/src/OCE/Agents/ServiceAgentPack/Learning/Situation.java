@@ -5,8 +5,6 @@
 package OCE.Agents.ServiceAgentPack.Learning;
 
 import OCE.Agents.IDAgent;
-import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.OCEMessages.MessageTypes;
 import OCE.OCEMessages.OCEMessage;
 
 import java.lang.reflect.Field;
@@ -20,13 +18,13 @@ import java.util.stream.Collectors;
  */
 public class Situation < T extends SituationEntry> {
 
-    private Map<IDAgent, T> mySetAgents; // the situation representing the current environment
+    private Map<IDAgent, T> agentSituationEntries; // the situation representing the current environment
 
     /**
      * Create a new situation
      */
     public Situation() {
-        this.mySetAgents = new TreeMap<>();
+        this.agentSituationEntries = new TreeMap<>();
     }
 
     /**
@@ -34,7 +32,7 @@ public class Situation < T extends SituationEntry> {
      * @param listMessages : the list of received messages
      */
     public  Situation(List<OCEMessage> listMessages){
-        this.mySetAgents = new TreeMap<>();
+        this.agentSituationEntries = new TreeMap<>();
         //Transform the list of messages (OCEMessages) to a list of Situation Entries
         ArrayList<SituationEntry> myListSituationEntries = new ArrayList<>(listMessages.stream()
                 .map(m -> m.toEntrySituation())
@@ -59,7 +57,7 @@ public class Situation < T extends SituationEntry> {
 
         //Transform the filtered list of situation entries to a Situation
         //The third parameter of Collector.toMap function is used when a duplicate key is detected, i.e: a service agent exist before with 'value 'x' : we keep the new value 'y' of the one just added
-        this.mySetAgents = myListSituationEntries.stream().collect(Collectors.toMap(SituationEntry::getAgent, s->(T)s, (x, y) ->  y));
+        this.agentSituationEntries = myListSituationEntries.stream().collect(Collectors.toMap(SituationEntry::getAgent, s->(T)s, (x, y) ->  y));
 //        for(SituationEntry sitE : myListSituationEntries){
 //            this.addElement(sitE.getAgent(), (T) sitE);
 //        }
@@ -69,16 +67,16 @@ public class Situation < T extends SituationEntry> {
      * Get the list of situation entries representing the current situation
      * @return the set of situation entries
      */
-    public Map<IDAgent, T> getMySetAgents() {
-        return mySetAgents;
+    public Map<IDAgent, T> getAgentSituationEntries() {
+        return agentSituationEntries;
     }
 
     /**
      * Set the list of situation entries representing the current situation
-     * @param mySetAgents : the new list of situation entries
+     * @param agentSituationEntries : the new list of situation entries
      */
-    public void setMySetAgents(Map<IDAgent, T> mySetAgents) {
-        this.mySetAgents = mySetAgents;
+    public void setAgentSituationEntries(Map<IDAgent, T> agentSituationEntries) {
+        this.agentSituationEntries = agentSituationEntries;
     }
 
     /**
@@ -87,7 +85,7 @@ public class Situation < T extends SituationEntry> {
      * @param value : the situation entry corresponding the the service agent with the reference "key"
      */
     public void addSituationEntry(IDAgent key, T value){
-        this.mySetAgents.put(key,value);
+        this.agentSituationEntries.put(key,value);
     }
 
     /**
@@ -96,7 +94,7 @@ public class Situation < T extends SituationEntry> {
      * @return true if the service agent exists in the situation, else return false
      */
     public boolean containServiceAgent(IDAgent idServiceAgent){
-        return this.mySetAgents.containsKey(idServiceAgent);
+        return this.agentSituationEntries.containsKey(idServiceAgent);
     }
 
     /**
@@ -106,7 +104,7 @@ public class Situation < T extends SituationEntry> {
      */
     public T getSituationEntryByIDAgent(IDAgent idAgent){
         if (this.containServiceAgent(idAgent)){
-            return this.mySetAgents.get(idAgent);
+            return this.agentSituationEntries.get(idAgent);
         }else return null;
     }
 
@@ -148,7 +146,7 @@ public class Situation < T extends SituationEntry> {
             return true;
 
         Situation<T> that = (Situation<T>) obj;
-        return this.mySetAgents.equals(that.getMySetAgents());
+        return this.agentSituationEntries.equals(that.getAgentSituationEntries());
     }
 
     /**
@@ -158,6 +156,6 @@ public class Situation < T extends SituationEntry> {
      */
     @Override
     public int hashCode() {
-        return this.mySetAgents.hashCode();
+        return this.agentSituationEntries.hashCode();
     }
 }

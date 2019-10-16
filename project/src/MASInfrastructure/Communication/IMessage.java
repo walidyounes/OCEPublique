@@ -9,7 +9,7 @@ import MASInfrastructure.Agent.InfraAgentReference;
 import java.util.ArrayList;
 
 /**
- * Interfaceto insure the transmition of messages between the agent
+ * Interface to insure the transmission of messages between the agent
  * @author Walid YOUNES
  * @version 1.0
  */
@@ -22,7 +22,7 @@ public interface IMessage {
     InfraAgentReference getEmitter();
 
     /**
-     *  set the refernece of the transmitter of the message
+     *  set the reference of the transmitter of the message
      * @param emitter : the reference of the transmitter
      */
     void setEmitter(InfraAgentReference emitter);

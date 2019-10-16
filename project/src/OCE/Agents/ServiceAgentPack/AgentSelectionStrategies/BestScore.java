@@ -17,9 +17,9 @@ public class BestScore implements IAgentSelectionStrategy {
         List<IDAgent> listBestAgent = new ArrayList<>();
 
         //Get the maximum score in the situation
-        Double maximumValue  = (Double) scoredCS.getMySetAgents().values().stream().map(e-> ((ScoredCurrentSituationEntry) e).getScore()).max(Comparator.comparing(Double::doubleValue)).get();
+        Double maximumValue  = (Double) scoredCS.getAgentSituationEntries().values().stream().map(e-> ((ScoredCurrentSituationEntry) e).getScore()).max(Comparator.comparing(Double::doubleValue)).get();
         //System.out.println("MAX score="+maximumValue);
-        for (Map.Entry<IDAgent, ScoredCurrentSituationEntry> entry : scoredCS.getMySetAgents().entrySet()) {  // Iterate through the list of agent and their score
+        for (Map.Entry<IDAgent, ScoredCurrentSituationEntry> entry : scoredCS.getAgentSituationEntries().entrySet()) {  // Iterate through the list of agent and their score
             if (entry.getValue().getScore()==maximumValue) {
                 System.out.println(entry.getKey());     // Print the key with max value
                 //Add the agent to the list of best agents
@@ -34,12 +34,12 @@ public class BestScore implements IAgentSelectionStrategy {
             //System.out.println("random index = "+indexAgent);
             //Get the ID corresponding to the random generated index
             IDAgent bestAgent = listBestAgent.get(indexAgent);
-            return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getMySetAgents().get(bestAgent));
+            return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent));
         }
         else{
             //Get the best agent (there is only one)
             IDAgent bestAgent = listBestAgent.get(0);
-            return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getMySetAgents().get(bestAgent));
+            return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent));
         }
     }
 }

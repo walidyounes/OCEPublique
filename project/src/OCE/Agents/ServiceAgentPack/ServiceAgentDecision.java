@@ -235,7 +235,7 @@ public class ServiceAgentDecision implements IDecisionState {
                             } else {
                                 //We update the current one
                                 Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
-                                this.myServiceAgent.getMyCurrentSituation().getMySetAgents().putAll(myCurrentSituation.getMySetAgents());
+                                this.myServiceAgent.getMyCurrentSituation().getAgentSituationEntries().putAll(myCurrentSituation.getAgentSituationEntries());
                             }
                             MyLogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
                             //Check for similar Reference Situation

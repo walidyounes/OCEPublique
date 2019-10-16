@@ -210,7 +210,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         if(this.myScoredCurrentSituation != null){
             //Transform the scored current situation to a reference situation
             Situation<ReferenceSituationEntry> referenceSituationToAdd = new Situation<>();
-            Map<IDAgent, ScoredCurrentSituationEntry> setScoredCurrentSituationEntry = this.myScoredCurrentSituation.getMySetAgents();
+            Map<IDAgent, ScoredCurrentSituationEntry> setScoredCurrentSituationEntry = this.myScoredCurrentSituation.getAgentSituationEntries();
             // Transform the scored situation entry to a reference situation entry
             for(IDAgent idAgent : setScoredCurrentSituationEntry.keySet()){
                 referenceSituationToAdd.addSituationEntry(idAgent, setScoredCurrentSituationEntry.get(idAgent).toReferenceSituationEntry());
@@ -223,11 +223,11 @@ public class ServiceAgent extends OCEAgent implements Comparable {
                 int iteratorIndex = 0;
                 Iterator<Situation<ReferenceSituationEntry>> customIterator  = this.myKnowledgeBase.iterator();
                 // Get the set of IDAgent of the reference situation to be added to the knowledgeDatabase
-                Set<IDAgent> referenceSIDAgentSet = referenceSituationToAdd.getMySetAgents().keySet();
+                Set<IDAgent> referenceSIDAgentSet = referenceSituationToAdd.getAgentSituationEntries().keySet();
                 while(iteratorIndex < this.myKnowledgeBase.size() && !found){
                     Situation<ReferenceSituationEntry> currentReferenceSituation = customIterator.next();
                     //Get the Set of IDAgents of the current RS and compare them
-                    Set<IDAgent> currentRSIDAgentSet = currentReferenceSituation.getMySetAgents().keySet();
+                    Set<IDAgent> currentRSIDAgentSet = currentReferenceSituation.getAgentSituationEntries().keySet();
                     if (referenceSIDAgentSet.equals(currentRSIDAgentSet)){
                         found=true;
                         // Save the reference situation

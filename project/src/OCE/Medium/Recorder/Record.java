@@ -11,13 +11,15 @@ import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Medium.ReferenceResolutionFailure;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
- * This compoenent is used to record each new ServiceAgent and it's associated reference in the infrastructure
+ * This component is used to record each new ServiceAgent and it's associated reference in the infrastructure
  * It's used in the communicationAdapter class to seek for the physical reference associated to a serviceAgent when a certain agent wants to send a message
  * @author Walid YOUNES
  * @version 1.0
@@ -25,9 +27,11 @@ import java.util.stream.Collectors;
 public class Record implements IRecord{
 
     private Map<OCEAgent, InfraAgentReference> agentsReferenceMap;
+    private ObservableList listOCEAgents; // Observable list used for visualisation in the UI
 
     public Record() {
         this.agentsReferenceMap =  new HashMap<>();
+        this.listOCEAgents = FXCollections.observableArrayList();
     }
 
     /**
@@ -40,6 +44,8 @@ public class Record implements IRecord{
         //If the serviceAgent doesn't exist we add it to the list
         if(!this.agentsReferenceMap.containsKey(oceAgent)){
             this.agentsReferenceMap.put(oceAgent, infraAgentReference);
+            //Add the agent to the list for visualisation in the UI
+            this.listOCEAgents.add(oceAgent);
         }
     }
 
@@ -53,11 +59,13 @@ public class Record implements IRecord{
         //If the serviceAgent exist we delete it
         if(this.agentsReferenceMap.containsKey(oceAgent)){
             this.agentsReferenceMap.remove(oceAgent);
+            //Delete the agent from the list for visualisation in the UI
+            this.listOCEAgents.remove(oceAgent);
         }
     }
 
     /**
-     * Resolve the physical adresse (InfraAgentReference) of ONE OCEAgent
+     * Resolve the physical address (InfraAgentReference) of ONE OCEAgent
      * @param oceAgent : the agent InfraAgent in question
      * @return his physical reference
      * @throws ReferenceResolutionFailure when the serviceAgent doesn't exist
@@ -71,7 +79,7 @@ public class Record implements IRecord{
     }
 
     /**
-     * Resolve the physical adresse (InfraAgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
+     * Resolve the physical address (InfraAgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
      * @param oceAgents : the list of the oceAgents
      * @return the list of corresponding physical references
      * @throws ReferenceResolutionFailure when a serviceAgent doesn't exist
@@ -92,9 +100,9 @@ public class Record implements IRecord{
     }
 
     /**
-     * Resolve the logical adresse (OCEAgent) of the InfraAgentReference
-     * @param infraAgent the refrence of the infrastructure agent
-     * @return the coresponding OCEAgent
+     * Resolve the logical address (OCEAgent) of the InfraAgentReference
+     * @param infraAgent the reference of the infrastructure agent
+     * @return the corresponding OCEAgent
      * @throws ReferenceResolutionFailure if the agent doesn't exist
      */
     @Override
@@ -148,10 +156,19 @@ public class Record implements IRecord{
             if(attachedMockupService.equals(currentService)){ // it's the service that we are looking for
                 found = true;
                 serviceAgent = Optional.of(currentServiceAgent);
-                MyLogger.log(Level.INFO, " Agent retrouvé est = "+serviceAgent.toString());
+                MyLogger.log(Level.INFO, " Found Agent = "+serviceAgent.toString());
             }
         }
         return serviceAgent;
+    }
+
+    /**
+     * Get the set of all agents existing in the system
+     * @return the list of agent present in the environment
+     */
+    @Override
+    public ObservableList<OCEAgent> getAllAgents() {
+        return this.listOCEAgents;
     }
 
     /**

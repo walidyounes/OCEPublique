@@ -10,7 +10,10 @@ import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.MyLogger;
 import MASInfrastructure.Infrastructure;
+import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
+import OCE.OCE;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -21,10 +24,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -56,8 +56,9 @@ public class UIMockupController implements Initializable {
     @FXML private JFXListView<Label> componentsList;
     @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
     @FXML private AnchorPane visualisationPane;
-    @FXML private AnchorPane Terminal;
+   // @FXML private AnchorPane Terminal;
     @FXML private JFXTextField NbCyclesAgent;
+    @FXML private JFXListView<OCEAgent> agentsListUI;
     private TextArea UILog;
     private JFXPopup popup;
 
@@ -67,7 +68,9 @@ public class UIMockupController implements Initializable {
 
     private MockupFacadeAdapter mockupFacadeAdapter;
     private Infrastructure infrastructure;
-    private Thread simulation;
+//    private Thread simulation;
+    private OCE myOCE;
+    private Thread opportunisticCompositionEngine;
     private boolean runExecution;
     private PhysicalDeviceBinder physicalDeviceBinder;
     private final int defaultMaxCycleAgent = 400;
@@ -80,11 +83,12 @@ public class UIMockupController implements Initializable {
         this.singleR.setSelected(true);
 
         this.UILog = new TextArea();
-        this.Terminal.setTopAnchor( this.UILog, 0d);
-        this.Terminal.setBottomAnchor( this.UILog, 0d);
-        this.Terminal.setRightAnchor( this.UILog, 0d);
-        this.Terminal.setLeftAnchor( this.UILog, 0d);
-        this.Terminal.getChildren().add( this.UILog);
+//        this.Terminal.setTopAnchor( this.UILog, 0d);
+//        this.Terminal.setBottomAnchor( this.UILog, 0d);
+//        this.Terminal.setRightAnchor( this.UILog, 0d);
+//        this.Terminal.setLeftAnchor( this.UILog, 0d);
+//        this.Terminal.getChildren().add( this.UILog);
+
         // Initialize the Mockup
         this.mockupFacadeAdapter = new MockupFacadeAdapter();
         //Initialize the MAS Infrastructure
@@ -92,21 +96,47 @@ public class UIMockupController implements Initializable {
         // Initialize the boolean variable for pause and resume
         this.runExecution = true;
 
-        //Create the list of services
+        // Create the list of services
         this.requiredByC = new ArrayList<>();
         this.providedByC = new ArrayList<>();
 
-        //Create the thread for the execution
-        this.simulation = new Thread( new Simulation(this.mockupFacadeAdapter, this.infrastructure));
+        // Create the thread for the execution
+//        this.simulation = new Thread( new Simulation(this.mockupFacadeAdapter, this.infrastructure));
+        this.myOCE = new OCE(this.mockupFacadeAdapter, this.infrastructure);
+        this.opportunisticCompositionEngine = new Thread(this.myOCE);
+
+        //Set the binding between the list of agents and the ListView in the UI
+        this.agentsListUI.setItems(this.myOCE.gteAllAgents());
+        this.agentsListUI.setCellFactory(a -> new AgentUIPersonalisedCell());
+        this.agentsListUI.setExpanded(true);
+
+//        //Add a selection listener to the  list view of agents
+//        this.agentsListUI.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<OCEAgent>() {
+//            @Override
+//            public void changed(ObservableValue<? extends OCEAgent> observable, OCEAgent oldValue, OCEAgent newValue) {
+//                //Check whether item is selected and set value of selected item to Label
+//                if(agentsListUI.getSelectionModel().getSelectedItem() != null)
+//                {
+//                    OCEAgent selectedOCEAgent = agentsListUI.getSelectionModel().getSelectedItem();
+//                    agentsListUI.getSelectionModel().
+//                    if(selectedOCEAgent instanceof ServiceAgent){
+//                        Tooltip agentTooltip = new Tooltip();
+//                        agentTooltip.setText(selectedOCEAgent.toString());
+//                    }
+//
+//                }
+//            }
+//        });
+
         // Initialise popUp
         initPopup();
 
-        //Initialise the graph
+        // Initialise the graph
         initGraph();
         previewGraph();
 
-        //Init log
-        //Create and configure the logger service
+        // Init log
+        // Create and configure the logger service
         MyLogger logger = new MyLogger();
         logger.uiLogProperty().addListener(new ChangeListener<String>() {
                                                @Override
@@ -149,8 +179,8 @@ public class UIMockupController implements Initializable {
         //System.out.println("adding services " + this.nameService.getText().length());
         Label label = new Label();
         OCService serviceToAdd;
-        int providedORrequired = -1;
-        int singleORmultiple = -1;
+        int providedORRequired = -1;
+        int singleORMultiple = -1;
         if(this.designationComponent.getText().length()>0) {
             if (this.nameService.getText().length() > 0) {
                 if(this.typeService.getText().length() > 0) {
@@ -158,42 +188,42 @@ public class UIMockupController implements Initializable {
                     if (this.providedR.isSelected()) {
                         // providedImage = new ImageView(new Image(new FileInputStream("/provided.png")));
                         label.setGraphic(new ImageView("/provided.png"));
-                        providedORrequired = 0; //ProvideService
+                        providedORRequired = 0; //ProvideService
                     } else {
                         if (this.requiredR.isSelected()) {
                             // requiredImage = new ImageView(new Image(new FileInputStream("/required.png")));
                             label.setGraphic(new ImageView("/required.png"));
-                            providedORrequired = 1; //RequiredService
+                            providedORRequired = 1; //RequiredService
                         }
                     }
 
                     if (this.singleR.isSelected()) {
                         textToAdd += " -- = SINGLE";
-                        singleORmultiple = 0; // Single Service
+                        singleORMultiple = 0; // Single Service
                     } else {
                         if (this.multipleR.isSelected()) {
                             textToAdd += " -- = MULTIPLE";
-                            singleORmultiple = 1; // Multiple Service
+                            singleORMultiple = 1; // Multiple Service
                         }
                     }
-                    if (singleORmultiple == 0) {
-                        if (providedORrequired == 0) {
+                    if (singleORMultiple == 0) {
+                        if (providedORRequired == 0) {
                             serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.PROVIDED);
                             this.providedByC.add(serviceToAdd);
                         } else {
-                            if (providedORrequired == 1) {
+                            if (providedORRequired == 1) {
                                 serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.REQUIRED);
                                 this.requiredByC.add(serviceToAdd);
                             }
                         }
 
                     } else {
-                        if (singleORmultiple == 1) {
-                            if (providedORrequired == 0) {
+                        if (singleORMultiple == 1) {
+                            if (providedORRequired == 0) {
                                 serviceToAdd = new MultiLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.PROVIDED);
                                 this.providedByC.add(serviceToAdd);
                             } else {
-                                if (providedORrequired == 1) {
+                                if (providedORRequired == 1) {
                                     serviceToAdd = new MultiLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.REQUIRED);
                                     this.requiredByC.add(serviceToAdd);
                                 }
@@ -258,7 +288,9 @@ public class UIMockupController implements Initializable {
 
     @FXML
     private void lunchSimulation(ActionEvent event){
-       this.simulation.start();
+       //this.simulation.start();
+        this.opportunisticCompositionEngine.start();
+        //disable the launch button
         ((JFXButton)event.getSource()).setDisable(true);
     }
 
@@ -267,10 +299,10 @@ public class UIMockupController implements Initializable {
         this.runExecution = !this.runExecution;
         System.out.println("Run Execution = " + this.runExecution);
         if(!this.runExecution){
-            this.infrastructure.pauseOrdonnancement();
+            this.infrastructure.pauseScheduling();
             ((JFXButton)event.getSource()).setText("Reprise");
         }else{
-            this.infrastructure.repriseOrdonnancement();
+            this.infrastructure.restartScheduling();
             ((JFXButton)event.getSource()).setText("Pause");
         }
 
@@ -279,7 +311,7 @@ public class UIMockupController implements Initializable {
 
     @FXML
     private void stopExecution(ActionEvent event){
-        this.infrastructure.arreterOrdonnancement();
+        this.infrastructure.stopScheduling();
     }
 
     private void deleteUIElements(){
@@ -383,7 +415,7 @@ public class UIMockupController implements Initializable {
 
         SwingNode swingNode = new SwingNode();
         swingNode.setContent((JComponent)view);
-        swingNode.resize(300,400);
+        swingNode.resize(200,400);
 
         this.visualisationPane.setTopAnchor(swingNode, 0d);
         this.visualisationPane.setBottomAnchor(swingNode, 0d);
@@ -550,6 +582,12 @@ public class UIMockupController implements Initializable {
     @FXML
     public void oneStepExecution(ActionEvent event){
         //Reset to 0 the value of the current agent cycle to restart the OCE cycle
-        this.infrastructure.resetCurrentCycleAgent();
+//        try {
+//            this.opportunisticCompositionEngine.join();
+//            this.myOCE.oneStepExecution();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        this.myOCE.oneStepExecution();
     }
 }

@@ -17,7 +17,7 @@ public class SuicideInfraMessage extends InfraMessage {
     private Boolean exist; // Boolean attribute used to inform the agent if it's service still exsit or not
 
     /**
-     * Create A Sonde InfraMessage
+     * Create A Probe InfraMessage
      * @param exist :  boolean value informing if the service attached to the agent is still existing in the environement or not
      * @param receivers : the references of the receivers of the ad, if null == Broadcast
      */
@@ -29,7 +29,7 @@ public class SuicideInfraMessage extends InfraMessage {
     }
 
     /**
-     * Create a Sonde message (empty message)
+     * Create a Probe message (empty message)
      */
     public SuicideInfraMessage() {
         this.exist = false;

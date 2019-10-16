@@ -8,8 +8,8 @@ package MASInfrastructure.Agent;
 import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
-import MASInfrastructure.Etat.IEtat;
-import MASInfrastructure.Etat.LifeCycle;
+import MASInfrastructure.State.IState;
+import MASInfrastructure.State.LifeCycle;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -54,7 +54,7 @@ public class InfraAgent {
      * get the current state of the agent
      * @return the current state
      */
-    public IEtat getState() {
+    public IState getState() {
         return lifeCycle.getCurrentState();
     }
 

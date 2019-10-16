@@ -18,6 +18,7 @@ import OCE.OCEMessages.FeedbackValues;
 import OCE.ServiceConnection.Connection;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class BinderAgentAction implements IActionState {
@@ -45,10 +46,14 @@ public class BinderAgentAction implements IActionState {
         if(decisionsList.size()>0){
             if(decisionsList.size()==2){ // We received the two messages that we were waiting for
                 MyLogger.log(Level.INFO, "The Binder agent received two messages !");
+                //Extract the information from the messages
                 this.firstServiceAgent = (ServiceAgent)decisionsList.get(0).getEmitter();
                 this.secondServiceAgent = (ServiceAgent)decisionsList.get(1).getEmitter();
                 this.firstService = ((ServiceAgent)decisionsList.get(0).getEmitter()).getHandledService();
                 this.secondService =  ((ServiceAgent)decisionsList.get(1).getEmitter()).getHandledService();
+                //Save the two services in the binder agent
+                ((BinderAgent)this.myBinderAgent).setFirstService(Optional.of(this.firstService));
+                ((BinderAgent)this.myBinderAgent).setSecondService(Optional.of(this.secondService));
 
                 //Launch the physical binging
                 this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();

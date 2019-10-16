@@ -2,28 +2,28 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Ordonnanceur;
+package MASInfrastructure.Scheduler;
 
 import MASInfrastructure.Agent.InfraAgent;
-import MASInfrastructure.Etat.IEtat;
+import MASInfrastructure.State.IState;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class StrategieEtatAEtat implements IStratOrdonnanceur {
+public class StateByStateStrategy implements ISchedulingStrategies {
 
     private List<InfraAgent> listOrdonnancement; // liste d'ordonnancement des agents
-    private List<OrdonnanceurListener> listListenerPourOrdonnanceur;
-    private Map<InfraAgent, IEtat> listEtatAgent;
+    private List<SchedulerListener> listListenerPourOrdonnanceur;
+    private Map<InfraAgent, IState> listEtatAgent;
     private int vitesse;
     private boolean run = true;
     private int currentAgentCycle;
     private int maxCycleAgent;
 
 
-    public StrategieEtatAEtat(List<InfraAgent> listInfraAgent, List<OrdonnanceurListener> listListenerActuels) {
+    public StateByStateStrategy(List<InfraAgent> listInfraAgent, List<SchedulerListener> listListenerActuels) {
         listOrdonnancement = listInfraAgent;
         listListenerPourOrdonnanceur = listListenerActuels;
         listEtatAgent = new HashMap<>();
@@ -31,14 +31,14 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
         this.maxCycleAgent = 300;
         this.run = true;
         // listOrdonnancement.forEach(agent -> listEtatAgent.put(agent, agent.getEtatInitial())); // todo : Walid
-        changerVitesse(EnumVitesse.CENT);
+        changerVitesse(EnumSpeed.CENT);
     }
 
     @Override
     public void ordonnancer() {
         run = true;
         InfraAgent infraAgentCourant;
-        IEtat etatCourant;
+        IState etatCourant;
         while (run) {
             infraAgentCourant = listOrdonnancement.get(0);
             etatCourant = listEtatAgent.get(infraAgentCourant); //TOdo delete this line
@@ -56,7 +56,7 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
         }
     }
 
-    public Map<InfraAgent, IEtat> getListEtatAgent() {
+    public Map<InfraAgent, IState> getListEtatAgent() {
         return listEtatAgent;
     }
 
@@ -64,14 +64,14 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
         return listOrdonnancement;
     }
 
-    private void changerEtatAgent(InfraAgent infraAgentCourant, IEtat etatAbstract) {
-        listListenerPourOrdonnanceur.forEach(ordonnanceurListener -> ordonnanceurListener
+    private void changerEtatAgent(InfraAgent infraAgentCourant, IState etatAbstract) {
+        listListenerPourOrdonnanceur.forEach(schedulerListener -> schedulerListener
                 .changementEtat(infraAgentCourant.getInfraAgentReference(), etatAbstract));
         listEtatAgent.put(infraAgentCourant, etatAbstract);
     }
 
     @Override
-    public void changerVitesse(EnumVitesse vitesse) {
+    public void changerVitesse(EnumSpeed vitesse) {
         switch (vitesse) {
             case CENT:
                 this.vitesse = 10;
@@ -98,8 +98,8 @@ public class StrategieEtatAEtat implements IStratOrdonnanceur {
     }
 
     @Override
-    public void addOrdonnaceurListener(OrdonnanceurListener ordonnanceurListener) {
-        listListenerPourOrdonnanceur.add(ordonnanceurListener);
+    public void addOrdonnaceurListener(SchedulerListener schedulerListener) {
+        listListenerPourOrdonnanceur.add(schedulerListener);
     }
 
     @Override

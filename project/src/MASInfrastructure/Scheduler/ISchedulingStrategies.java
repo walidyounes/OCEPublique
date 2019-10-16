@@ -2,26 +2,19 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Ordonnanceur;
+package MASInfrastructure.Scheduler;
 
 import MASInfrastructure.Agent.InfraAgent;
-
+import MASInfrastructure.Directory.IAgentListener;
 
 import java.util.List;
 
-public interface IOrdonnanceur {
-
+public interface ISchedulingStrategies extends IAgentListener {
     void ordonnancer();
 
-    void changerVitesse(EnumVitesse vitesse);
-
-    void changerOrdonnancement(IStratOrdonnanceur stratOrdonnanceur);
+    void changerVitesse(EnumSpeed vitesse);
 
     List<InfraAgent> arreterOrdonnancement();
-
-    void ordagentAjoute(InfraAgent infraAgent);
-
-    void OrdagentRetire(InfraAgent infraAgent);
 
     void pauseOrdonnancement();
 
@@ -31,4 +24,9 @@ public interface IOrdonnanceur {
 
     void resetCurrentCycleAgent();
 
+    void addOrdonnaceurListener(SchedulerListener schedulerListener);
+
+    void agentAjoute(InfraAgent infraAgent);
+
+    void agentRetire(InfraAgent infraAgent);
 }

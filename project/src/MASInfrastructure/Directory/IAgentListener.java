@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Annuaire;
+package MASInfrastructure.Directory;
 
 import MASInfrastructure.Agent.InfraAgent;
 

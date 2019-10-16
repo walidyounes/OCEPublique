@@ -4,19 +4,19 @@
 
 package Midlleware.ThreeState;
 
-import MASInfrastructure.Etat.IEtat;
-import MASInfrastructure.Etat.LifeCycle;
+import MASInfrastructure.State.IState;
+import MASInfrastructure.State.LifeCycle;
 import OCE.Decisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;
 
-public class DecisionState implements IEtat {
+public class DecisionState implements IState {
 
-    private IEtat nextState;
+    private IState nextState;
     private IDecisionState myWayOfDecision;
 
-    public DecisionState(IEtat nextState, IDecisionState myWayOfDecision) {
+    public DecisionState(IState nextState, IDecisionState myWayOfDecision) {
         this.nextState = nextState;
         this.myWayOfDecision = myWayOfDecision;
     }
@@ -40,7 +40,7 @@ public class DecisionState implements IEtat {
      *set the next state to go to from this state
      * @param nextState : the next state in the cyrcle
      */
-    public void setNextState(IEtat nextState) {
+    public void setNextState(IState nextState) {
         this.nextState = nextState;
     }
 

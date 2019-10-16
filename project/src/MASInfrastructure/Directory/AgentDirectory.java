@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Annuaire;
+package MASInfrastructure.Directory;
 
 import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 
-public class Annuaire implements IAnnuaire {
+public class AgentDirectory implements IAgentDirectory {
 
     private List<IAgentListener> agentListeners;
     private List<IReferenceAgentListener> referenceAgentListeners;
@@ -29,9 +29,9 @@ public class Annuaire implements IAnnuaire {
     private ConcurrentMap<InfraAgentReference, ReadWriteLock> agentsLocks;
 
     /**
-     * Constructeur privé pour implémenter le pattern "singleton"
+     * Private constructor for implementing the pattern "singleton"
      */
-    private Annuaire() {
+    private AgentDirectory() {
         referenceAgentListeners = Collections.synchronizedList(new ArrayList<>());
         agentListeners = Collections.synchronizedList(new ArrayList<>());
         messageAgentListeners = Collections.synchronizedList(new ArrayList<>());
@@ -41,20 +41,20 @@ public class Annuaire implements IAnnuaire {
     }
 
     /**
-     * Classe interne pour incarner la téchnique du holder
+     * Internal class for implementing the HOLDER technique
      */
-    private static class AnnuaireHolder {
+    private static class AgentDirectoryHolder {
         /**
-         * Instance unique non préinitialisée
+         * Unique instance pre initialised
          */
-        private final static Annuaire instance = new Annuaire();
+        private final static AgentDirectory instance = new AgentDirectory();
     }
 
     /**
-     * Point d'accès pour l'instance unique du singleton "Annuiare"
+     * Point d'accès pour l'instance unique du singleton "Directory"
      */
-    public static Annuaire getInstance() {
-        return AnnuaireHolder.instance;
+    public static AgentDirectory getInstance() {
+        return AgentDirectoryHolder.instance;
     }
 
     public ConcurrentMap<InfraAgentReference, InfraAgent> getAgents() {

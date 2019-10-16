@@ -27,12 +27,12 @@ public class SituationUtility {
      */
     public static <U extends SituationEntry,V extends SituationEntry> Set<IDAgent> intersection(Situation<U> firstSituation, Situation<V> secondSituation){
 
-        Map<IDAgent, V> otherSituationEntries = secondSituation.getMySetAgents();
+        Map<IDAgent, V> otherSituationEntries = secondSituation.getAgentSituationEntries();
 
-        Set<IDAgent> intersect = new TreeSet<>(firstSituation.getMySetAgents().keySet().stream().filter(secondSituation.getMySetAgents().keySet()::contains).collect(Collectors.toSet()));
+        Set<IDAgent> intersect = new TreeSet<>(firstSituation.getAgentSituationEntries().keySet().stream().filter(secondSituation.getAgentSituationEntries().keySet()::contains).collect(Collectors.toSet()));
 
 //        System.out.println("Taille Intersection = " + keyIntersection.size());
-//        for (ServiceAgent key: firstSituation.getMySetAgents().keySet())
+//        for (ServiceAgent key: firstSituation.getAgentSituationEntries().keySet())
 //        {
 //            if (otherSituationEntries.containsKey(key))
 //                intersect.add(key);
@@ -47,8 +47,8 @@ public class SituationUtility {
      * @return PackageSituation.PackageSituation representing the union set of this situation and the one send as a parameter
      */
     public static <U extends SituationEntry,V extends SituationEntry> Set<IDAgent> union(Situation<U> firstSituation, Situation<V> secondSituation){
-        Set<IDAgent> union = new TreeSet<>(firstSituation.getMySetAgents().keySet());
-        union.addAll(secondSituation.getMySetAgents().keySet());
+        Set<IDAgent> union = new TreeSet<>(firstSituation.getAgentSituationEntries().keySet());
+        union.addAll(secondSituation.getAgentSituationEntries().keySet());
         return union;
     }
 
@@ -124,7 +124,7 @@ public class SituationUtility {
     public static Situation<ScoredCurrentSituationEntry> scoreCurrentSituation(Situation<CurrentSituationEntry> currentSituation, Map<Situation<ReferenceSituationEntry>, Double> listReferenceSituations, double initialValue){
         Situation<ScoredCurrentSituationEntry> scoredCurrentSituation = new Situation<>(); // Create an empty situation
         //For each service agent in the current situation
-        for (IDAgent serviceAgent : currentSituation.getMySetAgents().keySet()){
+        for (IDAgent serviceAgent : currentSituation.getAgentSituationEntries().keySet()){
             int count = 0; // the number of references situations where the service agent appears
             double scoreServiceAgent = initialValue; // the value of score (the mean of scores from the reference situation where the service agent appears or initial value)
             //For each similar reference situations
@@ -132,14 +132,14 @@ public class SituationUtility {
                 //check if the service agent exists in the reference situation
                 if(referenceSituation.containServiceAgent(serviceAgent)){
                     //Get the score of the agent and multiply it by the degree of similarity between this reference situation and the current situation
-                    scoreServiceAgent += referenceSituation.getMySetAgents().get(serviceAgent).getScore()* listReferenceSituations.get(referenceSituation);
+                    scoreServiceAgent += referenceSituation.getAgentSituationEntries().get(serviceAgent).getScore()* listReferenceSituations.get(referenceSituation);
                     //Increase the number of reference situation where the agent is found
                     count++;
                 }
             }
             ScoredCurrentSituationEntry serviceAgentScoredEntry =null; // the entry corresponding to the service agent after scoring
             //Get the message type send by the service agent in the current situation
-            MessageTypes messageType = currentSituation.getMySetAgents().get(serviceAgent).getMessageType();
+            MessageTypes messageType = currentSituation.getAgentSituationEntries().get(serviceAgent).getMessageType();
             //check if the service agent appears at least in one reference situation
             if(count!=0) {
                 //Compute the mean of scores
@@ -213,10 +213,10 @@ public class SituationUtility {
         DecimalFormat df = new DecimalFormat("###.###", otherSymbols);
         //Get the list of scores
         //Compute the min of all scores
-        Double sumValue = scoredCurrentSituation.getMySetAgents().values().stream().map(e -> ((ScoredCurrentSituationEntry) e).getScore()).mapToDouble(d -> (double) d).sum();
+        Double sumValue = scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> ((ScoredCurrentSituationEntry) e).getScore()).mapToDouble(d -> (double) d).sum();
         //normalize the scores
         if (sumValue != 0) {
-            scoredCurrentSituation.getMySetAgents().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(Double.parseDouble(df.format((((ScoredCurrentSituationEntry) e).getScore() / sumValue)))));
+            scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(Double.parseDouble(df.format((((ScoredCurrentSituationEntry) e).getScore() / sumValue)))));
         }
     }
 

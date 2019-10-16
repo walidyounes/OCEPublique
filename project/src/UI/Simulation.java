@@ -10,15 +10,14 @@ import MASInfrastructure.Infrastructure;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import Midlleware.AgentFactory.OCEServiceAgentFactory;
 import OCE.Medium.Medium;
-import OCE.Unifieur.Matching;
-import OCE.sonde.Sonde;
+import OCE.sonde.Probe;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Simulation implements Runnable {
     private MockupFacadeAdapter mockupFacadeAdapter;
     private Infrastructure infrastructure;
+
     public Simulation(MockupFacadeAdapter mockupFacadeAdapter) {
         this.infrastructure = new Infrastructure();
         this.mockupFacadeAdapter = mockupFacadeAdapter;
@@ -31,18 +30,19 @@ public class Simulation implements Runnable {
 
     @Override
     public void run() {
-        //Matching alwaysTrueMatching = new Matching();
         //Initialize the medium component
         Medium medium = new Medium(infrastructure);
         //Create the agent Factory
         IOCEServiceAgentFactory agentFactory = new OCEServiceAgentFactory(infrastructure, medium);
-        // Create the Sonde component to probe the environment
-        Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 1000);
-        sonde.run();
+        // Create the Probe component to probe the environment
+        Probe probe = new Probe(mockupFacadeAdapter,medium, agentFactory, 1000);
+
+        // probe.run(); // deleted for test 16/10/2019
+
         MyLogger.log(Level.INFO, "");
         pause(3000);
         //Start the scheduling process
-        infrastructure.ordonnancer();
+        infrastructure.startScheduling();
 
         MyLogger.close();
     }

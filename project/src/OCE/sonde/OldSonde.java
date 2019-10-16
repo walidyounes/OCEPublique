@@ -1,9 +1,8 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
 package OCE.sonde;
-
 
 import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
 import AmbientEnvironment.FacadeAdapter.IAcquisition;
@@ -15,19 +14,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 
-
 /**
  * This class is used to probe the environment for new components that appear and components that have disappeared
  * @author Walid YOUNES
  * @version 1.0
  */
-public class Sonde {
-
+public class OldSonde {
     private ComponentManager componentsManager;
     private long periodicity; // the periodicity of the task of sensing the environment
 
 
-    public Sonde(IAcquisition acquisition, IRecord agentRecorder, IOCEServiceAgentFactory agentFactory, long periodicity) {
+    public OldSonde(IAcquisition acquisition, IRecord agentRecorder, IOCEServiceAgentFactory agentFactory, long periodicity) {
         this.periodicity = periodicity;
         // Instantiation of the serviceManager
         ServiceManager serviceManager = new ServiceManager(agentFactory, agentRecorder);
@@ -56,7 +53,7 @@ public class Sonde {
         public void run() {
             Timer time = new Timer(); // Instantiate Timer Object
             // Instantiate ScheduledTask class
-            ScheduledSounding st = new ScheduledSounding();
+            OldSonde.ScheduledSounding st = new OldSonde.ScheduledSounding();
             // Create Repetitively task for every "Periodicity" secs with a delay 0 secs between two executions
             time.schedule(st, 0, periodicity);
             MyLogger.log(Level.INFO, "*************************** Probing *******************");

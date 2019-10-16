@@ -4,18 +4,18 @@
 
 package Midlleware.ThreeState;
 
-import MASInfrastructure.Etat.IEtat;
-import MASInfrastructure.Etat.LifeCycle;
+import MASInfrastructure.State.IState;
+import MASInfrastructure.State.LifeCycle;
 import OCE.Decisions.OCEDecision;
 
 import java.util.ArrayList;
 
-public class ActionState implements IEtat {
+public class ActionState implements IState {
 
-    private IEtat nextState;
+    private IState nextState;
     private IActionState myWayOfAction;
 
-    public ActionState(IEtat nextState, IActionState myWayOfAction) {
+    public ActionState(IState nextState, IActionState myWayOfAction) {
         this.nextState = nextState;
         this.myWayOfAction = myWayOfAction;
     }
@@ -34,7 +34,7 @@ public class ActionState implements IEtat {
      * change the current state of the cycle
      * @param nextState the next state in the cycle
      */
-    public void setNextState(IEtat nextState) {
+    public void setNextState(IState nextState) {
         this.nextState = nextState;
     }
 

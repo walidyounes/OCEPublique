@@ -7,7 +7,7 @@ package Midlleware.AgentFactory;
 import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
-import MASInfrastructure.Etat.LifeCycle;
+import MASInfrastructure.State.LifeCycle;
 import MASInfrastructure.Infrastructure;
 import Midlleware.ThreeState.*;
 import OCE.Agents.AgentPerception;
@@ -15,7 +15,6 @@ import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.BinderAgentPack.BinderAgentAction;
 import OCE.Agents.BinderAgentPack.BinderAgentDecision;
 import OCE.Agents.IDAgent;
-import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Medium.Medium;
 import OCE.Selection.IMessageSelection;
 import OCE.Selection.RandomSelection;
@@ -67,7 +66,7 @@ public class OCEBinderAgentFactory implements IOCEBinderAgentFactory {
         // create the agent's life cycle
         LifeCycle lifeCycle = new LifeCycle(perceptionState);
         // create the agent in the infrastructure
-        InfraAgent associatedInfraAgent = this.infrastructure.creer(null, lifeCycle, this.infrastructure);
+        InfraAgent associatedInfraAgent = this.infrastructure.createInfrastructureAgent(null, lifeCycle, this.infrastructure);
         // Associate the serviceAgent to the agent in the infrastructure
         binderAgent.setMyInfraAgent(associatedInfraAgent);
         // Add the reference of the binder Agent in the Action state module

@@ -2,13 +2,13 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Annuaire;
+package MASInfrastructure.Directory;
 
 import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 
 
-public interface IGestionAgent {
+public interface IAgentDirectoryManager {
 
     void addAgent(InfraAgent infraAgent);
 

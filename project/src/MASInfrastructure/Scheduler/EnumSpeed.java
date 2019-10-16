@@ -3,9 +3,9 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Ordonnanceur;
+package MASInfrastructure.Scheduler;
 
 
-public enum EnumVitesse {
+public enum EnumSpeed {
     DIX, VINGT_CINQ, CINQUANTE, SOIXANTE_QUINZE, CENT
 }

@@ -7,15 +7,15 @@ package MASInfrastructure;
 import AmbientEnvironment.OCPlateforme.OCService;
 import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
-import MASInfrastructure.Annuaire.Annuaire;
-import MASInfrastructure.Annuaire.IAnnuaire;
+import MASInfrastructure.Directory.AgentDirectory;
+import MASInfrastructure.Directory.IAgentDirectory;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
-import MASInfrastructure.Etat.LifeCycle;
-import MASInfrastructure.Fabrique.IInfraAgentFactory;
-import MASInfrastructure.Fabrique.ISuicideService;
-import MASInfrastructure.Fabrique.InfraAgentFactory;
-import MASInfrastructure.Ordonnanceur.*;
+import MASInfrastructure.State.LifeCycle;
+import MASInfrastructure.Factory.IInfraAgentFactory;
+import MASInfrastructure.Factory.ISuicideService;
+import MASInfrastructure.Factory.InfraAgentFactory;
+import MASInfrastructure.Scheduler.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,43 +23,43 @@ import java.util.Optional;
 
 
 /**
- * MASInfrastructure fournit le service IInfraAgentFactory(création d'un agent) et de communication
+ * MASInfrastructure
  */
-public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICommunication, IOrdonnanceur {
+public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICommunication, IScheduler {
 
     private InfraAgentFactory infraAgentFactory;
-    private IOrdonnanceur ordonnanceur;
-    private IAnnuaire annuaire;
+    private IScheduler scheduler;
+    private IAgentDirectory annuaire;
 
     public Infrastructure() {
-        ordonnanceur = new Ordonnanceur(new StrategieClassique(new ArrayList<>(), new ArrayList<>()));
-        annuaire = Annuaire.getInstance();
-        infraAgentFactory = new InfraAgentFactory(annuaire, ordonnanceur);
+        scheduler = new Scheduler(new ClassicStrategy(new ArrayList<>(), new ArrayList<>()));
+        annuaire = AgentDirectory.getInstance();
+        infraAgentFactory = new InfraAgentFactory(annuaire, scheduler);
     }
 
     @Override
-    public void seSuicider(InfraAgentReference agent) {
-        infraAgentFactory.seSuicider(agent);
+    public void suicide(InfraAgentReference agent) {
+        infraAgentFactory.suicide(agent);
     }
 
     @Override
-    public void ordonnancer() {
-        ordonnanceur.ordonnancer();
+    public void startScheduling() {
+        scheduler.startScheduling();
     }
 
     @Override
-    public void changerVitesse(EnumVitesse vitesse) {
-        ordonnanceur.changerVitesse(vitesse);
+    public void changeSpeed(EnumSpeed newSpeed) {
+        scheduler.changeSpeed(newSpeed);
     }
 
     @Override
-    public void changerOrdonnancement(IStratOrdonnanceur stratOrdonnanceur) {
-        ordonnanceur.changerOrdonnancement(stratOrdonnanceur);
+    public void changeSchedulingStrategy(ISchedulingStrategies schedulingStrategy) {
+        scheduler.changeSchedulingStrategy(schedulingStrategy);
     }
 
     @Override
-    public List<InfraAgent> arreterOrdonnancement() {
-        return ordonnanceur.arreterOrdonnancement();
+    public List<InfraAgent> stopScheduling() {
+        return scheduler.stopScheduling();
     }
 
     /*	public void sendMessage(InfraAgentReference expediteur, InfraAgentReference destinataire, IMessage IMessage) {
@@ -91,46 +91,46 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     }
 
     @Override
-    public InfraAgent creer(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
-        InfraAgent infraAgent = infraAgentFactory.creer(attachedService, lifeCycle, myMailBoxManager);
-        // ordonnanceur.OrdagentAjoute(infraAgent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'ordonnanceur se fait par infraAgentFactory
+    public InfraAgent createInfrastructureAgent(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
+        InfraAgent infraAgent = infraAgentFactory.createInfrastructureAgent(attachedService, lifeCycle, myMailBoxManager);
+        // scheduler.OrdagentAjoute(infraAgent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'scheduler se fait par infraAgentFactory
         return infraAgent;
     }
 
-    public IAnnuaire getAnnuaire() {
+    public IAgentDirectory getAnnuaire() {
         return annuaire;
     }
 
-    public IOrdonnanceur getOrdonnanceur() {
-        return ordonnanceur;
+    public IScheduler getScheduler() {
+        return scheduler;
     }
 
     @Override
-    public void ordagentAjoute(InfraAgent infraAgent) {
+    public void addAgentToScheduler(InfraAgent infraAgent) {
 
-        ordonnanceur.ordagentAjoute(infraAgent);
+        scheduler.addAgentToScheduler(infraAgent);
     }
 
     @Override
-    public void OrdagentRetire(InfraAgent infraAgent) {
+    public void deleteAgentFromScheduler(InfraAgent infraAgent) {
 
-        ordonnanceur.OrdagentRetire(infraAgent);
+        scheduler.deleteAgentFromScheduler(infraAgent);
     }
 
     /**
      * Put pause to the scheduling process of the agents
      */
     @Override
-    public void pauseOrdonnancement() {
-        this.ordonnanceur.pauseOrdonnancement();
+    public void pauseScheduling() {
+        this.scheduler.pauseScheduling();
     }
 
     /**
      * Resume the execution of the scheduling process of the agents
      */
     @Override
-    public void repriseOrdonnancement() {
-        this.ordonnanceur.repriseOrdonnancement();
+    public void restartScheduling() {
+        this.scheduler.restartScheduling();
     }
 
     /**
@@ -139,7 +139,7 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
      */
     @Override
     public void setMaxCycleAgent(int maxCycleAgent) {
-       this.ordonnanceur.setMaxCycleAgent(maxCycleAgent);
+       this.scheduler.setMaxCycleAgent(maxCycleAgent);
     }
 
     /**
@@ -147,6 +147,6 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
      */
     @Override
     public void resetCurrentCycleAgent() {
-        this.ordonnanceur.resetCurrentCycleAgent();
+        this.scheduler.resetCurrentCycleAgent();
     }
 }

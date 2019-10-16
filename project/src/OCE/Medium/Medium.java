@@ -14,20 +14,22 @@ import OCE.Medium.Recorder.Record;
 import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 
 public class Medium implements IRecord, ICommunicationAdapter {
 
     private IRecord myRecorder;
-    private ICommunicationAdapter mycomunnicationAdapter;
+    private ICommunicationAdapter myCommunicationAdapter;
 
     public Medium(ICommunication communicationInfrastructure) {
         //Instantiate the recorder
         this.myRecorder = new Record();
         //Instantiate the communication adapter with the communication module from the infrastructure
-        this.mycomunnicationAdapter = new CommunicationAdapter(communicationInfrastructure, myRecorder);
+        this.myCommunicationAdapter = new CommunicationAdapter(communicationInfrastructure, myRecorder);
     }
 
     /**
@@ -39,7 +41,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
      */
     @Override
     public void sendMessageBroadcast(InfraMessage infraMessage, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
-        this.mycomunnicationAdapter.sendMessageBroadcast(infraMessage, emitter, receivers);
+        this.myCommunicationAdapter.sendMessageBroadcast(infraMessage, emitter, receivers);
     }
 
     /**
@@ -51,7 +53,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
      */
     @Override
     public void sendMessage(InfraMessage infraMessage, OCEAgent emitter, ArrayList<OCEAgent> receivers) {
-        this.mycomunnicationAdapter.sendMessage(infraMessage, emitter,  receivers);
+        this.myCommunicationAdapter.sendMessage(infraMessage, emitter,  receivers);
     }
 
     /**
@@ -62,18 +64,18 @@ public class Medium implements IRecord, ICommunicationAdapter {
      */
     /*@Override
     public Optional<IMessage> receiveMessage(ServiceAgent receiver) {
-        return this.mycomunnicationAdapter.receiveMessage(receiver);
+        return this.myCommunicationAdapter.receiveMessage(receiver);
     }*/
 
     /**
-     * allows an agent to retreive all the messages sented to it
+     * allows an agent to retrieve all the messages sent to it
      *
      * @param receiver the recipient of the messages
      * @return list of messages received
      */
     /*@Override
     public ArrayList<IMessage> receiveMessages(ServiceAgent receiver) {
-        return this.mycomunnicationAdapter.receiveMessages(receiver);
+        return this.myCommunicationAdapter.receiveMessages(receiver);
     }*/
 
     /**
@@ -97,7 +99,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
     }
 
     /**
-     * Resolve the physical adresse (InfraAgentReference) of ONE ServiceAgent
+     * Resolve the physical address (InfraAgentReference) of ONE ServiceAgent
      * @param oceAgent : the service InfraAgent in question
      * @return his physical reference
      * @throws ReferenceResolutionFailure when the oceAgent doesn't exist
@@ -108,7 +110,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
     }
 
     /**
-     * Resolve the physical adresse (InfraAgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
+     * Resolve the physical address (InfraAgentReference) of a list of ServiceAgents (usually used in the case of more thant one recipient)
      * @param oceAgents : the list of the oceAgents
      * @return the list of corresponding physical references
      * @throws ReferenceResolutionFailure when a serviceAgent doesn't exist
@@ -129,9 +131,9 @@ public class Medium implements IRecord, ICommunicationAdapter {
     }
 
     /**
-     * Resolve the logical adresse (OCEAgent) of a list of InfraAgentReference
-     * @param infraAgents the liste of the refrence of the infrastructure agent
-     * @return the coresponding list of OCEAgents
+     * Resolve the logical address (OCEAgent) of a list of InfraAgentReference
+     * @param infraAgents the list of the reference of the infrastructure agent
+     * @return the corresponding list of OCEAgents
      * @throws ReferenceResolutionFailure if one of the agents doesn't exist
      */
     @Override
@@ -140,13 +142,22 @@ public class Medium implements IRecord, ICommunicationAdapter {
     }
 
     /**
-     * Resolve the logical adresse (OCEAgent) of the InfraAgentReference
-     * @param infraAgent the refrence of the infrastructure agent
-     * @return the coresponding OCEAgent
+     * Resolve the logical address (OCEAgent) of the InfraAgentReference
+     * @param infraAgent the reference of the infrastructure agent
+     * @return the corresponding OCEAgent
      * @throws ReferenceResolutionFailure if the agent doesn't exist
      */
     @Override
     public OCEAgent retrieveOCEAgentByInfraAgentReference(InfraAgentReference infraAgent) throws ReferenceResolutionFailure {
         return this.myRecorder.retrieveOCEAgentByInfraAgentReference(infraAgent);
+    }
+
+    /**
+     * Get the set of all agents existing in the system
+     * @return the list of agent present in the environment
+     */
+    @Override
+    public ObservableList<OCEAgent> getAllAgents() {
+        return this.myRecorder.getAllAgents();
     }
 }

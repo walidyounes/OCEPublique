@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Etat;
+package MASInfrastructure.State;
 
 
 import java.util.ArrayList;
@@ -17,14 +17,14 @@ import java.util.Map;
  * @version 1.0
  */
 public class LifeCycle {
-    private IEtat currentState;
+    private IState currentState;
     private Map<String, ArrayList> sharedMemorie;
 
     /**
      * Constructor of the class
      * @param initialState : the first state of the cycle
      */
-    public LifeCycle(IEtat initialState) {
+    public LifeCycle(IState initialState) {
         this.currentState = initialState;
         this.sharedMemorie = new HashMap<>();
     }
@@ -33,7 +33,7 @@ public class LifeCycle {
      * Change the current state of the agent
      * @param newState : the new state in the life cycle of the agent
      */
-    public void setCurrentState(IEtat newState) {
+    public void setCurrentState(IState newState) {
         this.currentState = newState;
     }
 
@@ -41,7 +41,7 @@ public class LifeCycle {
      * Get the current state
      * @return the current state of the agent
      */
-    public IEtat getCurrentState() {
+    public IState getCurrentState() {
         return currentState;
     }
 

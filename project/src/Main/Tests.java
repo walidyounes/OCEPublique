@@ -13,7 +13,7 @@ import Midlleware.AgentFactory.OCEServiceAgentFactory;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Medium.Medium;
 import OCE.Unifieur.Matching;
-import OCE.sonde.Sonde;
+import OCE.sonde.Probe;
 
 import java.util.ArrayList;
 
@@ -34,8 +34,8 @@ public class Tests {
         IOCEServiceAgentFactory agentFactory = new OCEServiceAgentFactory(infrastructure, medium);
 
 
-        Sonde sonde = new Sonde(mockupFacadeAdapter,medium, agentFactory, 1000);
-        sonde.run();
+        Probe probe = new Probe(mockupFacadeAdapter,medium, agentFactory, 1000);
+        // probe.run(); //deleted for test 16/10/2019
 
         // Construction du composant "C1"
         ArrayList<OCService> providedByC1 = new ArrayList<OCService>();
@@ -56,7 +56,7 @@ public class Tests {
         mockupFacadeAdapter.addComponent(C2);
 
         pause(5000);
-        infrastructure.ordonnancer();
+        infrastructure.startScheduling();
 
         MyLogger.close();
     }

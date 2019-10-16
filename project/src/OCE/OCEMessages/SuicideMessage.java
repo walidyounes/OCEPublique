@@ -32,7 +32,7 @@ public class SuicideMessage extends OCEMessage {
     }
 
     /**
-     * Create a Sonde message (empty message)
+     * Create a Probe message (empty message)
      */
     public SuicideMessage() {
         this.exist = false;

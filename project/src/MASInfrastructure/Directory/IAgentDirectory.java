@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package MASInfrastructure.Annuaire;
+package MASInfrastructure.Directory;
 
 import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
-public interface IAnnuaire extends ICommunication, IGestionAgent {
+public interface IAgentDirectory extends ICommunication, IAgentDirectoryManager {
 
     void ajouterAgentListener(IAgentListener agentListener);
 

@@ -5,16 +5,12 @@
 package Midlleware.AgentFactory;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
 import MASInfrastructure.Agent.InfraAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
-import MASInfrastructure.Etat.LifeCycle;
+import MASInfrastructure.State.LifeCycle;
 import MASInfrastructure.Infrastructure;
 import Midlleware.ThreeState.*;
 import OCE.Agents.*;
-import OCE.Agents.BinderAgentPack.BinderAgent;
-import OCE.Agents.BinderAgentPack.BinderAgentAction;
-import OCE.Agents.BinderAgentPack.BinderAgentDecision;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentAction;
 import OCE.Agents.ServiceAgentPack.ServiceAgentDecision;
@@ -24,7 +20,6 @@ import OCE.Selection.RandomSelection;
 
 import java.util.AbstractMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * InfraAgent Factory implementation : implements the functions in the IOCEServiceAgentFactory Interface to create different type of agent
@@ -75,7 +70,7 @@ public class OCEServiceAgentFactory implements IOCEServiceAgentFactory {
         // create the agent's life cycle
         LifeCycle lifeCycle = new LifeCycle(perceptionState);
         // create the agent in the infrastructure
-        InfraAgent associatedInfraAgent = this.infrastructure.creer(attachedService, lifeCycle, this.infrastructure);
+        InfraAgent associatedInfraAgent = this.infrastructure.createInfrastructureAgent(attachedService, lifeCycle, this.infrastructure);
         // Associate the serviceAgent to the agent in the infrastructure
         serviceAgent.setMyInfraAgent(associatedInfraAgent);
 

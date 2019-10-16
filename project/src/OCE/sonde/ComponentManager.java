@@ -77,7 +77,7 @@ public class ComponentManager {
     public void disappearingComponentsAcquisition() throws AcquisitionFailure {
 
         Set<OCComponent> componentsList = acquisition.getDisappearedComponents();
-        System.out.println(" Disappearing components = " + componentsList + "size = " + componentsList.size());
+        // System.out.println(" Disappearing components = " + componentsList + "size = " + componentsList.size());
         for (OCComponent component : componentsList) {
 
             // Log in the disappearing of the component

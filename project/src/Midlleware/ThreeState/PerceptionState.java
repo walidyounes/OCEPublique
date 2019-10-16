@@ -4,18 +4,18 @@
 
 package Midlleware.ThreeState;
 
-import MASInfrastructure.Etat.IEtat;
-import MASInfrastructure.Etat.LifeCycle;
+import MASInfrastructure.State.IState;
+import MASInfrastructure.State.LifeCycle;
 import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;
 
-public class PerceptionState implements IEtat{
+public class PerceptionState implements IState {
 
-    private IEtat nextState;
+    private IState nextState;
     private IPerceptionState myWayOfPerception;
 
-    public PerceptionState(IEtat nextState, IPerceptionState myWayOfPerception) {
+    public PerceptionState(IState nextState, IPerceptionState myWayOfPerception) {
         this.nextState = nextState;
         this.myWayOfPerception = myWayOfPerception;
     }
@@ -34,7 +34,7 @@ public class PerceptionState implements IEtat{
      * set the next state to go to from this state
      * @param nextState : the next state in the cyrcle
      */
-    public void setNextState(IEtat nextState) {
+    public void setNextState(IState nextState) {
         this.nextState = nextState;
     }
 
