@@ -6,14 +6,14 @@ package OCE.OCEMessages.ARSAMessages;
 
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.DoNothingDecision;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.DoNothingDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.OCEMessages.MessageTypes;
 
 import java.util.ArrayList;
@@ -44,12 +44,12 @@ public class AgreeMessage extends ARSAMessage {
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
-        MyLogger.log(Level.INFO, oceAgentRef + " treats an agreement message ");
+        OCELogger.log(Level.INFO, oceAgentRef + " treats an agreement message ");
         //Verify the connexion state of the agent Todo: walid : il y a un probleme lorsque l'agent se met en attente  - walid  02/09/2019 : a vérifier ça signife quoi
         // if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
             // change the connexion's state of the agent
             //((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.Waiting); //  Todo Walid 02/09/2019 : je pense que c'est inutile de faire ça - 04/10/2019 : je le remet car j'ai changé dans le code de decision de l'agent - 04/09 17h : je l'ai enlevé
-            MyLogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
+            OCELogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
             return new DoNothingDecision();
        //  }
         //return null;

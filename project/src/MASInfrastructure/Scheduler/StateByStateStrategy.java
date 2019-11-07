@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Scheduler;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.State.IState;
 
 import java.util.HashMap;
@@ -14,17 +14,17 @@ import java.util.concurrent.TimeUnit;
 
 public class StateByStateStrategy implements ISchedulingStrategies {
 
-    private List<InfraAgent> listOrdonnancement; // liste d'ordonnancement des agents
+    private List<InfrastructureAgent> listOrdonnancement; // liste d'ordonnancement des agents
     private List<SchedulerListener> listListenerPourOrdonnanceur;
-    private Map<InfraAgent, IState> listEtatAgent;
+    private Map<InfrastructureAgent, IState> listEtatAgent;
     private int vitesse;
     private boolean run = true;
     private int currentAgentCycle;
     private int maxCycleAgent;
 
 
-    public StateByStateStrategy(List<InfraAgent> listInfraAgent, List<SchedulerListener> listListenerActuels) {
-        listOrdonnancement = listInfraAgent;
+    public StateByStateStrategy(List<InfrastructureAgent> listInfrastructureAgent, List<SchedulerListener> listListenerActuels) {
+        listOrdonnancement = listInfrastructureAgent;
         listListenerPourOrdonnanceur = listListenerActuels;
         listEtatAgent = new HashMap<>();
         this.currentAgentCycle = 0;
@@ -37,37 +37,37 @@ public class StateByStateStrategy implements ISchedulingStrategies {
     @Override
     public void ordonnancer() {
         run = true;
-        InfraAgent infraAgentCourant;
+        InfrastructureAgent infrastructureAgentCourant;
         IState etatCourant;
         while (run) {
-            infraAgentCourant = listOrdonnancement.get(0);
-            etatCourant = listEtatAgent.get(infraAgentCourant); //TOdo delete this line
+            infrastructureAgentCourant = listOrdonnancement.get(0);
+            etatCourant = listEtatAgent.get(infrastructureAgentCourant); //TOdo delete this line
             try {
                 TimeUnit.MICROSECONDS.sleep(vitesse);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // changerEtatAgent(infraAgentCourant, etatCourant.executer().orElseGet(infraAgentCourant::getEtatInitial)); - todo Walid
-            listOrdonnancement.remove(infraAgentCourant);
-            listOrdonnancement.add(infraAgentCourant);
+            // changerEtatAgent(infrastructureAgentCourant, etatCourant.executer().orElseGet(infrastructureAgentCourant::getEtatInitial)); - todo Walid
+            listOrdonnancement.remove(infrastructureAgentCourant);
+            listOrdonnancement.add(infrastructureAgentCourant);
             System.out.println("listOrdonnancement" + getListOrdonnancement());
             System.out.println("ListEtatAgent" + getListEtatAgent());
 
         }
     }
 
-    public Map<InfraAgent, IState> getListEtatAgent() {
+    public Map<InfrastructureAgent, IState> getListEtatAgent() {
         return listEtatAgent;
     }
 
-    public List<InfraAgent> getListOrdonnancement() {
+    public List<InfrastructureAgent> getListOrdonnancement() {
         return listOrdonnancement;
     }
 
-    private void changerEtatAgent(InfraAgent infraAgentCourant, IState etatAbstract) {
+    private void changerEtatAgent(InfrastructureAgent infrastructureAgentCourant, IState etatAbstract) {
         listListenerPourOrdonnanceur.forEach(schedulerListener -> schedulerListener
-                .changementEtat(infraAgentCourant.getInfraAgentReference(), etatAbstract));
-        listEtatAgent.put(infraAgentCourant, etatAbstract);
+                .changementEtat(infrastructureAgentCourant.getInfraAgentReference(), etatAbstract));
+        listEtatAgent.put(infrastructureAgentCourant, etatAbstract);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class StateByStateStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public List<InfraAgent> arreterOrdonnancement() {
+    public List<InfrastructureAgent> arreterOrdonnancement() {
         run = false;
         return listOrdonnancement;
     }
@@ -103,15 +103,15 @@ public class StateByStateStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public void agentAjoute(InfraAgent infraAgent) {
-        listOrdonnancement.add(infraAgent);
-        listEtatAgent.put(infraAgent, infraAgent.getState());
+    public void agentAjoute(InfrastructureAgent infrastructureAgent) {
+        listOrdonnancement.add(infrastructureAgent);
+        listEtatAgent.put(infrastructureAgent, infrastructureAgent.getState());
     }
 
     @Override
-    public void agentRetire(InfraAgent infraAgent) {
-        listOrdonnancement.remove(infraAgent);
-        listEtatAgent.remove(infraAgent);
+    public void agentRetire(InfrastructureAgent infrastructureAgent) {
+        listOrdonnancement.remove(infrastructureAgent);
+        listEtatAgent.remove(infrastructureAgent);
     }
 
     /**

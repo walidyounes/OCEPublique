@@ -4,7 +4,7 @@
 
 package OCE.ARSAStrategies.Advertise;
 
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import OCE.InfrastructureMessages.InfraARSAMessages.AdvertiseInfraMessage;
@@ -31,7 +31,7 @@ public class SingleAdInBroadcast implements IAdvertiseStrategy {
     @Override
     public void executer(ICommunication communicationManager) {
         System.out.println("single-Ad-In-Broadcast");
-        MyLogger.log(Level.INFO, "Strategy{ Name= single-Ad-In-Broadcast, Phase= ADVERTISE}");
+        OCELogger.log(Level.INFO, "Strategy{ Name= single-Ad-In-Broadcast, Phase= ADVERTISE}");
         InfraMessage ad = new AdvertiseInfraMessage(agent, null); // la liste des déstinataires est == null car en braodcast
         communicationManager.sendMessageBroadcast(ad);
     }

@@ -60,15 +60,15 @@ public class BinderAgent extends OCEAgent {
         return firstService;
     }
 
-    public void setFirstService(Optional<OCService> firstService) {
-        this.firstService = firstService;
+    public void setFirstService(OCService firstService) {
+        this.firstService = Optional.ofNullable(firstService);
     }
 
     public Optional<OCService> getSecondService() {
         return secondService;
     }
 
-    public void setSecondService(Optional<OCService> secondService) {
-        this.secondService = secondService;
+    public void setSecondService(OCService secondService) {
+        this.secondService = Optional.ofNullable(secondService);
     }
 }

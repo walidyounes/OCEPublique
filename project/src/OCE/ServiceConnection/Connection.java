@@ -6,8 +6,12 @@ package OCE.ServiceConnection;
 
 
 import AmbientEnvironment.MockupCompo.MockupService;
+import Logger.OCELogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
+
+import java.util.Optional;
+import java.util.logging.Level;
 
 /**
  * This class represent a connexion between two service agents
@@ -21,6 +25,7 @@ public class Connection implements Comparable {
     private MockupService firstService;
     private MockupService secondService;
     private BinderAgent binderAgent;
+    private Optional<IConnectionState> myConnectionState;
 
     /**
      * Construct a connexion
@@ -30,18 +35,20 @@ public class Connection implements Comparable {
     public Connection(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent) {
         this.firstServiceAgent = firstServiceAgent;
         this.secondServiceAgent = secondServiceAgent;
+        this.myConnectionState = Optional.empty();
     }
 
     /**
      * Construct a connexion with an associated binder agent
      * @param firstServiceAgent     : the first service agent responsible of the first service
      * @param secondServiceAgent    : the second service agent responsible of the second service
-     * @param binderAgent           : the binder agent witch is atached to this connexion
+     * @param binderAgent           : the binder agent witch is attached to this connexion
      */
     public Connection(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent, BinderAgent binderAgent) {
         this.firstServiceAgent = firstServiceAgent;
         this.secondServiceAgent = secondServiceAgent;
         this.binderAgent = binderAgent;
+        this.myConnectionState = Optional.empty();
     }
 
     /**
@@ -50,7 +57,7 @@ public class Connection implements Comparable {
      * @param secondServiceAgent    : the second service agent responsible of the second service
      * @param firstService          : the first service
      * @param secondService         : the second service
-     * @param binderAgent           : the binder agent witch is atached to this connexion
+     * @param binderAgent           : the binder agent witch is attached to this connexion
      */
     public Connection(ServiceAgent firstServiceAgent, ServiceAgent secondServiceAgent, MockupService firstService, MockupService secondService, BinderAgent binderAgent) {
         this.firstServiceAgent = firstServiceAgent;
@@ -58,6 +65,7 @@ public class Connection implements Comparable {
         this.firstService = firstService;
         this.secondService = secondService;
         this.binderAgent = binderAgent;
+        this.myConnectionState = Optional.empty();
     }
 
     /**
@@ -148,8 +156,8 @@ public class Connection implements Comparable {
      */
     public boolean isTheSameServices(String idFirstService, String idSecondService){
         //Get the string representation of the two services containing in this connexion
-        String thisIDFirstService = "" + this.firstService.getName() + this.firstService.getType() + this.firstService.getOwner()+this.firstService.getWay();
-        String thisIDSecondService = "" + this.secondService.getName() + this.secondService.getType() +this.secondService.getOwner()+this.secondService.getWay();
+        String thisIDFirstService = "" + this.firstService.getName() + this.firstService.getMatchingID() + this.firstService.getOwner()+this.firstService.getWay();
+        String thisIDSecondService = "" + this.secondService.getName() + this.secondService.getMatchingID() +this.secondService.getOwner()+this.secondService.getWay();
         //Check if the two representation of the two local services are equal to those send in parameters
         return thisIDFirstService.equals(idFirstService) && thisIDSecondService.equals(idSecondService);
     }
@@ -163,6 +171,32 @@ public class Connection implements Comparable {
         return this.firstService.equals(service) || this.secondService.equals(service);
     }
 
+    /**
+     * Get the state of this connection
+     * @return the state of the connection if it exists
+     */
+    public Optional<IConnectionState> getMyConnectionState() {
+        return myConnectionState;
+    }
+
+    /**
+     * Set the state's value of this connection
+     * @param myConnectionState : the new value
+     */
+    public void setMyConnectionState(IConnectionState myConnectionState) {
+        this.myConnectionState = Optional.of(myConnectionState);
+    }
+
+    /**
+     * Treat the connection according to her state (accepted, rejected or modified)
+     */
+    public void toSelfTreat(){
+        if (this.myConnectionState.isPresent()){
+            this.myConnectionState.get().treatConnection(this);
+        }else{
+            OCELogger.log(Level.INFO, "Connection without a state, it can't be treated !");
+        }
+    }
     /**
      * Compare two connexions (the comparison is compute on all the attribute of the connexion)
      * @param o the connexion to compare this one
@@ -206,6 +240,6 @@ public class Connection implements Comparable {
      */
     @Override
     public String toString() {
-        return "{ ("+this.firstServiceAgent + ", "+ this.secondServiceAgent+") - ( "+ this.firstService + ", "+this.secondService + ") - ( "+ this.binderAgent+ ") }";
+        return "{ ("+this.firstServiceAgent + ", "+ this.secondServiceAgent+") - ( "+ this.firstService + ", "+this.secondService + ") - ( "+ this.binderAgent+ ") - ( " + this.myConnectionState + ") }";
     }
 }

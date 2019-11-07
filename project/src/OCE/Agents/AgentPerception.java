@@ -4,8 +4,8 @@
 
 package OCE.Agents;
 
-import Logger.MyLogger;
-import MASInfrastructure.Agent.InfraAgent;
+import Logger.OCELogger;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import Midlleware.ThreeState.IPerceptionState;
 import OCE.InfrastructureMessages.InfraMessage;
 
@@ -20,16 +20,16 @@ import java.util.stream.Collectors;
  */
 public class AgentPerception implements IPerceptionState {
 
-    private InfraAgent myInfraAgent;
+    private InfrastructureAgent myInfrastructureAgent;
 
 
     /**
      * Update the reference of the Infrastructure Agent that this component is attached to
-     * @param myInfraAgent : the Infrastructure Agent whom this component is attached to
+     * @param myInfrastructureAgent : the Infrastructure Agent whom this component is attached to
      */
     @Override
-    public void setInfraAgent(InfraAgent myInfraAgent) {
-        this.myInfraAgent = myInfraAgent;
+    public void setInfraAgent(InfrastructureAgent myInfrastructureAgent) {
+        this.myInfrastructureAgent = myInfrastructureAgent;
     }
 
     /**
@@ -48,12 +48,12 @@ public class AgentPerception implements IPerceptionState {
     public ArrayList<InfraMessage> percept() {
 
         // Read the infraMessages from the mail-Box and convert them from IMessage to InfraMessage
-        ArrayList<InfraMessage> infraMessages = new ArrayList<>(this.myInfraAgent.readMessages().stream().map(x -> (InfraMessage)x).collect(Collectors.toList()));
+        ArrayList<InfraMessage> infraMessages = new ArrayList<>(this.myInfrastructureAgent.readMessages().stream().map(x -> (InfraMessage)x).collect(Collectors.toList()));
 
-        MyLogger.log(Level.INFO, "Agent : Perception -> Received infraMessages = "+ infraMessages.toString());
+        OCELogger.log(Level.INFO, "Agent : Perception -> Received infraMessages = "+ infraMessages.toString());
 
 //        if (infraMessages.isEmpty()){ // If the agent didn't receive any infraMessages he send a EmptyInfraMessage (equivalent to an Empty Perception)
-//            infraMessages.add(new EmptyInfraMessage(myInfraAgent.getInfraAgentReference()));
+//            infraMessages.add(new EmptyInfraMessage(myInfrastructureAgent.getInfraAgentReference()));
 //        }
         return infraMessages;
     }

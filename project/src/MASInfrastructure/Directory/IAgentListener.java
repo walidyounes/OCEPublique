@@ -4,11 +4,11 @@
 
 package MASInfrastructure.Directory;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 
 public interface IAgentListener {
 
-    void agentAjoute(InfraAgent infraAgent);
+    void agentAjoute(InfrastructureAgent infrastructureAgent);
 
-    void agentRetire(InfraAgent infraAgent);
+    void agentRetire(InfrastructureAgent infrastructureAgent);
 }

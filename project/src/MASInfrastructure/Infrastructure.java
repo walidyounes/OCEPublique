@@ -5,7 +5,7 @@
 package MASInfrastructure;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Directory.AgentDirectory;
 import MASInfrastructure.Directory.IAgentDirectory;
@@ -58,7 +58,7 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     }
 
     @Override
-    public List<InfraAgent> stopScheduling() {
+    public List<InfrastructureAgent> stopScheduling() {
         return scheduler.stopScheduling();
     }
 
@@ -91,10 +91,10 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     }
 
     @Override
-    public InfraAgent createInfrastructureAgent(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
-        InfraAgent infraAgent = infraAgentFactory.createInfrastructureAgent(attachedService, lifeCycle, myMailBoxManager);
-        // scheduler.OrdagentAjoute(infraAgent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'scheduler se fait par infraAgentFactory
-        return infraAgent;
+    public InfrastructureAgent createInfrastructureAgent(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
+        InfrastructureAgent infrastructureAgent = infraAgentFactory.createInfrastructureAgent(attachedService, lifeCycle, myMailBoxManager);
+        // scheduler.OrdagentAjoute(infrastructureAgent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'scheduler se fait par infraAgentFactory
+        return infrastructureAgent;
     }
 
     public IAgentDirectory getAnnuaire() {
@@ -106,15 +106,15 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     }
 
     @Override
-    public void addAgentToScheduler(InfraAgent infraAgent) {
+    public void addAgentToScheduler(InfrastructureAgent infrastructureAgent) {
 
-        scheduler.addAgentToScheduler(infraAgent);
+        scheduler.addAgentToScheduler(infrastructureAgent);
     }
 
     @Override
-    public void deleteAgentFromScheduler(InfraAgent infraAgent) {
+    public void deleteAgentFromScheduler(InfrastructureAgent infrastructureAgent) {
 
-        scheduler.deleteAgentFromScheduler(infraAgent);
+        scheduler.deleteAgentFromScheduler(infrastructureAgent);
     }
 
     /**

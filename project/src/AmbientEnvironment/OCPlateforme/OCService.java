@@ -8,9 +8,10 @@ import AmbientEnvironment.MockupCompo.AddLinkException;
 import AmbientEnvironment.MockupCompo.RemoveLinkException;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class OCService {
+public abstract class OCService implements Serializable {
     protected ArrayList<OCService> linkedServices;
     // protected JSONObject proprieties; // Properties of the services
 

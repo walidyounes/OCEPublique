@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.sonde;
+package OCE.probe;
 
 import javax.swing.*;
 import java.awt.*;

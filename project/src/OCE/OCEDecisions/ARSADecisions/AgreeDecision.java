@@ -2,14 +2,14 @@
  * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions.ARSADecisions;
+package OCE.OCEDecisions.ARSADecisions;
 
-import Logger.MyLogger;
+import Logger.OCELogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraARSAMessages.AgreeInfraMessage;
 import OCE.InfrastructureMessages.BindInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
@@ -25,10 +25,11 @@ import java.util.logging.Level;
 public class AgreeDecision extends OCEDecision {
 
     private BinderAgent binderAgent;
+
     /**
      * Create an agreement decision
      * @param emitter    reference of the agent that agrees
-     * @param receivers the references of the receivers of the ad, if null == Broadcast
+     * @param receivers the references of the receivers of the agreement
      */
     public AgreeDecision(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter= emitter;
@@ -41,7 +42,7 @@ public class AgreeDecision extends OCEDecision {
 
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
-        MyLogger.log(Level.INFO, "Treating an agree decision ! ");
+        OCELogger.log(Level.INFO, "Treating an agree decision ! ");
         //send the agree message
         AgreeInfraMessage agreeMessage = new AgreeInfraMessage(null, null);
         communicationAdapter.sendMessage(agreeMessage, this.emitter, this.receivers);

@@ -9,8 +9,7 @@ import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.MockupCompo.Way;
 import OCE.ServiceConnection.Connection;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,7 +56,8 @@ public class ICEXMLFormatter implements IFileFormatter {
             this.listComponents     = listComponents;
             this.listConnections    = listConnections;
             // Open the model XML file
-            BufferedWriter bw = new BufferedWriter(new FileWriter("MyLogFiles/editor.ice_editor"));
+            // BufferedWriter bw = new BufferedWriter(new FileWriter("MyLogFiles/ICE.ice_editor"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor"));
             //write the first line
             bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <iCE_Editor:Environment xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" "
                     + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance \" xmlns:iCE_Editor=\"http://www.eclipse.org/sirius/sample/ice_editor\"> \n");
@@ -71,11 +71,11 @@ public class ICEXMLFormatter implements IFileFormatter {
                             if(mapIsConnectedConnectedTo.getKey().isPresent()) {
                                 Map.Entry<Integer, Integer> indexes = findIndexes(mapIsConnectedConnectedTo);
 
-                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\" "
+                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID() + "\" "
                                         + "bindRequired=\"//@component."+ indexes.getKey()+
                                         "/@service."+ indexes.getValue()+"\"/>\n");
                             } else {
-                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"/>\n");
+                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID() +"\"/>\n");
                             }
                         }
                     }
@@ -86,21 +86,41 @@ public class ICEXMLFormatter implements IFileFormatter {
                             if(mapIsConnectedConnectedTo.getKey().isPresent()) {
                                 Map.Entry<Integer, Integer> indexes = findIndexes(mapIsConnectedConnectedTo);
 
-                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\" "
+                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID()+"\" "
                                         + "bindProvided=\"//@component."+ indexes.getKey()+
                                         "/@service."+ indexes.getValue()+"\"/>\n");
                             } else {
-                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"/>\n");
+                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID()+"\"/>\n");
                             }
                         }
                     }
                     bw.write("</component>\n");
             }
-            // Writing the endlines of the XML
+            // Writing the end lines of the XML
             bw.write("</iCE_Editor:Environment> \n");
 
             // Saving the file
             bw.close();
+
+            //Making the OCE Copy of the generated file
+
+            final String ICEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor";
+
+            final String OCEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\OCE-ICE-old.ice_editor";
+
+
+            try (final InputStream is = new FileInputStream(ICEFilePath);  final OutputStream os = new FileOutputStream(OCEFilePath)) {
+                //Make the copy
+                is.transferTo(os);
+                //Close both streams
+                is.close();
+                os.close();
+            }
+
+            catch (IOException exception) {
+                System.out.println("Error : ");
+                exception.printStackTrace();
+            }
         } catch (Exception e){
             System.out.println("Error : ");
             e.printStackTrace();

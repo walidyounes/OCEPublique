@@ -16,12 +16,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-public class MyLogger {
-    private final static Logger logger = Logger.getLogger(MyLogger.class.getName());
+public class OCELogger {
+    private final static Logger logger = Logger.getLogger(OCELogger.class.getName());
     private static FileHandler fh = null;
     private static StringProperty uiLog;
 
-    public MyLogger(){
+    public OCELogger(){
         this.uiLog = new SimpleStringProperty("");
     }
 

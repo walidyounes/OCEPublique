@@ -5,12 +5,16 @@
 package MOICE.connectionManager;
 
 import AmbientEnvironment.MockupCompo.MockupComponent;
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCComponent;
+import AmbientEnvironment.OCPlateforme.OCService;
 import MOICE.ICEXMLFormatter;
 import MOICE.IFileFormatter;
 import OCE.ServiceConnection.Connection;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConnectionManager implements IConnectionManager {
 
@@ -75,7 +79,8 @@ public class ConnectionManager implements IConnectionManager {
     }
 
     /**
-     * Register the component present in the environment
+     * Register the component in the list
+     * @param component : the component to register
      */
     @Override
     public void registerComponent(OCComponent component) {
@@ -83,18 +88,57 @@ public class ConnectionManager implements IConnectionManager {
     }
 
     /**
+     * Unregister the component from the list
+     * @param component : the component to unregister
+     */
+    @Override
+    public void unRegisterComponent(OCComponent component) {
+        MockupComponent deletedComponent = (MockupComponent) component;
+        //Get the connections where the service of this disappearing component are part of
+            for(OCService providedService : deletedComponent.getProvidedServices()){
+                MockupService providedServiceToDelete = (MockupService) providedService;
+                //Search in the list of registered connections, those where this service is part of
+                List<Connection> connectionToDelete = this.listConnections.stream().filter(c -> c.getFirstService().equals(providedServiceToDelete) || c.getSecondService().equals(providedServiceToDelete) ).collect(Collectors.toList());
+                System.out.println("" + connectionToDelete.toString());
+                this.listConnections.removeIf(c -> c.getFirstService().equals(providedServiceToDelete) || c.getSecondService().equals(providedServiceToDelete));
+            }
+            for(OCService requiredService : deletedComponent.getRequiredServices()){
+                MockupService requiredServiceToDelete = (MockupService) requiredService;
+                List<Connection> connectionToDelete = this.listConnections.stream().filter(c -> c.getFirstService().equals(requiredServiceToDelete) || c.getSecondService().equals(requiredServiceToDelete) ).collect(Collectors.toList());
+                System.out.println("" + connectionToDelete.toString());
+                this.listConnections.removeIf(c -> c.getFirstService().equals(requiredServiceToDelete) || c.getSecondService().equals(requiredServiceToDelete));
+            }
+
+        //Delete the component from the list
+        this.listComponents.remove(deletedComponent);
+    }
+
+    /**
      * Register the connection proposed by the engine OCE
+     * @param connection    : the proposed connection to register
      */
     @Override
     public void registerConnection(Connection connection) {
         this.listConnections.add(connection);
     }
 
+
+    /**
+     * Unregister the connection proposed by the engine OCE
+     * @param connection    : the proposed connection to unregister
+     */
+    @Override
+    public void unRegisterConnection(Connection connection) {
+        this.listConnections.remove(connection);
+    }
+
     /**
      * Collect the connection proposed by the engine OCE. This method is dedicated to ICE
      */
     @Override
-    public void collectConnection() {
+    public void collectOCEProposedConfiguration() {
         this.myFileFormatter.convertFormat(this.listComponents,this.listConnections);
     }
+
+
 }

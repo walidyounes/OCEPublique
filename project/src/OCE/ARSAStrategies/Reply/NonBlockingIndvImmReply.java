@@ -5,7 +5,7 @@
 package OCE.ARSAStrategies.Reply;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
@@ -40,7 +40,7 @@ public class NonBlockingIndvImmReply implements IReplyStrategy {
     @Override
     public void executer(ICommunication comm, OCService service, ArrayList<InfraAgentReference> destinataires) {
         System.out.println("non-Blocking-Targeted-Immediate-Response");
-        MyLogger.log(Level.INFO, "Strategy{ Name= non-Blocking-Targeted-Immediate-Response, Phase= Reply}");
+        OCELogger.log(Level.INFO, "Strategy{ Name= non-Blocking-Targeted-Immediate-Response, Phase= Reply}");
 
 //		InfraMessage bestAd = best(ads);
         //	MessageAgent bestAd = ads.get(0); // to remove

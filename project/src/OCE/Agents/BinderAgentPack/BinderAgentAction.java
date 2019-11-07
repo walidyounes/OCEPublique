@@ -6,11 +6,11 @@ package OCE.Agents.BinderAgentPack;
 
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import Midlleware.ThreeState.IActionState;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
 import OCE.InfrastructureMessages.FeedbackInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
@@ -42,18 +42,18 @@ public class BinderAgentAction implements IActionState {
     }
     @Override
     public void act(ArrayList<OCEDecision> decisionsList) {
-        MyLogger.log(Level.INFO, " Binder agent - "+ this.myBinderAgent +" - : Action -> ");
+        OCELogger.log(Level.INFO, " Binder agent - "+ this.myBinderAgent +" - : Action -> ");
         if(decisionsList.size()>0){
             if(decisionsList.size()==2){ // We received the two messages that we were waiting for
-                MyLogger.log(Level.INFO, "The Binder agent received two messages !");
+                OCELogger.log(Level.INFO, "The Binder agent received two messages !");
                 //Extract the information from the messages
                 this.firstServiceAgent = (ServiceAgent)decisionsList.get(0).getEmitter();
                 this.secondServiceAgent = (ServiceAgent)decisionsList.get(1).getEmitter();
                 this.firstService = ((ServiceAgent)decisionsList.get(0).getEmitter()).getHandledService();
                 this.secondService =  ((ServiceAgent)decisionsList.get(1).getEmitter()).getHandledService();
                 //Save the two services in the binder agent
-                ((BinderAgent)this.myBinderAgent).setFirstService(Optional.of(this.firstService));
-                ((BinderAgent)this.myBinderAgent).setSecondService(Optional.of(this.secondService));
+                ((BinderAgent)this.myBinderAgent).setFirstService(this.firstService);
+                ((BinderAgent)this.myBinderAgent).setSecondService(this.secondService);
 
                 //Launch the physical binging
                 this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();
@@ -78,12 +78,12 @@ public class BinderAgentAction implements IActionState {
             }else{ // In this cycle we received only one message
                 this.nbMessages += decisionsList.size();
                 if(nbMessages<2){  // it may be the second one or the first one
-                    MyLogger.log(Level.INFO, "The Binder agent received the first message !");
+                    OCELogger.log(Level.INFO, "The Binder agent received the first message !");
                     this.firstService = ((ServiceAgent)decisionsList.get(0).getEmitter()).getHandledService();
                     this.firstServiceAgent = (ServiceAgent)decisionsList.get(0).getEmitter();
 
                 }else{
-                    MyLogger.log(Level.INFO, "The Binder agent received the second message !");
+                    OCELogger.log(Level.INFO, "The Binder agent received the second message !");
                     this.secondService = ((ServiceAgent)decisionsList.get(0).getEmitter()).getHandledService();
                     this.secondServiceAgent = (ServiceAgent)decisionsList.get(0).getEmitter();
                     //Launch the physical binging
@@ -109,7 +109,7 @@ public class BinderAgentAction implements IActionState {
             }
         }else
         {
-            MyLogger.log(Level.INFO, "The binder agent didn't receive any thing in this cycle ");
+            OCELogger.log(Level.INFO, "The binder agent didn't receive any thing in this cycle ");
         }
 
 

@@ -5,7 +5,7 @@
 package OCE.ARSAStrategies.Select;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
@@ -40,7 +40,7 @@ public class ImmediateSelect implements ISelectStrategy {
     @Override
     public void executer(ICommunication comm, OCService service, ArrayList<InfraAgentReference> recipients) {
         System.out.println("immediate-Select");
-        MyLogger.log(Level.INFO, "Strategy{ Name= immediate-Select, Phase= SELECT}");
+        OCELogger.log(Level.INFO, "Strategy{ Name= immediate-Select, Phase= SELECT}");
 
 //		InfraMessage bestReply = best(replies);
      //   MessageAgent bestReply = responses.get(0); // to remove

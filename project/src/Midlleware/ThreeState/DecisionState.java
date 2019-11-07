@@ -6,7 +6,7 @@ package Midlleware.ThreeState;
 
 import MASInfrastructure.State.IState;
 import MASInfrastructure.State.LifeCycle;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;
@@ -23,13 +23,13 @@ public class DecisionState implements IState {
 
     @Override
     public void execute(LifeCycle c) {
-        //MyLogger.log(Level.INFO, " InfraAgent is in Decision state " );
+        //OCELogger.log(Level.INFO, " InfrastructureAgent is in Decision state " );
         // Retrive the list of perceptions initialized in the previous state
         ArrayList<InfraMessage> infraMessages = c.getSharedData("ListPerceptions");
         // execute the decision method of the agent
         ArrayList<OCEDecision> myListOfDecisions= myWayOfDecision.decide(infraMessages);
 
-       // MyLogger.log(Level.INFO, "List of decisions " + myListOfDecisions);
+       // OCELogger.log(Level.INFO, "List of decisions " + myListOfDecisions);
         //send the data to the next state
         c.shareVariable("ListDecisions", myListOfDecisions);
         //Move forward to the next state "Action state"

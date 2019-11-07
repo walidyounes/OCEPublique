@@ -4,13 +4,13 @@
 
 package OCE.Agents;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
 
 public abstract class OCEAgent {
-    protected InfraAgent myInfraAgent;
+    protected InfrastructureAgent myInfrastructureAgent;
     protected IDAgent myID;
     protected IPerceptionState myWayOfPerception;
     protected IDecisionState myWayOfDecision;
@@ -19,7 +19,7 @@ public abstract class OCEAgent {
 
     /**
      * Get the unique identifier of this agent
-     * @return the ID of this InfraAgent
+     * @return the ID of this InfrastructureAgent
      */
     public IDAgent getMyID() {
         return myID;
@@ -27,18 +27,18 @@ public abstract class OCEAgent {
 
     /**
      * set the agent (in the infrastructure) which is associated to this service agent
-     * @param myInfraAgent : the associated agent
+     * @param myInfrastructureAgent : the associated agent
      */
-    public void setMyInfraAgent(InfraAgent myInfraAgent) {
-        this.myInfraAgent = myInfraAgent;
+    public void setMyInfrastructureAgent(InfrastructureAgent myInfrastructureAgent) {
+        this.myInfrastructureAgent = myInfrastructureAgent;
     }
 
     /**
      * get the associated agent (un the infrastructure) to this serviceAgent
      * @return the associated agent
      */
-    public InfraAgent getMyInfraAgent() {
-        return myInfraAgent;
+    public InfrastructureAgent getMyInfrastructureAgent() {
+        return myInfrastructureAgent;
     }
 
     /**

@@ -100,7 +100,7 @@ public class Medium implements IRecord, ICommunicationAdapter {
 
     /**
      * Resolve the physical address (InfraAgentReference) of ONE ServiceAgent
-     * @param oceAgent : the service InfraAgent in question
+     * @param oceAgent : the service InfrastructureAgent in question
      * @return his physical reference
      * @throws ReferenceResolutionFailure when the oceAgent doesn't exist
      */

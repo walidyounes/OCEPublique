@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Directory;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.IMessage;
 
@@ -24,7 +24,7 @@ public class AgentDirectory implements IAgentDirectory {
     private List<IAgentListener> agentListeners;
     private List<IReferenceAgentListener> referenceAgentListeners;
     private List<IMessageAgentListener> messageAgentListeners;
-    private ConcurrentMap<InfraAgentReference, InfraAgent> agents; // contient les references des agents à l'instant t
+    private ConcurrentMap<InfraAgentReference, InfrastructureAgent> agents; // contient les references des agents à l'instant t
     private ConcurrentMap<InfraAgentReference, ConcurrentLinkedQueue<IMessage>> agentsMessagesQueues; // contient les references des agents associés aux messages reçus
     private ConcurrentMap<InfraAgentReference, ReadWriteLock> agentsLocks;
 
@@ -57,19 +57,19 @@ public class AgentDirectory implements IAgentDirectory {
         return AgentDirectoryHolder.instance;
     }
 
-    public ConcurrentMap<InfraAgentReference, InfraAgent> getAgents() {
+    public ConcurrentMap<InfraAgentReference, InfrastructureAgent> getAgents() {
         return agents;
     }
 
     @Override
-    public void addAgent(InfraAgent infraAgent) {
-        agentsLocks.put(infraAgent.getInfraAgentReference(), new ReentrantReadWriteLock());
-        lockAgentEcriture(infraAgent.getInfraAgentReference());
-        agents.put(infraAgent.getInfraAgentReference(), infraAgent);
-        agentsMessagesQueues.put(infraAgent.getInfraAgentReference(), new ConcurrentLinkedQueue<>());
-        unlockAgentEcriture(infraAgent.getInfraAgentReference());
-        referenceAgentListeners.forEach(agentListener -> agentListener.agentAjoute(infraAgent.getInfraAgentReference()));
-        agentListeners.forEach(agentListener -> agentListener.agentAjoute(infraAgent));
+    public void addAgent(InfrastructureAgent infrastructureAgent) {
+        agentsLocks.put(infrastructureAgent.getInfraAgentReference(), new ReentrantReadWriteLock());
+        lockAgentEcriture(infrastructureAgent.getInfraAgentReference());
+        agents.put(infrastructureAgent.getInfraAgentReference(), infrastructureAgent);
+        agentsMessagesQueues.put(infrastructureAgent.getInfraAgentReference(), new ConcurrentLinkedQueue<>());
+        unlockAgentEcriture(infrastructureAgent.getInfraAgentReference());
+        referenceAgentListeners.forEach(agentListener -> agentListener.agentAjoute(infrastructureAgent.getInfraAgentReference()));
+        agentListeners.forEach(agentListener -> agentListener.agentAjoute(infrastructureAgent));
     }
 
     @Override
@@ -233,7 +233,7 @@ public class AgentDirectory implements IAgentDirectory {
         return messageAgentListeners;
     }
 
-    public InfraAgent getAgentByRef(InfraAgentReference infraAgentReference) {
+    public InfrastructureAgent getAgentByRef(InfraAgentReference infraAgentReference) {
         return this.agents.get(infraAgentReference);
     }
 }

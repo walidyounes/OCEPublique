@@ -5,12 +5,12 @@
 package MASInfrastructure.Factory;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.State.LifeCycle;
 
 public interface IInfraAgentFactory {
 
-    InfraAgent createInfrastructureAgent(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager);
+    InfrastructureAgent createInfrastructureAgent(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager);
 
 }

@@ -21,7 +21,7 @@ public abstract class InfraMessage implements IMessage {
 
     protected InfraAgentReference emitter; // The transmitter of the message
     protected ArrayList<InfraAgentReference> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
-    protected MessageTypes myType; // The type of the message (Advertise, reply ..etc.)
+    protected MessageTypes myType; // The matchingID of the message (Advertise, reply ..etc.)
     /**
      * get the transmitter of the message
      * @return the reference of the transmitter of the message
@@ -59,13 +59,13 @@ public abstract class InfraMessage implements IMessage {
     }
 
     /**
-     * get the type of message,  which can be : Advertise, reply, select, agree...
-     * @return the type of the message
+     * get the matchingID of message,  which can be : Advertise, reply, select, agree...
+     * @return the matchingID of the message
      */
     public abstract MessageTypes getMyType();
 
     /**
-     * Transform the message into perception (this method is useful because in the OCE engine we deal with ServiceAgent reference not InfraAgent reference)
+     * Transform the message into perception (this method is useful because in the OCE engine we deal with ServiceAgent reference not InfrastructureAgent reference)
      * @param referenceResolver : the component used to resolv the adress ServiceAgent <> InfraAgentReference
      * @return the perception equivalent to the message
      */

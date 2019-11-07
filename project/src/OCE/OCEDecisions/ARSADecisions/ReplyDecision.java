@@ -2,10 +2,10 @@
  * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions.ARSADecisions;
+package OCE.OCEDecisions.ARSADecisions;
 
-import Logger.MyLogger;
-import OCE.Decisions.OCEDecision;
+import Logger.OCELogger;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraARSAMessages.ReplyInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Agents.OCEAgent;
@@ -23,7 +23,7 @@ public class ReplyDecision extends OCEDecision {
     /**
      * Create a reply decision
      * @param emitter    reference of the replying agent
-     * @param receivers the references of the receivers of the ad, if null == Broadcast
+     * @param receivers the references of the receivers of the response
      */
     public ReplyDecision(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter= emitter;
@@ -32,7 +32,7 @@ public class ReplyDecision extends OCEDecision {
 
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
-        MyLogger.log(Level.INFO, "Treating a reply decision ! ");
+        OCELogger.log(Level.INFO, "Treating a reply decision ! ");
         ReplyInfraMessage replyMessage = new ReplyInfraMessage(null, null );
         communicationAdapter.sendMessage(replyMessage, this.emitter, this.receivers);
     }

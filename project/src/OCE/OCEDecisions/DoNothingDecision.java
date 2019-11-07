@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions;
+package OCE.OCEDecisions;
 
 import OCE.Medium.Communication.ICommunicationAdapter;
 

@@ -4,7 +4,7 @@
 
 package OCE.ARSAStrategies.Advertise;
 
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Communication.ICommunication;
 
 import java.util.logging.Level;
@@ -21,6 +21,6 @@ public class NoAdvertise implements IAdvertiseStrategy {
     @Override
     public void executer(ICommunication comm) {
         System.out.println("This is No Advertise Strategy!");
-        MyLogger.log(Level.INFO, "Strategy{ Name= no_Advertise, Phase=  ADVERTISE}");
+        OCELogger.log(Level.INFO, "Strategy{ Name= no_Advertise, Phase=  ADVERTISE}");
     }
 }

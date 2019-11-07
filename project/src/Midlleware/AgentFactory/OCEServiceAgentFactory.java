@@ -4,8 +4,9 @@
 
 package Midlleware.AgentFactory;
 
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.State.LifeCycle;
 import MASInfrastructure.Infrastructure;
@@ -22,7 +23,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 /**
- * InfraAgent Factory implementation : implements the functions in the IOCEServiceAgentFactory Interface to create different type of agent
+ * InfrastructureAgent Factory implementation : implements the functions in the IOCEServiceAgentFactory Interface to create different matchingID of agent
  * @author Walid YOUNES
  * @version 1.0
  */
@@ -38,18 +39,18 @@ public class OCEServiceAgentFactory implements IOCEServiceAgentFactory {
 
     /**
      * create a service agent
-     * @return the association between service InfraAgent created and the physical reference of the agent
+     * @return the association between service InfrastructureAgent created and the physical reference of the agent
      */
     @Override
     public Map.Entry<ServiceAgent, InfraAgentReference> createServiceAgent(OCService attachedService) {
-        //MyLogger.log(Level.INFO, "Creating the agent for the service * " + attachedService.toString() + " *");
-        //Create the attributes of service InfraAgent
+        //OCELogger.log(Level.INFO, "Creating the agent for the service * " + attachedService.toString() + " *");
+        //Create the attributes of service InfrastructureAgent
         //Create the perception component
         IPerceptionState myWayOfPerception = new AgentPerception();
 
         //Create the decision component
         IActionState myWayOfAction = new ServiceAgentAction();
-        // Create The service InfraAgent
+        // Create The service InfrastructureAgent
         ServiceAgent serviceAgent = new ServiceAgent(attachedService, myWayOfPerception, null, myWayOfAction);
 
         //Create the strategy of message selection
@@ -70,21 +71,24 @@ public class OCEServiceAgentFactory implements IOCEServiceAgentFactory {
         // create the agent's life cycle
         LifeCycle lifeCycle = new LifeCycle(perceptionState);
         // create the agent in the infrastructure
-        InfraAgent associatedInfraAgent = this.infrastructure.createInfrastructureAgent(attachedService, lifeCycle, this.infrastructure);
+        InfrastructureAgent associatedInfrastructureAgent = this.infrastructure.createInfrastructureAgent(attachedService, lifeCycle, this.infrastructure);
         // Associate the serviceAgent to the agent in the infrastructure
-        serviceAgent.setMyInfraAgent(associatedInfraAgent);
+        serviceAgent.setMyInfrastructureAgent(associatedInfrastructureAgent);
 
         // Update the attributes of the perception with the reference of the Infrastructure Agent 
-        myWayOfPerception.setInfraAgent(associatedInfraAgent);
+        myWayOfPerception.setInfraAgent(associatedInfrastructureAgent);
 
         // Create the Binder Agent and update the service agent
         IOCEBinderAgentFactory myBinderAgentFactory = new OCEBinderAgentFactory(this.infrastructure,this.medium);
         serviceAgent.setMyBinderAgentFactory(myBinderAgentFactory);
 
         //Make the ID of the service Agent the same as the associated infrastructure agent
-        serviceAgent.setMyIDAgent(new IDAgent(""+associatedInfraAgent.getInfraAgentReference().getReferenceInterne()));
+        serviceAgent.setMyIDAgent(new IDAgent(""+ associatedInfrastructureAgent.getInfraAgentReference().getReferenceInterne()));
+        //Set the name for the visualization of this agent as the name of it's associated  service
+        String visualizationName = ((MockupService) attachedService).getStringRepresentation();
+        serviceAgent.getMyID().setVisualizingName("SA-"+visualizationName);
 
-        AbstractMap.SimpleEntry agentS_referenceAgent_Association = new AbstractMap.SimpleEntry(serviceAgent, associatedInfraAgent.getInfraAgentReference());
+        AbstractMap.SimpleEntry agentS_referenceAgent_Association = new AbstractMap.SimpleEntry(serviceAgent, associatedInfrastructureAgent.getInfraAgentReference());
         return agentS_referenceAgent_Association;
     }
 

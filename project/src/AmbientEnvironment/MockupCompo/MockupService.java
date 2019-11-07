@@ -7,17 +7,18 @@ package AmbientEnvironment.MockupCompo;
 
 import AmbientEnvironment.OCPlateforme.OCService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class MockupService extends OCService implements Comparable {
+public abstract class MockupService extends OCService implements Comparable, Serializable{
     protected String name;
-    protected String type; // Used to check if two services match
+    protected String matchingID; // Used to check if two services match
     private String owner;
     private Way myWay;
 
-    public MockupService(String name, String type, String ownerComponentName, Way myWay) {
+    public MockupService(String name, String matchingID, String ownerComponentName, Way myWay) {
         this.name = name;
-        this.type = type;
+        this.matchingID = matchingID;
         this.owner = ownerComponentName;
         this.myWay = myWay;
         this.linkedServices = new ArrayList<>();
@@ -54,19 +55,27 @@ public abstract class MockupService extends OCService implements Comparable {
 
 
     /**
-     * Get the type (signature) of the service
-     * @return the type value
+     * Get the matchingID (signature) of the service
+     * @return the matchingID value
      */
-    public String getType() {
-        return type;
+    public String getMatchingID() {
+        return matchingID;
     }
 
     /**
-     * Set the value of type of the service
-     * @param type  : the new value
+     * Set the value of matchingID of the service
+     * @param matchingID  : the new value
      */
-    public void setType(String type) {
-        this.type = type;
+    public void setMatchingID(String matchingID) {
+        this.matchingID = matchingID;
+    }
+
+    /**
+     * Get a string unique representation of the service
+     * @return the concatenation of the attributes of the service
+     */
+    public String getStringRepresentation(){
+        return ""+this.name+"-" + this.matchingID +"-"+this.myWay+ "-"+this.owner;
     }
 
     /**
@@ -81,9 +90,9 @@ public abstract class MockupService extends OCService implements Comparable {
 
         MockupService that = (MockupService) o;
 
-//        if (!name.equals(that.name) && !type.equals(that.type) && !owner.equals(that.owner)) return false;
+//        if (!name.equals(that.name) && !matchingID.equals(that.matchingID) && !owner.equals(that.owner)) return false;
 //        return myWay == that.myWay;
-        if (name.equals(that.name) && type.equals(that.type) && owner.equals(that.owner) &&  myWay == that.myWay) return true;
+        if (name.equals(that.name) && matchingID.equals(that.matchingID) && owner.equals(that.owner) &&  myWay == that.myWay) return true;
         return false;
     }
 
@@ -105,8 +114,8 @@ public abstract class MockupService extends OCService implements Comparable {
         if(this == o) return 0;
         if(o==null || getClass() != o.getClass()) return -1;
         MockupService that = (MockupService) o;
-        String strThis = this.name+this.type+this.owner+this.myWay;
-        String strThat = that.name+that.type+that.owner+that.myWay;
+        String strThis = this.name+this.matchingID +this.owner+this.myWay;
+        String strThat = that.name+that.matchingID +that.owner+that.myWay;
         int result = strThis.compareTo(strThat);
         if (result == 0) {
             assert this.equals(that) :
@@ -117,7 +126,7 @@ public abstract class MockupService extends OCService implements Comparable {
 
     @Override
     public String toString() {
-        return "Service " + name + "-"+ type + " of " + owner;
+        return "Service " + name + "-"+ matchingID + " of " + owner;
     }
 
     @Override

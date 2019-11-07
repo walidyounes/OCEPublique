@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Directory;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
@@ -27,8 +27,8 @@ public interface IAgentDirectory extends ICommunication, IAgentDirectoryManager 
 
     ConcurrentMap<InfraAgentReference, ConcurrentLinkedQueue<IMessage>> getAgentsMessagesQueues();
 
-    ConcurrentMap<InfraAgentReference, InfraAgent> getAgents();
+    ConcurrentMap<InfraAgentReference, InfrastructureAgent> getAgents();
 
     //walid
-    InfraAgent getAgentByRef(InfraAgentReference infraAgentReference);
+    InfrastructureAgent getAgentByRef(InfraAgentReference infraAgentReference);
 }

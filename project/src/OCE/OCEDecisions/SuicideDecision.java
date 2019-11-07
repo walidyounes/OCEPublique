@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions;
+package OCE.OCEDecisions;
 
 
 import OCE.Medium.Communication.ICommunicationAdapter;
@@ -16,7 +16,7 @@ public class SuicideDecision extends OCEDecision {
 
     /**
      * Create a suicide decision
-     * the emetteur is the sonde component and no receivers (the agent itself)
+     * the emetteur is the probe component and no receivers (the agent itself)
      */
     public SuicideDecision() {
         this.emitter= null;

@@ -4,13 +4,13 @@
 
 package MASInfrastructure.Directory;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 
 
 public interface IAgentDirectoryManager {
 
-    void addAgent(InfraAgent infraAgent);
+    void addAgent(InfrastructureAgent infrastructureAgent);
 
     void removeAgent(InfraAgentReference infraAgentReference);
 }

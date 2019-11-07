@@ -2,17 +2,16 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.sonde;
+package OCE.probe;
 
 
 import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
 import AmbientEnvironment.FacadeAdapter.IAcquisition;
-import Logger.MyLogger;
+import Logger.OCELogger;
+import MOICE.MOICE;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Medium.Recorder.IRecord;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 
 
@@ -57,10 +56,11 @@ public class Probe {
 
             synchronized (this) {
                 try {
-                    MyLogger.log(Level.INFO, "************************ Probing *******************");
+                    OCELogger.log(Level.INFO, "************************ Probing *******************");
                     componentsManager.appearingComponentsAcquisition();
                     componentsManager.disappearingComponentsAcquisition();
-
+                    //Todo Walid  06/11/2019 : To delete, this is just for test in the Midlleware MOICE
+                    MOICE.getInstance().collectOCEProposedConfiguration();
                 } catch (AcquisitionFailure acquisitionFailure) {
                     acquisitionFailure.printStackTrace();
                 }catch (Exception e){

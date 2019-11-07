@@ -60,10 +60,10 @@ public class TestPlantUMLJavaFX extends Application {
         MockupComponent C = new MockupComponent("C", providedByC, requiredByC);
         container.addComponent(C);
 
+        // ************************************************************************************************
+        // ************************************************************************************************
+        // ************************************************************************************************
 
-        // ************************************************************************************************
-        // ************************************************************************************************
-        // ************************************************************************************************
         String stringRepresentationEnvironment = componentsToPlantUMlRepresentation(container.getComponents()) ;
 
         SourceStringReader reader = new SourceStringReader(stringRepresentationEnvironment);
@@ -85,6 +85,7 @@ public class TestPlantUMLJavaFX extends Application {
             primaryStage.setResizable(false);
             primaryStage.show();
 
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,15 +103,15 @@ public class TestPlantUMLJavaFX extends Application {
             List<MockupService> requiredServices = component.getRequiredServices().stream().map(s -> (MockupService) s).collect(Collectors.toList());
 
             for (MockupService requiredService: requiredServices) {
-                String interfaceID = ""+ requiredService.getName()+requiredService.getType()+requiredService.getWay()+requiredService.getOwner();
-                representation += "interface " + " \" " + requiredService.getName()+ "." + requiredService.getType() + " \" " + " as " + interfaceID + "\n" ;
+                String interfaceID = ""+ requiredService.getName()+requiredService.getMatchingID()+requiredService.getWay()+requiredService.getOwner();
+                representation += "interface " + " \" " + requiredService.getName()+ "." + requiredService.getMatchingID() + " \" " + " as " + interfaceID + "\n" ;
                 representation += "[" + component.getName() +"] -right-( " +  interfaceID + "\n";
             }
             //Get the list of  provided services of this component
             List<MockupService> providedServices = component.getProvidedServices().stream().map(s -> (MockupService) s).collect(Collectors.toList());
             for (MockupService providedService: providedServices) {
-                String interfaceID = ""+ providedService.getName()+providedService.getType()+providedService.getWay()+providedService.getOwner();
-                representation += "interface " + " \" " + providedService.getName()+ "." + providedService.getType() + " \" " + " as " + interfaceID + "\n" ;
+                String interfaceID = ""+ providedService.getName()+providedService.getMatchingID()+providedService.getWay()+providedService.getOwner();
+                representation += "interface " + " \" " + providedService.getName()+ "." + providedService.getMatchingID() + " \" " + " as " + interfaceID + "\n" ;
                 representation +=  interfaceID + " - [" + component.getName() +"] \n";
             }
         }

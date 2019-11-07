@@ -6,7 +6,7 @@ package OCE.DeviceBinder;
 
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MOICE.MOICE;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.ServiceConnection.Connection;
@@ -56,12 +56,12 @@ public class PhysicalDeviceBinder {
         MockupService MService1 = (MockupService)service1;
         MockupService MService2 = (MockupService)service2;
         // Make the binding between the two services
-        MyLogger.log(Level.INFO, "Binding "+ MService1.getName()+"-"+MService1.getOwner()+" to "+MService2.getName()+"-"+MService2.getOwner());
-        PhysicalDeviceBinder.UIBinderServices.set(""+MService1.getName()+""+MService1.getType()+""+MService1.getOwner()+""+ MService1.getWay()+"-"+MService2.getName()+""+MService2.getType()+""+MService2.getOwner()+""+ MService2.getWay());
-        this.UIBinderS.setValue(""+MService1.getName()+""+MService1.getType()+""+MService1.getOwner()+""+ MService1.getWay()+"-"+MService2.getName()+""+MService2.getType()+""+MService2.getOwner()+""+ MService2.getWay());
-        //Todo Walid  02/10/2019 : To delete, this is just for testin the Midlleware MOICE
-        this.listConnections.forEach(c -> MOICE.getInstance().registerConnection(c));
-        MOICE.getInstance().collectConnection();
+        OCELogger.log(Level.INFO, "Binding "+ MService1.getName()+"-"+MService1.getOwner()+" to "+MService2.getName()+"-"+MService2.getOwner());
+        PhysicalDeviceBinder.UIBinderServices.set(""+MService1.getName()+""+MService1.getMatchingID()+""+MService1.getOwner()+""+ MService1.getWay()+"-"+MService2.getName()+""+MService2.getMatchingID()+""+MService2.getOwner()+""+ MService2.getWay());
+        this.UIBinderS.setValue(""+MService1.getName()+""+MService1.getMatchingID()+""+MService1.getOwner()+""+ MService1.getWay()+"-"+MService2.getName()+""+MService2.getMatchingID()+""+MService2.getOwner()+""+ MService2.getWay());
+        //Todo Walid  02/10/2019 : To delete, this is just for test in the Midlleware MOICE
+        // this.listConnections.forEach(c -> MOICE.getInstance().registerConnection(c));
+        MOICE.getInstance().collectOCEProposedConfiguration();
      }
 
     public String getUIBinderServices() {
@@ -90,6 +90,8 @@ public class PhysicalDeviceBinder {
      */
     public void addConnexion(Connection connection){
         this.listConnections.add(connection);
+        //Todo Walid  06/11/2019 : To delete, this is just for test in the Midlleware MOICE
+         MOICE.getInstance().registerConnection(connection);
     }
 
     /**
@@ -100,8 +102,8 @@ public class PhysicalDeviceBinder {
     public void deleteConnexion(String idFirstService, String idSecondService){
         for(Connection connection : listConnections){
             if(connection.isTheSameServices(idFirstService,idSecondService)){
-                MyLogger.log(Level.INFO, "Bingo");
-                MyLogger.log(Level.INFO,"Connection to delete = " + connection.toString());
+                OCELogger.log(Level.INFO, "Bingo");
+                OCELogger.log(Level.INFO,"Connection to delete = " + connection.toString());
                 //Disconnect the two service by changing their state Todo : this is just for test
                 connection.getFirstServiceAgent().setMyConnexionState(ServiceAgentConnexionState.NotConnected);
                 connection.getSecondServiceAgent().setMyConnexionState(ServiceAgentConnexionState.NotConnected);

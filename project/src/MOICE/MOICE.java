@@ -14,6 +14,7 @@ import MOICE.feedbackManager.IFeedbackManager;
 import OCE.ServiceConnection.Connection;
 
 import java.io.File;
+import java.util.List;
 
 public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentManager {
 
@@ -69,8 +70,18 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     }
 
     @Override
-    public void collectConnection() {
-        this.myConnectionManager.collectConnection();
+    public void unRegisterComponent(OCComponent component) {
+        this.myConnectionManager.unRegisterComponent(component);
+    }
+
+    @Override
+    public void unRegisterConnection(Connection connection) {
+        this.myConnectionManager.unRegisterConnection(connection);
+    }
+
+    @Override
+    public void collectOCEProposedConfiguration() {
+        this.myConnectionManager.collectOCEProposedConfiguration();
     }
 
     @Override
@@ -79,8 +90,8 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     }
 
     @Override
-    public void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration) {
-        this.myFeedbackManager.registerUserConfiguration(OCEConfiguration, ICEUserConfiguration);
+    public void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration, List<Connection> OCEConnectionList) {
+        this.myFeedbackManager.registerUserConfiguration(OCEConfiguration, ICEUserConfiguration, OCEConnectionList);
     }
 
     @Override

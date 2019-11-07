@@ -15,7 +15,7 @@ public class ScoredCurrentSituationEntry extends CurrentSituationEntry {
      * Construct a new scored current situation entry
      *
      * @param agent       : the agent emitter of the message
-     * @param messageType : the type of the message send
+     * @param messageType : the matchingID of the message send
      * @param score       : the score of the agent
      */
     public ScoredCurrentSituationEntry(IDAgent agent, MessageTypes messageType, double score) {
@@ -68,7 +68,7 @@ public class ScoredCurrentSituationEntry extends CurrentSituationEntry {
     /**
      * Test if two scored current situation entries are equals
      * @param obj : the other scored current situation entry to compare to this
-     * @return : true if the two object are equals (the same agent and the same message type), else false
+     * @return : true if the two object are equals (the same agent and the same message matchingID), else false
      */
     @Override
     public boolean equals(Object obj) {

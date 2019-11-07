@@ -8,10 +8,9 @@ import AmbientEnvironment.MockupCompo.*;
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
 import OCE.Agents.OCEAgent;
-import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
 import OCE.OCE;
 import com.jfoenix.controls.*;
@@ -51,7 +50,7 @@ import java.util.stream.Collectors;
 public class UIMockupController implements Initializable {
     @FXML private JFXTextField designationComponent;
     @FXML private JFXTextField nameService;
-    @FXML private JFXTextField typeService;
+    @FXML private JFXTextField matchingIDService;
     @FXML private JFXListView<Label> servicesList;
     @FXML private JFXListView<Label> componentsList;
     @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
@@ -137,7 +136,7 @@ public class UIMockupController implements Initializable {
 
         // Init log
         // Create and configure the logger service
-        MyLogger logger = new MyLogger();
+        OCELogger logger = new OCELogger();
         logger.uiLogProperty().addListener(new ChangeListener<String>() {
                                                @Override
                                                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -149,14 +148,14 @@ public class UIMockupController implements Initializable {
                                                    });
                                                }
                                            });
-        MyLogger.init();
+        OCELogger.init();
         this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();
     /*    physicalDeviceBinder.UIBinderServicesProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                         String[] idServices = newValue.split("-");
                         System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
-                        MyLogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+                        OCELogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
                         addEdge(idServices[0], idServices[1]);
             }
         });*/
@@ -166,7 +165,7 @@ public class UIMockupController implements Initializable {
                                                                                System.out.println(value);
                                                                                String[] idServices = value.split("-");
                                                                                System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
-                                                                               MyLogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+                                                                               OCELogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
                                                                                addEdge(idServices[0], idServices[1]);
                                                                            }
                                                                        });
@@ -183,8 +182,8 @@ public class UIMockupController implements Initializable {
         int singleORMultiple = -1;
         if(this.designationComponent.getText().length()>0) {
             if (this.nameService.getText().length() > 0) {
-                if(this.typeService.getText().length() > 0) {
-                    String textToAdd = "Name = " + this.nameService.getText() +"-"+this.typeService.getText();
+                if(this.matchingIDService.getText().length() > 0) {
+                    String textToAdd = "Name = " + this.nameService.getText() +"-"+this.matchingIDService.getText();
                     if (this.providedR.isSelected()) {
                         // providedImage = new ImageView(new Image(new FileInputStream("/provided.png")));
                         label.setGraphic(new ImageView("/provided.png"));
@@ -208,11 +207,11 @@ public class UIMockupController implements Initializable {
                     }
                     if (singleORMultiple == 0) {
                         if (providedORRequired == 0) {
-                            serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.PROVIDED);
+                            serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.matchingIDService.getText(), this.designationComponent.getText(), Way.PROVIDED);
                             this.providedByC.add(serviceToAdd);
                         } else {
                             if (providedORRequired == 1) {
-                                serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.REQUIRED);
+                                serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.matchingIDService.getText(), this.designationComponent.getText(), Way.REQUIRED);
                                 this.requiredByC.add(serviceToAdd);
                             }
                         }
@@ -220,11 +219,11 @@ public class UIMockupController implements Initializable {
                     } else {
                         if (singleORMultiple == 1) {
                             if (providedORRequired == 0) {
-                                serviceToAdd = new MultiLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.PROVIDED);
+                                serviceToAdd = new MultiLinkMockupService(this.nameService.getText(),this.matchingIDService.getText(), this.designationComponent.getText(), Way.PROVIDED);
                                 this.providedByC.add(serviceToAdd);
                             } else {
                                 if (providedORRequired == 1) {
-                                    serviceToAdd = new MultiLinkMockupService(this.nameService.getText(),this.typeService.getText(), this.designationComponent.getText(), Way.REQUIRED);
+                                    serviceToAdd = new MultiLinkMockupService(this.nameService.getText(),this.matchingIDService.getText(), this.designationComponent.getText(), Way.REQUIRED);
                                     this.requiredByC.add(serviceToAdd);
                                 }
                             }
@@ -234,10 +233,10 @@ public class UIMockupController implements Initializable {
                     label.setText(textToAdd);
                     this.servicesList.getItems().add(label);
                     this.nameService.setText("");
-                    this.typeService.setText("");
+                    this.matchingIDService.setText("");
                 }
                 else{
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill the type of the service first !!");
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill the matchingID of the service first !!");
                     alert.show();
                 }
             } else {
@@ -264,7 +263,7 @@ public class UIMockupController implements Initializable {
 
         if(this.designationComponent.getText().length()>0) {
             if(!this.servicesList.getItems().isEmpty()) {
-                String textToAdd = "Component : " + this.designationComponent.getText();
+                String textToAdd = "" + this.designationComponent.getText();
                 label.setText(textToAdd);
                 label.getStyleClass().add("label-list");
                 label.setGraphic(new ImageView("/component.png"));
@@ -320,7 +319,7 @@ public class UIMockupController implements Initializable {
         this.providedByC.clear();
         this.designationComponent.setText("");
         this.nameService.setText("");
-        this.typeService.setText("");
+        this.matchingIDService.setText("");
     }
 
     /**
@@ -341,23 +340,6 @@ public class UIMockupController implements Initializable {
         requiredServices.clear();
     }
 
-    private void deleteComponentFromMockup(String nameComp){
-        // search for the component
-        List<OCComponent> components = this.mockupFacadeAdapter.getComponents().stream()
-                                            .filter(p -> ((MockupComponent)p).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toList());
-
-        //get the component
-        MockupComponent C1 = (MockupComponent) components.get(0);
-        // Delete the component from the mockup container
-        System.out.println("Removing : " + C1.getName());
-        this.mockupFacadeAdapter.removeComponent(C1);
-
-        // Update the graph visualisation
-        deleteProvidedServiceFromGraphe(C1.getProvidedServices());
-        deleteRequiredServiceFromGraphe(C1.getRequiredServices());
-
-    }
-
     @FXML
     public void addComponentsFromXMLFile(ActionEvent event){
         FileChooser fileChooser = new FileChooser();
@@ -369,7 +351,7 @@ public class UIMockupController implements Initializable {
             for (MockupComponent component : listComponents){
                 addComponentToMockup(component.getName(),component.getProvidedServices(), component.getRequiredServices());
                 Label label = new Label();
-                String textToAdd = "Component : " + component.getName();
+                String textToAdd = "" + component.getName();
                 label.setText(textToAdd);
                 label.getStyleClass().add("label-list");
                 label.setGraphic(new ImageView("/component.png"));
@@ -382,6 +364,23 @@ public class UIMockupController implements Initializable {
             alert.setContentText("No File selected !");
             alert.show();
         }
+
+    }
+
+    private void deleteComponentFromMockup(String nameComp){
+        // search for the component
+        List<OCComponent> components = this.mockupFacadeAdapter.getComponents().stream()
+                                            .filter(p -> ((MockupComponent)p).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toList());
+
+        //get the component
+        MockupComponent C1 = (MockupComponent) components.get(0);
+        // Delete the component from the mockup container
+        System.out.println("Removing : " + C1.getName());
+        this.mockupFacadeAdapter.removeComponent(C1);
+
+        // Update the graph visualisation
+        deleteServicesFromGraph(C1.getProvidedServices());
+        deleteServicesFromGraph(C1.getRequiredServices());
 
     }
 
@@ -427,22 +426,19 @@ public class UIMockupController implements Initializable {
     }
 
     private void addProvidedServiceToGraphe(ArrayList<OCService> providedServices) {
-
         for (OCService service : providedServices) {
             MockupService myMService = (MockupService)service;
-            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getType()+myMService.getOwner()+myMService.getWay());
+            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getMatchingID()+myMService.getOwner()+myMService.getWay());
 
-            node.addAttribute("ui.label"," "+myMService.getName()+"-"+myMService.getType()+" Of " + myMService.getOwner());
-
+            node.addAttribute("ui.label"," "+myMService.getName()+"-"+myMService.getMatchingID()+" Of " + myMService.getOwner());
         }
-
     }
 
     private void addRequiredServiceToGraphe(ArrayList<OCService> requiredServices) {
         for (OCService service : requiredServices) {
             MockupService myMService = (MockupService)service;
-            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getType()+myMService.getOwner()+myMService.getWay());
-            node.addAttribute("ui.label",""+myMService.getName()+"-"+myMService.getType()+" Of " + myMService.getOwner());
+            Node node = this.serviceGraph.addNode(myMService.getName()+myMService.getMatchingID()+myMService.getOwner()+myMService.getWay());
+            node.addAttribute("ui.label",""+myMService.getName()+"-"+myMService.getMatchingID()+" Of " + myMService.getOwner());
             node.addAttribute("ui.class","Required");
         }
     }
@@ -452,24 +448,51 @@ public class UIMockupController implements Initializable {
             // We add only one time the edge between two services
             this.serviceGraph.addEdge(""+idService1+"-"+idService2, idService1, idService2);
         }
-
     }
 
-    private void deleteProvidedServiceFromGraphe(ArrayList<OCService> providedServices) {
+    private void deleteServicesFromGraph(ArrayList<OCService> listServices) {
 
-        for (OCService service : providedServices) {
+        for (OCService service : listServices) {
             MockupService myMService = (MockupService)service;
-            this.serviceGraph.removeNode(myMService.getName()+myMService.getType()+myMService.getOwner()+myMService.getWay());
-        }
-
-    }
-
-    private void deleteRequiredServiceFromGraphe(ArrayList<OCService> requiredServices) {
-        for (OCService service : requiredServices) {
-            MockupService myMService = (MockupService)service;
-            this.serviceGraph.removeNode(myMService.getName()+myMService.getType()+myMService.getOwner()+myMService.getWay());
+            String serviceID = ""+ myMService.getName()+myMService.getMatchingID()+myMService.getOwner()+myMService.getWay();
+            //Delete all the edges where this service figure as one endpoint
+            for (int i=0;i< this.serviceGraph.getEdgeCount();i++){
+                if(this.serviceGraph.getEdge(i).getId().contains(serviceID)){
+                    this.serviceGraph.removeEdge(i);
+                }
+            }
+            this.serviceGraph.removeNode(serviceID);
         }
     }
+
+//    private void deleteProvidedServiceFromGraphe(ArrayList<OCService> providedServices) {
+//
+//        for (OCService service : providedServices) {
+//            MockupService myMService = (MockupService)service;
+//            String serviceID = ""+ myMService.getName()+myMService.getMatchingID()+myMService.getOwner()+myMService.getWay();
+//            //Delete all the edges where this service figure as one endpoint
+//            for (int i=0;i< this.serviceGraph.getEdgeCount();i++){
+//                if(this.serviceGraph.getEdge(i).getId().contains(serviceID)){
+//                    this.serviceGraph.removeEdge(i);
+//                }
+//            }
+//            this.serviceGraph.removeNode(serviceID);
+//        }
+//    }
+
+//    private void deleteRequiredServiceFromGraphe(ArrayList<OCService> requiredServices) {
+//        for (OCService service : requiredServices) {
+//            MockupService myMService = (MockupService)service;
+//            String serviceID = ""+ myMService.getName()+myMService.getMatchingID()+myMService.getOwner()+myMService.getWay();
+//            //Delete all the edges where this service figure as one endpoint
+//            for (int i=0;i< this.serviceGraph.getEdgeCount();i++){
+//                if(this.serviceGraph.getEdge(i).getId().contains(serviceID)){
+//                    this.serviceGraph.removeEdge(i);
+//                }
+//            }
+//            this.serviceGraph.removeNode(serviceID);
+//        }
+//    }
 
     public synchronized void updateLog(String message){
         String pastContent = this.UILog.getText();
@@ -501,7 +524,7 @@ public class UIMockupController implements Initializable {
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               String nameComp = componentsList.getSelectionModel().getSelectedItem().getText().split(" : ")[1];
+               String nameComp = componentsList.getSelectionModel().getSelectedItem().getText();
                //System.out.println(nameComp);
                deleteComponentFromMockup(nameComp);
                componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
@@ -511,7 +534,7 @@ public class UIMockupController implements Initializable {
         detailButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String nameComp = componentsList.getSelectionModel().getSelectedItem().getText().split(" : ")[1];
+                String nameComp = componentsList.getSelectionModel().getSelectedItem().getText();
                 System.out.println(nameComp);
                 Set<OCComponent> mycomponents = mockupFacadeAdapter.getComponents().stream().filter(c -> ((MockupComponent)c).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toSet());
                 // Display the component's detail on a window
@@ -570,7 +593,6 @@ public class UIMockupController implements Initializable {
         try {
             int intValue = Integer.parseInt(stringValue);
             this.infrastructure.setMaxCycleAgent(intValue);
-
         }catch (NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Parsing error !");

@@ -5,7 +5,7 @@
 package MASInfrastructure.Factory;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Directory.IAgentDirectory;
 import MASInfrastructure.Communication.ICommunication;
@@ -22,18 +22,18 @@ public class InfraAgentFactory implements IInfraAgentFactory, ISuicideService {
     }
 
     @Override
-    public InfraAgent createInfrastructureAgent(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
-        InfraAgent infraAgent = new InfraAgent(attachedService, lifeCycle, myMailBoxManager);
-        annuaire.addAgent(infraAgent);
-        scheduler.addAgentToScheduler(infraAgent);
-        return infraAgent;
+    public InfrastructureAgent createInfrastructureAgent(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
+        InfrastructureAgent infrastructureAgent = new InfrastructureAgent(attachedService, lifeCycle, myMailBoxManager);
+        annuaire.addAgent(infrastructureAgent);
+        scheduler.addAgentToScheduler(infrastructureAgent);
+        return infrastructureAgent;
     }
 
     @Override
     public void suicide(InfraAgentReference infraAgentReference) {
-        InfraAgent infraAgentSuicide = annuaire.getAgentByRef(infraAgentReference); // walid : Get the corresponding agent to delete from the scheduler
+        InfrastructureAgent infrastructureAgentSuicide = annuaire.getAgentByRef(infraAgentReference); // walid : Get the corresponding agent to delete from the scheduler
         annuaire.removeAgent(infraAgentReference);
-        scheduler.deleteAgentFromScheduler(infraAgentSuicide);
+        scheduler.deleteAgentFromScheduler(infrastructureAgentSuicide);
     }
 
 }

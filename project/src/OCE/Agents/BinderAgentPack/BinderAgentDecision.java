@@ -4,10 +4,10 @@
 
 package OCE.Agents.BinderAgentPack;
 
-import Logger.MyLogger;
+import Logger.OCELogger;
 import Midlleware.ThreeState.IDecisionState;
-import OCE.Decisions.OCEDecision;
-import OCE.Decisions.BindDecision;
+import OCE.OCEDecisions.OCEDecision;
+import OCE.OCEDecisions.BindDecision;
 import OCE.InfrastructureMessages.InfraMessage;
 import OCE.Medium.Recorder.IRecord;
 import OCE.InfrastructureMessages.BindInfraMessage;
@@ -61,7 +61,7 @@ public class BinderAgentDecision implements IDecisionState {
 
     @Override
     public ArrayList<OCEDecision> decide(ArrayList<InfraMessage> perceptions) {
-        MyLogger.log(Level.INFO, " Binder agent - "+ this.myBinderAgent +" - : Decision -> ");
+        OCELogger.log(Level.INFO, " Binder agent - "+ this.myBinderAgent +" - : Decision -> ");
 
         // The list of decisions mad by the binder agent
         ArrayList<OCEDecision> myListOfDecisions = new ArrayList<>();
@@ -75,7 +75,7 @@ public class BinderAgentDecision implements IDecisionState {
             //Check if  the binder agent received the two messages that he supposed to receive from both agents
             //this.nbMessages += bindingPerceptions.size();
             //if (this.nbMessages <2){ // we didn't receive all the message
-             //   MyLogger.log(Level.INFO,"Waiting for the second message - nbMessage " + nbMessages);
+             //   OCELogger.log(Level.INFO,"Waiting for the second message - nbMessage " + nbMessages);
 
                 // myListOfDecisions.add(new DoNothingDecision());
            // }else{ // launch the physical binding

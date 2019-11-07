@@ -5,16 +5,14 @@
 package OCE;
 
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import Midlleware.AgentFactory.OCEServiceAgentFactory;
 import OCE.Agents.OCEAgent;
 import OCE.Medium.Medium;
-import OCE.sonde.Probe;
+import OCE.probe.Probe;
 import javafx.collections.ObservableList;
-
-import java.util.Set;
 
 public class OCE implements Runnable{
     private MockupFacadeAdapter mockupFacadeAdapter;
@@ -42,7 +40,7 @@ public class OCE implements Runnable{
         pause(2000);
         //Start the scheduling process
         infrastructure.startScheduling();
-        MyLogger.close();
+        OCELogger.close();
     }
 
     public ObservableList<OCEAgent> gteAllAgents(){

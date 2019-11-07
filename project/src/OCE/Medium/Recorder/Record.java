@@ -6,11 +6,12 @@ package OCE.Medium.Recorder;
 
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Medium.ReferenceResolutionFailure;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -45,14 +46,19 @@ public class Record implements IRecord{
         if(!this.agentsReferenceMap.containsKey(oceAgent)){
             this.agentsReferenceMap.put(oceAgent, infraAgentReference);
             //Add the agent to the list for visualisation in the UI
-            this.listOCEAgents.add(oceAgent);
+            Platform.runLater(
+                    () -> {
+                        // Update UI here
+                        this.listOCEAgents.add(oceAgent);
+                    }
+            );
+
         }
     }
 
     /**
      * Unregister from the recording list the mapping between an OCEAgent and it's associated referenceAgent
      * @param oceAgent : the agent
-     *
      */
     @Override
     public void unregisterOCEAgent(OCEAgent oceAgent) {
@@ -66,7 +72,7 @@ public class Record implements IRecord{
 
     /**
      * Resolve the physical address (InfraAgentReference) of ONE OCEAgent
-     * @param oceAgent : the agent InfraAgent in question
+     * @param oceAgent : the agent InfrastructureAgent in question
      * @return his physical reference
      * @throws ReferenceResolutionFailure when the serviceAgent doesn't exist
      */
@@ -140,7 +146,7 @@ public class Record implements IRecord{
      */
     @Override
     public Optional<ServiceAgent> retrieveSAgentByPService(OCService attachedService) {
-        //Cast the type of the object from OCEService to MockupService so we can check for equality
+        //Cast the matchingID of the object from OCEService to MockupService so we can check for equality
         MockupService attachedMockupService = (MockupService) attachedService;
         //The service agent returned by this function
         Optional<ServiceAgent> serviceAgent = Optional.empty();
@@ -155,8 +161,8 @@ public class Record implements IRecord{
             MockupService currentService = (MockupService) currentServiceAgent.getHandledService();
             if(attachedMockupService.equals(currentService)){ // it's the service that we are looking for
                 found = true;
-                serviceAgent = Optional.of(currentServiceAgent);
-                MyLogger.log(Level.INFO, " Found Agent = "+serviceAgent.toString());
+                serviceAgent = Optional.ofNullable(currentServiceAgent);
+                OCELogger.log(Level.INFO, " Found Agent = "+serviceAgent.toString());
             }
         }
         return serviceAgent;

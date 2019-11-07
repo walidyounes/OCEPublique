@@ -1,16 +1,16 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package UI;
+package UI.Diverse;
 
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import Midlleware.AgentFactory.OCEServiceAgentFactory;
 import OCE.Medium.Medium;
-import OCE.sonde.Probe;
+import OCE.probe.Probe;
 
 import java.util.logging.Level;
 
@@ -39,12 +39,12 @@ public class Simulation implements Runnable {
 
         // probe.run(); // deleted for test 16/10/2019
 
-        MyLogger.log(Level.INFO, "");
+        OCELogger.log(Level.INFO, "");
         pause(3000);
         //Start the scheduling process
         infrastructure.startScheduling();
 
-        MyLogger.close();
+        OCELogger.close();
     }
 
 

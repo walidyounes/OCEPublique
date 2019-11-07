@@ -5,13 +5,13 @@
 package OCE.OCEMessages;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -27,7 +27,7 @@ public class SuicideMessage extends OCEMessage {
      */
     public SuicideMessage(Boolean exist, ArrayList<OCEAgent> receivers) {
         this.exist = exist;
-        this.emitter = null; // The sonde has no reference
+        this.emitter = null; // The probe has no reference
         this.receivers = receivers;
     }
 
@@ -57,7 +57,7 @@ public class SuicideMessage extends OCEMessage {
     }
 
     /**
-     * treat the sonde message and make the suitable decision
+     * treat the probe message and make the suitable decision
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
      * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
@@ -65,7 +65,7 @@ public class SuicideMessage extends OCEMessage {
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
-        MyLogger.log(Level.INFO, OCEAgentRef + " treats a sonde message ");
+        OCELogger.log(Level.INFO, OCEAgentRef + " treats a probe message ");
         return null;
     }
     /**

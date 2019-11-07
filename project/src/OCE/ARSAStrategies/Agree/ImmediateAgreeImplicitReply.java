@@ -6,7 +6,7 @@ package OCE.ARSAStrategies.Agree;
 
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 import MASInfrastructure.Communication.IMessage;
@@ -38,7 +38,7 @@ public class ImmediateAgreeImplicitReply implements IAgreeStrategy {
     @Override
     public void executer(ICommunication comm, OCService service, InfraAgentReference agentBinder, InfraAgentReference recipient) {
         System.out.println("immediate-Agreement-Implicit-Response");
-        MyLogger.log(Level.INFO, "Strategy{ Name= immediate-Agreement-Implicit-Response, Phase= AGREE}");
+        OCELogger.log(Level.INFO, "Strategy{ Name= immediate-Agreement-Implicit-Response, Phase= AGREE}");
 
 //		InfraMessage bestSelection = best(selections);
       //  MessageAgent bestSelection = selections.get(0); // to remove
@@ -46,7 +46,7 @@ public class ImmediateAgreeImplicitReply implements IAgreeStrategy {
 
         //MessageAgent binding = new BindingMessage("", "", "", "", 0);
         // comm.envoyerMessage(binding);
-        MyLogger.log(Level.INFO, "Contacting "+agentBinder.toString()+ "} to start the binding ");
+        OCELogger.log(Level.INFO, "Contacting "+agentBinder.toString()+ "} to start the binding ");
         // S <- SN, SWA
     }
 }

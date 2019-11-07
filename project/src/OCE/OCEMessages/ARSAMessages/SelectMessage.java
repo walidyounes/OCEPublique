@@ -8,16 +8,16 @@ package OCE.OCEMessages.ARSAMessages;
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.MockupCompo.Way;
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.ARSADecisions.AgreeDecision;
-import OCE.Decisions.DoNothingDecision;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.ARSADecisions.AgreeDecision;
+import OCE.OCEDecisions.DoNothingDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.OCEMessages.MessageTypes;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.logging.Level;
  * @version 1.0
  */
 public class SelectMessage extends ARSAMessage {
-    private BinderAgent binderAgent; // The reference of the binding InfraAgent
+    private BinderAgent binderAgent; // The reference of the binding InfrastructureAgent
 
     /**
      * create a selection message
@@ -68,13 +68,13 @@ public class SelectMessage extends ARSAMessage {
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
-        MyLogger.log(Level.INFO, OCEAgentRef + " treats a selection message ");
+        OCELogger.log(Level.INFO, OCEAgentRef + " treats a selection message ");
         boolean mutualSelection=false;
         try{
             //Verify if the current agent selected in the previous cycles the the emitter agent that we received a select from him
             if (OCEAgentRef.getMySelectedAgent().getMyID().toString().equals(this.emitter.getMyID().toString())){
-                MyLogger.log(Level.INFO, OCEAgentRef + "************"+ this.emitter +" selected each other ");
-                //get the type (Way) of the service that the current agent handle
+                OCELogger.log(Level.INFO, OCEAgentRef + "************"+ this.emitter +" selected each other ");
+                //get the matchingID (Way) of the service that the current agent handle
                 Way myServiceWay=((MockupService)localService).getWay();
                 // If the agent handle a provided service, it ignores this selection message. Which means when mutual selection happen, we give the choice to the required service (it's a choice not important)
                 if(myServiceWay.equals(Way.PROVIDED)){
@@ -83,7 +83,7 @@ public class SelectMessage extends ARSAMessage {
             }
         }
         catch (NullPointerException e){
-            MyLogger.log(Level.WARNING, "the selected agent reference is NULL (no agent was selected !) ");
+            OCELogger.log(Level.WARNING, "the selected agent reference is NULL (no agent was selected !) ");
         }
         //Verify if their is mutual selection
         if ( !mutualSelection ){

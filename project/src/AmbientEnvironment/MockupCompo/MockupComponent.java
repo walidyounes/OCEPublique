@@ -8,10 +8,11 @@ package AmbientEnvironment.MockupCompo;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MockupComponent extends OCComponent {
+public class MockupComponent extends OCComponent implements Serializable {
     protected String name;
 
     public MockupComponent(String name, ArrayList<OCService> providedServices, ArrayList<OCService> requiredServices) {

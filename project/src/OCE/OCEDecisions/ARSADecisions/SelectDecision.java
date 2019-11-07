@@ -2,14 +2,14 @@
  * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions.ARSADecisions;
+package OCE.OCEDecisions.ARSADecisions;
 
-import Logger.MyLogger;
+import Logger.OCELogger;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.InfrastructureMessages.BindInfraMessage;
 import OCE.InfrastructureMessages.InfraARSAMessages.SelectInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
@@ -29,21 +29,21 @@ public class SelectDecision extends OCEDecision {
     /**
      * Create a selection decision
      * @param emitter    reference of the selecting agent
-     * @param receivers the references of the receivers of the ad, if null == Broadcast
+     * @param receivers the references of the receivers of the select message
      */
     public SelectDecision(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter= emitter;
         this.receivers = receivers;
-        this.myBinderAgent = instanciateBinderAgent(((ServiceAgent)emitter).getMyBinderAgentFactory());
+        this.myBinderAgent = instantiateBinderAgent(((ServiceAgent)emitter).getMyBinderAgentFactory());
     }
 
-    private BinderAgent instanciateBinderAgent(IOCEBinderAgentFactory binderAgentFactory){
+    private BinderAgent instantiateBinderAgent(IOCEBinderAgentFactory binderAgentFactory){
         return binderAgentFactory.createBinderAgent().getKey();
     }
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
-        MyLogger.log(Level.INFO, "Treating a Select decision ! ");
-        SelectInfraMessage selectMessage = new SelectInfraMessage(null, null, this.myBinderAgent.getMyInfraAgent().getInfraAgentReference());
+        OCELogger.log(Level.INFO, "Treating a Select decision ! ");
+        SelectInfraMessage selectMessage = new SelectInfraMessage(null, null, this.myBinderAgent.getMyInfrastructureAgent().getInfraAgentReference());
         communicationAdapter.sendMessage(selectMessage, this.emitter, this.receivers);
         // Send a message to the binder agent
         BindInfraMessage bindMessage = new BindInfraMessage(null, null);

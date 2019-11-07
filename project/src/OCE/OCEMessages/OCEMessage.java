@@ -9,7 +9,7 @@ import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public abstract class OCEMessage {
 
     protected OCEAgent emitter; // The transmitter of the message
     protected ArrayList<OCEAgent> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
-    //protected MessageTypes messageType; // The type of the message corresponding to this perception
+    //protected MessageTypes messageType; // The matchingID of the message corresponding to this perception
 
     /**
      * get the transmitter of the message
@@ -71,7 +71,7 @@ public abstract class OCEMessage {
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
      * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
-     * @return the deicision made by the engine
+     * @return the decision made by the engine
      */
     public abstract OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService);
 

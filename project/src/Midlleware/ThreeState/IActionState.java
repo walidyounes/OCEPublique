@@ -5,7 +5,7 @@
 package Midlleware.ThreeState;
 
 import OCE.Agents.OCEAgent;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.Medium.Communication.ICommunicationAdapter;
 
 import java.util.ArrayList;

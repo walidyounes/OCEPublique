@@ -10,7 +10,7 @@ import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 
 import java.util.ArrayList;
 

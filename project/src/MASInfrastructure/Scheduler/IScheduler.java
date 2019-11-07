@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Scheduler;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 
 
 import java.util.List;
@@ -17,11 +17,11 @@ public interface IScheduler {
 
     void changeSchedulingStrategy(ISchedulingStrategies schedulingStrategy);
 
-    List<InfraAgent> stopScheduling();
+    List<InfrastructureAgent> stopScheduling();
 
-    void addAgentToScheduler(InfraAgent infraAgent);
+    void addAgentToScheduler(InfrastructureAgent infrastructureAgent);
 
-    void deleteAgentFromScheduler(InfraAgent infraAgent);
+    void deleteAgentFromScheduler(InfrastructureAgent infrastructureAgent);
 
     void pauseScheduling();
 

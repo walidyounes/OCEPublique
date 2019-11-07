@@ -1,19 +1,19 @@
 /*
- * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package Main;
+package UI.Diverse;
 
 import AmbientEnvironment.MockupCompo.*;
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import AmbientEnvironment.OCPlateforme.OCService;
+import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
-import Logger.MyLogger;
 import Midlleware.AgentFactory.OCEServiceAgentFactory;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Medium.Medium;
 import OCE.Unifieur.Matching;
-import OCE.sonde.Probe;
+import OCE.probe.Probe;
 
 import java.util.ArrayList;
 
@@ -25,8 +25,8 @@ public class Tests {
         Infrastructure infrastructure = new Infrastructure();
 
         //Create and configure the logger service
-        MyLogger logger = new MyLogger(); // Pas la peine d'instancier
-        MyLogger.init();
+        OCELogger logger = new OCELogger(); // Pas la peine d'instancier
+        OCELogger.init();
 
         Matching alwaysTrueMatching = new Matching();
         Medium medium = new Medium(infrastructure);
@@ -58,7 +58,7 @@ public class Tests {
         pause(5000);
         infrastructure.startScheduling();
 
-        MyLogger.close();
+        OCELogger.close();
     }
     public static void pause(long ms) {
         try {

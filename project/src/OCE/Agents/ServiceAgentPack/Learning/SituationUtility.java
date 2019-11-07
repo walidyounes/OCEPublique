@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * This class implement a set of functions used on object of type situation
+ * This class implement a set of functions used on object of matchingID situation
  * @author Walid YOUNES
  * @version 1.0
  */
@@ -138,7 +138,7 @@ public class SituationUtility {
                 }
             }
             ScoredCurrentSituationEntry serviceAgentScoredEntry =null; // the entry corresponding to the service agent after scoring
-            //Get the message type send by the service agent in the current situation
+            //Get the message matchingID send by the service agent in the current situation
             MessageTypes messageType = currentSituation.getAgentSituationEntries().get(serviceAgent).getMessageType();
             //check if the service agent appears at least in one reference situation
             if(count!=0) {
@@ -159,7 +159,7 @@ public class SituationUtility {
     }
 
     /**
-     * Select the best agent depending on multiple strategies of selection (best score, best score with type and priority of messages)
+     * Select the best agent depending on multiple strategies of selection (best score, best score with matchingID and priority of messages)
      * @param scoredCS               : the scored situation from where we will select the best agent
      * @param agentSelectionStrategy : the strategy used to choose he best agent
      * @return the selected agent

@@ -33,7 +33,7 @@ public class AgreeInfraMessage extends ARSAInfraMessage {
 
 /*    @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
-        MyLogger.log(Level.INFO, "Treating a agreement message ! ");
+        OCELogger.log(Level.INFO, "Treating a agreement message ! ");
         return null;
     }*/
 
@@ -48,8 +48,8 @@ public class AgreeInfraMessage extends ARSAInfraMessage {
     }
 
     /**
-     * Get the type of this message
-     * @return the type of the message
+     * Get the matchingID of this message
+     * @return the matchingID of the message
      */
     @Override
     public MessageTypes getMyType() {

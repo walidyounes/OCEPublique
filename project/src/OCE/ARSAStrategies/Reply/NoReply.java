@@ -5,7 +5,7 @@
 package OCE.ARSAStrategies.Reply;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 
@@ -23,6 +23,6 @@ public class NoReply implements IReplyStrategy {
     @Override
     public void executer(ICommunication comm, OCService service, ArrayList<InfraAgentReference> destinataires) {
         System.out.println("This is No Reply Strategy!");
-        MyLogger.log(Level.INFO, "Strategy{ Name= no_Reply, Phase= Reply}");
+        OCELogger.log(Level.INFO, "Strategy{ Name= no_Reply, Phase= Reply}");
     }
 }

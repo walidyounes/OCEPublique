@@ -92,7 +92,7 @@
     </display>  
   </interface>  
   <association id="11">    
-    <end type="SOURCE" refId="7" navigable="false">      
+    <end matchingID="SOURCE" refId="7" navigable="false">
       <attribute id="12" name="appearedServiceSet">        
         <position height="18" width="109" x="317" y="378"/>      
       </attribute>      
@@ -100,11 +100,11 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end matchingID="TARGET" refId="3" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="14">    
-    <end type="SOURCE" refId="7" navigable="false">      
+    <end matchingID="SOURCE" refId="7" navigable="false">
       <attribute id="15" name="disappearedComponentSet">        
         <position height="18" width="140" x="410" y="233"/>      
       </attribute>      
@@ -112,11 +112,11 @@
         <position height="16" width="21" x="288" y="159"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end matchingID="TARGET" refId="4" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="17">    
-    <end type="SOURCE" refId="3" navigable="false">      
+    <end matchingID="SOURCE" refId="3" navigable="false">
       <attribute id="18" name="linkedServices">        
         <position height="18" width="80" x="188" y="417"/>      
       </attribute>      
@@ -124,11 +124,11 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end matchingID="TARGET" refId="3" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="20">    
-    <end type="SOURCE" refId="7" navigable="false">      
+    <end matchingID="SOURCE" refId="7" navigable="false">
       <attribute id="21" name="existingServiceSet">        
         <position height="18" width="100" x="305" y="314"/>      
       </attribute>      
@@ -136,19 +136,19 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end matchingID="TARGET" refId="3" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization id="23">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="8"/>  
+    <end matchingID="SOURCE" refId="7"/>
+    <end matchingID="TARGET" refId="8"/>
   </realization>  
   <realization id="24">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="9"/>  
+    <end matchingID="SOURCE" refId="7"/>
+    <end matchingID="TARGET" refId="9"/>
   </realization>  
   <association id="25">    
-    <end type="SOURCE" refId="4" navigable="false">      
+    <end matchingID="SOURCE" refId="4" navigable="false">
       <attribute id="26" name="requiredServices">        
         <position height="18" width="93" x="194" y="199"/>      
       </attribute>      
@@ -156,11 +156,11 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end matchingID="TARGET" refId="3" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="28">    
-    <end type="SOURCE" refId="4" navigable="false">      
+    <end matchingID="SOURCE" refId="4" navigable="false">
       <attribute id="29" name="providedServices">        
         <position height="18" width="95" x="60" y="178"/>      
       </attribute>      
@@ -168,11 +168,11 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end matchingID="TARGET" refId="3" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="31">    
-    <end type="SOURCE" refId="7" navigable="false">      
+    <end matchingID="SOURCE" refId="7" navigable="false">
       <attribute id="32" name="serviceList">        
         <position height="18" width="63" x="325" y="405"/>      
       </attribute>      
@@ -180,11 +180,11 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end matchingID="TARGET" refId="3" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="34">    
-    <end type="SOURCE" refId="7" navigable="false">      
+    <end matchingID="SOURCE" refId="7" navigable="false">
       <attribute id="35" name="appearedComponentSet">        
         <position height="18" width="126" x="270" y="242"/>      
       </attribute>      
@@ -192,11 +192,11 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end matchingID="TARGET" refId="4" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="37">    
-    <end type="SOURCE" refId="1" navigable="false">      
+    <end matchingID="SOURCE" refId="1" navigable="false">
       <attribute id="38" name="componentList">        
         <position height="18" width="78" x="300" y="63"/>      
       </attribute>      
@@ -204,19 +204,19 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end matchingID="TARGET" refId="4" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <generalization id="40">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="4"/>  
+    <end matchingID="SOURCE" refId="6"/>
+    <end matchingID="TARGET" refId="4"/>
   </generalization>  
   <generalization id="41">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
+    <end matchingID="SOURCE" refId="2"/>
+    <end matchingID="TARGET" refId="3"/>
   </generalization>  
   <association id="42">    
-    <end type="SOURCE" refId="7" navigable="false">      
+    <end matchingID="SOURCE" refId="7" navigable="false">
       <attribute id="43" name="componentList">        
         <position height="18" width="80" x="400" y="215"/>      
       </attribute>      
@@ -224,11 +224,11 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end matchingID="TARGET" refId="4" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="45">    
-    <end type="SOURCE" refId="7" navigable="false">      
+    <end matchingID="SOURCE" refId="7" navigable="false">
       <attribute id="46" name="existingComponentSet">        
         <position height="18" width="117" x="400" y="252"/>      
       </attribute>      
@@ -236,19 +236,19 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end matchingID="TARGET" refId="4" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <generalization id="48">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="1"/>  
+    <end matchingID="SOURCE" refId="7"/>
+    <end matchingID="TARGET" refId="1"/>
   </generalization>  
   <realization id="49">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="5"/>  
+    <end matchingID="SOURCE" refId="1"/>
+    <end matchingID="TARGET" refId="5"/>
   </realization>  
   <association id="50">    
-    <end type="SOURCE" refId="7" navigable="false">      
+    <end matchingID="SOURCE" refId="7" navigable="false">
       <attribute id="51" name="disappearedServiceSet">        
         <position height="18" width="123" x="313" y="348"/>      
       </attribute>      
@@ -256,12 +256,12 @@
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end matchingID="TARGET" refId="3" navigable="true"/>
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization id="53">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="10"/>  
+    <end matchingID="SOURCE" refId="7"/>
+    <end matchingID="TARGET" refId="10"/>
   </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

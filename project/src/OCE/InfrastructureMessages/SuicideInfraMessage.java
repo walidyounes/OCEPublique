@@ -23,7 +23,7 @@ public class SuicideInfraMessage extends InfraMessage {
      */
     public SuicideInfraMessage(Boolean exist, ArrayList<InfraAgentReference> receivers) {
         this.exist = exist;
-        this.emitter = null; // The sonde has no reference
+        this.emitter = null; // The probe has no reference
         this.receivers = receivers;
         this.myType = MessageTypes.SUICIDE;
     }
@@ -55,7 +55,7 @@ public class SuicideInfraMessage extends InfraMessage {
 /*
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
-        MyLogger.log(Level.INFO, "Treating a sonde message ! ");
+        OCELogger.log(Level.INFO, "Treating a probe message ! ");
         return null;
     }
     */
@@ -66,8 +66,8 @@ public class SuicideInfraMessage extends InfraMessage {
     }
 
     /**
-     * Get the type of the message
-     * @return : the type of this message
+     * Get the matchingID of the message
+     * @return : the matchingID of this message
      */
     @Override
     public MessageTypes getMyType() {

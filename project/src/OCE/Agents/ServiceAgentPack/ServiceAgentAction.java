@@ -4,10 +4,10 @@
 
 package OCE.Agents.ServiceAgentPack;
 
-import Logger.MyLogger;
+import Logger.OCELogger;
 import Midlleware.ThreeState.IActionState;
 import OCE.Agents.OCEAgent;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.ARSAStrategies.Advertise.IAdvertiseStrategy;
 import OCE.ARSAStrategies.Agree.IAgreeStrategy;
@@ -45,7 +45,7 @@ public class ServiceAgentAction implements IActionState {
      */
     @Override
     public void act(ArrayList<OCEDecision> decisionsList) {
-        MyLogger.log(Level.INFO, "Agent : Action");
+        OCELogger.log(Level.INFO, "Agent : Action");
         for (OCEDecision decision : decisionsList) {
             decision.toSelfTreat(communicationManager);
         }

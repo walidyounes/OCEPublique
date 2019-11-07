@@ -22,7 +22,7 @@ public class PerceptionState implements IState {
 
     @Override
     public void execute(LifeCycle c) {
-        //MyLogger.log(Level.INFO, " InfraAgent is in Perception state " );
+        //OCELogger.log(Level.INFO, " InfrastructureAgent is in Perception state " );
         // Execute the perception method of the agent
         ArrayList<InfraMessage> infraMessages = myWayOfPerception.percept();
         // Passe the list of infraMessages to the next state

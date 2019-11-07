@@ -8,7 +8,7 @@ import AmbientEnvironment.OCPlateforme.OCService;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.OCEMessages.OCEMessage;
 
 /**
@@ -24,7 +24,7 @@ public abstract class ARSAMessage extends OCEMessage {
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
      * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
-     * @return the deicision made by the engine
+     * @return the decision made by the engine
      */
     public abstract OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService);
 

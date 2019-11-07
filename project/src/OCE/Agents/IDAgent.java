@@ -7,8 +7,8 @@ package OCE.Agents;
 import java.util.UUID;
 
 public class IDAgent implements Comparable{
-    private  UUID internalReference;
-
+    private  UUID internalReference; // Agent's reference
+    private String visualizingName; // Agent's visualizing name, used when printing agent information
 
     /**
      * Constructor of the IDAgent with a random ID value
@@ -41,6 +41,22 @@ public class IDAgent implements Comparable{
         this.internalReference = internalReference;
     }
 
+    /**
+     * Get the value of the visualizing name of the agent
+     * @return the visualizing name
+     */
+    public String getVisualizingName() {
+        return visualizingName;
+    }
+
+    /**
+     * Update the value of the visualizing name for the agent
+     * @param visualizingName : the new value
+     */
+    public void setVisualizingName(String visualizingName) {
+        this.visualizingName = visualizingName;
+    }
+
     @Override
     public boolean equals(Object athat) {
         if (athat == null || getClass() != athat.getClass())
@@ -59,7 +75,7 @@ public class IDAgent implements Comparable{
 
     @Override
     public String toString() {
-        return "OCE.IDAgent{" + internalReference + "}";
+        return "OCE.IDAgent{" + this.visualizingName + "}";
     }
 
     @Override

@@ -5,17 +5,19 @@
 package OCE.OCEMessages;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.DoNothingDecision;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.DoNothingDecision;
+import OCE.OCEDecisions.OCEDecision;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.logging.Level;
 
 public class FeedbackMessage extends OCEMessage {
@@ -26,7 +28,7 @@ public class FeedbackMessage extends OCEMessage {
      * create a feedback perception
      * @param emitter   : reference of the agent sending the feedback message
      * @param receivers : the references of the receivers of the feedback message
-     * @param feedbackValues : the type of the feedback
+     * @param feedbackValues : the matchingID of the feedback
      */
     public FeedbackMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers, FeedbackValues feedbackValues) {
         this.emitter = emitter;
@@ -43,11 +45,23 @@ public class FeedbackMessage extends OCEMessage {
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
-        MyLogger.log(Level.INFO, OCEAgentRef + " treats a feedback message");
+        OCELogger.log(Level.INFO, OCEAgentRef + " treats a feedback message");
+        //Cast the OCEAgentRef from OCEAgent to ServiceAgent
+        ServiceAgent serviceAgentRef = (ServiceAgent) OCEAgentRef;
         //Set that the feedback is received
-        ((ServiceAgent)OCEAgentRef).setFeedbackReceived(true);
+        serviceAgentRef.setFeedbackReceived(true);
         //Set the value of the received feedback
-        ((ServiceAgent)OCEAgentRef).setFeedbackValue(this.feedbackValue);
+        serviceAgentRef.setFeedbackValue(this.feedbackValue);
+        //Get the reference of the other agent connected to the agent treating this message
+        Optional<OCEAgent> connectedToAgent = this.getConnectedTo(serviceAgentRef);
+        //If the value returned by the function is not empty
+        if(connectedToAgent.isPresent()){
+            //Cast the variable ConnectedTo
+            ServiceAgent otherServiceAgent = (ServiceAgent) connectedToAgent.get();
+            //Set the reference of the service agent that the service agent treating this message is connected to
+            serviceAgentRef.setConnectedTo(Optional.ofNullable(otherServiceAgent));
+            OCELogger.log(Level.INFO, "Service agent = " + serviceAgentRef.toString() + " is connected to = "+ otherServiceAgent.toString());
+        }
         return new DoNothingDecision();
     }
 
@@ -67,6 +81,27 @@ public class FeedbackMessage extends OCEMessage {
     @Override
     public SituationEntry toEntrySituation() {
         return new CurrentSituationEntry(((BinderAgent) this.emitter).getMyID(), MessageTypes.FEEDBACK);
+    }
+
+    /**
+     * Get the reference of the agent the agent "askingOCEAgent" is connected to (this message is send to both agent which are connected)
+     * @param askingOCEAgent    : the reference of the agent which is searching it's is connected to
+     * @return the reference of the agent connected to the agent "askingOCEAgent". It returns Empty response if the asking agent isn't one of the receivers of this message
+     */
+    private Optional<OCEAgent> getConnectedTo(OCEAgent askingOCEAgent){
+        Optional<OCEAgent> connectedTo = Optional.empty();
+        // Check if the asking agent is in the receivers of this message (We have only two receivers since cardinality == 1)
+        if(this.receivers.size() == 2) {
+            OCELogger.log(Level.INFO, " found two receivers ! ");
+            if(this.receivers.get(0).equals(askingOCEAgent)){
+                connectedTo = Optional.of(this.receivers.get(1));
+            }else{
+                if(this.receivers.get(1).equals(askingOCEAgent)){
+                    connectedTo = Optional.of(this.receivers.get(0));
+                }
+            }
+        }
+        return connectedTo;
     }
 
     @Override

@@ -8,9 +8,10 @@ package AmbientEnvironment.MockupCompo;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MockupContainer implements Container {
+public class MockupContainer implements Container, Serializable {
     protected ArrayList<OCComponent> componentList = new ArrayList<>();
 
 

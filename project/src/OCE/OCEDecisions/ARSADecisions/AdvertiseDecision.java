@@ -2,11 +2,11 @@
  * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.Decisions.ARSADecisions;
+package OCE.OCEDecisions.ARSADecisions;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
-import OCE.Decisions.OCEDecision;
+import Logger.OCELogger;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraARSAMessages.AdvertiseInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Agents.OCEAgent;
@@ -34,7 +34,7 @@ public class AdvertiseDecision extends OCEDecision {
 
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
-        MyLogger.log(Level.INFO, "Treating an advertisement decision ! ");
+        OCELogger.log(Level.INFO, "Treating an advertisement decision ! ");
         AdvertiseInfraMessage advertiseMessage = new AdvertiseInfraMessage(null, null, this.myService);
         communicationAdapter.sendMessageBroadcast(advertiseMessage, this.emitter, this.receivers);
     }

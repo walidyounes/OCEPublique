@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * @version 1.0
  */
 public class SelectInfraMessage extends ARSAInfraMessage {
-    private InfraAgentReference binderAgent; // The reference of the binding InfraAgent
+    private InfraAgentReference binderAgent; // The reference of the binding InfrastructureAgent
 
     /**
      * create a selection message
@@ -64,7 +64,7 @@ public class SelectInfraMessage extends ARSAInfraMessage {
 /*
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
-        MyLogger.log(Level.INFO, "Treating a selection message ! ");
+        OCELogger.log(Level.INFO, "Treating a selection message ! ");
         return null;
     }*/
 
@@ -79,8 +79,8 @@ public class SelectInfraMessage extends ARSAInfraMessage {
     }
 
     /**
-     * Get the type of the message
-     * @return : the type of this message
+     * Get the matchingID of the message
+     * @return : the matchingID of this message
      */
     @Override
     public MessageTypes getMyType() {

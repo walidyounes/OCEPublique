@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Scheduler;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 
 
 import java.util.List;
@@ -33,13 +33,13 @@ public class Scheduler implements IScheduler {
     }
 
     @Override
-    public List<InfraAgent> stopScheduling() {
+    public List<InfrastructureAgent> stopScheduling() {
         return schedulingStrategy.arreterOrdonnancement();
     }
 
     @Override
-    public void addAgentToScheduler(InfraAgent infraAgent) {
-        schedulingStrategy.agentAjoute(infraAgent);
+    public void addAgentToScheduler(InfrastructureAgent infrastructureAgent) {
+        schedulingStrategy.agentAjoute(infrastructureAgent);
     }
 
     public ISchedulingStrategies getSchedulingStrategy() {
@@ -47,8 +47,8 @@ public class Scheduler implements IScheduler {
     }
 
     @Override
-    public void deleteAgentFromScheduler(InfraAgent infraAgent) {
-        schedulingStrategy.agentRetire(infraAgent);
+    public void deleteAgentFromScheduler(InfrastructureAgent infrastructureAgent) {
+        schedulingStrategy.agentRetire(infrastructureAgent);
     }
 
 

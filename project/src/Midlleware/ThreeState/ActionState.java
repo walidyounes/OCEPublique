@@ -6,7 +6,7 @@ package Midlleware.ThreeState;
 
 import MASInfrastructure.State.IState;
 import MASInfrastructure.State.LifeCycle;
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class ActionState implements IState {
 
     @Override
     public void execute(LifeCycle c) {
-        //MyLogger.log(Level.INFO, " InfraAgent is in Action state " );
+        //OCELogger.log(Level.INFO, " InfrastructureAgent is in Action state " );
         // Retrieve the list of decisions made by the engine in the previous state
         ArrayList<OCEDecision> decisions = c.getSharedData("ListDecisions");
         // execute the action method of the agent

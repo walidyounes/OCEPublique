@@ -43,11 +43,11 @@ public class AdvertiseInfraMessage extends ARSAInfraMessage {
     /*
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef, OCService localService) {
-        MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
+        OCELogger.log(Level.INFO, "Treating an advertisement message ! ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
             //Verify the matching between the services Todo use the matching in the future
-            //todo here we are casting the type to MockupService
+            //todo here we are casting the matchingID to MockupService
             MockupService service1 =  (MockupService)localService;
             MockupService service2 = (MockupService)this.myService;
 

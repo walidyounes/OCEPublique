@@ -4,7 +4,7 @@
 
 package Midlleware.ThreeState;
 
-import OCE.Decisions.OCEDecision;
+import OCE.OCEDecisions.OCEDecision;
 import OCE.InfrastructureMessages.InfraMessage;
 
 import java.util.ArrayList;

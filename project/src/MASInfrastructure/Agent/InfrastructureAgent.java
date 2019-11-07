@@ -17,15 +17,15 @@ import java.util.Optional;
 /**
  *
  */
-public class InfraAgent {
+public class InfrastructureAgent {
 
     private final InfraAgentReference infraAgentReference;
     private LifeCycle lifeCycle;
     private OCService handledService; //TOdo walid : vérfier si ce champs est utile
     private ICommunication myMailBoxManager;
 
-    public InfraAgent(OCService handledService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
-        // Create a unique ID for the InfraAgent
+    public InfrastructureAgent(OCService handledService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
+        // Create a unique ID for the InfrastructureAgent
         this.infraAgentReference = new InfraAgentReference();
         //Attach the service to handle by this agent
         this.handledService = handledService;

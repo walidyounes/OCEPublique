@@ -7,15 +7,15 @@ package OCE.OCEMessages.ARSAMessages;
 
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.SituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
-import OCE.Decisions.DoNothingDecision;
-import OCE.Decisions.OCEDecision;
-import OCE.Decisions.ARSADecisions.ReplyDecision;
+import OCE.OCEDecisions.DoNothingDecision;
+import OCE.OCEDecisions.OCEDecision;
+import OCE.OCEDecisions.ARSADecisions.ReplyDecision;
 import OCE.OCEMessages.MessageTypes;
 import OCE.Unifieur.IMatching;
 import OCE.Unifieur.Matching;
@@ -47,25 +47,25 @@ public class AdvertiseMessage extends ARSAMessage {
      * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
      * @param oceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
-     * @return the deicision made by the engine
+     * @return the decision made by the engine
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
-        MyLogger.log(Level.INFO, oceAgentRef + " treats an advertisement message ");
+        OCELogger.log(Level.INFO, oceAgentRef + " treats an advertisement message ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
-            MyLogger.log(Level.INFO, oceAgentRef +" is not connected  ");
+            OCELogger.log(Level.INFO, oceAgentRef +" is not connected  ");
             //Verify the matching between the services Todo use the matching in the future
-            //todo here we are casting the type to MockupService
+            //todo here we are casting the matchingID to MockupService
             MockupService service1 =  (MockupService)localService;
             MockupService service2 = (MockupService)this.distantService;
-           // MyLogger.log(Level.INFO, "service local = " + service1.toString());
-           // MyLogger.log(Level.INFO, "service distant = " + service2.toString());
+           // OCELogger.log(Level.INFO, "service local = " + service1.toString());
+           // OCELogger.log(Level.INFO, "service distant = " + service2.toString());
             //verify the matching
             IMatching matching = new Matching();
 
             if(matching.match(service1, service2)){
-                MyLogger.log(Level.INFO, "The two services matchs ! ");
+                OCELogger.log(Level.INFO, "The two services matchs ! ");
                 // Send a reply message to the emitter of this message
                 ArrayList<OCEAgent> replyReceivers = new ArrayList<>();
                 replyReceivers.add(this.emitter);

@@ -10,6 +10,7 @@ public enum MessageTypes {
     SELECT,
     AGREE,
     FEEDBACK,
+    DISCONNECT,
     BIND,
     SUICIDE;
 }

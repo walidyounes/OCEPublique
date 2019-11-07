@@ -25,11 +25,11 @@ public class ReplyInfraMessage extends ARSAInfraMessage {
      * Create a Response message
      *
      * @param emitter    reference of the responding agent
-     * @param recievers the references of the receivers of the response, if null == Broadcast
+     * @param receivers the references of the receivers of the response, if null == Broadcast
      */
-    public ReplyInfraMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> recievers) {
+    public ReplyInfraMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers) {
         this.emitter= emitter;
-        this.receivers = recievers;
+        this.receivers = receivers;
         this.myType = MessageTypes.REPLY;
     }
 
@@ -37,7 +37,7 @@ public class ReplyInfraMessage extends ARSAInfraMessage {
 /*
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef,  OCService localService) {
-        MyLogger.log(Level.INFO, "Treating an advertisement message ! ");
+        OCELogger.log(Level.INFO, "Treating an advertisement message ! ");
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
             // Send a selection message to the emitter of this message
@@ -60,8 +60,8 @@ public class ReplyInfraMessage extends ARSAInfraMessage {
     }
 
     /**
-     * Get the type of the message
-     * @return : the type of this message
+     * Get the matchingID of the message
+     * @return : the matchingID of this message
      */
     @Override
     public MessageTypes getMyType() {

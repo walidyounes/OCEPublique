@@ -4,8 +4,8 @@
 
 package MASInfrastructure.Scheduler;
 
-import Logger.MyLogger;
-import MASInfrastructure.Agent.InfraAgent;
+import Logger.OCELogger;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Directory.IReferenceAgentListener;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 public class ClassicStrategy implements ISchedulingStrategies {
 
-    private List<InfraAgent> listOrdonnancement; // list of observed agents
+    private List<InfrastructureAgent> listOrdonnancement; // list of observed agents
     private List<SchedulerListener> listListenerPourOrdonnanceur; // list of observers
     private int vitesse;
     private int currentAgentCycle;
@@ -24,11 +24,11 @@ public class ClassicStrategy implements ISchedulingStrategies {
 
     /**
      *
-     * @param listInfraAgents
+     * @param listInfrastructureAgents
      * @param listListenerActuels
      */
-    public ClassicStrategy(List<InfraAgent> listInfraAgents, List<SchedulerListener> listListenerActuels) {
-        listOrdonnancement = listInfraAgents;
+    public ClassicStrategy(List<InfrastructureAgent> listInfrastructureAgents, List<SchedulerListener> listListenerActuels) {
+        listOrdonnancement = listInfrastructureAgents;
         this.run= true;
         this.currentAgentCycle = 0;
         this.maxCycleAgent = defaultMaxCycleAgent;
@@ -40,7 +40,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
 /*	@Override
 	public void startScheduling() {
 		run = true;
-		OCE.InfraAgent agentCourant;
+		OCE.InfrastructureAgent agentCourant;
 		while (run) {
 			agentCourant = listOrdonnancement.get(0);
 			LifeCycle(agentCourant.getInfraAgentReference(), agentCourant.getEtatInitial());
@@ -59,16 +59,16 @@ public class ClassicStrategy implements ISchedulingStrategies {
         this.stop = false;
         this.currentAgentCycle = 0;
 
-        InfraAgent currentInfraAgent;
+        InfrastructureAgent currentInfrastructureAgent;
         while(!stop) {
             synchronized (this) {
                 while (this.currentAgentCycle < this.maxCycleAgent) {
-                    currentInfraAgent = listOrdonnancement.get(0);
-                    MyLogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfraAgent.getInfraAgentReference() + " ***********************************");
-                    //LifeCycle(currentInfraAgent.getInfraAgentReference(), currentInfraAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
-                    currentInfraAgent.run(); // change the state of the agent
-                    listOrdonnancement.remove(currentInfraAgent);
-                    listOrdonnancement.add(currentInfraAgent);
+                    currentInfrastructureAgent = listOrdonnancement.get(0);
+                    OCELogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfrastructureAgent.getInfraAgentReference() + " ***********************************");
+                    //LifeCycle(currentInfrastructureAgent.getInfraAgentReference(), currentInfrastructureAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
+                    currentInfrastructureAgent.run(); // change the state of the agent
+                    listOrdonnancement.remove(currentInfrastructureAgent);
+                    listOrdonnancement.add(currentInfrastructureAgent);
 
                     this.currentAgentCycle++;
                 }
@@ -76,7 +76,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
         }
     }
 
-    public List<InfraAgent> getListOrdonnancement() {
+    public List<InfrastructureAgent> getListOrdonnancement() {
         return listOrdonnancement;
     }
 
@@ -120,7 +120,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public List<InfraAgent> arreterOrdonnancement() {
+    public List<InfrastructureAgent> arreterOrdonnancement() {
         this.stop = true;
         return listOrdonnancement;
     }
@@ -131,8 +131,8 @@ public class ClassicStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public void agentAjoute(InfraAgent infraAgent) {
-        listOrdonnancement.add(infraAgent);
+    public void agentAjoute(InfrastructureAgent infrastructureAgent) {
+        listOrdonnancement.add(infrastructureAgent);
        // System.out.println("listOrdonnancement****" + getListOrdonnancement());
     }
 
@@ -141,8 +141,8 @@ public class ClassicStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public void agentRetire(InfraAgent infraAgent) {
-        listOrdonnancement.remove(infraAgent);
+    public void agentRetire(InfrastructureAgent infrastructureAgent) {
+        listOrdonnancement.remove(infrastructureAgent);
     }
 
     /**
@@ -167,7 +167,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
      */
     @Override
     public void setMaxCycleAgent(int maxCycleAgent) {
-        MyLogger.log(Level.INFO,"Changement du nombre de cycles agent par cycle moteur, nouvelle valeur = "+ maxCycleAgent);
+        OCELogger.log(Level.INFO,"Changement du nombre de cycles agent par cycle moteur, nouvelle valeur = "+ maxCycleAgent);
         this.maxCycleAgent = maxCycleAgent;
     }
 

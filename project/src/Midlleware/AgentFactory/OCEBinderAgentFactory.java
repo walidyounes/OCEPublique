@@ -4,8 +4,8 @@
 
 package Midlleware.AgentFactory;
 
-import Logger.MyLogger;
-import MASInfrastructure.Agent.InfraAgent;
+import Logger.OCELogger;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.State.LifeCycle;
 import MASInfrastructure.Infrastructure;
@@ -27,6 +27,7 @@ public class OCEBinderAgentFactory implements IOCEBinderAgentFactory {
 
     private Infrastructure infrastructure;
     private Medium medium; // it's stand for communicationManager and recordManager
+    private static int binderAgentSerialNumber=0;
 
     public OCEBinderAgentFactory(Infrastructure infrastructure, Medium communicationManager) {
         this.infrastructure = infrastructure;
@@ -38,14 +39,14 @@ public class OCEBinderAgentFactory implements IOCEBinderAgentFactory {
      */
     @Override
     public Map.Entry<BinderAgent, InfraAgentReference> createBinderAgent() {
-        MyLogger.log(Level.INFO, "Creating the binder agent * " );
-        //Create the attributes of service InfraAgent
+        OCELogger.log(Level.INFO, "Creating the binder agent * " );
+        //Create the attributes of service InfrastructureAgent
         //Create the perception component
         IPerceptionState myWayOfPerception = new AgentPerception();
 
         //Create the decision component
         IActionState myWayOfAction = new BinderAgentAction();
-        // Create The service InfraAgent
+        // Create The service InfrastructureAgent
         BinderAgent binderAgent = new BinderAgent(myWayOfPerception, null, myWayOfAction);
 
         //Create the strategy of message selection
@@ -66,21 +67,28 @@ public class OCEBinderAgentFactory implements IOCEBinderAgentFactory {
         // create the agent's life cycle
         LifeCycle lifeCycle = new LifeCycle(perceptionState);
         // create the agent in the infrastructure
-        InfraAgent associatedInfraAgent = this.infrastructure.createInfrastructureAgent(null, lifeCycle, this.infrastructure);
+        InfrastructureAgent associatedInfrastructureAgent = this.infrastructure.createInfrastructureAgent(null, lifeCycle, this.infrastructure);
         // Associate the serviceAgent to the agent in the infrastructure
-        binderAgent.setMyInfraAgent(associatedInfraAgent);
+        binderAgent.setMyInfrastructureAgent(associatedInfrastructureAgent);
         // Add the reference of the binder Agent in the Action state module
         myWayOfAction.setBinderAgent(binderAgent);
 
         // Update the attributes of the perception with the reference of the Infrastructure Agent
-        myWayOfPerception.setInfraAgent(associatedInfraAgent);
+        myWayOfPerception.setInfraAgent(associatedInfrastructureAgent);
 
         //Make the ID of the binder Agent the same as the associated infrastructure agent
-        binderAgent.setMyIDAgent(new IDAgent(""+associatedInfraAgent.getInfraAgentReference().getReferenceInterne()));
+        binderAgent.setMyIDAgent(new IDAgent(""+ associatedInfrastructureAgent.getInfraAgentReference().getReferenceInterne()));
+
+        //Set the name for the visualization of this agent as "BinderAgent' + Sequential Number
+        String visualizationName = "BA-"+this.binderAgentSerialNumber;
+        binderAgent.getMyID().setVisualizingName(visualizationName);
+
+        // Increment the serial Number for binder agents
+        this.binderAgentSerialNumber++;
 
         // Register the binder Agent in the Record
-        medium.registerOCEAgent(binderAgent, associatedInfraAgent.getInfraAgentReference());
-        AbstractMap.SimpleEntry agentB_referenceAgent_Association = new AbstractMap.SimpleEntry(binderAgent, associatedInfraAgent.getInfraAgentReference());
+        medium.registerOCEAgent(binderAgent, associatedInfrastructureAgent.getInfraAgentReference());
+        AbstractMap.SimpleEntry agentB_referenceAgent_Association = new AbstractMap.SimpleEntry(binderAgent, associatedInfrastructureAgent.getInfraAgentReference());
         return agentB_referenceAgent_Association;
     }
 }

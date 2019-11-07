@@ -4,7 +4,7 @@
 
 package MASInfrastructure.Scheduler;
 
-import MASInfrastructure.Agent.InfraAgent;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Directory.IAgentListener;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public interface ISchedulingStrategies extends IAgentListener {
 
     void changerVitesse(EnumSpeed vitesse);
 
-    List<InfraAgent> arreterOrdonnancement();
+    List<InfrastructureAgent> arreterOrdonnancement();
 
     void pauseOrdonnancement();
 
@@ -26,7 +26,7 @@ public interface ISchedulingStrategies extends IAgentListener {
 
     void addOrdonnaceurListener(SchedulerListener schedulerListener);
 
-    void agentAjoute(InfraAgent infraAgent);
+    void agentAjoute(InfrastructureAgent infrastructureAgent);
 
-    void agentRetire(InfraAgent infraAgent);
+    void agentRetire(InfrastructureAgent infrastructureAgent);
 }

@@ -5,6 +5,7 @@
 package OCE.Agents.ServiceAgentPack;
 
 import AmbientEnvironment.OCPlateforme.OCService;
+import Logger.OCELogger;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
@@ -18,6 +19,7 @@ import OCE.Agents.ServiceAgentPack.Learning.Situation;
 import OCE.OCEMessages.FeedbackValues;
 
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * This class implement the agent responsible of a physical service
@@ -26,15 +28,18 @@ import java.util.*;
  */
 public class ServiceAgent extends OCEAgent implements Comparable {
 
-    private OCService handledService;
-    private ServiceAgentConnexionState myConnexionState;
-    private IOCEBinderAgentFactory myBinderAgentFactory;
-    private Situation<CurrentSituationEntry> myCurrentSituation;
-    private Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation;
+
+    private OCService handledService;                                           // The service that the agent is responsible for
+    private ServiceAgentConnexionState myConnexionState;                        // The state of the service agent
+    private Optional<ServiceAgent> connectedTo;                                 // The reference for the service agent which are connected to, it's set to null if the agent is not connected
+    private IOCEBinderAgentFactory myBinderAgentFactory;                        // The reference for the binder agent factory
+    private Situation<CurrentSituationEntry> myCurrentSituation;                // The current situation under construction
+    private Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation;    // The scored current situation of the agent
+    private Set<Situation<ReferenceSituationEntry>> myKnowledgeBase;            // The agent's knowledge base
     private int myCurrentCycleNumber; // Todo just for the test of the presentation issue of an assembly to the user
-    private boolean feedbackReceived; // variable to indicate whether the agent received the feedback or not
-    private FeedbackValues feedbackValue;
-    private Set<Situation<ReferenceSituationEntry>> myKnowledgeBase;
+    private boolean feedbackReceived;                                           // The variable to indicate whether the agent received the feedback or not
+    private FeedbackValues feedbackValue;                                       // The feedback value
+
     /**
      * Create a service Agent specifying a random ID
      * @param handledService    : the service handled by the agent
@@ -48,8 +53,10 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myWayOfPerception = myWayOfPerception;
         this.myWayOfDecision = myWayOfDecision;
         this.myWayOfAction = myWayOfAction;
-        this.myInfraAgent = null;
+        this.myInfrastructureAgent = null;
         this.myConnexionState = ServiceAgentConnexionState.Created;
+        //Initialised the attribute to empty cause the agent start not connected
+        this.connectedTo = Optional.empty();
         //Initialise at null it means that it's the start of an engine cycle
         this.myCurrentSituation = null;
         this.myScoredCurrentSituation = null;
@@ -72,7 +79,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myWayOfPerception = myWayOfPerception;
         this.myWayOfDecision = myWayOfDecision;
         this.myWayOfAction = myWayOfAction;
-        this.myInfraAgent = null;
+        this.myInfrastructureAgent = null;
         this.myConnexionState = ServiceAgentConnexionState.Created;
         //Initialise at null it means that it's the start of an engine cycle
         this.myCurrentSituation = null;
@@ -186,6 +193,23 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     public void incrementMyCurrentCycleNumber(){
         this.myCurrentCycleNumber ++;
     }
+
+    /**
+     * Get the reference of the service agent to who this agent is connected to
+     * @return if this agent is connected then it return the reference of the other service agent, otherwise it returns "Empty"
+     */
+    public Optional<ServiceAgent> getConnectedTo() {
+        return connectedTo;
+    }
+
+    /**
+     * Set the value for the attribute expressing with whom this agent is connected to
+     * @param connectedTo : the new value to update
+     */
+    public void setConnectedTo(Optional<ServiceAgent> connectedTo) {
+        this.connectedTo = connectedTo;
+    }
+
     /**
      * Get the content of the knowledge base of the service agent
      * @return the list of reference situation that construct the agent's knowledge base
@@ -285,6 +309,26 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      */
     public void setFeedbackValue(FeedbackValues feedbackValue) {
         this.feedbackValue = feedbackValue;
+    }
+
+    /**
+     * Launch the suicide mechanism of the agent
+     */
+    public void suicide(){
+        OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is committing SUICIDE !");
+        //Check if the agent is connected
+        if(this.myConnexionState.equals(ServiceAgentConnexionState.Connected) && this.connectedTo.isPresent()){
+            //Todo : walid 29 11H55 on rentre pas ici je pense que le service connected to n'existe pas
+            OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is ready to SUICIDE!");
+            //Put the indicator of suicide to true so in the decision process, the agent will send a disconnect message
+            ((ServiceAgentDecision)this.myWayOfDecision).setCommitSuicide(true);
+        }
+        //Save the knowledge of the service agent | Todo : For now we don't do it -> we put to sleep
+
+        //Put the serviceAgent to sleep
+        this.myConnexionState = ServiceAgentConnexionState.Sleep;
+        OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is put to SLEEP !");
+
     }
 
     /**

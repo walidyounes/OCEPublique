@@ -5,7 +5,7 @@
 package OCE.ARSAStrategies.Select;
 
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MASInfrastructure.Agent.InfraAgentReference;
 import MASInfrastructure.Communication.ICommunication;
 
@@ -24,6 +24,6 @@ public class NoSelect implements ISelectStrategy {
     @Override
     public void executer(ICommunication comm, OCService service, ArrayList<InfraAgentReference> recipients) {
         System.out.println("This is No Select strategy");
-        MyLogger.log(Level.INFO, "Strategy{ Name= no_Select, Phase= SELECT}");
+        OCELogger.log(Level.INFO, "Strategy{ Name= no_Select, Phase= SELECT}");
     }
 }

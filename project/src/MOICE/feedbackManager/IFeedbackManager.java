@@ -4,11 +4,14 @@
 
 package MOICE.feedbackManager;
 
+import OCE.ServiceConnection.Connection;
+
 import java.io.File;
+import java.util.List;
 
 public interface IFeedbackManager {
 
-    void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration);
+    void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration, List<Connection> OCEConnectionList);
 
     void collectFeedback();
 }

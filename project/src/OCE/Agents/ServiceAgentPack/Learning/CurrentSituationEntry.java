@@ -10,14 +10,14 @@ import OCE.OCEMessages.MessageTypes;
 
 public class CurrentSituationEntry extends SituationEntry {
 
-    protected MessageTypes messageType; // The type of the message send by the agent "agent"
+    protected MessageTypes messageType; // The matchingID of the message send by the agent "agent"
 
 
     /**
      * Construct a new current situation entry
      *
      * @param agent       : the agent emitter of the message
-     * @param messageType : the type of the message send
+     * @param messageType : the matchingID of the message send
      */
     public CurrentSituationEntry(IDAgent agent, MessageTypes messageType) {
         this.agent = agent;
@@ -44,16 +44,16 @@ public class CurrentSituationEntry extends SituationEntry {
     }
 
     /**
-     * Get the type of the message sent by the agent represented in the entry
-     * @return the type of the message sent by the agent represented in the entry
+     * Get the matchingID of the message sent by the agent represented in the entry
+     * @return the matchingID of the message sent by the agent represented in the entry
      */
     public MessageTypes getMessageType() {
         return messageType;
     }
 
     /**
-     * Set the type of the message sent by the agent represented in the entry
-     * @param messageType : the type of the message sent by the agent represented in the entry
+     * Set the matchingID of the message sent by the agent represented in the entry
+     * @param messageType : the matchingID of the message sent by the agent represented in the entry
      */
     public void setMessageType(MessageTypes messageType) {
         this.messageType = messageType;
@@ -62,7 +62,7 @@ public class CurrentSituationEntry extends SituationEntry {
     /**
      * Test if two current situation entries are equals
      * @param obj : the other current situation entry to compare to this
-     * @return : true if the two object are equals (the same agent and the same message type), else false
+     * @return : true if the two object are equals (the same agent and the same message matchingID), else false
      */
     @Override
     public boolean equals(Object obj) {

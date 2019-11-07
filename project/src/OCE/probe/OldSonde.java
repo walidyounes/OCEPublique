@@ -2,11 +2,11 @@
  * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.sonde;
+package OCE.probe;
 
 import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
 import AmbientEnvironment.FacadeAdapter.IAcquisition;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Medium.Recorder.IRecord;
 
@@ -56,7 +56,7 @@ public class OldSonde {
             OldSonde.ScheduledSounding st = new OldSonde.ScheduledSounding();
             // Create Repetitively task for every "Periodicity" secs with a delay 0 secs between two executions
             time.schedule(st, 0, periodicity);
-            MyLogger.log(Level.INFO, "*************************** Probing *******************");
+            OCELogger.log(Level.INFO, "*************************** Probing *******************");
         }
     };
 

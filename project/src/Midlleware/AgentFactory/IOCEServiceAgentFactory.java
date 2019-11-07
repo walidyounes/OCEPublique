@@ -12,7 +12,7 @@ import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import java.util.Map;
 
 /**
- * InfraAgent Factory Interface : offer a set of functions allowing to create different type of agents
+ * InfrastructureAgent Factory Interface : offer a set of functions allowing to create different matchingID of agents
  * @author Walid YOUNES
  * @version 1.0
  */

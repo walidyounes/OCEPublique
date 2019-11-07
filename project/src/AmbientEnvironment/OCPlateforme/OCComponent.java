@@ -4,9 +4,10 @@
 
 package AmbientEnvironment.OCPlateforme;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class OCComponent {
+public abstract class OCComponent implements Serializable {
     protected ArrayList<OCService> providedServices;
     protected ArrayList<OCService> requiredServices;
 

@@ -38,8 +38,8 @@ public class FeedbackInfraMessage extends InfraMessage
     }
 
     /**
-     * Get the type of the message
-     * @return : The type of this message
+     * Get the matchingID of the message
+     * @return : The matchingID of this message
      */
     @Override
     public MessageTypes getMyType() {

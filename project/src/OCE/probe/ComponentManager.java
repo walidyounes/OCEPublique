@@ -2,7 +2,7 @@
  * Copyright (c) 2018.  Younes Walid, IRIT, University of Toulouse
  */
 
-package OCE.sonde;
+package OCE.probe;
 
 import AmbientEnvironment.FacadeAdapter.AcquisitionFailure;
 import AmbientEnvironment.FacadeAdapter.IAcquisition;
@@ -10,14 +10,10 @@ import AmbientEnvironment.MockupCompo.MockupComponent;
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
-import Logger.MyLogger;
+import Logger.OCELogger;
 import MOICE.MOICE;
-import MOICE.connectionManager.ConnectionManager;
-import MOICE.deploymentManager.DeploymentManager;
-import MOICE.feedbackManager.FeedbackManager;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -34,7 +30,7 @@ public class ComponentManager {
 
     /**
      * Get, store the list of appearing components
-     * and send the list of the services of these components to the ServiceManager
+     * and send the list of their services to the ServiceManager
      * @throws AcquisitionFailure raised when there is a failure in the acquisition of the components from the environment
      */
     public void appearingComponentsAcquisition() throws AcquisitionFailure {
@@ -42,22 +38,21 @@ public class ComponentManager {
         Set<OCComponent> componentsList = acquisition.getNewComponents();
 
         // TODO walid 30-09-2019 : Delete later this is just for test
-
             ArrayList<MockupComponent> MOICEComponentsList = new ArrayList<>(componentsList.stream().map( e -> (MockupComponent) e).collect(Collectors.toList()));
             MOICE middlewareMOICE = MOICE.getInstance();
             MOICEComponentsList.forEach( c -> middlewareMOICE.registerComponent(c));
+        // fin Todo
 
         for (OCComponent component : componentsList) {
-
             // log in the appearing components
             String log = String.format("Provided=%s Required=%s - Appearing", component.getProvidedServices(), component.getRequiredServices());
-            MyLogger.log(Level.INFO, log);
+            OCELogger.log(Level.INFO, log);
             // Get both required and provided services for the component
             ArrayList<OCService> providedServices = component.getProvidedServices();
             ArrayList<OCService> requiredServices = component.getRequiredServices();
             //Log the services
-            MyLogger.log(Level.INFO,"Provided Services = " + providedServices );
-            MyLogger.log(Level.INFO,"Required Services = " + requiredServices );
+            OCELogger.log(Level.INFO,"Provided Services = " + providedServices );
+            OCELogger.log(Level.INFO,"Required Services = " + requiredServices );
 
             //Send the list of services to the ServiceManager for further processing
             if (providedServices != null) {
@@ -70,19 +65,25 @@ public class ComponentManager {
     }
 
     /**
-     *
-     * Fetch and store the appearing components and send the list of there services to the serviceManager
-     * @throws AcquisitionFailure raised when there is a failure in the acquisition of the components from the environement
+     * Fetch and store the disappearing components and send the list of there services to the serviceManager
+     * @throws AcquisitionFailure raised when there is a failure in the acquisition of the components from the environment
      */
     public void disappearingComponentsAcquisition() throws AcquisitionFailure {
 
         Set<OCComponent> componentsList = acquisition.getDisappearedComponents();
+
+        // TODO walid 06-11-2019 : Delete later this is just for test
+        ArrayList<MockupComponent> MOICEComponentsList = new ArrayList<>(componentsList.stream().map( e -> (MockupComponent) e).collect(Collectors.toList()));
+        MOICE middlewareMOICE = MOICE.getInstance();
+        MOICEComponentsList.forEach( c -> middlewareMOICE.unRegisterComponent(c));
+
+        // fin Todo
+
         // System.out.println(" Disappearing components = " + componentsList + "size = " + componentsList.size());
         for (OCComponent component : componentsList) {
-
-            // Log in the disappearing of the component
+            // Log in the disappearance of the component
             String log = String.format("Provided = %s Required = %s - Disappearing", component.getProvidedServices(), component.getRequiredServices());
-            MyLogger.log(Level.INFO, log);
+            OCELogger.log(Level.INFO, log);
 
             ArrayList<OCService> providedServices = component.getProvidedServices();
             ArrayList<OCService> requiredServices = component.getRequiredServices();
