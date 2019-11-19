@@ -4,6 +4,7 @@
 
 package MOICE.feedbackManager;
 
+import MOICE.connectionManager.IConnectionManager;
 import OCE.ServiceConnection.*;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
@@ -14,16 +15,36 @@ import org.w3c.dom.NodeList;
 import javax.swing.text.html.Option;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-public class FeedbackManager implements IFeedbackManager {
+public class FeedbackManager implements IFeedbackManager, PropertyChangeListener {
 
+    private IConnectionManager connectionManager;           // The connection manager component to get the list of connections proposed by OCE
+    private List<Connection> connectionsBeforeAnnotation;   // the list of connections before annotating them
+    private PropertyChangeSupport support;                  //Support to notify the listeners of changes that occurs to a property of this class
 
-//    @Override
+    /**
+     * Constructor of the feedback manager
+     */
+    public FeedbackManager() {
+        this.connectionsBeforeAnnotation = new ArrayList<>();
+        this.support = new PropertyChangeSupport(this);
+    }
+
+    /**
+     * Constructor of the feedback manager
+     */
+    public FeedbackManager(IConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+        this.connectionsBeforeAnnotation = new ArrayList<>();
+        this.support = new PropertyChangeSupport(this);
+    }
+
+    //    @Override
 //    public void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration, List<Connection> OCEConnectionList) {
 //        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 //        try {
@@ -203,8 +224,22 @@ public class FeedbackManager implements IFeedbackManager {
 //        }
 //    }
 
+    /**
+     * Use the configuration send by ICE, compute the difference with the configuration proposed by OCE and use it to annotate the connections
+     * @param OCEConfigurationPath      : the path of the file send by ICE
+     * @param ICEUserConfigurationPath  : the path of the saved configuration proposed by OCE
+     */
     @Override
-    public void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration, List<Connection> OCEConnectionList) {
+    public void registerUserConfiguration(String OCEConfigurationPath, String ICEUserConfigurationPath) {
+        //Get the initial connections proposed by ICE
+        List<Connection> OCEConnectionList = this.connectionManager.getListConnectionProposedOCE();
+        //Save the list of connections before annotation
+        Collections.copy(OCEConnectionList,this.connectionsBeforeAnnotation);
+
+        //Open the files that contains the configurations
+        File OCEConfiguration = new File(OCEConfigurationPath);
+        File ICEUserConfiguration = new File(ICEUserConfigurationPath);
+
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
@@ -275,34 +310,48 @@ public class FeedbackManager implements IFeedbackManager {
 
                                         if (!bindOCE.equalsIgnoreCase("") && bindICE.equalsIgnoreCase("")) { // A connection was deleted by the user
                                             System.out.println("The USER DELETED this connection " + " = = " + componentName + "." + serviceNameOCE + "-" + bindOCE);
-                                            if (foundConnection.getKey().isPresent()) {
-                                                //Mark the connection as REJECTED
-                                                IConnectionState connectionState = new RejectedConnectionState();
-                                                foundConnection.getKey().get().setMyConnectionState(connectionState);
+                                            if (foundConnection.getKey().isPresent() ) {
+                                                //Check if the connection have not bean annotated before
+                                                if(!foundConnection.getKey().get().getMyConnectionState().isPresent()) {
+                                                    //Mark the connection as REJECTED
+                                                    IConnectionState connectionState = new RejectedConnectionState();
+                                                    foundConnection.getKey().get().setMyConnectionState(connectionState);
+                                                }else{
+                                                    //Check if the connection was annotated as modified (The other service of the connection may not have been connected by the user)
+                                                    if(foundConnection.getKey().get().getMyConnectionState().get() instanceof ModifiedConnectionState ){
+                                                        System.out.println("The SECOND service = "+ componentName + "." + serviceNameOCE +  " did not get connected to an other service");
+                                                    }
+                                                    System.out.println("Connection already been annotated as = " + foundConnection.getKey().get().getMyConnectionState().get().toString());
+                                                }
                                             }
                                         } else {
                                             if (bindOCE.equalsIgnoreCase(bindICE)) { // Connection accepted by the user
                                                 //System.out.println(componentName + "."+ serviceNameOCE + "-" + bindRequiredOCE + " WAS NOT MODIFIED " + " = = " + componentName + "."+ serviceNameICE + "-" + bindRequiredICE);
                                                 System.out.println("The USER ACCEPTED this connection " + " = = " + componentName + "." + serviceNameICE + "-" + bindICE);
-
                                                 if (foundConnection.getKey().isPresent()) {
-                                                    //Mark the connection as ACCEPTED
-                                                    IConnectionState connectionState = new AcceptedConnectionState();
-                                                    foundConnection.getKey().get().setMyConnectionState(connectionState);
+                                                    //Check if the connection have not bean annotated before
+                                                    if(!foundConnection.getKey().get().getMyConnectionState().isPresent()) {
+                                                        //Mark the connection as ACCEPTED
+                                                        IConnectionState connectionState = new AcceptedConnectionState();
+                                                        foundConnection.getKey().get().setMyConnectionState(connectionState);
+                                                    }else{
+                                                        System.out.println("Connection already been annotated as = " + foundConnection.getKey().get().getMyConnectionState().get().toString());
+                                                    }
                                                 }
                                             } else { // Connection modified by the user
                                                 System.out.println(componentName + "." + serviceNameOCE + "-" + bindOCE + " WAS MODIFIED " + " = = " + componentName + "." + serviceNameICE + "-" + bindICE);
                                                 //Todo : walid 03/11/2019 : this part is still to be addressed
                                                 if (foundConnection.getKey().isPresent()) {
+                                                    //We don't check if the connection have been annotated before cause we need to annotate each service is modified to what
                                                     //Mark the connection as MODIFIED
                                                     IConnectionState connectionState = new ModifiedConnectionState();
                                                     foundConnection.getKey().get().setMyConnectionState(connectionState);
 
                                                     //Check the rank of the service
                                                     if (foundConnection.getValue().get().equalsIgnoreCase("First")) {
-                                                        //Check the second service
+                                                        System.out.println("The FIRST service = " + componentName + "." + serviceNameOCE + "is connected to ="+ bindICE);
                                                     } else { // It is second service
-
+                                                        System.out.println("The SECOND service = "+ bindOCE+  "is connected to ="+ bindICE );
                                                     }
                                                 }
                                             }
@@ -318,6 +367,18 @@ public class FeedbackManager implements IFeedbackManager {
                     }
                 }
             }
+            //Notify the listener that the feedback is computed and the connections are annotated
+            this.support.firePropertyChange("AnnotatedConnection", this.connectionsBeforeAnnotation, OCEConnectionList );
+            try{
+                //Delete the two files after computing feedback
+                OCEConfiguration.delete();
+                ICEUserConfiguration.delete();
+
+            }catch(Exception exception){
+                exception.printStackTrace();
+            }
+
+
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -411,5 +472,57 @@ public class FeedbackManager implements IFeedbackManager {
     @Override
     public void collectFeedback() {
 
+    }
+
+    /**
+     * Add a listener for the property change
+     * @param listener  : the listener for the change property
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove a listener for the property change
+     * @param listener  : the listener to be removed
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * Add a listener to be informed when the feedback is computed
+     *
+     * @param listener : the reference to the listener
+     */
+    @Override
+    public void addFeedbackComputedListener(PropertyChangeListener listener) {
+        this.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove a listener from the list of the entities to be informed when the feedback is computed
+     *
+     * @param listener : the reference to the listener
+     */
+    @Override
+    public void removeFeedbackComputedListener(PropertyChangeListener listener) {
+        this.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * This method gets called when a bound property is changed
+     * (the property here is the file send by ICE (the new configuration, wen it's received we trigger the compute of the feedback and connection's annotation)
+     *
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        //The files send by the user exists so we treat them
+        String iceFilePath = "ICEConfiguration\\ICEConfiguration.ice_editor";
+        String oceFilePath = "ICEConfiguration\\OCE-ICE-old.ice_editor";
+        System.out.println("Compute feedback :)");
+        this.registerUserConfiguration(oceFilePath, iceFilePath);
     }
 }

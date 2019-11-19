@@ -5,6 +5,7 @@
 package OCE.ServiceConnection;
 
 import AmbientEnvironment.MockupCompo.MockupService;
+import OCE.Medium.Communication.ICommunicationAdapter;
 
 import java.util.Optional;
 
@@ -25,9 +26,10 @@ public class ModifiedConnectionState implements IConnectionState {
      * Treat the connexion according to the it's state
      *
      * @param connection :  the connection to be treated
+     * @param communicationManager : the medium used to send messages to the concerned agent which are part of this connection
      */
     @Override
-    public void treatConnection(Connection connection) {
+    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager) {
 
     }
 

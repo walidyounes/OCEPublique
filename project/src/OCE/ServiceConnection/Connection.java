@@ -192,7 +192,8 @@ public class Connection implements Comparable {
      */
     public void toSelfTreat(){
         if (this.myConnectionState.isPresent()){
-            this.myConnectionState.get().treatConnection(this);
+            //Todo :  15/11/2019 : complete this section
+            //this.myConnectionState.get().treatConnection(this, );
         }else{
             OCELogger.log(Level.INFO, "Connection without a state, it can't be treated !");
         }

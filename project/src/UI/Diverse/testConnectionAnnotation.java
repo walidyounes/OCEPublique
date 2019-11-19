@@ -6,7 +6,16 @@ package UI.Diverse;
 
 import AmbientEnvironment.MockupCompo.MockupComponent;
 import AmbientEnvironment.MockupCompo.MockupService;
+import MOICE.MOICEProbe;
 import MOICE.feedbackManager.FeedbackManager;
+import Midlleware.AgentFactory.OCEServiceAgentFactory;
+import OCE.Agents.AgentPerception;
+import OCE.Agents.BinderAgentPack.BinderAgentDecision;
+import OCE.Agents.IDAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgentAction;
+import OCE.Agents.ServiceAgentPack.ServiceAgentDecision;
+import OCE.FeedbackDispatcher.OCEFeedbackDispatcher;
 import OCE.ServiceConnection.Connection;
 import UI.XMLFileTools;
 
@@ -40,19 +49,30 @@ public class testConnectionAnnotation {
             }
 
         //Create the list of simulated connections
+        ServiceAgent serviceAgent = new ServiceAgent(new IDAgent(), firstService, new AgentPerception(), new ServiceAgentDecision(null, null, null), new ServiceAgentAction());
         List<Connection> listConnections = new ArrayList<>();
-        Connection myConnection = new Connection(null, null, firstService, secondService, null);
+        Connection myConnection = new Connection(serviceAgent, serviceAgent, firstService, secondService, null);
 
         listConnections.add(myConnection);
 
-        //Calculate feedback
-        File fileOCE = new File("MyLogFiles\\oldFile.xml");
-        File fileICE = new File("MyLogFiles\\newFile.xml");
 
+        //Create an instance for the feedback manager
         FeedbackManager feedbackManager = new FeedbackManager();
-        feedbackManager.registerUserConfiguration(fileOCE, fileICE, listConnections);
+        //Create the instance of the feedback Dispatcher
+        OCEFeedbackDispatcher oceFeedbackDispatcher = new OCEFeedbackDispatcher();
+
+        //Add the dispatcher as a listener
+        feedbackManager.addPropertyChangeListener(oceFeedbackDispatcher);
+
+        //Calculate feedback
+        feedbackManager.registerUserConfiguration("MyLogFiles\\oldFile.xml", "MyLogFiles\\newFile.xml");
+
 
         //Print the list of connection
         System.out.println(" " + listConnections);
+
+        MOICEProbe moiceProbe = new MOICEProbe();
+
+        moiceProbe.run();
     }
 }

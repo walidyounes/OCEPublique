@@ -140,5 +140,13 @@ public class ConnectionManager implements IConnectionManager {
         this.myFileFormatter.convertFormat(this.listComponents,this.listConnections);
     }
 
-
+    /**
+     * Get the list of connections proposed by OCE
+     *
+     * @return : the reference to the list of connections
+     */
+    @Override
+    public List<Connection> getListConnectionProposedOCE() {
+        return this.listConnections;
+    }
 }

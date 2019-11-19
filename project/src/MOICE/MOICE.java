@@ -13,7 +13,7 @@ import MOICE.feedbackManager.FeedbackManager;
 import MOICE.feedbackManager.IFeedbackManager;
 import OCE.ServiceConnection.Connection;
 
-import java.io.File;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentManager {
@@ -21,11 +21,11 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     private IConnectionManager myConnectionManager;
     private IFeedbackManager myFeedbackManager;
     private IDeploymentManager myDeploymentManager;
-
+    private MOICEProbe probeFileStorage;
     /** Holder */
     private static class MOICESingletonHolder
     {
-       //Unique instance not initialized in advance
+       //Unique instance initialized in advance
         private final static MOICE instance = new MOICE();
     }
 
@@ -55,8 +55,11 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
      */
     private MOICE() {
         this.myConnectionManager = new ConnectionManager();
-        this.myFeedbackManager = new FeedbackManager();
+        this.myFeedbackManager = new FeedbackManager(this.myConnectionManager);
         this.myDeploymentManager = new DeploymentManager();
+        this.probeFileStorage = new MOICEProbe();
+        //launch the probing thread
+        this.probeFileStorage.run();
     }
 
     @Override
@@ -89,13 +92,80 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
         this.myDeploymentManager.deployConfiguration();
     }
 
+    /**
+     * Get the list of connections proposed by OCE
+     *
+     * @return : the reference to the list of connections
+     */
     @Override
-    public void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration, List<Connection> OCEConnectionList) {
-        this.myFeedbackManager.registerUserConfiguration(OCEConfiguration, ICEUserConfiguration, OCEConnectionList);
+    public List<Connection> getListConnectionProposedOCE() {
+        return this.myConnectionManager.getListConnectionProposedOCE();
+    }
+
+    /**
+     * Use the configuration send by ICE, compute the difference with the configuration proposed by OCE and use it to annotate the connections
+     * @param OCEConfigurationPath      : the path of the file send by ICE
+     * @param ICEUserConfigurationPath  : the path of the saved configuration proposed by OCE
+     */
+    @Override
+    public void registerUserConfiguration(String OCEConfigurationPath, String ICEUserConfigurationPath) {
+        this.myFeedbackManager.registerUserConfiguration(OCEConfigurationPath, ICEUserConfigurationPath);
     }
 
     @Override
     public void collectFeedback() {
         this.myFeedbackManager.collectFeedback();
+    }
+
+    /**
+     * Add a listener to be informed when the feedback is computed
+     *
+     * @param listener : the reference to the listener
+     */
+    @Override
+    public void addFeedbackComputedListener(PropertyChangeListener listener) {
+        this.myFeedbackManager.addFeedbackComputedListener(listener);
+    }
+
+    /**
+     * Remove a listener from the list of the entities to be informed when the feedback is computed
+     *
+     * @param listener : the reference to the listener
+     */
+    @Override
+    public void removeFeedbackComputedListener(PropertyChangeListener listener) {
+        this.myFeedbackManager.removeFeedbackComputedListener(listener);
+    }
+
+    /**
+     * Get the connection manager component
+     * @return  : the reference to the connection manager component
+     */
+    public IConnectionManager getMyConnectionManager() {
+        return myConnectionManager;
+    }
+
+    /**
+     * Get the feedback manager component
+     * @return  :   the reference to the feedback manager component
+     */
+    public IFeedbackManager getMyFeedbackManager() {
+        return myFeedbackManager;
+    }
+
+    /**
+     * Get the deployment manager component
+     * @return  : the reference to the deployment manager component
+     */
+    public IDeploymentManager getMyDeploymentManager() {
+        return myDeploymentManager;
+    }
+
+    /**
+     * Get the Probing component responsible of fetching for the information sent by ICE
+     * @return  :    the reference to the probing component
+     */
+    public MOICEProbe getProbeFileStorage() {
+        return probeFileStorage;
     }
 }

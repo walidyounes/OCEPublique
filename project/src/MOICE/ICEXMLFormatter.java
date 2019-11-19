@@ -106,8 +106,7 @@ public class ICEXMLFormatter implements IFileFormatter {
 
             final String ICEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor";
 
-            final String OCEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\OCE-ICE-old.ice_editor";
-
+            final String OCEFilePath = "ICEConfiguration\\OCE-ICE-old.ice_editor";
 
             try (final InputStream is = new FileInputStream(ICEFilePath);  final OutputStream os = new FileOutputStream(OCEFilePath)) {
                 //Make the copy

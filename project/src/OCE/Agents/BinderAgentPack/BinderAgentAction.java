@@ -18,7 +18,6 @@ import OCE.OCEMessages.FeedbackValues;
 import OCE.ServiceConnection.Connection;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.logging.Level;
 
 public class BinderAgentAction implements IActionState {
@@ -65,15 +64,15 @@ public class BinderAgentAction implements IActionState {
 
                 // reinitialise the number of received messages
                 this.nbMessages =0;
-                //Simulate the feedback : send to both agent an automatic response
-                //create the message with a "VALIDATED" response
-                FeedbackInfraMessage feedbackMessage = new FeedbackInfraMessage(null, null, FeedbackValues.VALIDATED);
-                //Add the two agents as receivers for the message
-                ArrayList<OCEAgent> receivers = new ArrayList<>();
-                receivers.add(this.firstServiceAgent);
-                receivers.add(this.secondServiceAgent);
-                //send the message using the communication manager
-                this.communicationManager.sendMessage(feedbackMessage,this.myBinderAgent,receivers);
+//                //Simulate the feedback : send to both agent an automatic response
+//                //create the message with a "ACCEPTED" response
+//                FeedbackInfraMessage feedbackMessage = new FeedbackInfraMessage(null, null, FeedbackValues.ACCEPTED);
+//                //Add the two agents as receivers for the message
+//                ArrayList<OCEAgent> receivers = new ArrayList<>();
+//                receivers.add(this.firstServiceAgent);
+//                receivers.add(this.secondServiceAgent);
+//                //send the message using the communication manager
+//                this.communicationManager.sendMessage(feedbackMessage,this.myBinderAgent,receivers);
 
             }else{ // In this cycle we received only one message
                 this.nbMessages += decisionsList.size();
@@ -96,15 +95,15 @@ public class BinderAgentAction implements IActionState {
 
                     // reinitialise the number of received messages
                     this.nbMessages =0;
-                    //Simulate the feedback : send to both agent an automatic response
-                    //create the message with a "VALIDATED" response
-                    FeedbackInfraMessage feedbackMessage = new FeedbackInfraMessage(null, null, FeedbackValues.VALIDATED);
-                    //Add the two agents as receivers for the message
-                    ArrayList<OCEAgent> receivers = new ArrayList<>();
-                    receivers.add(this.firstServiceAgent);
-                    receivers.add(this.secondServiceAgent);
-                    //send the message using the communication manager
-                    this.communicationManager.sendMessage(feedbackMessage,this.myBinderAgent,receivers);
+//                    //Simulate the feedback : send to both agent an automatic response
+//                    //create the message with a "ACCEPTED" response
+//                    FeedbackInfraMessage feedbackMessage = new FeedbackInfraMessage(null, null, FeedbackValues.ACCEPTED);
+//                    //Add the two agents as receivers for the message
+//                    ArrayList<OCEAgent> receivers = new ArrayList<>();
+//                    receivers.add(this.firstServiceAgent);
+//                    receivers.add(this.secondServiceAgent);
+//                    //send the message using the communication manager
+//                    this.communicationManager.sendMessage(feedbackMessage,this.myBinderAgent,receivers);
                 }
             }
         }else

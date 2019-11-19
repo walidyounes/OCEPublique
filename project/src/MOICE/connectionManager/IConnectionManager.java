@@ -7,6 +7,8 @@ package MOICE.connectionManager;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import OCE.ServiceConnection.Connection;
 
+import java.util.List;
+
 public interface IConnectionManager {
 
     /**
@@ -37,4 +39,10 @@ public interface IConnectionManager {
      * Collect the connection proposed by the engine OCE. This method is dedicated to ICE
      */
     void collectOCEProposedConfiguration();
+
+    /**
+     * Get the list of connections proposed by OCE
+     * @return : the reference to the list of connections
+     */
+    List<Connection> getListConnectionProposedOCE();
 }

@@ -7,9 +7,12 @@ package OCE;
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
+import MOICE.MOICE;
+import MOICE.feedbackManager.FeedbackManager;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import Midlleware.AgentFactory.OCEServiceAgentFactory;
 import OCE.Agents.OCEAgent;
+import OCE.FeedbackDispatcher.OCEFeedbackDispatcher;
 import OCE.Medium.Medium;
 import OCE.probe.Probe;
 import javafx.collections.ObservableList;
@@ -20,7 +23,7 @@ public class OCE implements Runnable{
     private Probe probe;
     private Medium medium;
     private IOCEServiceAgentFactory serviceAgentFactory;
-
+    private OCEFeedbackDispatcher oceFeedbackDispatcher;
 
     public OCE(MockupFacadeAdapter mockupFacadeAdapter, Infrastructure infrastructure) {
         this.mockupFacadeAdapter = mockupFacadeAdapter;
@@ -31,6 +34,14 @@ public class OCE implements Runnable{
         this.serviceAgentFactory = new OCEServiceAgentFactory(infrastructure, medium);
         // Create the Probe component to probe the environment
         this.probe = new Probe(mockupFacadeAdapter,medium, this.serviceAgentFactory, 1000);
+        //Create the instance to the component used to collect user feedback and dispatch them to the corresponding agent
+        this.oceFeedbackDispatcher = OCEFeedbackDispatcher.getInstance();
+        //Set the reference to the component used to transit messages to the agents
+        this.oceFeedbackDispatcher.setCommunicationAdapter(this.medium);
+        //Add the oceFeedbackDispatcher component as a listener in MOICE's Feedback manager
+        MOICE.getInstance().addFeedbackComputedListener(this.oceFeedbackDispatcher);
+        //Add MOICE's feedbackManager as a listener in MOICEProbe component
+        MOICE.getInstance().getProbeFileStorage().addPropertyChangeListener((FeedbackManager)MOICE.getInstance().getMyFeedbackManager());
     }
 
     @Override

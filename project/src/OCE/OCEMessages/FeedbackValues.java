@@ -5,6 +5,7 @@
 package OCE.OCEMessages;
 
 public enum FeedbackValues {
-    VALIDATED,
-    REJECTED;
+    ACCEPTED,
+    REJECTED,
+    MODIFIED
 }

@@ -211,12 +211,26 @@ public class SituationUtility {
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
         otherSymbols.setDecimalSeparator('.');
         DecimalFormat df = new DecimalFormat("###.###", otherSymbols);
-        //Get the list of scores
-        //Compute the min of all scores
-        Double sumValue = scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> ((ScoredCurrentSituationEntry) e).getScore()).mapToDouble(d -> (double) d).sum();
-        //normalize the scores
-        if (sumValue != 0) {
-            scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(Double.parseDouble(df.format((((ScoredCurrentSituationEntry) e).getScore() / sumValue)))));
+        //If the number of agents in the current situation is higher than 1
+        boolean sizeOne = (scoredCurrentSituation.getAgentSituationEntries().size() <=1);
+        //Translation of all the scores to a positive interval [0, + a] a> 0 if their is negative scores
+        boolean negative=false;
+        Double minValue  =  scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e-> ((ScoredCurrentSituationEntry) e).getScore()).mapToDouble(d -> (double) d).min().getAsDouble();
+        if(minValue < 0){
+            negative = true;
+            //Add the minimal value to all the scores of all agents
+            scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(Double.parseDouble(df.format((((ScoredCurrentSituationEntry) e).getScore() - minValue)))));
+        }
+        //If their is one agent in the current situation and it's scored negatively we normalised it to 0
+        if(sizeOne && negative) {
+            scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(Double.parseDouble(df.format(0))));
+        }else {
+            //Compute the sum of all scores
+            Double sumValue = scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> ((ScoredCurrentSituationEntry) e).getScore()).mapToDouble(d -> (double) d).sum();
+            //normalize the scores
+            if (sumValue != 0) {
+                scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(Double.parseDouble(df.format((((ScoredCurrentSituationEntry) e).getScore() / sumValue)))));
+            }
         }
     }
 

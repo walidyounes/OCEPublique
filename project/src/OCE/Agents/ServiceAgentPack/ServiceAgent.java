@@ -304,7 +304,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     }
 
     /**
-     * Set the value of the received feedback "VALIDATED" or "REJECTED"
+     * Set the value of the received feedback "ACCEPTED" or "REJECTED"
      * @param feedbackValue : the value of the feedback
      */
     public void setFeedbackValue(FeedbackValues feedbackValue) {

@@ -30,7 +30,6 @@ import OCE.Unifieur.Matching;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -135,7 +134,7 @@ public class ServiceAgentDecision implements IDecisionState {
 //
 //                OCELogger.log(Level.INFO, "Agent : Decision -> Updating Scored Current Situation = " + this.myServiceAgent.getMyScoredCurrentSituation().toString());
 //
-//                if (this.myServiceAgent.getFeedbackValue() == FeedbackValues.VALIDATED) reinforcement = +beta;
+//                if (this.myServiceAgent.getFeedbackValue() == FeedbackValues.ACCEPTED) reinforcement = +beta;
 //                else reinforcement = -beta;
 //                SituationUtility.updateScoreCurrentSituation(this.myServiceAgent.getMyScoredCurrentSituation(), this.cycleBestAgent.getKey(), alpha, reinforcement);
 //                SituationUtility.normalizeScoresSCS(this.myServiceAgent.getMyScoredCurrentSituation());
@@ -231,11 +230,12 @@ public class ServiceAgentDecision implements IDecisionState {
                                 OCELogger.log(Level.INFO, "Agent : Decision -> Before updating Scored Current Situation = " + this.myServiceAgent.getMyScoredCurrentSituation().toString());
 
                                 //Compute the value of the reinforcement depending on the value of the feedback
-                                if (this.myServiceAgent.getFeedbackValue() == FeedbackValues.VALIDATED)
+                                if (this.myServiceAgent.getFeedbackValue() == FeedbackValues.ACCEPTED)
                                     reinforcement = +beta;
                                 else reinforcement = -beta;
                                 //Update the scores in the current scored situation and normalize the values
                                 SituationUtility.updateScoreCurrentSituation(this.myServiceAgent.getMyScoredCurrentSituation(), this.cycleBestAgent.getKey(), alpha, reinforcement);
+
                                 SituationUtility.normalizeScoresSCS(this.myServiceAgent.getMyScoredCurrentSituation());
                                 // set the feedback received to false
                                 this.myServiceAgent.setFeedbackReceived(false);

@@ -22,7 +22,7 @@ import java.util.logging.Level;
 
 public class FeedbackMessage extends OCEMessage {
 
-    private FeedbackValues feedbackValue; // the feedbackValue given for the feedback, to simplify it has two possible values "VALIDATED" "REJECTED"
+    private FeedbackValues feedbackValue; // the feedbackValue given for the feedback, to simplify it has two possible values "ACCEPTED" "REJECTED"
 
     /**
      * create a feedback perception

@@ -21,7 +21,7 @@ public class TestFeedbackGeneration {
         List<Connection> listOCEConnections  = new ArrayList<>();
 
         FeedbackManager feedbackManager = new FeedbackManager();
-        feedbackManager.registerUserConfiguration(fileOCE, fileICE, listOCEConnections);
+        feedbackManager.registerUserConfiguration("MyLogFiles\\oldFile.xml", "MyLogFiles\\newFile.xml");
 
     }
 }
