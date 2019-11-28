@@ -30,6 +30,8 @@ public class OCE implements Runnable{
         this.infrastructure = infrastructure;
         //Initialize the medium component
         this.medium = new Medium(infrastructure);
+        //Add the infrastructure as a listener for special event in the medium "like for example deleting agents'
+        this.medium.addPropertyChangeListener(infrastructure);
         //Create the agent Factory
         this.serviceAgentFactory = new OCEServiceAgentFactory(infrastructure, medium);
         // Create the Probe component to probe the environment
@@ -38,6 +40,8 @@ public class OCE implements Runnable{
         this.oceFeedbackDispatcher = OCEFeedbackDispatcher.getInstance();
         //Set the reference to the component used to transit messages to the agents
         this.oceFeedbackDispatcher.setCommunicationAdapter(this.medium);
+        //Set the reference to the component used for reference resolving
+        this.oceFeedbackDispatcher.setOceRecord(this.medium);
         //Add the oceFeedbackDispatcher component as a listener in MOICE's Feedback manager
         MOICE.getInstance().addFeedbackComputedListener(this.oceFeedbackDispatcher);
         //Add MOICE's feedbackManager as a listener in MOICEProbe component

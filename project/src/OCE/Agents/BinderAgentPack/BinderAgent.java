@@ -5,13 +5,16 @@
 package OCE.Agents.BinderAgentPack;
 
 import AmbientEnvironment.OCPlateforme.OCService;
+import Logger.OCELogger;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
 import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
+import OCE.Medium.Recorder.IRecord;
 
 import java.util.Optional;
+import java.util.logging.Level;
 
 /**
  * This class implement the agent responsible of binding the services associated to two ServiceAgent
@@ -20,8 +23,9 @@ import java.util.Optional;
  */
 public class BinderAgent extends OCEAgent {
 
-    Optional<OCService> firstService;
-    Optional<OCService> secondService;
+    private Optional<OCService> firstService;
+    private Optional<OCService> secondService;
+    private IRecord oceRecord;
 
     public BinderAgent(IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
         this.myID = new IDAgent();
@@ -30,6 +34,16 @@ public class BinderAgent extends OCEAgent {
         this.myWayOfAction = myWayOfAction;
         this.firstService = Optional.empty();
         this.secondService = Optional.empty();
+    }
+
+    public BinderAgent(IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction, IRecord oceRecord) {
+        this.myID = new IDAgent();
+        this.myWayOfPerception = myWayOfPerception;
+        this.myWayOfDecision = myWayOfDecision;
+        this.myWayOfAction = myWayOfAction;
+        this.firstService = Optional.empty();
+        this.secondService = Optional.empty();
+        this.oceRecord = oceRecord;
     }
 
     /**
@@ -55,6 +69,14 @@ public class BinderAgent extends OCEAgent {
         return this.myID.toString();
     }
 
+    /**
+     * Launch the suicide mechanism of this agent
+     */
+    public void suicide(){
+        OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is committing SUICIDE !");
+        //Unregister from OCE's record witch will trigger automatically the delete from the infrastructure
+        this.oceRecord.unregisterOCEAgent(this);
+    }
 
     public Optional<OCService> getFirstService() {
         return firstService;

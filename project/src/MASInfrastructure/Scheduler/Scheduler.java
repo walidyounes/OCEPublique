@@ -19,12 +19,12 @@ public class Scheduler implements IScheduler {
 
     @Override
     public void startScheduling() {
-        schedulingStrategy.ordonnancer();
+        schedulingStrategy.startScheduling();
     }
 
     @Override
     public void changeSpeed(EnumSpeed newSpeed) {
-        schedulingStrategy.changerVitesse(newSpeed);
+        schedulingStrategy.changeSpeed(newSpeed);
     }
 
     @Override
@@ -34,12 +34,12 @@ public class Scheduler implements IScheduler {
 
     @Override
     public List<InfrastructureAgent> stopScheduling() {
-        return schedulingStrategy.arreterOrdonnancement();
+        return schedulingStrategy.stopScheduling();
     }
 
     @Override
     public void addAgentToScheduler(InfrastructureAgent infrastructureAgent) {
-        schedulingStrategy.agentAjoute(infrastructureAgent);
+        schedulingStrategy.addAgent(infrastructureAgent);
     }
 
     public ISchedulingStrategies getSchedulingStrategy() {
@@ -48,7 +48,7 @@ public class Scheduler implements IScheduler {
 
     @Override
     public void deleteAgentFromScheduler(InfrastructureAgent infrastructureAgent) {
-        schedulingStrategy.agentRetire(infrastructureAgent);
+        schedulingStrategy.deleteAgent(infrastructureAgent);
     }
 
 
@@ -57,7 +57,7 @@ public class Scheduler implements IScheduler {
      */
     @Override
     public void pauseScheduling() {
-        this.schedulingStrategy.pauseOrdonnancement();
+        this.schedulingStrategy.pauseScheduling();
     }
 
     /**
@@ -65,7 +65,7 @@ public class Scheduler implements IScheduler {
      */
     @Override
     public void restartScheduling() {
-        this.schedulingStrategy.repriseOrdonnancement();
+        this.schedulingStrategy.rerunScheduling();
     }
 
     /**

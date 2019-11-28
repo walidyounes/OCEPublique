@@ -184,7 +184,7 @@ public class Connection implements Comparable {
      * @param myConnectionState : the new value
      */
     public void setMyConnectionState(IConnectionState myConnectionState) {
-        this.myConnectionState = Optional.of(myConnectionState);
+        this.myConnectionState = Optional.ofNullable(myConnectionState);
     }
 
     /**

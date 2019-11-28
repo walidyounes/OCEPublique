@@ -21,7 +21,8 @@ public abstract class InfraMessage implements IMessage {
 
     protected InfraAgentReference emitter; // The transmitter of the message
     protected ArrayList<InfraAgentReference> receivers; // The list of the recipients of the message, if == null -> message is in broadcast
-    protected MessageTypes myType; // The matchingID of the message (Advertise, reply ..etc.)
+    protected MessageTypes myType; // The matchingID of the message (Advertise, reply, select, agree, bind, disconnect, TemporaryConnected ..etc.)
+
     /**
      * get the transmitter of the message
      * @return the reference of the transmitter of the message
@@ -59,7 +60,7 @@ public abstract class InfraMessage implements IMessage {
     }
 
     /**
-     * get the matchingID of message,  which can be : Advertise, reply, select, agree...
+     * get the matchingID of message,  which can be : Advertise, reply, select, agree, bind, disconnect...
      * @return the matchingID of the message
      */
     public abstract MessageTypes getMyType();

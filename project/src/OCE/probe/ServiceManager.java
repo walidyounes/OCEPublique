@@ -37,7 +37,7 @@ public class ServiceManager implements INotification {
             // Check if it's a reappearance of an past existed service
             if(this.disappearedServiceAgent.containsKey(service)){
                 System.out.println("The service reappeared = "+service.toString());
-                //Todo: before ordering the creation of a new service agent, we check if it's existed before and in that case we only wake it up
+                //Before ordering the creation of a new service agent, we check if it's existed before and in that case we only wake it up
                 OCELogger.log(Level.INFO, "Reactivation the appearing service agent = "+ this.disappearedServiceAgent.get(service).toString());
                 this.disappearedServiceAgent.get(service).setMyConnexionState(ServiceAgentConnexionState.NotConnected);
                 this.agentRecorder.getAllAgents().add(this.disappearedServiceAgent.get(service));

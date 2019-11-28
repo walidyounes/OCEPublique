@@ -69,13 +69,13 @@ public class AgentDirectory implements IAgentDirectory {
         agentsMessagesQueues.put(infrastructureAgent.getInfraAgentReference(), new ConcurrentLinkedQueue<>());
         unlockAgentEcriture(infrastructureAgent.getInfraAgentReference());
         referenceAgentListeners.forEach(agentListener -> agentListener.agentAjoute(infrastructureAgent.getInfraAgentReference()));
-        agentListeners.forEach(agentListener -> agentListener.agentAjoute(infrastructureAgent));
+        agentListeners.forEach(agentListener -> agentListener.addAgent(infrastructureAgent));
     }
 
     @Override
     public void removeAgent(InfraAgentReference infraAgentReference) {
 
-        agentListeners.forEach(agentListener -> agentListener.agentRetire(agents.get(infraAgentReference)));
+        agentListeners.forEach(agentListener -> agentListener.deleteAgent(agents.get(infraAgentReference)));
         lockAgentEcriture(infraAgentReference);
         agents.remove(infraAgentReference);
         agentsMessagesQueues.remove(infraAgentReference);

@@ -93,12 +93,12 @@ public class SelectMessage extends ARSAMessage {
             AgreeDecision agreeDecision=  new AgreeDecision(OCEAgentRef, agreeReceivers);
             // Add the reference contact of the Binder Agent
             agreeDecision.setBinderAgent(this.binderAgent);
-
+            //Deleting the other binder agent
+            //I moved the code elsewhere cause it causes problem
             return agreeDecision;
         }else{
             return new DoNothingDecision();
         }
-
 
     }
 

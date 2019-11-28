@@ -21,7 +21,6 @@ public class BindMessage extends OCEMessage {
      * create a bind perception
      * @param emitter    reference of the agent sending the bind message
      * @param receivers the references of the receivers of the bind message
-
      */
     public BindMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter = emitter;

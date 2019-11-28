@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -64,9 +65,16 @@ public class Record implements IRecord{
     public void unregisterOCEAgent(OCEAgent oceAgent) {
         //If the serviceAgent exist we delete it
         if(this.agentsReferenceMap.containsKey(oceAgent)){
+            System.out.println("Deleting from OCE the agent = " + oceAgent.toString());
             this.agentsReferenceMap.remove(oceAgent);
             //Delete the agent from the list for visualisation in the UI
-            this.listOCEAgents.remove(oceAgent);
+            //Add the agent to the list for visualisation in the UI
+            Platform.runLater(
+                    () -> {
+                        // Update UI here
+                        this.listOCEAgents.remove(oceAgent);
+                    }
+            );
         }
     }
 

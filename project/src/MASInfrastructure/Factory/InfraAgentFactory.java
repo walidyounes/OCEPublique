@@ -30,10 +30,13 @@ public class InfraAgentFactory implements IInfraAgentFactory, ISuicideService {
     }
 
     @Override
-    public void suicide(InfraAgentReference infraAgentReference) {
-        InfrastructureAgent infrastructureAgentSuicide = annuaire.getAgentByRef(infraAgentReference); // walid : Get the corresponding agent to delete from the scheduler
-        annuaire.removeAgent(infraAgentReference);
-        scheduler.deleteAgentFromScheduler(infrastructureAgentSuicide);
+    public void suicide(InfrastructureAgent infrastructureAgent) {
+        // InfrastructureAgent infrastructureAgentSuicide = annuaire.getAgentByRef(infraAgentReference); // walid : Get the corresponding agent to delete from the scheduler / walid delete this 26/11/2019
+        System.out.println(" Deleting from the infrastructure the agent = " + infrastructureAgent.toString());
+        //REmove the agent reference from the annuaire
+        annuaire.removeAgent(infrastructureAgent.getInfraAgentReference());
+        //Delete the agent from the infrastructure scheduler
+        scheduler.deleteAgentFromScheduler(infrastructureAgent);
     }
 
 }

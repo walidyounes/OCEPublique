@@ -4,6 +4,7 @@
 
 package MOICE.connectionManager;
 
+import AmbientEnvironment.MockupCompo.MockupComponent;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import OCE.ServiceConnection.Connection;
 
@@ -45,4 +46,10 @@ public interface IConnectionManager {
      * @return : the reference to the list of connections
      */
     List<Connection> getListConnectionProposedOCE();
+
+    /**
+     * Get the list of components present in the ambient environment
+     * @return  : the list of components
+     */
+    List<MockupComponent> getListComponents();
 }

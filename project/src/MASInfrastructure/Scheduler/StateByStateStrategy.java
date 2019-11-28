@@ -14,43 +14,43 @@ import java.util.concurrent.TimeUnit;
 
 public class StateByStateStrategy implements ISchedulingStrategies {
 
-    private List<InfrastructureAgent> listOrdonnancement; // liste d'ordonnancement des agents
+    private List<InfrastructureAgent> listAgentsToSchedule; // liste d'ordonnancement des agents
     private List<SchedulerListener> listListenerPourOrdonnanceur;
     private Map<InfrastructureAgent, IState> listEtatAgent;
-    private int vitesse;
+    private int speed;
     private boolean run = true;
     private int currentAgentCycle;
     private int maxCycleAgent;
 
 
     public StateByStateStrategy(List<InfrastructureAgent> listInfrastructureAgent, List<SchedulerListener> listListenerActuels) {
-        listOrdonnancement = listInfrastructureAgent;
+        listAgentsToSchedule = listInfrastructureAgent;
         listListenerPourOrdonnanceur = listListenerActuels;
         listEtatAgent = new HashMap<>();
         this.currentAgentCycle = 0;
         this.maxCycleAgent = 300;
         this.run = true;
-        // listOrdonnancement.forEach(agent -> listEtatAgent.put(agent, agent.getEtatInitial())); // todo : Walid
-        changerVitesse(EnumSpeed.CENT);
+        // listAgentsToSchedule.forEach(agent -> listEtatAgent.put(agent, agent.getEtatInitial())); // todo : Walid
+        changeSpeed(EnumSpeed.CENT);
     }
 
     @Override
-    public void ordonnancer() {
+    public void startScheduling() {
         run = true;
         InfrastructureAgent infrastructureAgentCourant;
         IState etatCourant;
         while (run) {
-            infrastructureAgentCourant = listOrdonnancement.get(0);
+            infrastructureAgentCourant = listAgentsToSchedule.get(0);
             etatCourant = listEtatAgent.get(infrastructureAgentCourant); //TOdo delete this line
             try {
-                TimeUnit.MICROSECONDS.sleep(vitesse);
+                TimeUnit.MICROSECONDS.sleep(speed);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             // changerEtatAgent(infrastructureAgentCourant, etatCourant.executer().orElseGet(infrastructureAgentCourant::getEtatInitial)); - todo Walid
-            listOrdonnancement.remove(infrastructureAgentCourant);
-            listOrdonnancement.add(infrastructureAgentCourant);
-            System.out.println("listOrdonnancement" + getListOrdonnancement());
+            listAgentsToSchedule.remove(infrastructureAgentCourant);
+            listAgentsToSchedule.add(infrastructureAgentCourant);
+            System.out.println("listAgentsToSchedule" + getListAgentsToSchedule());
             System.out.println("ListEtatAgent" + getListEtatAgent());
 
         }
@@ -60,8 +60,8 @@ public class StateByStateStrategy implements ISchedulingStrategies {
         return listEtatAgent;
     }
 
-    public List<InfrastructureAgent> getListOrdonnancement() {
-        return listOrdonnancement;
+    public List<InfrastructureAgent> getListAgentsToSchedule() {
+        return listAgentsToSchedule;
     }
 
     private void changerEtatAgent(InfrastructureAgent infrastructureAgentCourant, IState etatAbstract) {
@@ -71,46 +71,46 @@ public class StateByStateStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public void changerVitesse(EnumSpeed vitesse) {
-        switch (vitesse) {
+    public void changeSpeed(EnumSpeed speed) {
+        switch (speed) {
             case CENT:
-                this.vitesse = 10;
+                this.speed = 10;
                 break;
             case SOIXANTE_QUINZE:
-                this.vitesse = 15;
+                this.speed = 15;
                 break;
             case CINQUANTE:
-                this.vitesse = 20;
+                this.speed = 20;
                 break;
             case VINGT_CINQ:
-                this.vitesse = 50;
+                this.speed = 50;
                 break;
             case DIX:
-                this.vitesse = 100;
+                this.speed = 100;
                 break;
         }
     }
 
     @Override
-    public List<InfrastructureAgent> arreterOrdonnancement() {
+    public List<InfrastructureAgent> stopScheduling() {
         run = false;
-        return listOrdonnancement;
+        return listAgentsToSchedule;
     }
 
     @Override
-    public void addOrdonnaceurListener(SchedulerListener schedulerListener) {
+    public void addSchedulingListener(SchedulerListener schedulerListener) {
         listListenerPourOrdonnanceur.add(schedulerListener);
     }
 
     @Override
-    public void agentAjoute(InfrastructureAgent infrastructureAgent) {
-        listOrdonnancement.add(infrastructureAgent);
+    public void addAgent(InfrastructureAgent infrastructureAgent) {
+        listAgentsToSchedule.add(infrastructureAgent);
         listEtatAgent.put(infrastructureAgent, infrastructureAgent.getState());
     }
 
     @Override
-    public void agentRetire(InfrastructureAgent infrastructureAgent) {
-        listOrdonnancement.remove(infrastructureAgent);
+    public void deleteAgent(InfrastructureAgent infrastructureAgent) {
+        listAgentsToSchedule.remove(infrastructureAgent);
         listEtatAgent.remove(infrastructureAgent);
     }
 
@@ -118,7 +118,7 @@ public class StateByStateStrategy implements ISchedulingStrategies {
      * Put pause to the scheduling process of the agents
      */
     @Override
-    public void pauseOrdonnancement() {
+    public void pauseScheduling() {
         this.run = false;
     }
 
@@ -126,7 +126,7 @@ public class StateByStateStrategy implements ISchedulingStrategies {
      * Resume the execution of the scheduling process of the agents
      */
     @Override
-    public void repriseOrdonnancement() {
+    public void rerunScheduling() {
         this.run = true;
     }
 

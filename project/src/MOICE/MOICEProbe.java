@@ -101,6 +101,7 @@ public class MOICEProbe {
      * @param listener  : the listener to be removed
      */
     public void removePropertyChangeListener(PropertyChangeListener listener){
+        //we don't check if the listener exists because the function does it internally
         this.fileReceived.removePropertyChangeListener(listener);
     }
 }

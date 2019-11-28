@@ -12,5 +12,6 @@ public enum MessageTypes {
     FEEDBACK,
     DISCONNECT,
     BIND,
+    TemporaryConnected,
     SUICIDE;
 }

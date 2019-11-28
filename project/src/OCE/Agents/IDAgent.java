@@ -73,9 +73,14 @@ public class IDAgent implements Comparable{
         return internalReference.hashCode();
     }
 
+//    @Override
+//    public String toString() {
+//        return "OCE.IDAgent{" + this.visualizingName + "}";
+//    }
+
     @Override
     public String toString() {
-        return "OCE.IDAgent{" + this.visualizingName + "}";
+        return "{" + this.visualizingName + "}";
     }
 
     @Override

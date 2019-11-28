@@ -4,6 +4,9 @@
 
 package MOICE.feedbackManager;
 
+import AmbientEnvironment.MockupCompo.MockupComponent;
+import AmbientEnvironment.MockupCompo.MockupService;
+import AmbientEnvironment.OCPlateforme.OCService;
 import MOICE.connectionManager.IConnectionManager;
 import OCE.ServiceConnection.*;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +15,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.swing.text.html.Option;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.beans.PropertyChangeEvent;
@@ -44,186 +46,6 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
         this.support = new PropertyChangeSupport(this);
     }
 
-    //    @Override
-//    public void registerUserConfiguration(File OCEConfiguration, File ICEUserConfiguration, List<Connection> OCEConnectionList) {
-//        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//        try {
-//            DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
-//
-//            Document documentOCEConfiguration = dbBuilder.parse(OCEConfiguration);
-//            Document documentICEUserConfiguration = dbBuilder.parse(ICEUserConfiguration);
-//
-//            //Create the list of all component in the OCEConfiguration xml FIle
-//            NodeList componentsOCEConfiguration = documentOCEConfiguration.getElementsByTagName("component");
-//
-//            //Create the list of all component in the ICEUserConfiguration xml FIle
-//            NodeList componentsICEUserConfiguration = documentICEUserConfiguration.getElementsByTagName("component");
-//
-//            for (int indexOCE = 0; indexOCE < componentsOCEConfiguration.getLength(); indexOCE++){
-//                Node componentNode = componentsOCEConfiguration.item(indexOCE);
-//                if(componentNode.getNodeType() == Node.ELEMENT_NODE){
-//                    Element componentElement = (Element) componentNode;
-//                    //Search if the component exists in the USer configuration
-//                    String componentName = componentElement.getAttribute("Name");
-//                    Optional<Element> componentICEUserConfig = isComponentAvailable(componentName, componentsICEUserConfiguration);
-//                    //If the component is found
-//                    if(componentICEUserConfig.isPresent()){
-//                        NodeList serviceListOCEComponent = componentElement.getElementsByTagName("service");
-//                        NodeList serviceListICEComponent = componentICEUserConfig.get().getElementsByTagName("service");
-//
-//                        //The two service list have the same size (we don't delete services - > if the component is found they have the same services in the same order)
-//                        for(int indexService = 0; indexService < serviceListOCEComponent.getLength(); indexService++){
-//                            Node serviceNodeOCE = serviceListOCEComponent.item(indexService);
-//                            Node serviceNodeICE = serviceListICEComponent.item(indexService);
-//
-//                            if(serviceNodeOCE.getNodeType() == Node.ELEMENT_NODE && serviceNodeICE.getNodeType() == Node.ELEMENT_NODE ){
-//                                Element serviceElementOCE = (Element) serviceNodeOCE;
-//                                //Get the name of the service in OCE File
-//                                String serviceNameOCE = serviceElementOCE.getAttribute("Name");
-//                                //Get the matchingID of the service in OCE File
-//                                String serviceMatchingIDOCE = serviceElementOCE.getAttribute("matchingID");
-//
-//                                //Get the name of the service in ICE File
-//                                Element serviceElementICE = (Element) serviceNodeICE;
-//                                String serviceNameICE = serviceElementICE.getAttribute("Name");
-//                                //Get the matchingID of the service in ICE File
-//                                String serviceMatchingIDICE = serviceElementICE.getAttribute("matchingID");
-//
-//                                //Check if the service is provided or required
-//                                if(serviceElementOCE.getAttribute("xsi:type").contains("Provided")){
-//
-//                                    String bindRequiredOCE = convertBindPathToBindName(serviceElementOCE.getAttribute("bindRequired"),componentsOCEConfiguration);
-//                                    String bindRequiredICE = convertBindPathToBindName(serviceElementICE.getAttribute("bindRequired"),componentsICEUserConfiguration);
-//
-//                                    if(bindRequiredOCE.equalsIgnoreCase("") && bindRequiredICE.equalsIgnoreCase("")){ // The service was an remains not connected
-//                                        // No connection to annotate
-//                                        System.out.println(componentName + "."+ serviceNameOCE + " WAS and STILL NOT CONNECTED ");
-//                                    }else{
-//                                        if(bindRequiredOCE.equalsIgnoreCase("") && !bindRequiredICE.equalsIgnoreCase("")){ // A connection was added by the user
-//                                            System.out.println("The USER ADDED this connection " + " = = " + componentName + "."+ serviceNameICE + "-" + bindRequiredICE);
-//
-//                                        }else{
-//                                            //Search for the connection that this service is part of (we are sure that the service was connectd at this point)
-//                                            Map.Entry<Optional<Connection>, Optional<String>> foundConnection = serviceIsPartOfConnection(OCEConnectionList, componentName, serviceNameOCE, "PROVIDED", serviceMatchingIDOCE);
-//
-//                                            if(!bindRequiredOCE.equalsIgnoreCase("") && bindRequiredICE.equalsIgnoreCase("")) { // A connection was deleted by the user
-//                                                System.out.println("The USER DELETED this connection " + " = = " + componentName + "."+ serviceNameOCE + "-" + bindRequiredOCE);
-//                                                if (foundConnection.getKey().isPresent()){
-//                                                    //Mark the connection as REJECTED
-//                                                    IConnectionState connectionState = new RejectedConnectionState();
-//                                                    foundConnection.getKey().get().setMyConnectionState(connectionState);
-//                                                }
-//                                            }else{
-//                                                if(bindRequiredOCE.equalsIgnoreCase(bindRequiredICE)){ // Connection accepted by the user
-//                                                    //System.out.println(componentName + "."+ serviceNameOCE + "-" + bindRequiredOCE + " WAS NOT MODIFIED " + " = = " + componentName + "."+ serviceNameICE + "-" + bindRequiredICE);
-//                                                    System.out.println("The USER ACCEPTED this connection " + " = = " + componentName + "."+ serviceNameICE + "-" + bindRequiredICE);
-//
-//                                                    if (foundConnection.getKey().isPresent()){
-//                                                        //Mark the connection as ACCEPTED
-//                                                        IConnectionState connectionState = new AcceptedConnectionState();
-//                                                        foundConnection.getKey().get().setMyConnectionState(connectionState);
-//                                                    }
-//                                                }else{ // Connection modified by the user
-//                                                    System.out.println(componentName + "."+ serviceNameOCE + "-" + bindRequiredOCE + " WAS MODIFIED " + " = = " + componentName + "."+ serviceNameICE + "-" + bindRequiredICE);
-//                                                    //Todo : walid 03/11/2019 : this part is still to be addressed
-//                                                    if (foundConnection.getKey().isPresent()){
-//                                                        //Mark the connection as MODIFIED
-//                                                        IConnectionState connectionState = new ModifiedConnectionState();
-//                                                        foundConnection.getKey().get().setMyConnectionState(connectionState);
-//
-//                                                        //Check the rank of the service
-//                                                        if(foundConnection.getValue().get().equalsIgnoreCase("First")){
-//                                                            //Check the second service
-//                                                        }else{ // It is second service
-//
-//                                                        }
-//                                                    }
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//
-//                                }else{
-//                                    //It's a required service
-//                                    String bindProvidedOCE = convertBindPathToBindName(serviceElementOCE.getAttribute("bindProvided"),componentsOCEConfiguration);
-//                                    String bindProvidedICE = convertBindPathToBindName(serviceElementICE.getAttribute("bindProvided"),componentsICEUserConfiguration);
-//
-//                                    if(bindProvidedOCE.equalsIgnoreCase("") && bindProvidedICE.equalsIgnoreCase("")){ // The service was an remains not connected
-//                                        // No connection to annotate
-//                                        System.out.println(componentName + "."+ serviceNameOCE + " WAS and STILL NOT CONNECTED ");
-//                                    }else{
-//                                        if(bindProvidedOCE.equalsIgnoreCase("") && !bindProvidedICE.equalsIgnoreCase("")){ // A connection was added by the user
-//                                            System.out.println("The USER ADDED this connection " + " = = " + componentName + "."+ serviceNameICE + "-" + bindProvidedICE);
-//
-//                                        }else{
-//                                            //Search for the connection that this service is part of
-//                                            Map.Entry<Optional<Connection>, Optional<String>> foundConnection = serviceIsPartOfConnection(OCEConnectionList, componentName, serviceNameOCE, "REQUIRED", serviceMatchingIDOCE);
-//
-//                                            if(!bindProvidedOCE.equalsIgnoreCase("") && bindProvidedICE.equalsIgnoreCase("")) { // A connection was deleted by the user
-//                                                System.out.println("The USER DELETED this connection " + " = = " + componentName + "."+ serviceNameOCE + "-" + bindProvidedOCE);
-//                                                if (foundConnection.getKey().isPresent()){
-//                                                    //Mark the connection as REJECTED
-//                                                    IConnectionState connectionState = new RejectedConnectionState();
-//                                                    foundConnection.getKey().get().setMyConnectionState(connectionState);
-//                                                }
-//                                            }else{
-//                                                if(bindProvidedOCE.equalsIgnoreCase(bindProvidedICE)){ // Connection accepted by the user
-//                                                    //System.out.println(componentName + "."+ serviceNameOCE + "-" + bindRequiredOCE + " WAS NOT MODIFIED " + " = = " + componentName + "."+ serviceNameICE + "-" + bindRequiredICE);
-//                                                    System.out.println("The USER ACCEPTED this connection " + " = = " + componentName + "."+ serviceNameICE + "-" + bindProvidedICE);
-//
-//                                                    if (foundConnection.getKey().isPresent()){
-//                                                        //Mark the connection as ACCEPTED
-//                                                        IConnectionState connectionState = new AcceptedConnectionState();
-//                                                        foundConnection.getKey().get().setMyConnectionState(connectionState);
-//                                                    }
-//                                                }else{ // Connection modified by the user
-//                                                    System.out.println(componentName + "."+ serviceNameOCE + "-" + bindProvidedOCE + " WAS MODIFIED " + " = = " + componentName + "."+ serviceNameICE + "-" + bindProvidedICE);
-//                                                    //Todo : walid 03/11/2019 : this part is still to be addressed
-//                                                    if (foundConnection.getKey().isPresent()){
-//                                                        //Mark the connection as MODIFIED
-//                                                        IConnectionState connectionState = new ModifiedConnectionState();
-//                                                        foundConnection.getKey().get().setMyConnectionState(connectionState);
-//
-//                                                        //Check the rank of the service
-//                                                        if(foundConnection.getValue().get().equalsIgnoreCase("First")){
-//                                                            //Check the second service
-//                                                        }else{ // It is second service
-//
-//                                                        }
-//                                                    }
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//
-////                                    if(bindProvidedOCE.equalsIgnoreCase(bindProvidedICE)){
-////                                        System.out.println(componentName + "."+ serviceNameOCE + "-" + bindProvidedOCE + " WAS NOT MODIFIED " + " = = " +  componentName + "."+ serviceNameICE + "-" + bindProvidedICE);
-////                                        //System.out.println(bindProvidedOCE + " was not modified " + " - " + bindProvidedICE);
-////                                        if (foundConnection.getKey().isPresent()){
-////                                            //Mark the connection as ACCEPTED
-////                                            IConnectionState connectionState = new AcceptedConnectionState();
-////                                            foundConnection.getKey().get().setMyConnectionState(connectionState);
-////                                        }
-////                                    }else{
-////                                        System.out.println(componentName + "."+ serviceNameOCE + "-" + bindProvidedOCE + " WAS MODIFIED " + " = = " +  componentName + "."+ serviceNameICE + "-" + bindProvidedICE);
-////                                        // System.out.println(bindProvidedOCE + " was modified to = " + bindProvidedICE);
-////                                    }
-//                                }
-//                            }
-//
-//                        }
-//
-//                    }else{
-//                        //The user deleted this component from the configuration -> all the binding of this component's services are disconnected
-//                        System.out.println( componentName + " was deleted by the user !");
-//                    }
-//                }
-//            }
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-
     /**
      * Use the configuration send by ICE, compute the difference with the configuration proposed by OCE and use it to annotate the connections
      * @param OCEConfigurationPath      : the path of the file send by ICE
@@ -231,6 +53,8 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
      */
     @Override
     public void registerUserConfiguration(String OCEConfigurationPath, String ICEUserConfigurationPath) {
+        //Get the list of components present in the ambient environment
+        List<MockupComponent> componentsList = this.connectionManager.getListComponents();
         //Get the initial connections proposed by ICE
         List<Connection> OCEConnectionList = this.connectionManager.getListConnectionProposedOCE();
         //Save the list of connections before annotation
@@ -340,18 +164,46 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
                                                 }
                                             } else { // Connection modified by the user
                                                 System.out.println(componentName + "." + serviceNameOCE + "-" + bindOCE + " WAS MODIFIED " + " = = " + componentName + "." + serviceNameICE + "-" + bindICE);
-                                                //Todo : walid 03/11/2019 : this part is still to be addressed
                                                 if (foundConnection.getKey().isPresent()) {
-                                                    //We don't check if the connection have been annotated before cause we need to annotate each service is modified to what
                                                     //Mark the connection as MODIFIED
-                                                    IConnectionState connectionState = new ModifiedConnectionState();
-                                                    foundConnection.getKey().get().setMyConnectionState(connectionState);
+                                                    IConnectionState connectionState=null;
 
-                                                    //Check the rank of the service
-                                                    if (foundConnection.getValue().get().equalsIgnoreCase("First")) {
-                                                        System.out.println("The FIRST service = " + componentName + "." + serviceNameOCE + "is connected to ="+ bindICE);
-                                                    } else { // It is second service
-                                                        System.out.println("The SECOND service = "+ bindOCE+  "is connected to ="+ bindICE );
+                                                    //Check if the connection was annotated before
+                                                    if(foundConnection.getKey().get().getMyConnectionState().isPresent()){
+                                                        //Check if the connection was annotated as modified
+                                                        if(foundConnection.getKey().get().getMyConnectionState().get() instanceof ModifiedConnectionState ){
+                                                            //Get the reference to the modified state
+                                                            System.out.println("already annotated as modified ! ");
+                                                            connectionState = foundConnection.getKey().get().getMyConnectionState().get();
+                                                        }else{
+                                                            //We don't check if the connection have been annotated as REJECTED cause when we treat the connection we check -> we replace the rejected by modify
+                                                            //Change the annotation of the connection from rejected to modified
+                                                            connectionState = new ModifiedConnectionState();
+                                                            System.out.println("Was annotated as REJECTED, now annotated as MODIFIED! ");
+                                                        }
+
+                                                    }else {
+                                                        //It's the first time this connection is been annotated
+                                                        connectionState = new ModifiedConnectionState();
+                                                        System.out.println("first time getting annotated as modified! ");
+                                                    }
+                                                    //Annotated the connection
+                                                    foundConnection.getKey().get().setMyConnectionState(connectionState);
+                                                    //If the current service is provided we are looking for a required service and vice versa
+                                                    String serviceTypeToFind = "";
+                                                    if(serviceType.equalsIgnoreCase("PROVIDED")) serviceTypeToFind = "REQUIRED";
+                                                    else serviceTypeToFind = "PROVIDED";
+                                                    //Get the service to which the current service is connected to
+                                                    Optional<MockupService> modifiedToService = this.getServiceByNameOwner(bindICE,serviceTypeToFind,serviceMatchingIDICE, componentsList);
+                                                    if(modifiedToService.isPresent()){
+                                                        //Check the rank of the service
+                                                        if (foundConnection.getValue().get().equalsIgnoreCase("First")) {
+                                                            ((ModifiedConnectionState)connectionState).setSecondServiceChangedTo(modifiedToService.get());
+                                                            System.out.println("The FIRST service = " + componentName + "." + serviceNameOCE + "is connected to ="+ bindICE + " == " + modifiedToService);
+                                                        } else { // It is second service
+                                                            ((ModifiedConnectionState)connectionState).setFirstServiceChangedTo(modifiedToService.get());
+                                                            System.out.println("The SECOND service = "+ bindOCE+  "is connected to ="+ bindICE + " == " + modifiedToService );
+                                                        }
                                                     }
                                                 }
                                             }
@@ -369,6 +221,9 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
             }
             //Notify the listener that the feedback is computed and the connections are annotated
             this.support.firePropertyChange("AnnotatedConnection", this.connectionsBeforeAnnotation, OCEConnectionList );
+
+            //Delete the initial connections proposed by ICE
+            this.connectionManager.getListConnectionProposedOCE().clear();
             try{
                 //Delete the two files after computing feedback
                 OCEConfiguration.delete();
@@ -469,6 +324,62 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
         return new AbstractMap.SimpleEntry<Optional<Connection>, Optional<String>>(connectionFound, rankToFind);
     }
 
+    /**
+     * Fetch in the list of components and services for the service that matches the parameter of serviceName and Component Owner name
+     * @param serviceOwnerServiceName   : the name of the service and the name of the component owner
+     * @param serviceType               : the type of the service (required or provided)
+     * @param matchingID                : the matching Id of the service
+     * @param componentList             : the list of components in the ambient environment
+     * @return  : the reference to the service if it's exist, and "empty" if not
+     */
+    Optional<MockupService> getServiceByNameOwner(String serviceOwnerServiceName, String serviceType, String matchingID,List<MockupComponent> componentList){
+        Optional<MockupService> foundService  = Optional.empty();
+        //Split the name of the component owner and the name of the service
+        String[] tmpSplit = StringUtils.split(serviceOwnerServiceName, ".");
+        System.out.println(tmpSplit);
+
+        String serviceName = tmpSplit[1];
+        String componentOwnerName = tmpSplit[0];
+
+        //Iterate of the list of components
+        boolean found = false;
+        Iterator<MockupComponent> mockupComponentIterator = componentList.iterator();
+        while(mockupComponentIterator.hasNext() && !found){
+            //Get the component
+            MockupComponent currentComponent = mockupComponentIterator.next();
+            //If it's the component that we are looking for
+            if(currentComponent.getName().equalsIgnoreCase(componentOwnerName)){
+                //Check for the service if it exists in the required/Provided services list
+                Optional<Iterator<OCService>> serviceIterator = Optional.empty();
+                //Initialise the iterator with the one from provided/ Required service list
+                if(serviceType.equalsIgnoreCase("Required")){
+                    if(!currentComponent.getRequiredServices().isEmpty()){
+                        //Initialise the iterator with the one of the required service list
+                        serviceIterator = Optional.ofNullable(currentComponent.getRequiredServices().iterator());
+                    }
+                }else{
+                    if(!currentComponent.getProvidedServices().isEmpty()){
+                        //Initialise the iterator with the one of the provided service list
+                        serviceIterator = Optional.ofNullable(currentComponent.getProvidedServices().iterator());
+                    }
+                }
+                if(serviceIterator.isPresent()){
+                    //Search through the iterator for the service
+                    while (serviceIterator.get().hasNext() && !found){
+                        //Get and cast the current service in the list
+                        MockupService currentMockService = (MockupService) serviceIterator.get().next();
+                        //Check if it's the required service in question
+                        if(currentMockService.getName().equalsIgnoreCase(serviceName) &&currentMockService.getMatchingID().equalsIgnoreCase(matchingID)){
+                            found = true;
+                            foundService = Optional.ofNullable(currentMockService);
+                        }
+                    }
+                }
+            }
+        }
+        return foundService;
+    }
+
     @Override
     public void collectFeedback() {
 
@@ -487,6 +398,7 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
      * @param listener  : the listener to be removed
      */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
+        //we don't check if the listener exists because the function does it internally
         support.removePropertyChangeListener(listener);
     }
 

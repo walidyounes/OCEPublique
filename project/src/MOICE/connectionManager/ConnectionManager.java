@@ -149,4 +149,13 @@ public class ConnectionManager implements IConnectionManager {
     public List<Connection> getListConnectionProposedOCE() {
         return this.listConnections;
     }
+
+    /**
+     * Get the list of components available in the ambient environment
+     * @return the list of components
+     */
+    @Override
+    public ArrayList<MockupComponent> getListComponents() {
+        return this.listComponents;
+    }
 }

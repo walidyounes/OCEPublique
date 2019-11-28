@@ -73,9 +73,9 @@ public class ICEXMLFormatter implements IFileFormatter {
 
                                 bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID() + "\" "
                                         + "bindRequired=\"//@component."+ indexes.getKey()+
-                                        "/@service."+ indexes.getValue()+"\"/>\n");
+                                        "/@service."+ indexes.getValue()+"\" Cardinality=\"1\"/>\n");
                             } else {
-                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID() +"\"/>\n");
+                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID() +"\" Cardinality=\"1\"/>\n");
                             }
                         }
                     }
@@ -88,9 +88,9 @@ public class ICEXMLFormatter implements IFileFormatter {
 
                                 bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID()+"\" "
                                         + "bindProvided=\"//@component."+ indexes.getKey()+
-                                        "/@service."+ indexes.getValue()+"\"/>\n");
+                                        "/@service."+ indexes.getValue()+"\" Cardinality=\"1\"/>\n");
                             } else {
-                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID()+"\"/>\n");
+                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID()+"\" Cardinality=\"1\"/>\n");
                             }
                         }
                     }

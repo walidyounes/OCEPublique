@@ -10,6 +10,7 @@ import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import Midlleware.ThreeState.IActionState;
 import Midlleware.ThreeState.IDecisionState;
 import Midlleware.ThreeState.IPerceptionState;
+import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.CurrentSituationEntry;
@@ -33,12 +34,13 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     private ServiceAgentConnexionState myConnexionState;                        // The state of the service agent
     private Optional<ServiceAgent> connectedTo;                                 // The reference for the service agent which are connected to, it's set to null if the agent is not connected
     private IOCEBinderAgentFactory myBinderAgentFactory;                        // The reference for the binder agent factory
-    private Situation<CurrentSituationEntry> myCurrentSituation;                // The current situation under construction
-    private Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation;    // The scored current situation of the agent
+    private Optional<Situation<CurrentSituationEntry>> myCurrentSituation;                // The current situation under construction
+    private Optional<Situation<ScoredCurrentSituationEntry>> myScoredCurrentSituation;    // The scored current situation of the agent
     private Set<Situation<ReferenceSituationEntry>> myKnowledgeBase;            // The agent's knowledge base
-    private int myCurrentCycleNumber; // Todo just for the test of the presentation issue of an assembly to the user
+    private int myCurrentCycleNumber;                                           // Todo just for the test of the presentation issue of an assembly to the user
     private boolean feedbackReceived;                                           // The variable to indicate whether the agent received the feedback or not
     private FeedbackValues feedbackValue;                                       // The feedback value
+    private Optional<BinderAgent> myBinderAgent;                                // The binder agent
 
     /**
      * Create a service Agent specifying a random ID
@@ -55,14 +57,14 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myWayOfAction = myWayOfAction;
         this.myInfrastructureAgent = null;
         this.myConnexionState = ServiceAgentConnexionState.Created;
-        //Initialised the attribute to empty cause the agent start not connected
-        this.connectedTo = Optional.empty();
+        this.connectedTo = Optional.empty(); //Initialised the attribute to empty cause the agent start not connected
+        this.myBinderAgent = Optional.empty(); //Initialised the attribute to empty cause the agent doesn't have a binder agent yet
         //Initialise at null it means that it's the start of an engine cycle
-        this.myCurrentSituation = null;
-        this.myScoredCurrentSituation = null;
+        this.myCurrentSituation = Optional.empty();
+        this.myScoredCurrentSituation = Optional.empty();
         this.myCurrentCycleNumber = 0;
         //Todo : change implementation to add uploading of old knowledge
-        myKnowledgeBase = new HashSet<>();
+        this.myKnowledgeBase = new HashSet<>();
     }
 
     /**
@@ -81,12 +83,14 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myWayOfAction = myWayOfAction;
         this.myInfrastructureAgent = null;
         this.myConnexionState = ServiceAgentConnexionState.Created;
-        //Initialise at null it means that it's the start of an engine cycle
-        this.myCurrentSituation = null;
-        this.myScoredCurrentSituation = null;
+        this.connectedTo = Optional.empty(); //Initialised the attribute to empty cause the agent start not connected
+        this.myBinderAgent = Optional.empty(); //Initialised the attribute to empty cause the agent doesn't have a binder agent yet
+        //Initialise to Empty it means that it's the start of an engine cycle
+        this.myCurrentSituation = Optional.empty();
+        this.myScoredCurrentSituation =  Optional.empty();
         this.myCurrentCycleNumber = 0;
         //Todo : change implementation to add uploading of old knowledge
-        myKnowledgeBase = new HashSet<>();
+        this.myKnowledgeBase = new HashSet<>();
     }
 
 
@@ -141,9 +145,9 @@ public class ServiceAgent extends OCEAgent implements Comparable {
 
     /**
      * Get the current situation of the agent in its current cycle
-     * @return the reference of the current situation or null if it's the beginning of an engine cycle
+     * @return the reference of the current situation or "emtpy" if it's the beginning of an engine cycle
      */
-    public Situation<CurrentSituationEntry> getMyCurrentSituation() {
+    public Optional<Situation<CurrentSituationEntry>> getMyCurrentSituation() {
         return myCurrentSituation;
     }
 
@@ -152,14 +156,21 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      * @param myCurrentSituation : the new current situation
      */
     public void setMyCurrentSituation(Situation<CurrentSituationEntry> myCurrentSituation) {
-        this.myCurrentSituation = myCurrentSituation;
+        this.myCurrentSituation = Optional.ofNullable(myCurrentSituation);
+    }
+
+    /**
+     * reset the value of the current situation to default value (empty)
+     */
+    public void resetMyCurrentSituation() {
+        this.myCurrentSituation = Optional.empty();
     }
 
     /**
      * Get the scored current situation
-     * @return the reference of the scored current situation or null if it's the beginning of an engine cycle
+     * @return the reference of the scored current situation or "empty" if it's the beginning of an engine cycle
      */
-    public Situation<ScoredCurrentSituationEntry> getMyScoredCurrentSituation() {
+    public Optional<Situation<ScoredCurrentSituationEntry>> getMyScoredCurrentSituation() {
         return myScoredCurrentSituation;
     }
 
@@ -168,9 +179,15 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      * @param myScoredCurrentSituation : the new scored current situation
      */
     public void setMyScoredCurrentSituation(Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation) {
-        this.myScoredCurrentSituation = myScoredCurrentSituation;
+        this.myScoredCurrentSituation = Optional.ofNullable(myScoredCurrentSituation);
     }
 
+    /**
+     * reset the value of the scored current situation to default value (empty)
+     */
+    public void resetMyScoredCurrentSituation() {
+        this.myScoredCurrentSituation = Optional.empty();
+    }
     /**
      * Get the current agent cycle value
      * @return the value of the current agent cycle
@@ -206,8 +223,15 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      * Set the value for the attribute expressing with whom this agent is connected to
      * @param connectedTo : the new value to update
      */
-    public void setConnectedTo(Optional<ServiceAgent> connectedTo) {
-        this.connectedTo = connectedTo;
+    public void setConnectedTo(ServiceAgent connectedTo) {
+        this.connectedTo = Optional.ofNullable(connectedTo);
+    }
+
+    /**
+     * Reset to default "empty" the value for the field "connectedTo" expressing with whom this agent is connected to
+     */
+    public void resetConnectedTo() {
+        this.connectedTo = Optional.empty();
     }
 
     /**
@@ -234,7 +258,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         if(this.myScoredCurrentSituation != null){
             //Transform the scored current situation to a reference situation
             Situation<ReferenceSituationEntry> referenceSituationToAdd = new Situation<>();
-            Map<IDAgent, ScoredCurrentSituationEntry> setScoredCurrentSituationEntry = this.myScoredCurrentSituation.getAgentSituationEntries();
+            Map<IDAgent, ScoredCurrentSituationEntry> setScoredCurrentSituationEntry = this.myScoredCurrentSituation.get().getAgentSituationEntries();
             // Transform the scored situation entry to a reference situation entry
             for(IDAgent idAgent : setScoredCurrentSituationEntry.keySet()){
                 referenceSituationToAdd.addSituationEntry(idAgent, setScoredCurrentSituationEntry.get(idAgent).toReferenceSituationEntry());
@@ -331,6 +355,28 @@ public class ServiceAgent extends OCEAgent implements Comparable {
 
     }
 
+    /**
+     * Get the reference if the binder agent of this service agent
+     * @return  : the reference of the binderAgent if it exist or Empty
+     */
+    public Optional<BinderAgent> getMyBinderAgent() {
+        return myBinderAgent;
+    }
+
+    /**
+     * Set the reference to the binder agent of this service agent
+     * @param myBinderAgent : the reference of the binder agent
+     */
+    public void setMyBinderAgent(BinderAgent myBinderAgent) {
+        this.myBinderAgent = Optional.ofNullable(myBinderAgent);
+    }
+
+    /**
+     * Set the reference to the binder agent of this service agent to Empty (NULL)
+     */
+    public void deleteMyBinderAgent(){
+        this.myBinderAgent = Optional.empty();
+    }
     /**
      *  Compare two Service Agents (the comparison is compute on the handled Service)
      * @param o the service agent to compare this to

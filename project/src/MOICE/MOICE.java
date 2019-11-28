@@ -4,6 +4,7 @@
 
 package MOICE;
 
+import AmbientEnvironment.MockupCompo.MockupComponent;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import MOICE.connectionManager.ConnectionManager;
 import MOICE.connectionManager.IConnectionManager;
@@ -100,6 +101,16 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     @Override
     public List<Connection> getListConnectionProposedOCE() {
         return this.myConnectionManager.getListConnectionProposedOCE();
+    }
+
+    /**
+     * Get the list of components present in the ambient environment
+     *
+     * @return : the list of components
+     */
+    @Override
+    public List<MockupComponent> getListComponents() {
+        return this.myConnectionManager.getListComponents();
     }
 
     /**

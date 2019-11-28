@@ -6,6 +6,7 @@ package OCE.Agents.ServiceAgentPack.Learning;
 
 import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.IAgentSelectionStrategy;
+import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.OCEMessages.MessageTypes;
 
 import java.text.DecimalFormat;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class SituationUtility {
+    public static double CSN = 0.2; // The variable that indicates the sensitivity coefficient to novelty of the user (default value = 0.2)
+
     /**
      * Compute the intersection between two situation given as parameter
      * @param firstSituation  : the first situation
@@ -123,9 +126,16 @@ public class SituationUtility {
      */
     public static Situation<ScoredCurrentSituationEntry> scoreCurrentSituation(Situation<CurrentSituationEntry> currentSituation, Map<Situation<ReferenceSituationEntry>, Double> listReferenceSituations, double initialValue){
         Situation<ScoredCurrentSituationEntry> scoredCurrentSituation = new Situation<>(); // Create an empty situation
+        List<ScoredCurrentSituationEntry> situationEntriesToScoreLaterMax = new ArrayList<>(); // List of situations entries to score with maximum value after all the other scores were compute
+        List<ScoredCurrentSituationEntry> situationEntriesToScoreLaterMean = new ArrayList<>(); // List of situations entries to score with sum value after all the other scores were compute
+
+        double maxScoreValue=0; //Maximum of scores of the agents that we managed to score in this situation
+        double sumScoreValue=0; //The sum of scores of the agents that we managed to score in the current situation
+
         //For each service agent in the current situation
         for (IDAgent serviceAgent : currentSituation.getAgentSituationEntries().keySet()){
             int count = 0; // the number of references situations where the service agent appears
+
             double scoreServiceAgent = initialValue; // the value of score (the mean of scores from the reference situation where the service agent appears or initial value)
             //For each similar reference situations
             for(Situation<ReferenceSituationEntry> referenceSituation : listReferenceSituations.keySet()){
@@ -142,19 +152,51 @@ public class SituationUtility {
             MessageTypes messageType = currentSituation.getAgentSituationEntries().get(serviceAgent).getMessageType();
             //check if the service agent appears at least in one reference situation
             if(count!=0) {
+                //Update the maximum of scores  of the agents that we managed to score in the current situation
+                if(scoreServiceAgent > maxScoreValue){
+                    maxScoreValue = scoreServiceAgent;
+                }
+                //Update the sum of scores  of the agents that we managed to score in the current situation
+                sumScoreValue = sumScoreValue + scoreServiceAgent;
+
                 //Compute the mean of scores
                 scoreServiceAgent = scoreServiceAgent / count;
                 //Todo : change this code and put it in a function in the class PackageSituation.CurrentSituationEntry
                 //Create a scoredCurrentSituationEntry for the service agent
                 serviceAgentScoredEntry = new ScoredCurrentSituationEntry(serviceAgent, messageType, scoreServiceAgent);
+
             }else{ // The service agent doesn't appear in any reference situation
-                //Generate a random score
                 //Create a scoredCurrentSituationEntry for the service agent
                 serviceAgentScoredEntry = new ScoredCurrentSituationEntry(serviceAgent, messageType, scoreServiceAgent);
+
+                //Generate a random probability of sensitivity coefficient to novelty
+                Random random = new Random();
+                double probatCSN = random.nextDouble();
+                System.out.println("Probabilite de CSN = "+probatCSN);
+                if(probatCSN <= SituationUtility.CSN){ //Score with maximum
+                    situationEntriesToScoreLaterMax.add(serviceAgentScoredEntry);
+                }else{//Score with sum of values
+                    situationEntriesToScoreLaterMean.add(serviceAgentScoredEntry);
+                }
             }
             //Add the entry to the scored situation entry
             scoredCurrentSituation.addSituationEntry(serviceAgent, serviceAgentScoredEntry);
         }
+        //Update the scores for the service agents that we couldn't score
+
+        Random random = new Random();
+        double finalMaxScoreValue = maxScoreValue;
+        situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue+random.nextDouble()));
+        //we compute the mean values of the score  (we take out the maximum score and the agent if the number of agents >2)
+        int numberAgents = 0;
+        if(scoredCurrentSituation.getAgentSituationEntries().size() > 2 ){
+            numberAgents = (scoredCurrentSituation.getAgentSituationEntries().size() -2);
+        }else{
+            numberAgents = scoredCurrentSituation.getAgentSituationEntries().size();
+        }
+        double finalMeanValue = (sumScoreValue-maxScoreValue) /numberAgents;
+        situationEntriesToScoreLaterMean.forEach(se-> se.setScore(finalMeanValue));
+
         return scoredCurrentSituation;
     }
 

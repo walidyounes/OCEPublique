@@ -40,6 +40,7 @@ public class SelectDecision extends OCEDecision {
     private BinderAgent instantiateBinderAgent(IOCEBinderAgentFactory binderAgentFactory){
         return binderAgentFactory.createBinderAgent().getKey();
     }
+
     @Override
     public void toSelfTreat(ICommunicationAdapter communicationAdapter) {
         OCELogger.log(Level.INFO, "Treating a Select decision ! ");
@@ -50,10 +51,12 @@ public class SelectDecision extends OCEDecision {
         ArrayList<OCEAgent> bindReceivers = new ArrayList<>();
         bindReceivers.add(this.myBinderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter,bindReceivers);
-        // Change the state of the agent to "Waiting state" //Todo: walid 04/02/2019 : I deleted this _> 04/09 ça provoque un bug -> i put it back
+        // Change the state of the agent to "Waiting state"
         ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.Waiting);
         //Set the selectedAgent ot be verified later
         this.emitter.setMySelectedAgent(this.receivers.get(0));
+        //Set the binder agent in the service agent
+        ((ServiceAgent)this.emitter).setMyBinderAgent(this.myBinderAgent);
     }
 
     @Override

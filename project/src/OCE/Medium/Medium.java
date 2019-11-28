@@ -16,6 +16,8 @@ import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import javafx.collections.ObservableList;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
@@ -24,12 +26,15 @@ public class Medium implements IRecord, ICommunicationAdapter {
 
     private IRecord myRecorder;
     private ICommunicationAdapter myCommunicationAdapter;
+    private PropertyChangeSupport support;                  //Support to notify the listeners of changes that occurs to a property of this class
 
     public Medium(ICommunication communicationInfrastructure) {
         //Instantiate the recorder
         this.myRecorder = new Record();
         //Instantiate the communication adapter with the communication module from the infrastructure
         this.myCommunicationAdapter = new CommunicationAdapter(communicationInfrastructure, myRecorder);
+        //Instantiate the support for the property
+        this.support = new PropertyChangeSupport(this);
     }
 
     /**
@@ -96,6 +101,8 @@ public class Medium implements IRecord, ICommunicationAdapter {
     @Override
     public void unregisterOCEAgent(OCEAgent oceAgent) {
         this.myRecorder.unregisterOCEAgent(oceAgent);
+        //sending notification for the listeners in the infrastructures to delete the agent
+        this.support.firePropertyChange("DeleteAgent",null,oceAgent);
     }
 
     /**
@@ -159,5 +166,22 @@ public class Medium implements IRecord, ICommunicationAdapter {
     @Override
     public ObservableList<OCEAgent> getAllAgents() {
         return this.myRecorder.getAllAgents();
+    }
+
+    /**
+     * Add a listener to be informed when an event occurs
+     * @param listenerToAdd : the listener to add
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listenerToAdd){
+        this.support.addPropertyChangeListener(listenerToAdd);
+    }
+
+    /**
+     * Remove from the list of listener the listener given as a parameter
+     * @param listenerToDelete  : the listener to delete
+     */
+    public void deletePropertyChangeListener(PropertyChangeListener listenerToDelete){
+        //we don't check if the listener exists because the function does it internally
+        this.support.removePropertyChangeListener(listenerToDelete);
     }
 }

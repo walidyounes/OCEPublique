@@ -10,23 +10,23 @@ import MASInfrastructure.Directory.IAgentListener;
 import java.util.List;
 
 public interface ISchedulingStrategies extends IAgentListener {
-    void ordonnancer();
+    void startScheduling();
 
-    void changerVitesse(EnumSpeed vitesse);
+    void changeSpeed(EnumSpeed speed);
 
-    List<InfrastructureAgent> arreterOrdonnancement();
+    List<InfrastructureAgent> stopScheduling();
 
-    void pauseOrdonnancement();
+    void pauseScheduling();
 
-    void repriseOrdonnancement();
+    void rerunScheduling();
 
     void setMaxCycleAgent(int maxCycleAgent);
 
     void resetCurrentCycleAgent();
 
-    void addOrdonnaceurListener(SchedulerListener schedulerListener);
+    void addSchedulingListener(SchedulerListener schedulerListener);
 
-    void agentAjoute(InfrastructureAgent infrastructureAgent);
+    void addAgent(InfrastructureAgent infrastructureAgent);
 
-    void agentRetire(InfrastructureAgent infrastructureAgent);
+    void deleteAgent(InfrastructureAgent infrastructureAgent);
 }

@@ -16,7 +16,10 @@ import MASInfrastructure.Factory.IInfraAgentFactory;
 import MASInfrastructure.Factory.ISuicideService;
 import MASInfrastructure.Factory.InfraAgentFactory;
 import MASInfrastructure.Scheduler.*;
+import OCE.Agents.OCEAgent;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +28,7 @@ import java.util.Optional;
 /**
  * MASInfrastructure
  */
-public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICommunication, IScheduler {
+public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICommunication, IScheduler, PropertyChangeListener {
 
     private InfraAgentFactory infraAgentFactory;
     private IScheduler scheduler;
@@ -38,7 +41,7 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     }
 
     @Override
-    public void suicide(InfraAgentReference agent) {
+    public void suicide(InfrastructureAgent agent) {
         infraAgentFactory.suicide(agent);
     }
 
@@ -148,5 +151,25 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     @Override
     public void resetCurrentCycleAgent() {
         this.scheduler.resetCurrentCycleAgent();
+    }
+
+    /**
+     * This method gets called when a bound property is changed.
+     *
+     * @param evt A PropertyChangeEvent object describing the event source
+     *            and the property that has changed.
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        //Depending on the name of the property we do the corresponding operation
+//        switch (evt.getPropertyName()){
+//            case "DeleteAgent" :
+                //Get the reference of the deleted Agent
+                InfrastructureAgent agentToDelete = ((OCEAgent)evt.getNewValue()).getMyInfrastructureAgent();
+                System.out.println("Event detected : Deleting agent from the Infrastructure  " + agentToDelete);
+                //Order the delete
+                this.suicide(agentToDelete);
+//                break;
+//        }
     }
 }

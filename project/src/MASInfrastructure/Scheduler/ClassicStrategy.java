@@ -13,9 +13,9 @@ import java.util.logging.Level;
 
 public class ClassicStrategy implements ISchedulingStrategies {
 
-    private List<InfrastructureAgent> listOrdonnancement; // list of observed agents
-    private List<SchedulerListener> listListenerPourOrdonnanceur; // list of observers
-    private int vitesse;
+    private List<InfrastructureAgent> listAgentsToSchedule; // list of observed agents
+    private List<SchedulerListener> schedulerListeners; // list of observers
+    private int speed;
     private int currentAgentCycle;
     private int maxCycleAgent;
     private boolean run;
@@ -28,13 +28,13 @@ public class ClassicStrategy implements ISchedulingStrategies {
      * @param listListenerActuels
      */
     public ClassicStrategy(List<InfrastructureAgent> listInfrastructureAgents, List<SchedulerListener> listListenerActuels) {
-        listOrdonnancement = listInfrastructureAgents;
+        listAgentsToSchedule = listInfrastructureAgents;
         this.run= true;
         this.currentAgentCycle = 0;
         this.maxCycleAgent = defaultMaxCycleAgent;
         this.stop = false;
-        listListenerPourOrdonnanceur = listListenerActuels;
-        changerVitesse(EnumSpeed.CENT);
+        schedulerListeners = listListenerActuels;
+        changeSpeed(EnumSpeed.CENT);
     }
 
 /*	@Override
@@ -42,18 +42,18 @@ public class ClassicStrategy implements ISchedulingStrategies {
 		run = true;
 		OCE.InfrastructureAgent agentCourant;
 		while (run) {
-			agentCourant = listOrdonnancement.get(0);
+			agentCourant = listAgentsToSchedule.get(0);
 			LifeCycle(agentCourant.getInfraAgentReference(), agentCourant.getEtatInitial());
-			listOrdonnancement.remove(agentCourant);
-			listOrdonnancement.add(agentCourant);
+			listAgentsToSchedule.remove(agentCourant);
+			listAgentsToSchedule.add(agentCourant);
 
-			System.out.println("listOrdonnancement" + getListOrdonnancement());
+			System.out.println("listAgentsToSchedule" + getListAgentsToSchedule());
 		}
 	}
 */
 
     @Override
-    public void ordonnancer() {
+    public void startScheduling() {
         //Initialize the parameters for the execution
         this.run = true;
         this.stop = false;
@@ -63,12 +63,12 @@ public class ClassicStrategy implements ISchedulingStrategies {
         while(!stop) {
             synchronized (this) {
                 while (this.currentAgentCycle < this.maxCycleAgent) {
-                    currentInfrastructureAgent = listOrdonnancement.get(0);
+                    currentInfrastructureAgent = listAgentsToSchedule.get(0);
                     OCELogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfrastructureAgent.getInfraAgentReference() + " ***********************************");
                     //LifeCycle(currentInfrastructureAgent.getInfraAgentReference(), currentInfrastructureAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
                     currentInfrastructureAgent.run(); // change the state of the agent
-                    listOrdonnancement.remove(currentInfrastructureAgent);
-                    listOrdonnancement.add(currentInfrastructureAgent);
+                    listAgentsToSchedule.remove(currentInfrastructureAgent);
+                    listAgentsToSchedule.add(currentInfrastructureAgent);
 
                     this.currentAgentCycle++;
                 }
@@ -76,16 +76,16 @@ public class ClassicStrategy implements ISchedulingStrategies {
         }
     }
 
-    public List<InfrastructureAgent> getListOrdonnancement() {
-        return listOrdonnancement;
+    public List<InfrastructureAgent> getListAgentsToSchedule() {
+        return listAgentsToSchedule;
     }
 
     /*
         private void LifeCycle(InfraAgentReference agentCourantReference, EtatAbstract etatAbstract) {
-            listListenerPourOrdonnanceur.forEach(
+            schedulerListeners.forEach(
                     ordonnanceurListener -> ordonnanceurListener.changementEtat(agentCourantReference, etatAbstract));
             try {
-                TimeUnit.MICROSECONDS.sleep(vitesse);
+                TimeUnit.MICROSECONDS.sleep(speed);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -94,46 +94,46 @@ public class ClassicStrategy implements ISchedulingStrategies {
         }
     */
     @Override
-    public void changerVitesse(EnumSpeed vitesse) {
-        switch (vitesse) {
+    public void changeSpeed(EnumSpeed speed) {
+        switch (speed) {
             case CENT:
-                this.vitesse = 10;
+                this.speed = 10;
                 break;
             case SOIXANTE_QUINZE:
-                this.vitesse = 15;
+                this.speed = 15;
                 break;
             case CINQUANTE:
-                this.vitesse = 20;
+                this.speed = 20;
                 break;
             case VINGT_CINQ:
-                this.vitesse = 50;
+                this.speed = 50;
                 break;
             case DIX:
-                this.vitesse = 100;
+                this.speed = 100;
                 break;
         }
 
     }
 
-    public List<SchedulerListener> getListListenerPourOrdonnanceur() {
-        return listListenerPourOrdonnanceur;
+    public List<SchedulerListener> getSchedulerListeners() {
+        return schedulerListeners;
     }
 
     @Override
-    public List<InfrastructureAgent> arreterOrdonnancement() {
+    public List<InfrastructureAgent> stopScheduling() {
         this.stop = true;
-        return listOrdonnancement;
+        return listAgentsToSchedule;
     }
 
     @Override
-    public void addOrdonnaceurListener(SchedulerListener schedulerListener) {
-        listListenerPourOrdonnanceur.add(schedulerListener);
+    public void addSchedulingListener(SchedulerListener schedulerListener) {
+        schedulerListeners.add(schedulerListener);
     }
 
     @Override
-    public void agentAjoute(InfrastructureAgent infrastructureAgent) {
-        listOrdonnancement.add(infrastructureAgent);
-       // System.out.println("listOrdonnancement****" + getListOrdonnancement());
+    public void addAgent(InfrastructureAgent infrastructureAgent) {
+        listAgentsToSchedule.add(infrastructureAgent);
+       // System.out.println("listAgentsToSchedule****" + getListAgentsToSchedule());
     }
 
     public List<IReferenceAgentListener> getReferenceAgentListeners() {
@@ -141,15 +141,16 @@ public class ClassicStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public void agentRetire(InfrastructureAgent infrastructureAgent) {
-        listOrdonnancement.remove(infrastructureAgent);
+    public void deleteAgent(InfrastructureAgent infrastructureAgent) {
+        System.out.println(" Deleting from the scheduling strategy the agent = " + infrastructureAgent.toString());
+        listAgentsToSchedule.remove(infrastructureAgent);
     }
 
     /**
      * Put pause to the scheduling process of the agents
      */
     @Override
-    public void pauseOrdonnancement() {
+    public void pauseScheduling() {
         this.run = false;
     }
 
@@ -157,7 +158,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
      * Resume the execution of the scheduling process of the agents
      */
     @Override
-    public void repriseOrdonnancement() {
+    public void rerunScheduling() {
         this.run = true;
     }
 

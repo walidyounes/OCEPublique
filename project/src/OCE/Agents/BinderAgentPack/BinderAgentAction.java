@@ -10,6 +10,7 @@ import Logger.OCELogger;
 import Midlleware.ThreeState.IActionState;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
+import OCE.InfrastructureMessages.TemporaryConnectedInfraMessage;
 import OCE.OCEDecisions.OCEDecision;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
 import OCE.InfrastructureMessages.FeedbackInfraMessage;
@@ -74,6 +75,16 @@ public class BinderAgentAction implements IActionState {
 //                //send the message using the communication manager
 //                this.communicationManager.sendMessage(feedbackMessage,this.myBinderAgent,receivers);
 
+                //Send the temporary connected message to both agents
+                //create the message
+                TemporaryConnectedInfraMessage temporaryConnectedInfraMessage = new TemporaryConnectedInfraMessage(null, null);
+                //Add the two agents as receivers for the message
+                ArrayList<OCEAgent> receivers = new ArrayList<>();
+                receivers.add(this.firstServiceAgent);
+                receivers.add(this.secondServiceAgent);
+                //send the message using the communication manager
+                this.communicationManager.sendMessage(temporaryConnectedInfraMessage,this.myBinderAgent,receivers);
+
             }else{ // In this cycle we received only one message
                 this.nbMessages += decisionsList.size();
                 if(nbMessages<2){  // it may be the second one or the first one
@@ -104,6 +115,16 @@ public class BinderAgentAction implements IActionState {
 //                    receivers.add(this.secondServiceAgent);
 //                    //send the message using the communication manager
 //                    this.communicationManager.sendMessage(feedbackMessage,this.myBinderAgent,receivers);
+
+                    //Send the temporary connected message to both agents
+                        //create the message
+                        TemporaryConnectedInfraMessage temporaryConnectedInfraMessage = new TemporaryConnectedInfraMessage(null, null);
+                        //Add the two agents as receivers for the message
+                        ArrayList<OCEAgent> receivers = new ArrayList<>();
+                        receivers.add(this.firstServiceAgent);
+                        receivers.add(this.secondServiceAgent);
+                        //send the message using the communication manager
+                        this.communicationManager.sendMessage(temporaryConnectedInfraMessage,this.myBinderAgent,receivers);
                 }
             }
         }else

@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 
 public class BinderAgentDecision implements IDecisionState {
 
-    private IMessageSelection selectionMessageStrategy;
+    //private IMessageSelection selectionMessageStrategy;
     private BinderAgent myBinderAgent;
     private IRecord referenceResolver;
     private int nbMessages;
 
-    public BinderAgentDecision(IMessageSelection selectionMessageStrategy, BinderAgent myBinderAgent, IRecord referenceResolver) {
-        this.selectionMessageStrategy = selectionMessageStrategy;
+    public BinderAgentDecision(BinderAgent myBinderAgent, IRecord referenceResolver) {
+        // this.selectionMessageStrategy = selectionMessageStrategy;
         this.myBinderAgent = myBinderAgent;
         this.referenceResolver = referenceResolver;
         this.nbMessages = 0;

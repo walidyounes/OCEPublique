@@ -24,7 +24,7 @@ public class DecisionState implements IState {
     @Override
     public void execute(LifeCycle c) {
         //OCELogger.log(Level.INFO, " InfrastructureAgent is in Decision state " );
-        // Retrive the list of perceptions initialized in the previous state
+        // Retrieve the list of perceptions initialized in the previous state
         ArrayList<InfraMessage> infraMessages = c.getSharedData("ListPerceptions");
         // execute the decision method of the agent
         ArrayList<OCEDecision> myListOfDecisions= myWayOfDecision.decide(infraMessages);

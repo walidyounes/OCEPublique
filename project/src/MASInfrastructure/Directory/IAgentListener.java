@@ -8,7 +8,7 @@ import MASInfrastructure.Agent.InfrastructureAgent;
 
 public interface IAgentListener {
 
-    void agentAjoute(InfrastructureAgent infrastructureAgent);
+    void addAgent(InfrastructureAgent infrastructureAgent);
 
-    void agentRetire(InfrastructureAgent infrastructureAgent);
+    void deleteAgent(InfrastructureAgent infrastructureAgent);
 }
