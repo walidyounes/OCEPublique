@@ -14,11 +14,11 @@ public interface ISchedulingStrategies extends IAgentListener {
 
     void changeSpeed(EnumSpeed speed);
 
-    List<InfrastructureAgent> stopScheduling();
+    void stopScheduling();
 
-    void pauseScheduling();
+    // void pauseScheduling();
 
-    void rerunScheduling();
+    // void rerunScheduling();
 
     void setMaxCycleAgent(int maxCycleAgent);
 

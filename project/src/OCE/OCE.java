@@ -9,7 +9,9 @@ import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
 import MOICE.MOICE;
 import MOICE.feedbackManager.FeedbackManager;
+import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
+import Midlleware.AgentFactory.OCEBinderAgentFactory;
 import Midlleware.AgentFactory.OCEServiceAgentFactory;
 import OCE.Agents.OCEAgent;
 import OCE.FeedbackDispatcher.OCEFeedbackDispatcher;
@@ -42,6 +44,10 @@ public class OCE implements Runnable{
         this.oceFeedbackDispatcher.setCommunicationAdapter(this.medium);
         //Set the reference to the component used for reference resolving
         this.oceFeedbackDispatcher.setOceRecord(this.medium);
+        //Set the reference to the component used for creating Binder agents
+        IOCEBinderAgentFactory feedbackDispatcherBinderAgentFactory = new OCEBinderAgentFactory(this.infrastructure, this.medium);
+        this.oceFeedbackDispatcher.setBinderAgentFactory(feedbackDispatcherBinderAgentFactory);
+
         //Add the oceFeedbackDispatcher component as a listener in MOICE's Feedback manager
         MOICE.getInstance().addFeedbackComputedListener(this.oceFeedbackDispatcher);
         //Add MOICE's feedbackManager as a listener in MOICEProbe component
@@ -80,5 +86,13 @@ public class OCE implements Runnable{
         } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
+    }
+
+    public Infrastructure getInfrastructure() {
+        return infrastructure;
+    }
+
+    public Medium getMedium() {
+        return medium;
     }
 }

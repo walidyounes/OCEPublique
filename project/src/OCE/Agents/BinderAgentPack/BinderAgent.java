@@ -73,7 +73,7 @@ public class BinderAgent extends OCEAgent {
      * Launch the suicide mechanism of this agent
      */
     public void suicide(){
-        OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is committing SUICIDE !");
+        OCELogger.log(Level.INFO, " The binder agent = " + this.toString() + " is committing SUICIDE !");
         //Unregister from OCE's record witch will trigger automatically the delete from the infrastructure
         this.oceRecord.unregisterOCEAgent(this);
     }
@@ -92,5 +92,14 @@ public class BinderAgent extends OCEAgent {
 
     public void setSecondService(OCService secondService) {
         this.secondService = Optional.ofNullable(secondService);
+    }
+
+    /**
+     * Reset the set of attributes of this agent to factory settings
+     */
+    @Override
+    public void resetToFactoryDefaultSettings() {
+        this.firstService = Optional.empty();
+        this.secondService = Optional.empty();
     }
 }

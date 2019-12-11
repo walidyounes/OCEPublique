@@ -61,8 +61,8 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     }
 
     @Override
-    public List<InfrastructureAgent> stopScheduling() {
-        return scheduler.stopScheduling();
+    public void stopScheduling() {
+        scheduler.stopScheduling();
     }
 
     /*	public void sendMessage(InfraAgentReference expediteur, InfraAgentReference destinataire, IMessage IMessage) {
@@ -120,21 +120,21 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
         scheduler.deleteAgentFromScheduler(infrastructureAgent);
     }
 
-    /**
-     * Put pause to the scheduling process of the agents
-     */
-    @Override
-    public void pauseScheduling() {
-        this.scheduler.pauseScheduling();
-    }
-
-    /**
-     * Resume the execution of the scheduling process of the agents
-     */
-    @Override
-    public void restartScheduling() {
-        this.scheduler.restartScheduling();
-    }
+//    /**
+//     * Put pause to the scheduling process of the agents
+//     */
+//    @Override
+//    public void pauseScheduling() {
+//        this.scheduler.pauseScheduling();
+//    }
+//
+//    /**
+//     * Resume the execution of the scheduling process of the agents
+//     */
+//    @Override
+//    public void restartScheduling() {
+//        this.scheduler.restartScheduling();
+//    }
 
     /**
      * Set the value of the number of agent cycle per OCE Cycle

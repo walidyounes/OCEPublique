@@ -19,6 +19,7 @@ import OCE.Agents.ServiceAgentPack.Learning.ScoredCurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
 import OCE.OCEMessages.FeedbackValues;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -255,7 +256,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      */
     public void updateMyKnowledgeBase(){
         //If the scored current situation exist
-        if(this.myScoredCurrentSituation != null){
+        if(this.myScoredCurrentSituation.isPresent()){
             //Transform the scored current situation to a reference situation
             Situation<ReferenceSituationEntry> referenceSituationToAdd = new Situation<>();
             Map<IDAgent, ScoredCurrentSituationEntry> setScoredCurrentSituationEntry = this.myScoredCurrentSituation.get().getAgentSituationEntries();
@@ -298,7 +299,8 @@ public class ServiceAgent extends OCEAgent implements Comparable {
                 this.myKnowledgeBase.add(referenceSituationToAdd);
             }
             //Reinitialise the situation attribute in the agent
-            this.myScoredCurrentSituation = null;
+            this.myScoredCurrentSituation = Optional.empty();
+            this.myCurrentSituation = Optional.empty();
         }
 
     }
@@ -377,6 +379,26 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     public void deleteMyBinderAgent(){
         this.myBinderAgent = Optional.empty();
     }
+
+    /**
+     * Reset the set of attributes of this agent to factory setting except for the knowledge
+     */
+    public void resetToFactoryDefaultSettings(){
+        //Mark  the state of the connection to not connected
+        this.setMyConnexionState(ServiceAgentConnexionState.NotConnected);
+        //Delete the agent to which this agent is maybe connected to
+        this.resetConnectedTo();
+        //If the agent has a binder agent delete it
+        this.deleteMyBinderAgent();
+        //reset the field Current situation and scored current situation
+        this.resetMyCurrentSituation();
+        this.resetMyScoredCurrentSituation();
+        //Reset the number of the cycle of the agent
+        this.myCurrentCycleNumber = 0;
+        //Reset the field indicating the feedback is received
+        this.feedbackReceived = false;
+    }
+
     /**
      *  Compare two Service Agents (the comparison is compute on the handled Service)
      * @param o the service agent to compare this to

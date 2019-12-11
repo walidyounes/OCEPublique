@@ -10,12 +10,10 @@ import Logger.OCELogger;
 import Midlleware.ThreeState.IActionState;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.InfrastructureMessages.TemporaryConnectedInfraMessage;
+import OCE.InfrastructureMessages.WaitingForFeedbackInfraMessage;
 import OCE.OCEDecisions.OCEDecision;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
-import OCE.InfrastructureMessages.FeedbackInfraMessage;
 import OCE.Medium.Communication.ICommunicationAdapter;
-import OCE.OCEMessages.FeedbackValues;
 import OCE.ServiceConnection.Connection;
 
 import java.util.ArrayList;
@@ -77,13 +75,13 @@ public class BinderAgentAction implements IActionState {
 
                 //Send the temporary connected message to both agents
                 //create the message
-                TemporaryConnectedInfraMessage temporaryConnectedInfraMessage = new TemporaryConnectedInfraMessage(null, null);
+                WaitingForFeedbackInfraMessage waitingForFeedbackInfraMessage = new WaitingForFeedbackInfraMessage(null, null);
                 //Add the two agents as receivers for the message
                 ArrayList<OCEAgent> receivers = new ArrayList<>();
                 receivers.add(this.firstServiceAgent);
                 receivers.add(this.secondServiceAgent);
                 //send the message using the communication manager
-                this.communicationManager.sendMessage(temporaryConnectedInfraMessage,this.myBinderAgent,receivers);
+                this.communicationManager.sendMessage(waitingForFeedbackInfraMessage,this.myBinderAgent,receivers);
 
             }else{ // In this cycle we received only one message
                 this.nbMessages += decisionsList.size();
@@ -104,6 +102,10 @@ public class BinderAgentAction implements IActionState {
                     //Launch the bindings
                     this.physicalDeviceBinder.bindServices(firstService, secondService);
 
+                    //Save the two services in the binder agent
+                    ((BinderAgent)this.myBinderAgent).setFirstService(this.firstService);
+                    ((BinderAgent)this.myBinderAgent).setSecondService(this.secondService);
+
                     // reinitialise the number of received messages
                     this.nbMessages =0;
 //                    //Simulate the feedback : send to both agent an automatic response
@@ -118,13 +120,13 @@ public class BinderAgentAction implements IActionState {
 
                     //Send the temporary connected message to both agents
                         //create the message
-                        TemporaryConnectedInfraMessage temporaryConnectedInfraMessage = new TemporaryConnectedInfraMessage(null, null);
+                        WaitingForFeedbackInfraMessage waitingForFeedbackInfraMessage = new WaitingForFeedbackInfraMessage(null, null);
                         //Add the two agents as receivers for the message
                         ArrayList<OCEAgent> receivers = new ArrayList<>();
                         receivers.add(this.firstServiceAgent);
                         receivers.add(this.secondServiceAgent);
                         //send the message using the communication manager
-                        this.communicationManager.sendMessage(temporaryConnectedInfraMessage,this.myBinderAgent,receivers);
+                        this.communicationManager.sendMessage(waitingForFeedbackInfraMessage,this.myBinderAgent,receivers);
                 }
             }
         }else

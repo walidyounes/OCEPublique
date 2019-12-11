@@ -5,6 +5,7 @@
 package OCE.FeedbackDispatcher;
 
 import MASInfrastructure.Communication.ICommunication;
+import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Medium.Recorder.IRecord;
 import OCE.ServiceConnection.Connection;
@@ -17,6 +18,7 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
 
     ICommunicationAdapter communicationAdapter;         //The reference of the component responsible of transit of messages to the agents
     IRecord  oceRecord;                                 //The reference of the component responsible of resolving references and recording agents
+    IOCEBinderAgentFactory binderAgentFactory;          //The reference of the component used to create Binder agents
 
     /** Holder */
     private static class OCEFeedbackDispatcherSingletonHolder
@@ -42,11 +44,19 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
     }
 
     /**
-     * Set the reference of the component responsible responsible for resolving references and recording agents
+     * Set the reference of the component responsible for resolving references and recording agents
      * @param oceRecord  : the reference of  the component responsible for resolving references and recording agents
      */
     public void setOceRecord(IRecord oceRecord) {
         this.oceRecord = oceRecord;
+    }
+
+    /**
+     * Set the component responsible for creating binder agents
+     * @param binderAgentFactory    : the reference of the component responsible for creating Binder agents in OCE
+     */
+    public void setBinderAgentFactory(IOCEBinderAgentFactory binderAgentFactory) {
+        this.binderAgentFactory = binderAgentFactory;
     }
 
     /**
@@ -58,7 +68,7 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
             //Check if the connection is annotated
             if(connection.getMyConnectionState().isPresent()){
                 //Treat the connection depending on it's annotation
-                connection.getMyConnectionState().get().treatConnection(connection, this.communicationAdapter, this.oceRecord);
+                connection.getMyConnectionState().get().treatConnection(connection, this.communicationAdapter, this.oceRecord, this.binderAgentFactory);
             }
         }
 

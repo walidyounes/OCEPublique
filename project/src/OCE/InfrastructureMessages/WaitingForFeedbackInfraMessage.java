@@ -9,11 +9,11 @@ import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.OCEMessages.MessageTypes;
 import OCE.OCEMessages.OCEMessage;
-import OCE.OCEMessages.TemporaryConnectedMessage;
+import OCE.OCEMessages.WitingForFeedbackMessage;
 
 import java.util.ArrayList;
 
-public class TemporaryConnectedInfraMessage extends InfraMessage {
+public class WaitingForFeedbackInfraMessage extends InfraMessage {
 
     /**
      * Create a Temporary connected infra message
@@ -21,10 +21,10 @@ public class TemporaryConnectedInfraMessage extends InfraMessage {
      * @param emitter    reference of the agent sending the temporary connected message (it's usually A binder Agent)
      * @param receivers the references of the receivers of the message
      */
-    public TemporaryConnectedInfraMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers) {
+    public WaitingForFeedbackInfraMessage(InfraAgentReference emitter, ArrayList<InfraAgentReference> receivers) {
         this.emitter= emitter;
         this.receivers = receivers;
-        this.myType = MessageTypes.TemporaryConnected;
+        this.myType = MessageTypes.WAITINGFEEDBACK;
     }
 
     /**
@@ -68,7 +68,7 @@ public class TemporaryConnectedInfraMessage extends InfraMessage {
     }
 
     /**
-     * get the matchingID of message,  which can be : Advertise, reply, select, agree, bind, disconnect, TemporaryConnected.....
+     * get the matchingID of message,  which can be : Advertise, reply, select, agree, bind, disconnect, WAITINGFEEDBACK.....
      *
      * @return the matchingID of the message
      */
@@ -86,7 +86,7 @@ public class TemporaryConnectedInfraMessage extends InfraMessage {
     @Override
     public OCEMessage toOCEMessage(IRecord referenceResolver) {
         try {
-            return new TemporaryConnectedMessage(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
+            return new WitingForFeedbackMessage(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;

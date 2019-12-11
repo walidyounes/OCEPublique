@@ -26,7 +26,7 @@ public abstract class OCEAgent {
     }
 
     /**
-     * set the agent (in the infrastructure) which is associated to this service agent
+     * Set the agent (in the infrastructure) which is associated to this service agent
      * @param myInfrastructureAgent : the associated agent
      */
     public void setMyInfrastructureAgent(InfrastructureAgent myInfrastructureAgent) {
@@ -34,7 +34,7 @@ public abstract class OCEAgent {
     }
 
     /**
-     * get the associated agent (un the infrastructure) to this serviceAgent
+     * Get the associated agent (un the infrastructure) to this serviceAgent
      * @return the associated agent
      */
     public InfrastructureAgent getMyInfrastructureAgent() {
@@ -42,7 +42,7 @@ public abstract class OCEAgent {
     }
 
     /**
-     * set the perception mechanism of this agent
+     * Set the reference of the perception component of the service agent
      * @param myWayOfPerception the perception mechanism
      */
     public void setMyWayOfPerception(IPerceptionState myWayOfPerception) {
@@ -50,7 +50,7 @@ public abstract class OCEAgent {
     }
 
     /**
-     * set the decision mechanism of the agent
+     * Set the reference of the decision component of the service agent
      * @param myWayOfDecision  the decision mechanism
      */
     public void setMyWayOfDecision(IDecisionState myWayOfDecision) {
@@ -58,7 +58,15 @@ public abstract class OCEAgent {
     }
 
     /**
-     * set the action mechanism of the agent
+     * Get the reference of the decision component of the service agent
+     * @return
+     */
+    public IDecisionState getMyWayOfDecision() {
+        return myWayOfDecision;
+    }
+
+    /**
+     * Set the reference of the action component of the service agent
      * @param myWayOfAction the action mechanism
      */
     public void setMyWayOfAction(IActionState myWayOfAction) {
@@ -73,4 +81,8 @@ public abstract class OCEAgent {
         this.mySelectedAgent = mySelectedAgent;
     }
 
+    /**
+     * Reset the set of attributes of this agent to factory settings
+     */
+    public abstract void resetToFactoryDefaultSettings();
 }

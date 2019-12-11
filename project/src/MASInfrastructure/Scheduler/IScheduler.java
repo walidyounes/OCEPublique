@@ -17,15 +17,15 @@ public interface IScheduler {
 
     void changeSchedulingStrategy(ISchedulingStrategies schedulingStrategy);
 
-    List<InfrastructureAgent> stopScheduling();
+    void stopScheduling();
 
     void addAgentToScheduler(InfrastructureAgent infrastructureAgent);
 
     void deleteAgentFromScheduler(InfrastructureAgent infrastructureAgent);
 
-    void pauseScheduling();
+    // void pauseScheduling();
 
-    void restartScheduling();
+    // void restartScheduling();
 
     void setMaxCycleAgent(int maxCycleAgent);
 

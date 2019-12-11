@@ -49,7 +49,9 @@ public class SelectDecision extends OCEDecision {
         // Send a message to the binder agent
         BindInfraMessage bindMessage = new BindInfraMessage(null, null);
         ArrayList<OCEAgent> bindReceivers = new ArrayList<>();
-        bindReceivers.add(this.myBinderAgent);
+        bindReceivers.add(this.
+
+                myBinderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter,bindReceivers);
         // Change the state of the agent to "Waiting state"
         ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.Waiting);

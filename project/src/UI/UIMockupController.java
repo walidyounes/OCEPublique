@@ -10,13 +10,16 @@ import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
+import MOICE.MOICE;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
 import OCE.Agents.ServiceAgentPack.Learning.SituationUtility;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
+import OCE.Agents.ServiceAgentPack.ServiceAgentDecision;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
+import OCE.Medium.Medium;
 import OCE.OCE;
 import com.jfoenix.controls.*;
 import javafx.application.Platform;
@@ -45,6 +48,7 @@ import org.graphstream.ui.view.Viewer;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
@@ -57,14 +61,24 @@ public class UIMockupController implements Initializable {
     @FXML private JFXListView<Label> servicesList;
     @FXML private JFXListView<Label> componentsList;
     @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
+    @FXML private JFXButton launchButton;
+    @FXML private JFXButton nextOCECycleButton;
     @FXML private AnchorPane visualisationPane;
     @FXML private VBox agentDetailsPane;
+    @FXML private VBox graphVisualisationPane;
 
    // @FXML private AnchorPane Terminal;
     @FXML private JFXTextField NbCyclesAgent;
-    @FXML private JFXTextField coefficientNovelty;
+    //@FXML private JFXTextField coefficientNovelty;
+
+    @FXML private JFXSlider noveltyCoefficientSlider;
+    @FXML private JFXSlider learningRateSlider;
+    @FXML private JFXSlider reinforcementSlider;
+    @FXML private JFXSlider similarityThresholdSlider;
+    @FXML private JFXSlider epsilonSlider;
+
     @FXML private JFXListView<OCEAgent> agentsListUI;
-    private TextArea UILog;
+//    private TextArea UILog;
     private JFXPopup popup;
 
     private ArrayList<OCService> providedByC;
@@ -76,39 +90,64 @@ public class UIMockupController implements Initializable {
 //    private Thread simulation;
     private OCE myOCE;
     private Thread opportunisticCompositionEngine;
-    private boolean runExecution;
     private PhysicalDeviceBinder physicalDeviceBinder;
     private final int defaultMaxCycleAgent = 400;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.servicesList.setExpanded(true);
-        this.componentsList.setExpanded(true);
-        this.providedR.setSelected(true);
-        this.singleR.setSelected(true);
+        //Initialise the System
+        this.initSystem();
+        //Initialise the UI of the system
+        this.initSystemUI();
+    }
 
-        this.UILog = new TextArea();
-//        this.Terminal.setTopAnchor( this.UILog, 0d);
-//        this.Terminal.setBottomAnchor( this.UILog, 0d);
-//        this.Terminal.setRightAnchor( this.UILog, 0d);
-//        this.Terminal.setLeftAnchor( this.UILog, 0d);
-//        this.Terminal.getChildren().add( this.UILog);
+    /**
+     * Initialise the system with the different attribute
+     */
+    private void initSystem(){
 
         // Initialize the Mockup
         this.mockupFacadeAdapter = new MockupFacadeAdapter();
         //Initialize the MAS Infrastructure
         this.infrastructure = new Infrastructure();
-        // Initialize the boolean variable for pause and resume
-        this.runExecution = true;
 
         // Create the list of services
         this.requiredByC = new ArrayList<>();
         this.providedByC = new ArrayList<>();
 
         // Create the thread for the execution
-//        this.simulation = new Thread( new Simulation(this.mockupFacadeAdapter, this.infrastructure));
         this.myOCE = new OCE(this.mockupFacadeAdapter, this.infrastructure);
         this.opportunisticCompositionEngine = new Thread(this.myOCE);
+
+        // Init log
+        // Create and configure the logger service
+        OCELogger logger = new OCELogger();
+        OCELogger.init();
+        this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();
+        this.physicalDeviceBinder.UIBinderSProperty().setValueListener(new NotifySetStringProperty.OnSetValueListener() {
+            @Override
+            public void onValueSet(String value) {
+                System.out.println(value);
+                String[] idServices = value.split("-");
+                System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+                OCELogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
+                addEdge(idServices[0], idServices[1]);
+            }
+        });
+    }
+
+    /**
+     * Initialise the UI of the system
+     */
+    private void initSystemUI(){
+        this.servicesList.setExpanded(true);
+        this.componentsList.setExpanded(true);
+        this.agentsListUI.setExpanded(true);
+        //Put by default the radios button selected
+        this.providedR.setSelected(true);
+        this.singleR.setSelected(true);
+        //Associate the text fields to the function called when we press "Enter"
+        this.NbCyclesAgent.setOnKeyPressed((event) -> { if(event.getCode() == KeyCode.ENTER) { updateMaxCycleAgent(); } });
 
         //Set the binding between the list of agents and the ListView in the UI
         this.agentsListUI.setItems(this.myOCE.gteAllAgents());
@@ -128,10 +167,10 @@ public class UIMockupController implements Initializable {
                     if(selectedOCEAgent instanceof ServiceAgent){
                         titledPaneAgentDetails = createTitledPaneContentServiceAgent((ServiceAgent) selectedOCEAgent);
                     }else {
-                       if(selectedOCEAgent instanceof BinderAgent){
-                           titledPaneAgentDetails = createTitledPaneContentBinderAgent((BinderAgent) selectedOCEAgent);
+                        if(selectedOCEAgent instanceof BinderAgent){
+                            titledPaneAgentDetails = createTitledPaneContentBinderAgent((BinderAgent) selectedOCEAgent);
                         }else{
-                           titledPaneAgentDetails = new TitledPane();
+                            titledPaneAgentDetails = new TitledPane();
                         }
                     }
                     //Add the label to the agent's details visualisation Pane
@@ -141,52 +180,45 @@ public class UIMockupController implements Initializable {
             }
         });
 
-        // Initialise popUp
+        //Add the function to be called when the value of each slider for the learning parameters changes in value
+        this.noveltyCoefficientSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                SituationUtility.CSN = newValue.doubleValue();
+            }
+        });
+        this.learningRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgentDecision)((ServiceAgent)agent).getMyWayOfDecision()).setLearningRate(newValue.doubleValue()));
+            }
+        });
+        this.reinforcementSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgentDecision)((ServiceAgent)agent).getMyWayOfDecision()).setBeta(newValue.doubleValue()));
+            }
+        });
+        this.similarityThresholdSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgentDecision)((ServiceAgent)agent).getMyWayOfDecision()).setSimilarityThreshold(newValue.doubleValue()));
+            }
+        });
+        this.epsilonSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgentDecision)((ServiceAgent)agent).getMyWayOfDecision()).setEpsilon(newValue.doubleValue()));
+            }
+        });
+
+        // Initialise popUp that we show in the components list
         initPopup();
 
-        // Initialise the graph
+        // Initialise and preview the graph the graph
         initGraph();
-        previewGraph();
-
-        // Init log
-        // Create and configure the logger service
-        OCELogger logger = new OCELogger();
-        logger.uiLogProperty().addListener(new ChangeListener<String>() {
-                                               @Override
-                                               public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                                                   Platform.runLater(new Runnable() {
-                                                       @Override
-                                                       public void run() {
-                                                           UILog.setText(newValue);
-                                                       }
-                                                   });
-                                               }
-                                           });
-        OCELogger.init();
-        this.physicalDeviceBinder = PhysicalDeviceBinder.getInstance();
-    /*    physicalDeviceBinder.UIBinderServicesProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                        String[] idServices = newValue.split("-");
-                        System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
-                        OCELogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
-                        addEdge(idServices[0], idServices[1]);
-            }
-        });*/
-        this.physicalDeviceBinder.UIBinderSProperty().setValueListener(new NotifySetStringProperty.OnSetValueListener() {
-                                                                           @Override
-                                                                           public void onValueSet(String value) {
-                                                                               System.out.println(value);
-                                                                               String[] idServices = value.split("-");
-                                                                               System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
-                                                                               OCELogger.log(Level.INFO,"idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
-                                                                               addEdge(idServices[0], idServices[1]);
-                                                                           }
-                                                                       });
-
-        this.NbCyclesAgent.setOnKeyPressed((event) -> { if(event.getCode() == KeyCode.ENTER) { updateMaxCycleAgent(); } });
-
-        coefficientNovelty.setOnKeyPressed((event) -> { if(event.getCode() == KeyCode.ENTER) { updateCoefficientNovelty(); }} );
+        //Set hidden the visualisation pane fo the graph
+        this.graphVisualisationPane.setVisible(false);
     }
 
     @FXML
@@ -301,33 +333,6 @@ public class UIMockupController implements Initializable {
         }
     }
 
-    @FXML
-    private void lunchSimulation(ActionEvent event){
-       //this.simulation.start();
-        this.opportunisticCompositionEngine.start();
-        //disable the launch button
-        ((JFXButton)event.getSource()).setDisable(true);
-    }
-
-    @FXML
-    private void pauseResumeExecution(ActionEvent event){
-        this.runExecution = !this.runExecution;
-        System.out.println("Run Execution = " + this.runExecution);
-        if(!this.runExecution){
-            this.infrastructure.pauseScheduling();
-            ((JFXButton)event.getSource()).setText("Reprise");
-        }else{
-            this.infrastructure.restartScheduling();
-            ((JFXButton)event.getSource()).setText("Pause");
-        }
-
-    }
-
-
-    @FXML
-    private void stopExecution(ActionEvent event){
-        this.infrastructure.stopScheduling();
-    }
 
     private void deleteUIElements(){
         this.servicesList.getItems().clear();
@@ -401,7 +406,7 @@ public class UIMockupController implements Initializable {
     }
 
     /**
-     * Initialize the graph visualizer
+     * Initialize the graph visualizer and preview the graph
      */
     private void initGraph(){
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
@@ -410,7 +415,8 @@ public class UIMockupController implements Initializable {
         // ...
         this.serviceGraph.removeAttribute("ui.stylesheet");
         this.serviceGraph.addAttribute("ui.stylesheet", "url('UI\\grapheStyleSheet.css')");
-
+        //Preview the graph
+        previewGraph();
     }
 
     private void previewGraph(){
@@ -510,10 +516,11 @@ public class UIMockupController implements Initializable {
 //        }
 //    }
 
-    public synchronized void updateLog(String message){
-        String pastContent = this.UILog.getText();
-        this.UILog.setText(pastContent+""+ message+"\n");
-    }
+//    public synchronized void updateLog(String message){
+//        String pastContent = this.UILog.getText();
+//        this.UILog.setText(pastContent+""+ message+"\n");
+//    }
+
     @FXML
     private void showPopup(MouseEvent event){
         if(event.getButton().equals(MouseButton.SECONDARY)){// Detect right button click
@@ -590,13 +597,33 @@ public class UIMockupController implements Initializable {
 
 
     @FXML
-    public void deleteConnexion(ActionEvent event){
-        String edgeToDelete =  this.serviceGraph.getEdge(0).getId();
-        String[] idServices = edgeToDelete.split("-");
-        System.out.println("idSer1 = "+ idServices[0]+ " idSer2 = "+idServices[1]);
-        this.physicalDeviceBinder.deleteConnexion(idServices[0],idServices[1]);
+    private void lunchSimulation(ActionEvent event){
+        //this.simulation.start();
+        //if(!this.opportunisticCompositionEngine.isInterrupted()){
+        this.opportunisticCompositionEngine.start();
+        //disable the launch button
+        ((JFXButton)event.getSource()).setDisable(true);
+        //}
+    }
 
-        this.serviceGraph.removeEdge(0);
+//    @FXML
+//    private void pauseResumeExecution(ActionEvent event){
+//        this.runExecution = !this.runExecution;
+//        System.out.println("Run Execution = " + this.runExecution);
+//        if(!this.runExecution){
+//            this.infrastructure.pauseScheduling();
+//            ((JFXButton)event.getSource()).setText("Reprise");
+//        }else{
+//            this.infrastructure.restartScheduling();
+//            ((JFXButton)event.getSource()).setText("Pause");
+//        }
+//
+//    }
+
+
+    @FXML
+    private void stopExecution(ActionEvent event){
+        this.infrastructure.stopScheduling();
     }
 
     /**
@@ -619,42 +646,130 @@ public class UIMockupController implements Initializable {
 
     @FXML
     public void oneStepExecution(ActionEvent event){
-        //Reset to 0 the value of the current agent cycle to restart the OCE cycle
-//        try {
-//            this.opportunisticCompositionEngine.join();
-//            this.myOCE.oneStepExecution();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         this.myOCE.oneStepExecution();
     }
 
-    /**
-     * Get the value typed in the textField corresponding to the sensibility coefficient of novelty of the user
-     * */
-    private void updateCoefficientNovelty(){
-        //Get the value typed in the textField
-        String stringValue = this.coefficientNovelty.getText();
-        //convert the value to an integer
-        try {
-            double doubleValue = Double.parseDouble(stringValue);
-            if(doubleValue <= 1 && doubleValue >= 0){
-                SituationUtility.CSN = doubleValue;
-                System.out.println("CSN Value = "+ SituationUtility.CSN);
-            }else{
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Parsing error !");
-                alert.setContentText("The value must be a double between [0, 1] ! ");
-                alert.show();
-            }
 
-        }catch (NumberFormatException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Parsing error !");
-            alert.setContentText("The value must be a double ! ");
-            alert.show();
+    /**
+     * Reset the OCE cycle (reset agent's settings to factory default)
+     * @param event
+     */
+    @FXML
+    public void resetOCECycle(ActionEvent event){
+        Alert myAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        myAlert.setTitle("OCE Cycle reset");
+        myAlert.setContentText("Êtes vous sur de vouloir redemarer un autre Cycle moteur ?");
+        Optional<ButtonType> result = myAlert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            //Reset all agent's attributes to factory mode settings (for service agent we don't delete the knowledge base)
+            this.myOCE.gteAllAgents().stream().forEach(agent-> agent.resetToFactoryDefaultSettings());
+            //Delete the binder agents
+            this.myOCE.gteAllAgents().stream().filter(agent -> agent instanceof BinderAgent).forEach(agentB -> ((BinderAgent) agentB).suicide());
+            // todo 09/12 Delete in the graph the connections
+            this.serviceGraph.getEdgeSet().stream().forEach(edge -> this.serviceGraph.removeEdge(edge));
         }
     }
+
+    @FXML
+    public void resetSystem(ActionEvent event){
+        Alert myAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        myAlert.setTitle("System reset");
+        myAlert.setContentText("Êtes vous sur de vouloir redemarer le system ?");
+        Optional<ButtonType> result = myAlert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            //Delete components and services
+            Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    componentsList.getItems().clear();
+                    //Reactivate the launch button
+                    launchButton.setDisable(false);
+                    //Clear list of details of the agent
+                    agentDetailsPane.getChildren().clear();
+                }
+            });
+            //Delete components and services from the Mockup
+            mockupFacadeAdapter.getComponents().clear();
+            //Delete agents from OCE
+            Medium medium = this.myOCE.getMedium();
+            this.myOCE.gteAllAgents().forEach(agent -> medium.unregisterOCEAgent(agent));
+            //Stop the scheduler
+            this.infrastructure.stopScheduling();
+            //Reinitialise the counter og agent's cycle in the scheduler
+            this.infrastructure.resetCurrentCycleAgent();
+
+            //Reinitialise the system and the system UI
+            this.initSystem();
+            this.initSystemUI();
+
+            //reset settings in MOICE, which automatically clear the content of ICE's File for visualisation
+            MOICE.getInstance().resetToDefaultSettings();
+
+        }
+    }
+
+    @FXML
+    public void quitter(ActionEvent event){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Quitter");
+        alert.setContentText("Êtes vous sur de vouloir quitter le programme ?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+           System.exit(0);
+        }
+    }
+
+    /**
+     * Show and hide the panel visualisation of services as a graph
+     * @param event : the event detected (button on click)
+     */
+    @FXML
+    public void showHideServiceGraphVisualisation(ActionEvent event){
+        if(this.graphVisualisationPane.isVisible()){
+            this.graphVisualisationPane.setVisible(false);
+        }else{
+            this.graphVisualisationPane.setVisible(true);
+        }
+    }
+
+    @FXML
+    public void launchICEVisualisationProgram(ActionEvent event){
+        try {
+            // Command to create an external process
+            String command = "C:\\Users\\wyounes\\Documents\\GEMOC\\GemocStudio";
+            // Running the above command
+            Runtime run  = Runtime.getRuntime();
+            Process proc = run.exec(command);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    /**
+//     * Get the value typed in the textField corresponding to the sensibility coefficient of novelty of the user
+//     * */
+//    private void updateCoefficientNovelty(){
+//        //Get the value typed in the textField
+//        String stringValue = this.coefficientNovelty.getText();
+//        //convert the value to an integer
+//        try {
+//            double doubleValue = Double.parseDouble(stringValue);
+//            if(doubleValue <= 1 && doubleValue >= 0){
+//                SituationUtility.CSN = doubleValue;
+//                System.out.println("CSN Value = "+ SituationUtility.CSN);
+//            }else{
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle("Parsing error !");
+//                alert.setContentText("The value must be a double between [0, 1] ! ");
+//                alert.show();
+//            }
+//
+//        }catch (NumberFormatException e){
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Parsing error !");
+//            alert.setContentText("The value must be a double ! ");
+//            alert.show();
+//        }
+//    }
 
     /**
      * Get the service agent's information and create a label to display it on the UI
@@ -670,6 +785,8 @@ public class UIMockupController implements Initializable {
 
         Label idAgent = new Label("IDAgent = " + serviceAgent.getMyID());
         Label handledService = new Label("Handled Service  = " + serviceAgent.getHandledService().toString());
+        Label agentState = new Label("Agent's state  = " + serviceAgent.getMyConnexionState().toString());
+        Label agentBinderAgent = new Label("Agent's binder Agent  = " + serviceAgent.getMyBinderAgent().toString());
 
         TitledPane agentKnowledgeBaseTitledPane = new TitledPane();
         agentKnowledgeBaseTitledPane.setText(" Knowledge Base ");
@@ -694,6 +811,8 @@ public class UIMockupController implements Initializable {
 
         contentSA.getChildren().add(idAgent);
         contentSA.getChildren().add(handledService);
+        contentSA.getChildren().add(agentState);
+        contentSA.getChildren().add(agentBinderAgent);
         contentSA.getChildren().add(agentKnowledgeBaseTitledPane);
 
         contentSA.getChildren().forEach( node -> node.setStyle("-fx-font-size: 12;"));

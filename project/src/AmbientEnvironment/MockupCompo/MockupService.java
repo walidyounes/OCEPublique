@@ -79,6 +79,20 @@ public abstract class MockupService extends OCService implements Comparable, Ser
     }
 
     /**
+     * Get a string unique representation of the service
+     * @return the concatenation of the attributes of the service
+     */
+    public String getSummaryStringRepresentation(){
+        String serviceType = "";
+        if(this.myWay.equals(Way.PROVIDED)){
+            serviceType = "PROV";
+        }else{
+            serviceType = "REQ";
+        }
+        return ""+this.name+"-"+"-"+serviceType+ "-"+this.owner;
+    }
+
+    /**
      *  Compare two MockupService (the comparison is compute on the combination "Name-Type-Owner-Way")
      * @param o the object to compare this to
      * @return true if the two object are equal, else false
@@ -92,7 +106,7 @@ public abstract class MockupService extends OCService implements Comparable, Ser
 
 //        if (!name.equals(that.name) && !matchingID.equals(that.matchingID) && !owner.equals(that.owner)) return false;
 //        return myWay == that.myWay;
-        if (name.equals(that.name) && matchingID.equals(that.matchingID) && owner.equals(that.owner) &&  myWay == that.myWay) return true;
+        if (name.equals(that.name) && matchingID.equals(that.matchingID) && owner.equals(that.owner) &&  myWay.equals(that.myWay)) return true;
         return false;
     }
 

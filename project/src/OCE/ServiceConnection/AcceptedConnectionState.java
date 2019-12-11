@@ -4,6 +4,7 @@
 
 package OCE.ServiceConnection;
 
+import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.InfrastructureMessages.FeedbackInfraMessage;
@@ -21,9 +22,10 @@ public class AcceptedConnectionState implements IConnectionState {
      * @param connection :  the connection to be treated
      * @param communicationManager : the medium used to send messages to the concerned agent which are part of this connection
      * @param oceRecord : the reference to the component responsible for reference resolving
+     * @param binderAgentFactory   : the reference to the component which allows creating binder agents
      */
     @Override
-    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord) {
+    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory) {
         //Get the first Service agent
         ServiceAgent firstServiceAgent = connection.getFirstServiceAgent();
         //Get the second Service agent

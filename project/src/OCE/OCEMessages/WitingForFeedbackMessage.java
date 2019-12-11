@@ -16,17 +16,16 @@ import OCE.OCEDecisions.DoNothingDecision;
 import OCE.OCEDecisions.OCEDecision;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.logging.Level;
 
-public class TemporaryConnectedMessage extends OCEMessage {
+public class WitingForFeedbackMessage extends OCEMessage {
 
     /**
      * create a bind perception
      * @param emitter    reference of the agent sending the bind message (usualy it's a binder agent)
      * @param receivers the references of the receivers of the bind message
      */
-    public TemporaryConnectedMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+    public WitingForFeedbackMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter = emitter;
         this.receivers = receivers;
     }
@@ -45,7 +44,7 @@ public class TemporaryConnectedMessage extends OCEMessage {
         //Cast the matchingID of the agent to a service agent
         ServiceAgent serviceAgent = (ServiceAgent) OCEAgentRef;
         //Change the connexion state of the service agent
-        serviceAgent.setMyConnexionState(ServiceAgentConnexionState.TemporaryConnected);
+        serviceAgent.setMyConnexionState(ServiceAgentConnexionState.WAITINGFEEDBACK);
         //Reset the attribute "connectedTo" to initial value (empty)
         //serviceAgent.setConnectedTo(Optional.empty());
 
@@ -59,9 +58,10 @@ public class TemporaryConnectedMessage extends OCEMessage {
                 //Delete the reference of the binder agent from the service agent
                 ((ServiceAgent) OCEAgentRef).deleteMyBinderAgent();
             }
-            //Add in the agent treating this message the reference of the emitter as it's binder agent
-            ((ServiceAgent) OCEAgentRef).setMyBinderAgent((BinderAgent) this.emitter);
+
         }
+        //Add in the agent treating this message the reference of the emitter as it's binder agent
+        ((ServiceAgent) OCEAgentRef).setMyBinderAgent((BinderAgent) this.emitter);
         return new DoNothingDecision();
     }
 
@@ -82,12 +82,12 @@ public class TemporaryConnectedMessage extends OCEMessage {
      */
     @Override
     public SituationEntry toEntrySituation() {
-        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.TemporaryConnected);
+        return new CurrentSituationEntry(((ServiceAgent) this.emitter).getMyID(), MessageTypes.WAITINGFEEDBACK);
     }
 
     @Override
     public String toString() {
-        return "TemporaryConnectedMessage{" +
+        return "WitingForFeedbackMessage{" +
                 "emitter=" + emitter +
                 ", receivers=" + receivers +
                 '}';

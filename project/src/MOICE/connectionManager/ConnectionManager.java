@@ -158,4 +158,13 @@ public class ConnectionManager implements IConnectionManager {
     public ArrayList<MockupComponent> getListComponents() {
         return this.listComponents;
     }
+
+    /**
+     * Reset to default settings by deleting the list of OCE's proposed connections, the list of components and the content of the ICE's visualisation file
+     */
+    public void resetToDefaultSettings(){
+        this.listConnections.clear();
+        this.listComponents.clear();
+        this.myFileFormatter.clearICEFileContent();
+    }
 }

@@ -21,7 +21,7 @@ public class Situation < T extends SituationEntry> {
     private Map<IDAgent, T> agentSituationEntries; // the situation representing the current environment
 
     /**
-     * Create a new situation
+     * Create a new empty situation
      */
     public Situation() {
         this.agentSituationEntries = new TreeMap<>();

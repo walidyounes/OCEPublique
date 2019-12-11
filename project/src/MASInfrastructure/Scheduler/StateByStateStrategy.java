@@ -92,9 +92,8 @@ public class StateByStateStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public List<InfrastructureAgent> stopScheduling() {
+    public void stopScheduling() {
         run = false;
-        return listAgentsToSchedule;
     }
 
     @Override
@@ -114,21 +113,21 @@ public class StateByStateStrategy implements ISchedulingStrategies {
         listEtatAgent.remove(infrastructureAgent);
     }
 
-    /**
-     * Put pause to the scheduling process of the agents
-     */
-    @Override
-    public void pauseScheduling() {
-        this.run = false;
-    }
-
-    /**
-     * Resume the execution of the scheduling process of the agents
-     */
-    @Override
-    public void rerunScheduling() {
-        this.run = true;
-    }
+//    /**
+//     * Put pause to the scheduling process of the agents
+//     */
+//    @Override
+//    public void pauseScheduling() {
+//        this.run = false;
+//    }
+//
+//    /**
+//     * Resume the execution of the scheduling process of the agents
+//     */
+//    @Override
+//    public void rerunScheduling() {
+//        this.run = true;
+//    }
 
     /**
      * Set the value of the number of agent cycle per OCE Cycle

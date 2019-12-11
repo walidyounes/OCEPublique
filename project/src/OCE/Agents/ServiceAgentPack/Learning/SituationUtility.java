@@ -4,6 +4,7 @@
 
 package OCE.Agents.ServiceAgentPack.Learning;
 
+import Logger.OCELogger;
 import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.IAgentSelectionStrategy;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
@@ -12,6 +13,7 @@ import OCE.OCEMessages.MessageTypes;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -132,71 +134,90 @@ public class SituationUtility {
         double maxScoreValue=0; //Maximum of scores of the agents that we managed to score in this situation
         double sumScoreValue=0; //The sum of scores of the agents that we managed to score in the current situation
 
-        //For each service agent in the current situation
-        for (IDAgent serviceAgent : currentSituation.getAgentSituationEntries().keySet()){
-            int count = 0; // the number of references situations where the service agent appears
-
-            double scoreServiceAgent = initialValue; // the value of score (the mean of scores from the reference situation where the service agent appears or initial value)
-            //For each similar reference situations
-            for(Situation<ReferenceSituationEntry> referenceSituation : listReferenceSituations.keySet()){
-                //check if the service agent exists in the reference situation
-                if(referenceSituation.containServiceAgent(serviceAgent)){
-                    //Get the score of the agent and multiply it by the degree of similarity between this reference situation and the current situation
-                    scoreServiceAgent += referenceSituation.getAgentSituationEntries().get(serviceAgent).getScore()* listReferenceSituations.get(referenceSituation);
-                    //Increase the number of reference situation where the agent is found
-                    count++;
+        //If no reference situation similar to the current situation were found
+        if(listReferenceSituations.size() == 0){
+            OCELogger.log(Level.INFO,"Scoring Current situation -> no reference situations similaire to the current one were found ! ");
+            //Get the number of agents in the current situation
+            int numberAgentCS = currentSituation.getAgentSituationEntries().size();
+            if(numberAgentCS > 0) {
+                double valueScoreToPut = 1 / (double) numberAgentCS;
+                OCELogger.log(Level.INFO,"Scoring Current situation -> no reference situations similaire to the current one were found -> initial value to put = " + valueScoreToPut);
+                //For each service agent in the current situation
+                for (IDAgent serviceAgent : currentSituation.getAgentSituationEntries().keySet()){
+                    //Get the message type send by the service agent in the current situation
+                    MessageTypes messageType = currentSituation.getAgentSituationEntries().get(serviceAgent).getMessageType();
+                    //Add the entry to the scored situation entry
+                    scoredCurrentSituation.addSituationEntry(serviceAgent,  new ScoredCurrentSituationEntry(serviceAgent, messageType, valueScoreToPut));
                 }
             }
-            ScoredCurrentSituationEntry serviceAgentScoredEntry =null; // the entry corresponding to the service agent after scoring
-            //Get the message matchingID send by the service agent in the current situation
-            MessageTypes messageType = currentSituation.getAgentSituationEntries().get(serviceAgent).getMessageType();
-            //check if the service agent appears at least in one reference situation
-            if(count!=0) {
-                //Update the maximum of scores  of the agents that we managed to score in the current situation
-                if(scoreServiceAgent > maxScoreValue){
-                    maxScoreValue = scoreServiceAgent;
-                }
-                //Update the sum of scores  of the agents that we managed to score in the current situation
-                sumScoreValue = sumScoreValue + scoreServiceAgent;
-
-                //Compute the mean of scores
-                scoreServiceAgent = scoreServiceAgent / count;
-                //Todo : change this code and put it in a function in the class PackageSituation.CurrentSituationEntry
-                //Create a scoredCurrentSituationEntry for the service agent
-                serviceAgentScoredEntry = new ScoredCurrentSituationEntry(serviceAgent, messageType, scoreServiceAgent);
-
-            }else{ // The service agent doesn't appear in any reference situation
-                //Create a scoredCurrentSituationEntry for the service agent
-                serviceAgentScoredEntry = new ScoredCurrentSituationEntry(serviceAgent, messageType, scoreServiceAgent);
-
-                //Generate a random probability of sensitivity coefficient to novelty
-                Random random = new Random();
-                double probatCSN = random.nextDouble();
-                System.out.println("Probabilite de CSN = "+probatCSN);
-                if(probatCSN <= SituationUtility.CSN){ //Score with maximum
-                    situationEntriesToScoreLaterMax.add(serviceAgentScoredEntry);
-                }else{//Score with sum of values
-                    situationEntriesToScoreLaterMean.add(serviceAgentScoredEntry);
-                }
-            }
-            //Add the entry to the scored situation entry
-            scoredCurrentSituation.addSituationEntry(serviceAgent, serviceAgentScoredEntry);
-        }
-        //Update the scores for the service agents that we couldn't score
-
-        Random random = new Random();
-        double finalMaxScoreValue = maxScoreValue;
-        situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue+random.nextDouble()));
-        //we compute the mean values of the score  (we take out the maximum score and the agent if the number of agents >2)
-        int numberAgents = 0;
-        if(scoredCurrentSituation.getAgentSituationEntries().size() > 2 ){
-            numberAgents = (scoredCurrentSituation.getAgentSituationEntries().size() -2);
         }else{
-            numberAgents = scoredCurrentSituation.getAgentSituationEntries().size();
-        }
-        double finalMeanValue = (sumScoreValue-maxScoreValue) /numberAgents;
-        situationEntriesToScoreLaterMean.forEach(se-> se.setScore(finalMeanValue));
+            //For each service agent in the current situation
+            for (IDAgent serviceAgent : currentSituation.getAgentSituationEntries().keySet()){
+                int count = 0; // the number of references situations where the service agent appears
 
+                double scoreServiceAgent = initialValue; // the value of score (the mean of scores from the reference situation where the service agent appears or initial value)
+                //For each similar reference situations
+                for(Situation<ReferenceSituationEntry> referenceSituation : listReferenceSituations.keySet()){
+                    //check if the service agent exists in the reference situation
+                    if(referenceSituation.containServiceAgent(serviceAgent)){
+                        //Get the score of the agent and multiply it by the degree of similarity between this reference situation and the current situation
+                        scoreServiceAgent += referenceSituation.getAgentSituationEntries().get(serviceAgent).getScore()* listReferenceSituations.get(referenceSituation);
+                        //Increase the number of reference situation where the agent is found
+                        count++;
+                    }
+                }
+                ScoredCurrentSituationEntry serviceAgentScoredEntry =null; // the entry corresponding to the service agent after scoring
+                //Get the message type send by the service agent in the current situation
+                MessageTypes messageType = currentSituation.getAgentSituationEntries().get(serviceAgent).getMessageType();
+                //check if the service agent appears at least in one reference situation
+                if(count!=0) {
+                    //Update the maximum of scores  of the agents that we managed to score in the current situation
+                    if(scoreServiceAgent > maxScoreValue){
+                        maxScoreValue = scoreServiceAgent;
+                    }
+                    //Update the sum of scores  of the agents that we managed to score in the current situation
+                    sumScoreValue = sumScoreValue + scoreServiceAgent;
+
+                    //Compute the mean of scores
+                    scoreServiceAgent = scoreServiceAgent / count;
+                    //Todo : change this code and put it in a function in the class PackageSituation.CurrentSituationEntry
+                    //Create a scoredCurrentSituationEntry for the service agent
+                    serviceAgentScoredEntry = new ScoredCurrentSituationEntry(serviceAgent, messageType, scoreServiceAgent);
+
+                }else{ // The service agent doesn't appear in any reference situation
+                    //Create a scoredCurrentSituationEntry for the service agent
+                    serviceAgentScoredEntry = new ScoredCurrentSituationEntry(serviceAgent, messageType, scoreServiceAgent);
+
+                    //Generate a random probability of sensitivity coefficient to novelty
+                    Random random = new Random();
+                    double probatCSN = random.nextDouble();
+                    System.out.println("Probabilite de CSN = "+probatCSN);
+                    if(probatCSN <= SituationUtility.CSN){ //Score with maximum
+                        situationEntriesToScoreLaterMax.add(serviceAgentScoredEntry);
+                    }else{//Score with sum of values
+                        situationEntriesToScoreLaterMean.add(serviceAgentScoredEntry);
+                    }
+                }
+                //Add the entry to the scored situation entry
+                scoredCurrentSituation.addSituationEntry(serviceAgent, serviceAgentScoredEntry);
+            }
+            //Update the scores for the service agents that we couldn't score
+
+            Random random = new Random();
+            double finalMaxScoreValue = maxScoreValue;
+            situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue+random.nextDouble()));
+            //we compute the mean values of the score  (we take out the maximum score and the agent if the number of agents >2)
+            int numberAgents = 0;
+            if(scoredCurrentSituation.getAgentSituationEntries().size() > 2 ){
+                numberAgents = (scoredCurrentSituation.getAgentSituationEntries().size() -2);
+            }else{
+                numberAgents = scoredCurrentSituation.getAgentSituationEntries().size();
+            }
+            double finalMeanValue = (sumScoreValue-maxScoreValue) /numberAgents;
+            situationEntriesToScoreLaterMean.forEach(se-> se.setScore(finalMeanValue));
+
+        }
+        OCELogger.log(Level.INFO,"Scoring Current situation -> scored current situation = " + scoredCurrentSituation);
         return scoredCurrentSituation;
     }
 
@@ -272,6 +293,11 @@ public class SituationUtility {
             //normalize the scores
             if (sumValue != 0) {
                 scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(Double.parseDouble(df.format((((ScoredCurrentSituationEntry) e).getScore() / sumValue)))));
+            }else{
+                //la somme == 0, we initialise with the same value but keeping the sum==1
+                int numberOfAgentsInSituation = scoredCurrentSituation.getAgentSituationEntries().size();
+                double value = Double.parseDouble(df.format(1/numberOfAgentsInSituation));
+                scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> (ScoredCurrentSituationEntry) e).forEach(e -> ((ScoredCurrentSituationEntry) e).setScore(value));
             }
         }
     }

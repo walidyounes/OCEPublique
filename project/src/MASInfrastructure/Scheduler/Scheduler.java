@@ -33,8 +33,8 @@ public class Scheduler implements IScheduler {
     }
 
     @Override
-    public List<InfrastructureAgent> stopScheduling() {
-        return schedulingStrategy.stopScheduling();
+    public void stopScheduling() {
+        schedulingStrategy.stopScheduling();
     }
 
     @Override
@@ -52,21 +52,21 @@ public class Scheduler implements IScheduler {
     }
 
 
-    /**
-     * Put pause to the scheduling process of the agents
-     */
-    @Override
-    public void pauseScheduling() {
-        this.schedulingStrategy.pauseScheduling();
-    }
-
-    /**
-     * Resume the execution of the scheduling process of the agents
-     */
-    @Override
-    public void restartScheduling() {
-        this.schedulingStrategy.rerunScheduling();
-    }
+//    /**
+//     * Put pause to the scheduling process of the agents
+//     */
+//    @Override
+//    public void pauseScheduling() {
+//        this.schedulingStrategy.pauseScheduling();
+//    }
+//
+//    /**
+//     * Resume the execution of the scheduling process of the agents
+//     */
+//    @Override
+//    public void restartScheduling() {
+//        this.schedulingStrategy.rerunScheduling();
+//    }
 
     /**
      * Set the value of the number of agent cycle per OCE Cycle

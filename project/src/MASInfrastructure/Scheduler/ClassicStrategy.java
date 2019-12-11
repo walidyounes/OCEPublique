@@ -19,7 +19,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
     private int currentAgentCycle;
     private int maxCycleAgent;
     private boolean run;
-    private boolean stop;
+    private boolean isRunning;
     private final int defaultMaxCycleAgent = 400;
 
     /**
@@ -32,7 +32,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
         this.run= true;
         this.currentAgentCycle = 0;
         this.maxCycleAgent = defaultMaxCycleAgent;
-        this.stop = false;
+        this.isRunning = true;
         schedulerListeners = listListenerActuels;
         changeSpeed(EnumSpeed.CENT);
     }
@@ -55,22 +55,22 @@ public class ClassicStrategy implements ISchedulingStrategies {
     @Override
     public void startScheduling() {
         //Initialize the parameters for the execution
-        this.run = true;
-        this.stop = false;
+        this.isRunning = true;
         this.currentAgentCycle = 0;
 
         InfrastructureAgent currentInfrastructureAgent;
-        while(!stop) {
+        while(isRunning) {
             synchronized (this) {
-                while (this.currentAgentCycle < this.maxCycleAgent) {
-                    currentInfrastructureAgent = listAgentsToSchedule.get(0);
-                    OCELogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfrastructureAgent.getInfraAgentReference() + " ***********************************");
-                    //LifeCycle(currentInfrastructureAgent.getInfraAgentReference(), currentInfrastructureAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
-                    currentInfrastructureAgent.run(); // change the state of the agent
-                    listAgentsToSchedule.remove(currentInfrastructureAgent);
-                    listAgentsToSchedule.add(currentInfrastructureAgent);
 
-                    this.currentAgentCycle++;
+                    while (this.currentAgentCycle < this.maxCycleAgent && listAgentsToSchedule.size()>0 ) {
+                        currentInfrastructureAgent = listAgentsToSchedule.get(0);
+                        OCELogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfrastructureAgent.getInfraAgentReference() + " ***********************************");
+                        //LifeCycle(currentInfrastructureAgent.getInfraAgentReference(), currentInfrastructureAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
+                        currentInfrastructureAgent.run(); // change the state of the agent
+                        listAgentsToSchedule.remove(currentInfrastructureAgent);
+                        listAgentsToSchedule.add(currentInfrastructureAgent);
+
+                        this.currentAgentCycle++;
                 }
             }
         }
@@ -120,9 +120,10 @@ public class ClassicStrategy implements ISchedulingStrategies {
     }
 
     @Override
-    public List<InfrastructureAgent> stopScheduling() {
-        this.stop = true;
-        return listAgentsToSchedule;
+    public void stopScheduling() {
+        synchronized (this) {
+            this.isRunning = false;
+        }
     }
 
     @Override
@@ -146,21 +147,21 @@ public class ClassicStrategy implements ISchedulingStrategies {
         listAgentsToSchedule.remove(infrastructureAgent);
     }
 
-    /**
-     * Put pause to the scheduling process of the agents
-     */
-    @Override
-    public void pauseScheduling() {
-        this.run = false;
-    }
-
-    /**
-     * Resume the execution of the scheduling process of the agents
-     */
-    @Override
-    public void rerunScheduling() {
-        this.run = true;
-    }
+//    /**
+//     * Put pause to the scheduling process of the agents
+//     */
+//    @Override
+//    public void pauseScheduling() {
+//        this.run = false;
+//    }
+//
+//    /**
+//     * Resume the execution of the scheduling process of the agents
+//     */
+//    @Override
+//    public void rerunScheduling() {
+//        this.run = true;
+//    }
 
     /**
      * Set the value of the number of agent cycle per OCE Cycle

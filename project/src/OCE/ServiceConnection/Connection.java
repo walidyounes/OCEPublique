@@ -52,6 +52,18 @@ public class Connection implements Comparable {
     }
 
     /**
+     * Construct a connexion
+     * @param firstService     : the first service agent responsible of the first service
+     * @param secondService    : the second service agent responsible of the second service
+     */
+    public Connection(MockupService firstService, MockupService secondService) {
+        this.firstServiceAgent = null;
+        this.secondServiceAgent = null;
+        this.firstService = firstService;
+        this.secondService = secondService;
+        this.myConnectionState = Optional.empty();
+    }
+    /**
      * Construct a connexion with an associated binder agent
      * @param firstServiceAgent     : the first service agent responsible of the first service
      * @param secondServiceAgent    : the second service agent responsible of the second service

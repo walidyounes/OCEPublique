@@ -85,8 +85,8 @@ public class OCEServiceAgentFactory implements IOCEServiceAgentFactory {
         //Make the ID of the service Agent the same as the associated infrastructure agent
         serviceAgent.setMyIDAgent(new IDAgent(""+ associatedInfrastructureAgent.getInfraAgentReference().getReferenceInterne()));
         //Set the name for the visualization of this agent as the name of it's associated  service
-        String visualizationName = ((MockupService) attachedService).getStringRepresentation();
-        serviceAgent.getMyID().setVisualizingName("SA-"+visualizationName);
+        String visualizationName = ((MockupService) attachedService).getSummaryStringRepresentation();
+        serviceAgent.getMyID().setVisualizingName(""+visualizationName);
 
         AbstractMap.SimpleEntry agentS_referenceAgent_Association = new AbstractMap.SimpleEntry(serviceAgent, associatedInfrastructureAgent.getInfraAgentReference());
         return agentS_referenceAgent_Association;

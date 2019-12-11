@@ -179,4 +179,12 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     public MOICEProbe getProbeFileStorage() {
         return probeFileStorage;
     }
+
+    /**
+     * Reset to default settings of the components
+     */
+    public void resetToDefaultSettings(){
+        ((ConnectionManager)this.myConnectionManager).resetToDefaultSettings();
+        ((FeedbackManager)this.myFeedbackManager).resetToDefaultSettings();
+    }
 }

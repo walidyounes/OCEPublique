@@ -7,6 +7,7 @@ package MOICE;
 import AmbientEnvironment.MockupCompo.MockupComponent;
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.MockupCompo.Way;
+import AmbientEnvironment.OCPlateforme.OCService;
 import OCE.ServiceConnection.Connection;
 
 import java.io.*;
@@ -50,6 +51,11 @@ public class ICEXMLFormatter implements IFileFormatter {
 //        this.listConnections = listConnections;
 //    }
 
+    /**
+     * Create the file used by ICE for visualition with the right formatting
+     * @param listComponents    : the list of available components in the environment
+     * @param listConnections   : the list of connections proposed by OCE
+     */
     @Override
     public void convertFormat(List<MockupComponent> listComponents, List<Connection> listConnections) {
         try{
@@ -135,10 +141,29 @@ public class ICEXMLFormatter implements IFileFormatter {
                 List<MockupComponent> theMockupComponent = this.listComponents.stream().filter(c -> c.getName().equalsIgnoreCase(serviceConnectedTo.get().getOwner())).collect(Collectors.toList());
                 if(!theMockupComponent.isEmpty()){ // if the list is not empty it contains only one component
                     indexComponent = this.listComponents.indexOf(theMockupComponent.get(0));
+
+                    List<OCService>  componentServicesList = theMockupComponent.get(0).getAllServices();
+
+                    //System.out.println("The Component found  = "+theMockupComponent.get(0));
+                    boolean foundS = false;
                     if(serviceConnectedTo.get().getWay()== Way.PROVIDED){
-                        indexService = theMockupComponent.get(0).getProvidedServices().indexOf(serviceConnectedTo.get());
+//                        List<OCService> listProvidedServices = theMockupComponent.get(0).getProvidedServices();
+//                        while(!foundS && indexService < listProvidedServices.size()){
+//
+//                            MockupService currentService = (MockupService) listProvidedServices.get(indexService);
+//                            System.out.println(" \n \n Current Service P = "+currentService + "\n \n");
+//                            if(currentService.getName().equalsIgnoreCase(serviceConnectedTo.get().getName())) {
+//                                foundS = true;
+//                                System.out.println("Index of services P  = "+indexService);
+//                            }else{
+//                                indexService ++;
+//                            }
+//                        }
+                        indexService = componentServicesList.indexOf(serviceConnectedTo.get());
+                        //System.out.println("Index of services P  = "+indexService);
                     }else {
-                        indexService = theMockupComponent.get(0).getRequiredServices().indexOf(serviceConnectedTo.get());
+                        indexService = componentServicesList.indexOf(serviceConnectedTo.get());
+                        //System.out.println("Index of services R  = "+indexService);
                     }
                 }
             }
@@ -166,4 +191,27 @@ public class ICEXMLFormatter implements IFileFormatter {
         return new AbstractMap.SimpleEntry(mockupService, mockupServiceConnectedTo);
     }
 
+    /**
+     * Clear the content of the file used to visualisation in ICE (technically it means creating a file with empty content)
+     */
+    @Override
+    public void clearICEFileContent() {
+        try {
+            // Open the model XML file
+            // BufferedWriter bw = new BufferedWriter(new FileWriter("MyLogFiles/ICE.ice_editor"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor"));
+            //write the first line
+            bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <iCE_Editor:Environment xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" "
+                    + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance \" xmlns:iCE_Editor=\"http://www.eclipse.org/sirius/sample/ice_editor\"> \n");
+
+            // Writing the end lines of the XML
+            bw.write("</iCE_Editor:Environment> \n");
+
+            // Saving the file
+            bw.close();
+
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+    }
 }
