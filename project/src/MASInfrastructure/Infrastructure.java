@@ -109,7 +109,6 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     @Override
     public InfrastructureAgent createInfrastructureAgent(OCService attachedService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {
         InfrastructureAgent infrastructureAgent = infraAgentFactory.createInfrastructureAgent(attachedService, lifeCycle, myMailBoxManager);
-        // scheduler.OrdagentAjoute(infrastructureAgent); //walid : ToDo Pourquoi avoir supprimer cette ligne ?? --> car l'ajout dans l'scheduler se fait par infraAgentFactory
         return infrastructureAgent;
     }
 

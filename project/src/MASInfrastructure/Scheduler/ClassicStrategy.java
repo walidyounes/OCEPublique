@@ -48,7 +48,6 @@ public class ClassicStrategy implements ISchedulingStrategies {
                     while (this.currentAgentCycle < this.maxCycleAgent && listAgentsToSchedule.size()>0 ) {
                         currentInfrastructureAgent = listAgentsToSchedule.get(0);
                         OCELogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfrastructureAgent.getInfraAgentReference() + " ***********************************");
-                        //LifeCycle(currentInfrastructureAgent.getInfraAgentReference(), currentInfrastructureAgent.getEtatInitial()); - todo walid : pour le moement je ne sais pas c'est qui les listeners pour les avertir du changement d'état
                         currentInfrastructureAgent.run(); // change the state of the agent
                         listAgentsToSchedule.remove(currentInfrastructureAgent);
                         listAgentsToSchedule.add(currentInfrastructureAgent);

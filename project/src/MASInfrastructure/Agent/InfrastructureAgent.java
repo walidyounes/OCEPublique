@@ -21,7 +21,7 @@ public class InfrastructureAgent {
 
     private final InfraAgentReference infraAgentReference;
     private LifeCycle lifeCycle;
-    private OCService handledService; //TOdo walid : vérfier si ce champs est utile
+    private OCService handledService;
     private ICommunication myMailBoxManager;
 
     public InfrastructureAgent(OCService handledService, LifeCycle lifeCycle, ICommunication myMailBoxManager) {

@@ -145,11 +145,11 @@ public abstract class MockupService extends OCService implements Comparable, Ser
 
     @Override
     public void addLink(OCService s) throws AddLinkException {
-        //TODO : Complete the code
+        this.linkedServices.add(s);
     }
 
     @Override
     public void removeLink(OCService s) throws RemoveLinkException {
-        //TODO : Complete the code
+        this.linkedServices.remove(s);
     }
 }

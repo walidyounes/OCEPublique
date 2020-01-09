@@ -62,7 +62,7 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
 
         //Save the list of connections before annotation
         Collections.copy(OCEConnectionList,this.connectionsBeforeAnnotation);
-        //Create a list of connections potentially added by ICE Todo To delete
+        //Create a list of connections potentially added by ICE
         List<Connection> ICEAddedConnectionList = new ArrayList<>();
 
         //Open the files that contains the configurations
