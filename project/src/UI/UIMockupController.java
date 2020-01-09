@@ -190,25 +190,25 @@ public class UIMockupController implements Initializable {
         this.learningRateSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgentDecision)((ServiceAgent)agent).getMyWayOfDecision()).setLearningRate(newValue.doubleValue()));
+                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgent)agent).setLearningRate(newValue.doubleValue()));
             }
         });
         this.reinforcementSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgentDecision)((ServiceAgent)agent).getMyWayOfDecision()).setBeta(newValue.doubleValue()));
+                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgent)agent).setBeta(newValue.doubleValue()));
             }
         });
         this.similarityThresholdSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgentDecision)((ServiceAgent)agent).getMyWayOfDecision()).setSimilarityThreshold(newValue.doubleValue()));
+                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgent)agent).setSimilarityThreshold(newValue.doubleValue()));
             }
         });
         this.epsilonSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgentDecision)((ServiceAgent)agent).getMyWayOfDecision()).setEpsilon(newValue.doubleValue()));
+                agentsListUI.getItems().stream().filter(agent-> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgent)agent).setEpsilon(newValue.doubleValue()));
             }
         });
 
@@ -466,10 +466,17 @@ public class UIMockupController implements Initializable {
     }
 
     private void addEdge(String idService1, String idService2){
-        if(this.serviceGraph.getEdge(""+idService1+idService2)==null && this.serviceGraph.getEdge(""+idService2+idService1)==null ) {
-            // We add only one time the edge between two services
-            this.serviceGraph.addEdge(""+idService1+"-"+idService2, idService1, idService2);
+        try {
+            if(this.serviceGraph.getEdge(""+idService1+idService2)==null && this.serviceGraph.getEdge(""+idService2+idService1)==null ) {
+                // We add only one time the edge between two services
+                if(this.serviceGraph.getNode(idService1)!=null && this.serviceGraph.getNode(idService2)!=null){
+                    this.serviceGraph.addEdge(""+idService1+"-"+idService2, idService1, idService2);
+                }
+            }
+        }catch (Exception e){
+            //ignore exceptions in this Graph stream function
         }
+
     }
 
     private void deleteServicesFromGraph(ArrayList<OCService> listServices) {
@@ -574,13 +581,13 @@ public class UIMockupController implements Initializable {
                     content = content + "Provided services : \n";
                     // Concat the content of all services of the component in a single string
                     content = content + ((MockupComponent)compo).getProvidedServices().stream()
-                                                                                        .map(s -> "\t - "+((MockupService)s).toString()+"\n")
+                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID() +"\n")
                                                                                             .collect(Collectors.joining());
                     // content = content + ""+((MockupComponent)compo).getProvidedServices()+"\n";
                     content = content + "Required services : \n";
                     // content = content + ""+((MockupComponent)compo).getRequiredServices();
                     content = content + ((MockupComponent)compo).getRequiredServices().stream()
-                                                                                        .map(s -> "\t - "+((MockupService)s).toString()+"\n")
+                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID()+"\n")
                                                                                             .collect(Collectors.joining());
                     System.out.println("Provided services = "+ ((MockupComponent)compo).getProvidedServices()+"\n");
                     System.out.println(" Required services = "+ ((MockupComponent)compo).getRequiredServices()+"\n");
@@ -657,15 +664,14 @@ public class UIMockupController implements Initializable {
     @FXML
     public void resetOCECycle(ActionEvent event){
         Alert myAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        myAlert.setTitle("OCE Cycle reset");
-        myAlert.setContentText("Êtes vous sur de vouloir redemarer un autre Cycle moteur ?");
+        myAlert.setTitle("OCE connection delete");
+        myAlert.setContentText("Are you sure of deleting all the connections ?");
         Optional<ButtonType> result = myAlert.showAndWait();
         if (result.get() == ButtonType.OK){
             //Reset all agent's attributes to factory mode settings (for service agent we don't delete the knowledge base)
             this.myOCE.gteAllAgents().stream().forEach(agent-> agent.resetToFactoryDefaultSettings());
             //Delete the binder agents
             this.myOCE.gteAllAgents().stream().filter(agent -> agent instanceof BinderAgent).forEach(agentB -> ((BinderAgent) agentB).suicide());
-            // todo 09/12 Delete in the graph the connections
             this.serviceGraph.getEdgeSet().stream().forEach(edge -> this.serviceGraph.removeEdge(edge));
         }
     }
@@ -674,7 +680,7 @@ public class UIMockupController implements Initializable {
     public void resetSystem(ActionEvent event){
         Alert myAlert = new Alert(Alert.AlertType.CONFIRMATION);
         myAlert.setTitle("System reset");
-        myAlert.setContentText("Êtes vous sur de vouloir redemarer le system ?");
+        myAlert.setContentText("Are you sure of willing to reset the system?");
         Optional<ButtonType> result = myAlert.showAndWait();
         if (result.get() == ButtonType.OK){
             //Delete components and services

@@ -5,6 +5,7 @@
 package OCE.ServiceConnection;
 
 import Logger.OCELogger;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
@@ -15,6 +16,7 @@ import OCE.Medium.Recorder.IRecord;
 import OCE.OCEMessages.FeedbackValues;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -27,9 +29,10 @@ public class AddedConnectionState implements IConnectionState {
      * @param communicationManager : the medium used to send messages to the concerned agent which are part of this connection
      * @param oceRecord            : the reference to the component responsible for reference resolving
      * @param binderAgentFactory   : the reference to the component which allows creating binder agents
+     * @param infrastructureAgentList   : the list of agents to wake up to inform them of the arrival of user feedback
      */
     @Override
-    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory) {
+    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList) {
         OCELogger.log(Level.WARNING, "Treating a connection ADDED BY THE USER ");
 
         //Retrieve the reference to the service agent who handel the service 'firstService' of this new connection
@@ -45,7 +48,11 @@ public class AddedConnectionState implements IConnectionState {
         connection.setBinderAgent(createdBinderAgent);
 
         //If the two service agents are found
-        if (firstServiceAgent.isPresent() && firstServiceAgent.isPresent()){
+        if (firstServiceAgent.isPresent() && secondServiceAgent.isPresent()){
+            //Add both agents in the list to get wake up later to treat the user feedback
+            infrastructureAgentList.add(firstServiceAgent.get().getMyInfrastructureAgent());
+            infrastructureAgentList.add(secondServiceAgent.get().getMyInfrastructureAgent());
+
             //Create the feedback message for the first agent with a ADDED Value
             FeedbackInfraMessage firstAgentFeedbackMessage = new FeedbackInfraMessage(null, null, FeedbackValues.ADDED);
             //Add the first agent as receivers for the first message

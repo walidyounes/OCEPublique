@@ -105,8 +105,8 @@ public class PhysicalDeviceBinder {
                 OCELogger.log(Level.INFO, "Bingo");
                 OCELogger.log(Level.INFO,"Connection to delete = " + connection.toString());
                 //Disconnect the two service by changing their state Todo : this is just for test
-                connection.getFirstServiceAgent().setMyConnexionState(ServiceAgentConnexionState.NotConnected);
-                connection.getSecondServiceAgent().setMyConnexionState(ServiceAgentConnexionState.NotConnected);
+                connection.getFirstServiceAgent().setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
+                connection.getSecondServiceAgent().setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
             }
         }
     }

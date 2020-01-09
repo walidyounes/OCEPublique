@@ -37,7 +37,7 @@ public class AgreeMessage extends ARSAMessage {
 
     /**
      * treat the agree message and make the suitable decision
-     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param stateConnexionAgent : the connexion's state of this service agent "CREATED, CONNECTED, NOT_CONNECTED, WAITING"
      * @param oceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
      * @return the decision made by the engine
@@ -45,14 +45,11 @@ public class AgreeMessage extends ARSAMessage {
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
         OCELogger.log(Level.INFO, oceAgentRef + " treats an agreement message ");
-        //Verify the connexion state of the agent Todo: walid : il y a un probleme lorsque l'agent se met en attente  - walid  02/09/2019 : a vérifier ça signife quoi
-        // if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
-            // change the connexion's state of the agent
-            //((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.Waiting); //  Todo Walid 02/09/2019 : je pense que c'est inutile de faire ça - 04/10/2019 : je le remet car j'ai changé dans le code de decision de l'agent - 04/09 17h : je l'ai enlevé
-            OCELogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
-            return new DoNothingDecision();
-       //  }
-        //return null;
+        // change the connexion's state of the agent
+        //((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.WAITING); //  Todo Walid 02/09/2019 : je pense que c'est inutile de faire ça - 04/10/2019 : je le remet car j'ai changé dans le code de decision de l'agent - 04/09 17h : je l'ai enlevé
+        ((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.EXPECTING_FEEDBACK); // Todo walid 13/12/2019 : je l'ai ajouté car lorsqu'un agent traite se message il n'est plus en mode WAITING FOR AGREE il passe directement vers l'attente de feedback
+        //OCELogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
+        return new DoNothingDecision();
     }
 
     /**

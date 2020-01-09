@@ -19,7 +19,7 @@ public class BestScoreEpsilonGreedy implements IAgentSelectionStrategy {
     }
 
     @Override
-    public Map.Entry<IDAgent, ScoredCurrentSituationEntry> execute(Situation<ScoredCurrentSituationEntry> scoredCS) {
+    public Optional<Map.Entry<IDAgent, ScoredCurrentSituationEntry>> execute(Situation<ScoredCurrentSituationEntry> scoredCS) {
         //Create the list of potential best agent
         List<IDAgent> listBestAgent = new ArrayList<>();
         //Generate a random probability of exploration
@@ -34,7 +34,7 @@ public class BestScoreEpsilonGreedy implements IAgentSelectionStrategy {
             System.out.println("random index = "+indexAgent);
             List<IDAgent> listAgents = new ArrayList<>(scoredCS.getAgentSituationEntries().keySet());
             IDAgent bestAgent = listAgents.get(indexAgent);
-            return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent));
+            return Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent)));
 
         }else {//Exploitation -> choose the best agent according to the values of score
 
@@ -56,12 +56,12 @@ public class BestScoreEpsilonGreedy implements IAgentSelectionStrategy {
                 //System.out.println("random index = "+indexAgent);
                 //Get the ID corresponding to the random generated index
                 IDAgent bestAgent = listBestAgent.get(indexAgent);
-                return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent));
+                return Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent)));
             }
             else{
                 //Get the best agent (there is only one)
                 IDAgent bestAgent = listBestAgent.get(0);
-                return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent));
+                return Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent)));
             }
         }
     }

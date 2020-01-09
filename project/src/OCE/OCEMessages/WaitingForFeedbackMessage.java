@@ -18,14 +18,14 @@ import OCE.OCEDecisions.OCEDecision;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-public class WitingForFeedbackMessage extends OCEMessage {
+public class WaitingForFeedbackMessage extends OCEMessage {
 
     /**
      * create a bind perception
      * @param emitter    reference of the agent sending the bind message (usualy it's a binder agent)
      * @param receivers the references of the receivers of the bind message
      */
-    public WitingForFeedbackMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
+    public WaitingForFeedbackMessage(OCEAgent emitter, ArrayList<OCEAgent> receivers) {
         this.emitter = emitter;
         this.receivers = receivers;
     }
@@ -33,18 +33,18 @@ public class WitingForFeedbackMessage extends OCEMessage {
     /**
      * treat the message and make the suitable decision
      *
-     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param stateConnexionAgent : the connexion's state of this service agent "CREATED, CONNECTED, NOT_CONNECTED, WAITING"
      * @param OCEAgentRef         : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService        : the information of the service of the agent that's treating this message
      * @return the decision made by the engine
      */
     @Override
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent OCEAgentRef, OCService localService) {
-        OCELogger.log(Level.INFO, OCEAgentRef + " treats a Temporary Connected message");
+        OCELogger.log(Level.INFO, OCEAgentRef + " treats a Temporary CONNECTED message");
         //Cast the matchingID of the agent to a service agent
         ServiceAgent serviceAgent = (ServiceAgent) OCEAgentRef;
         //Change the connexion state of the service agent
-        serviceAgent.setMyConnexionState(ServiceAgentConnexionState.WAITINGFEEDBACK);
+        serviceAgent.setMyConnexionState(ServiceAgentConnexionState.EXPECTING_FEEDBACK);
         //Reset the attribute "connectedTo" to initial value (empty)
         //serviceAgent.setConnectedTo(Optional.empty());
 
@@ -87,7 +87,7 @@ public class WitingForFeedbackMessage extends OCEMessage {
 
     @Override
     public String toString() {
-        return "WitingForFeedbackMessage{" +
+        return "WaitingForFeedbackMessage{" +
                 "emitter=" + emitter +
                 ", receivers=" + receivers +
                 '}';

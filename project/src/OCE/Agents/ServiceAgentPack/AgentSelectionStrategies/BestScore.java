@@ -12,7 +12,7 @@ import java.util.*;
 
 public class BestScore implements IAgentSelectionStrategy {
     @Override
-    public Map.Entry<IDAgent, ScoredCurrentSituationEntry> execute(Situation<ScoredCurrentSituationEntry> scoredCS) {
+    public Optional<Map.Entry<IDAgent, ScoredCurrentSituationEntry>> execute(Situation<ScoredCurrentSituationEntry> scoredCS) {
         //Create the list of potential best agent
         List<IDAgent> listBestAgent = new ArrayList<>();
 
@@ -34,12 +34,12 @@ public class BestScore implements IAgentSelectionStrategy {
             //System.out.println("random index = "+indexAgent);
             //Get the ID corresponding to the random generated index
             IDAgent bestAgent = listBestAgent.get(indexAgent);
-            return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent));
+            return Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent)));
         }
         else{
             //Get the best agent (there is only one)
             IDAgent bestAgent = listBestAgent.get(0);
-            return new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent));
+            return Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(bestAgent, scoredCS.getAgentSituationEntries().get(bestAgent)));
         }
     }
 }

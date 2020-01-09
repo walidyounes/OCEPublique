@@ -6,6 +6,7 @@ package MOICE.connectionManager;
 
 import AmbientEnvironment.MockupCompo.MockupComponent;
 import AmbientEnvironment.OCPlateforme.OCComponent;
+import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.ServiceConnection.Connection;
 
 import java.util.List;
@@ -35,6 +36,12 @@ public interface IConnectionManager {
      * @param connection    : the proposed connection to unregister
      */
     void unRegisterConnection(Connection connection);
+
+    /**
+     * Delete all connections that are handled by the binder agent send as a parameter
+     * @param binderAgent : the binder agent that we which to delete the connections
+     */
+    void unRegisterConnectionByBinderAgent(BinderAgent binderAgent);
 
     /**
      * Collect the connection proposed by the engine OCE. This method is dedicated to ICE

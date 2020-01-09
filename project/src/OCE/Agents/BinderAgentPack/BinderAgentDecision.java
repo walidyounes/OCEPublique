@@ -75,7 +75,7 @@ public class BinderAgentDecision implements IDecisionState {
             //Check if  the binder agent received the two messages that he supposed to receive from both agents
             //this.nbMessages += bindingPerceptions.size();
             //if (this.nbMessages <2){ // we didn't receive all the message
-             //   OCELogger.log(Level.INFO,"Waiting for the second message - nbMessage " + nbMessages);
+             //   OCELogger.log(Level.INFO,"WAITING for the second message - nbMessage " + nbMessages);
 
                 // myListOfDecisions.add(new DoNothingDecision());
            // }else{ // launch the physical binding

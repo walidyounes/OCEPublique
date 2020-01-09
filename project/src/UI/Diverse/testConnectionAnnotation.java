@@ -59,10 +59,10 @@ public class testConnectionAnnotation {
         //Create an instance for the feedback manager
         FeedbackManager feedbackManager = new FeedbackManager();
         //Create the instance of the feedback Dispatcher
-        OCEFeedbackDispatcher oceFeedbackDispatcher = new OCEFeedbackDispatcher();
+        // OCEFeedbackDispatcher oceFeedbackDispatcher = new OCEFeedbackDispatcher(null);
 
         //Add the dispatcher as a listener
-        feedbackManager.addPropertyChangeListener(oceFeedbackDispatcher);
+        // feedbackManager.addPropertyChangeListener(oceFeedbackDispatcher);
 
         //Calculate feedback
         feedbackManager.registerUserConfiguration("MyLogFiles\\oldFile.xml", "MyLogFiles\\newFile.xml");

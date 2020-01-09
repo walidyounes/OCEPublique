@@ -108,6 +108,15 @@ public class Situation < T extends SituationEntry> {
         }else return null;
     }
 
+    /**
+     * Delete, if it exists, the situation Entry corresponding to the specified idAgent
+     * @param idAgent : the id of the agent
+     */
+    public void deleteSituationEntryByIDAgent(IDAgent idAgent){
+        if (this.containServiceAgent(idAgent)){
+            this.agentSituationEntries.remove(idAgent);
+        }
+    }
 
     @Override
     public String toString() {

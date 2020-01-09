@@ -11,6 +11,7 @@ import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentConnexionState;
 import OCE.Medium.Recorder.IRecord;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -39,8 +40,17 @@ public class ServiceManager implements INotification {
                 System.out.println("The service reappeared = "+service.toString());
                 //Before ordering the creation of a new service agent, we check if it's existed before and in that case we only wake it up
                 OCELogger.log(Level.INFO, "Reactivation the appearing service agent = "+ this.disappearedServiceAgent.get(service).toString());
-                this.disappearedServiceAgent.get(service).setMyConnexionState(ServiceAgentConnexionState.NotConnected);
-                this.agentRecorder.getAllAgents().add(this.disappearedServiceAgent.get(service));
+                this.disappearedServiceAgent.get(service).setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
+                //Reset to factory the parameters of the reappearing service agent, Except for its KNOWLEDGE
+                this.disappearedServiceAgent.get(service).resetToFactoryDefaultSettings();
+                //Add the agent to the list in the UI
+                Platform.runLater(
+                        () -> {
+                            // Update UI here
+                            this.agentRecorder.getAllAgents().add(this.disappearedServiceAgent.get(service));
+                        }
+                );
+
             }else{
                 //The service is a new service, thus we create his attached serviceAgent
                 Map.Entry<ServiceAgent, InfraAgentReference> agentS_referenceAgent_Association = agentFactory.createServiceAgent(service);

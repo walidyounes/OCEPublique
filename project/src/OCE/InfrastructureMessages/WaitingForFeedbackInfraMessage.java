@@ -9,7 +9,7 @@ import OCE.Medium.Recorder.IRecord;
 import OCE.Medium.ReferenceResolutionFailure;
 import OCE.OCEMessages.MessageTypes;
 import OCE.OCEMessages.OCEMessage;
-import OCE.OCEMessages.WitingForFeedbackMessage;
+import OCE.OCEMessages.WaitingForFeedbackMessage;
 
 import java.util.ArrayList;
 
@@ -68,7 +68,7 @@ public class WaitingForFeedbackInfraMessage extends InfraMessage {
     }
 
     /**
-     * get the matchingID of message,  which can be : Advertise, reply, select, agree, bind, disconnect, WAITINGFEEDBACK.....
+     * get the matchingID of message,  which can be : Advertise, reply, select, agree, bind, disconnect, WAITING_FEEDBACK.....
      *
      * @return the matchingID of the message
      */
@@ -86,7 +86,7 @@ public class WaitingForFeedbackInfraMessage extends InfraMessage {
     @Override
     public OCEMessage toOCEMessage(IRecord referenceResolver) {
         try {
-            return new WitingForFeedbackMessage(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
+            return new WaitingForFeedbackMessage(referenceResolver.retrieveOCEAgentByInfraAgentReference(this.emitter), referenceResolver.retrieveOCEAgentsByInfraAgentReferences(this.receivers));
         } catch (ReferenceResolutionFailure referenceResolutionFailure) {
             referenceResolutionFailure.printStackTrace();
             return null;

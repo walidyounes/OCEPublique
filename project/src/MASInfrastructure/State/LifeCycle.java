@@ -12,13 +12,13 @@ import java.util.Map;
 /**
  * This class implement a life cycle of an agent, it consist in
  * currentState : the current state of the agent
- * sharedMemorie : an shared area to store data
+ * sharedMemory : an shared area to store data
  * @author Walid YOUNES
  * @version 1.0
  */
 public class LifeCycle {
     private IState currentState;
-    private Map<String, ArrayList> sharedMemorie;
+    private Map<String, ArrayList> sharedMemory;
 
     /**
      * Constructor of the class
@@ -26,7 +26,7 @@ public class LifeCycle {
      */
     public LifeCycle(IState initialState) {
         this.currentState = initialState;
-        this.sharedMemorie = new HashMap<>();
+        this.sharedMemory = new HashMap<>();
     }
 
     /**
@@ -46,16 +46,16 @@ public class LifeCycle {
     }
 
     /**
-     * This function allow to share data in a labelized area
+     * This function allow to share data in a labeled area
      * @param variableName : the name of the are, its used to distinguish the different areas
-     * @param dataToshare  : the data to share between the states
+     * @param dataToShare  : the data to share between the states
      */
-    public void shareVariable(String variableName, ArrayList dataToshare) {
-        if (this.sharedMemorie.containsKey(variableName)) {
-            //Si l'état existe déjà on remplace juste la variable
-            this.sharedMemorie.replace(variableName, dataToshare);
+    public void shareVariable(String variableName, ArrayList dataToShare) {
+        if (this.sharedMemory.containsKey(variableName)) {
+            //If the state exists we change only the variable
+            this.sharedMemory.replace(variableName, dataToShare);
         } else {
-            this.sharedMemorie.put(variableName, dataToshare);
+            this.sharedMemory.put(variableName, dataToShare);
         }
     }
 
@@ -65,7 +65,7 @@ public class LifeCycle {
      * @return the data stored in that area
      */
     public ArrayList getSharedData(String variableName) {
-        return this.sharedMemorie.get(variableName);
+        return this.sharedMemory.get(variableName);
     }
 
     /**

@@ -44,7 +44,7 @@ public class AdvertiseMessage extends ARSAMessage {
 
     /**
      * treat the advertising message and make the suitable decision
-     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param stateConnexionAgent : the connexion's state of this service agent "CREATED, CONNECTED, NOT_CONNECTED, WAITING"
      * @param oceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
      * @return the decision made by the engine
@@ -53,7 +53,7 @@ public class AdvertiseMessage extends ARSAMessage {
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
         OCELogger.log(Level.INFO, oceAgentRef + " treats an advertisement message ");
         //Verify the connexion state of the agent
-        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
+        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NOT_CONNECTED) || stateConnexionAgent.equals(ServiceAgentConnexionState.CREATED)){
             OCELogger.log(Level.INFO, oceAgentRef +" is not connected  ");
             //Verify the matching between the services Todo use the matching in the future
             //todo here we are casting the matchingID to MockupService

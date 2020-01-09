@@ -10,6 +10,7 @@ import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
 import MOICE.ICEXMLFormatter;
 import MOICE.IFileFormatter;
+import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.ServiceConnection.Connection;
 
 import java.util.ArrayList;
@@ -130,6 +131,26 @@ public class ConnectionManager implements IConnectionManager {
     @Override
     public void unRegisterConnection(Connection connection) {
         this.listConnections.remove(connection);
+    }
+
+    /**
+     * Delete all connections that are handled by the binder agent send as a parameter
+     * @param binderAgent : the binder agent that we which to delete the connections
+     */
+    @Override
+    public void unRegisterConnectionByBinderAgent(BinderAgent binderAgent) {
+        List<Connection> listConnectionsToRemove = new ArrayList<>();
+        //Iterate over the connections
+        for (Connection currentConnection: this.listConnections) {
+            //If it's matches the criteria
+            if(currentConnection.getBinderAgent().equals(binderAgent)){
+                //Add it to the list of connections to remove
+                listConnectionsToRemove.add(currentConnection);
+                System.out.println("Deleting this connection = " + currentConnection.toString() + " --- belonging to this binder agent = " + binderAgent.toString());
+            }
+        }
+        //Remove the connections
+        this.listConnections.removeAll(listConnectionsToRemove);
     }
 
     /**

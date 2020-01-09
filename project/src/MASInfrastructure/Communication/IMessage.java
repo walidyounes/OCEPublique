@@ -41,7 +41,7 @@ public interface IMessage {
 
     /**
      * treat the message and make the suitable decision
-     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param stateConnexionAgent : the connexion's state of this service agent "Created, CONNECTED, NotConnected, WAITING"
      * @param serviceAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @return the deicision made by the engine
      */

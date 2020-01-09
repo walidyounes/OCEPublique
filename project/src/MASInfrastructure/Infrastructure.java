@@ -36,6 +36,7 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
 
     public Infrastructure() {
         scheduler = new Scheduler(new ClassicStrategy(new ArrayList<>(), new ArrayList<>()));
+//        scheduler = new Scheduler(new CycleByCycleStrategy(new ArrayList<>(), new ArrayList<>()));
         annuaire = AgentDirectory.getInstance();
         infraAgentFactory = new InfraAgentFactory(annuaire, scheduler);
     }
@@ -48,6 +49,18 @@ public class Infrastructure implements IInfraAgentFactory, ISuicideService, ICom
     @Override
     public void startScheduling() {
         scheduler.startScheduling();
+    }
+
+    /**
+     * Start a special scheduling cycle with a set of agents and for a certain number of cycles.
+     * An example of a use case for this method, is to treat the feedback : scheduling the agents which are supposed to treat the feedback.
+     *
+     * @param listAgentsToSchedule :   the list of agents to schedule
+     * @param numberCycles         :   the number of agent cycle to run (One cycle = Perception, Decision, Action)
+     */
+    @Override
+    public void startSpecialScheduling(List<InfrastructureAgent> listAgentsToSchedule, int numberCycles) {
+        this.scheduler.startSpecialScheduling(listAgentsToSchedule, numberCycles);
     }
 
     @Override

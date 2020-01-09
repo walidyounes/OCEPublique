@@ -5,7 +5,9 @@
 package OCE.ServiceConnection;
 
 import AmbientEnvironment.MockupCompo.MockupService;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
+import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.InfrastructureMessages.FeedbackInfraMessage;
@@ -14,6 +16,7 @@ import OCE.Medium.Recorder.IRecord;
 import OCE.OCEMessages.FeedbackValues;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ModifiedConnectionState implements IConnectionState {
@@ -32,13 +35,14 @@ public class ModifiedConnectionState implements IConnectionState {
     /**
      * Treat the connexion according to the it's state
      *
-     * @param connection :  the connection to be treated
-     * @param communicationManager : the medium used to send messages to the concerned agent which are part of this connection
-     * @param oceRecord : the reference to the component responsible for reference resolving
-     * @param binderAgentFactory   : the reference to the component which allows creating binder agents
+     * @param connection                :  the connection to be treated
+     * @param communicationManager      : the medium used to send messages to the concerned agent which are part of this connection
+     * @param oceRecord                 : the reference to the component responsible for reference resolving
+     * @param binderAgentFactory        : the reference to the component which allows creating binder agents
+     * @param infrastructureAgentList   : the list of agents to wake up to inform them of the arrival of user feedback
      */
     @Override
-    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory) {
+    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList) {
         //Get the first Service agent
         ServiceAgent firstServiceAgent = connection.getFirstServiceAgent();
         //Get the second Service agent
@@ -51,12 +55,22 @@ public class ModifiedConnectionState implements IConnectionState {
         ArrayList<OCEAgent> firstAgentReceivers = new ArrayList<>();
         firstAgentReceivers.add(firstServiceAgent);
 
+        //Add both agents in the list to get wake up later to treat the user feedback
+        infrastructureAgentList.add(firstServiceAgent.getMyInfrastructureAgent());
+        infrastructureAgentList.add(secondServiceAgent.getMyInfrastructureAgent());
+
+        //Get the binder agents of this connection
+        BinderAgent binderAgent = connection.getBinderAgent();
+
         //Check to with these two service agents are connected to
         if(this.secondServiceChangedTo.isPresent()){
                 //Get the reference of the service agent corresponding to the new service connected to the firstService (it return null if it fails)
                 ServiceAgent firstSAConnectedTo = oceRecord.retrieveSAgentByPService(this.secondServiceChangedTo.get()).orElse(null);
 
-                //Set the reference of the service agent to the agent to whom the first agent is connected to
+                //Add the agent in the list to get wake up later to treat the user feedback
+                infrastructureAgentList.add(firstSAConnectedTo.getMyInfrastructureAgent());
+
+                //Set the reference of the service agent to whom the first agent is connected to
                 firstAgentFeedbackMessage.setAgentChosenUser(firstSAConnectedTo);
 
                 //Send a FeedbackMessage to the agent chosen by the user
@@ -90,6 +104,9 @@ public class ModifiedConnectionState implements IConnectionState {
         if(this.firstServiceChangedTo.isPresent()){
             //Get the reference of the service agent corresponding to the new service connected to the secondService (it return null if it fails)
             ServiceAgent secondSAConnectedTo = oceRecord.retrieveSAgentByPService(this.firstServiceChangedTo.get()).orElse(null);
+
+            //Add the agent in the list to get wake up later to treat the user feedback
+            infrastructureAgentList.add(secondSAConnectedTo.getMyInfrastructureAgent());
 
             //Set the reference of the service agent to the agent to whom the second agent is connected to
             secondAgentFeedbackMessage.setAgentChosenUser(secondSAConnectedTo);

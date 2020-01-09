@@ -19,7 +19,6 @@ import OCE.Agents.ServiceAgentPack.Learning.ScoredCurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
 import OCE.OCEMessages.FeedbackValues;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -31,17 +30,27 @@ import java.util.logging.Level;
 public class ServiceAgent extends OCEAgent implements Comparable {
 
 
-    private OCService handledService;                                           // The service that the agent is responsible for
-    private ServiceAgentConnexionState myConnexionState;                        // The state of the service agent
-    private Optional<ServiceAgent> connectedTo;                                 // The reference for the service agent which are connected to, it's set to null if the agent is not connected
-    private IOCEBinderAgentFactory myBinderAgentFactory;                        // The reference for the binder agent factory
-    private Optional<Situation<CurrentSituationEntry>> myCurrentSituation;                // The current situation under construction
-    private Optional<Situation<ScoredCurrentSituationEntry>> myScoredCurrentSituation;    // The scored current situation of the agent
-    private Set<Situation<ReferenceSituationEntry>> myKnowledgeBase;            // The agent's knowledge base
-    private int myCurrentCycleNumber;                                           // Todo just for the test of the presentation issue of an assembly to the user
-    private boolean feedbackReceived;                                           // The variable to indicate whether the agent received the feedback or not
-    private FeedbackValues feedbackValue;                                       // The feedback value
-    private Optional<BinderAgent> myBinderAgent;                                // The binder agent
+    private OCService handledService;                                                        // The service that the agent is responsible for
+    private ServiceAgentConnexionState myConnexionState;                                    // The state of the service agent
+    private Optional<ServiceAgent> connectedTo;                                             // The reference for the service agent which are connected to, it's set to null if the agent is not connected
+    private IOCEBinderAgentFactory myBinderAgentFactory;                                    // The reference for the binder agent factory
+    private Optional<Situation<CurrentSituationEntry>> myCurrentSituation;                  // The current situation under construction
+    private Optional<Situation<ScoredCurrentSituationEntry>> myScoredCurrentSituation;      // The scored current situation of the agent
+    private Optional<Map.Entry<IDAgent, ScoredCurrentSituationEntry>> oceCycleBestAgent;    // 2-Uplet that indicates the best agent selected in the previous cycle agent
+    private Set<Situation<ReferenceSituationEntry>> myKnowledgeBase;                        // The agent's knowledge base
+    private int myCurrentCycleNumber;                                                       // Variable to indicate whether the agent is in it's first agent cycle
+    // private boolean feedbackReceived;                                                       // The variable to indicate whether the agent received the feedback or not
+    // private FeedbackValues feedbackValue;                                                   // The feedback value
+    private Optional<BinderAgent> myBinderAgent;                                            // The binder agent
+    private boolean startingNewEngineCycle;                                                 // Variable used to indicate whether we are starting a new Engine cycle (it's used when the service agent was connected in the previous engine cycle, when starting a new cycle, the agent for now sty connected
+                                                                                            //so it need to inform it's binder agent to recreate the same connection to get visualized by the user in ICE
+    // Learning parameters
+    private final double initialValue = 0.0;    //The value used to initialise the score
+    private double reinforcement = 0.0;         //The value of the reinforcement
+    private double beta = 1;              //The value used to compute the reinforcement from the feedback
+    private double learningRate = 0.4;           //The Learning rate
+    private double similarityThreshold = 0.3;             //Define the similarityThreshold for selecting similar reference situation
+    private double epsilon = 0.2;              //The value of the threshold used by the strategy of selection of best agent
 
     /**
      * Create a service Agent specifying a random ID
@@ -57,15 +66,15 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myWayOfDecision = myWayOfDecision;
         this.myWayOfAction = myWayOfAction;
         this.myInfrastructureAgent = null;
-        this.myConnexionState = ServiceAgentConnexionState.Created;
+        this.myConnexionState = ServiceAgentConnexionState.CREATED;
         this.connectedTo = Optional.empty(); //Initialised the attribute to empty cause the agent start not connected
         this.myBinderAgent = Optional.empty(); //Initialised the attribute to empty cause the agent doesn't have a binder agent yet
         //Initialise at null it means that it's the start of an engine cycle
         this.myCurrentSituation = Optional.empty();
         this.myScoredCurrentSituation = Optional.empty();
         this.myCurrentCycleNumber = 0;
-        //Todo : change implementation to add uploading of old knowledge
-        this.myKnowledgeBase = new HashSet<>();
+        this.myKnowledgeBase = new HashSet<>(); //PS : we can change implementation to add uploading of old knowledge
+        this.startingNewEngineCycle = true; // By default, when the engine get launched
     }
 
     /**
@@ -83,15 +92,15 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myWayOfDecision = myWayOfDecision;
         this.myWayOfAction = myWayOfAction;
         this.myInfrastructureAgent = null;
-        this.myConnexionState = ServiceAgentConnexionState.Created;
+        this.myConnexionState = ServiceAgentConnexionState.CREATED;
         this.connectedTo = Optional.empty(); //Initialised the attribute to empty cause the agent start not connected
         this.myBinderAgent = Optional.empty(); //Initialised the attribute to empty cause the agent doesn't have a binder agent yet
         //Initialise to Empty it means that it's the start of an engine cycle
         this.myCurrentSituation = Optional.empty();
         this.myScoredCurrentSituation =  Optional.empty();
         this.myCurrentCycleNumber = 0;
-        //Todo : change implementation to add uploading of old knowledge
-        this.myKnowledgeBase = new HashSet<>();
+        this.myKnowledgeBase = new HashSet<>(); //PS : we can change implementation to add uploading of old knowledge
+        this.startingNewEngineCycle = true; // By default, when the engine get launched
     }
 
 
@@ -305,37 +314,37 @@ public class ServiceAgent extends OCEAgent implements Comparable {
 
     }
 
-    /**
-     * Check whether the feedback is received
-     * @return true if the agent received the feedback, false otherwise
-     */
-    public boolean isFeedbackReceived() {
-        return feedbackReceived;
-    }
-
-    /**
-     * Set the whether the feedback received or not
-     * @param feedbackReceived : true = feedback received, false = not received
-     */
-    public void setFeedbackReceived(boolean feedbackReceived) {
-        this.feedbackReceived = feedbackReceived;
-    }
-
-    /**
-     * Get the value of the last feedback received
-     * @return the value of the last received feedback
-     */
-    public FeedbackValues getFeedbackValue() {
-        return feedbackValue;
-    }
-
-    /**
-     * Set the value of the received feedback "ACCEPTED" or "REJECTED"
-     * @param feedbackValue : the value of the feedback
-     */
-    public void setFeedbackValue(FeedbackValues feedbackValue) {
-        this.feedbackValue = feedbackValue;
-    }
+//    /**
+//     * Check whether the feedback is received
+//     * @return true if the agent received the feedback, false otherwise
+//     */
+//    public boolean isFeedbackReceived() {
+//        return feedbackReceived;
+//    }
+//
+//    /**
+//     * Set the whether the feedback received or not
+//     * @param feedbackReceived : true = feedback received, false = not received
+//     */
+//    public void setFeedbackReceived(boolean feedbackReceived) {
+//        this.feedbackReceived = feedbackReceived;
+//    }
+//
+//    /**
+//     * Get the value of the last feedback received
+//     * @return the value of the last received feedback
+//     */
+//    public FeedbackValues getFeedbackValue() {
+//        return feedbackValue;
+//    }
+//
+//    /**
+//     * Set the value of the received feedback "ACCEPTED" or "REJECTED"
+//     * @param feedbackValue : the value of the feedback
+//     */
+//    public void setFeedbackValue(FeedbackValues feedbackValue) {
+//        this.feedbackValue = feedbackValue;
+//    }
 
     /**
      * Launch the suicide mechanism of the agent
@@ -343,16 +352,22 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     public void suicide(){
         OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is committing SUICIDE !");
         //Check if the agent is connected
-        if(this.myConnexionState.equals(ServiceAgentConnexionState.Connected) && this.connectedTo.isPresent()){
-            //Todo : walid 29 11H55 on rentre pas ici je pense que le service connected to n'existe pas
+        if(this.myConnexionState.equals(ServiceAgentConnexionState.CONNECTED) && this.connectedTo.isPresent()){
+            //Todo : walid 29 11H55 on rentre pas ici je pense que le service connected to n'existe pas -> 20/01 je pense que ce todo est inutile
             OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is ready to SUICIDE!");
             //Put the indicator of suicide to true so in the decision process, the agent will send a disconnect message
             ((ServiceAgentDecision)this.myWayOfDecision).setCommitSuicide(true);
+            if(this.myBinderAgent.isPresent()){
+                //Delete the service handled by tis agent from the binder agent, if the two service were deleted the binder agent suicide
+                this.myBinderAgent.get().deleteMyService(this.handledService);
+                //Delete the reference of the binder agent from the service
+                this.deleteMyBinderAgent();
+            }
         }
-        //Save the knowledge of the service agent | Todo : For now we don't do it -> we put to sleep
+        //Save the knowledge of the service agent | For now we don't do it -> we put to sleep
 
         //Put the serviceAgent to sleep
-        this.myConnexionState = ServiceAgentConnexionState.Sleep;
+        this.myConnexionState = ServiceAgentConnexionState.SLEEP;
         OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is put to SLEEP !");
 
     }
@@ -381,11 +396,129 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     }
 
     /**
+     * Get the reference of the chosen agent in the current oce cycle
+     * @return : the couple 'AgentRef, SituationEntry" of the chosen agent to be connected to
+     */
+    public Optional<Map.Entry<IDAgent, ScoredCurrentSituationEntry>> getOceCycleBestAgent() {
+        return oceCycleBestAgent;
+    }
+
+    /**
+     * Set the reference of the chosen agent in the current oce cycle and it's situation entry
+     * @param oceCycleBestAgent : the couple 'AgentRef, SituationEntry" of the chosen agent to be connected to
+     */
+    public void setOceCycleBestAgent(Map.Entry<IDAgent, ScoredCurrentSituationEntry> oceCycleBestAgent) {
+        this.oceCycleBestAgent = Optional.ofNullable(oceCycleBestAgent);
+    }
+
+    /**
+     * Get if the service agent is starting a new engine (OCE) cycle
+     * @return true if a new engine cycle is starting, else it return false
+     */
+    public boolean isStartingNewEngineCycle() {
+        return startingNewEngineCycle;
+    }
+
+    /**
+     * Set whether the service agent is starting a new engine (OCE) cycle
+     * @param startingNewEngineCycle: true if a new engine cycle is starting, else it return false
+     */
+    public void setStartingNewEngineCycle(boolean startingNewEngineCycle) {
+        this.startingNewEngineCycle = startingNewEngineCycle;
+        this.myCurrentCycleNumber = 0;
+    }
+
+    /**
+     * Set the value for "epsilon" which is used in the selection of best agent strategy
+     * @param epsilon : the new value
+     */
+    public void setEpsilon(double epsilon) {
+        //OCELogger.log(Level.INFO,"Agent = "+ this.myServiceAgent.toString() + " update the EPSILON value to " + epsilon);
+        this.epsilon = epsilon;
+    }
+
+    /**
+     * Get the value for "epsilon" which is used in the selection of best agent strategy
+     * @return : the value of Epsilon
+     */
+    public double getEpsilon() {
+        return this.epsilon;
+    }
+
+    /**
+     * Set the value for the learning rate parameter (alpha)
+     * @param learningRate : the new value
+     */
+    public void setLearningRate(double learningRate) {
+        //OCELogger.log(Level.INFO,"Agent = "+ this.myServiceAgent.toString() + " update the LEARNING RATE value to " + learningRate);
+        this.learningRate = learningRate;
+    }
+
+    /**
+     * Get the value for the learning rate parameter (alpha)
+     * @return : the value of the learning rate of this agent
+     */
+    public double getLearningRate() {
+        return this.learningRate;
+    }
+
+    /**
+     * Set the value for the parameter "beta" used to compute the reinforcement value
+     * @param beta : the new value
+     */
+    public void setBeta(double beta) {
+        //OCELogger.log(Level.INFO,"Agent = "+ this.myServiceAgent.toString() + " update the BETA (Used to compute reinforcement) value to " + beta);
+        this.beta = beta;
+    }
+
+    /**
+     * Get the value for the parameter "beta" used to compute the reinforcement value
+     * @return : the value of the parameter beta of this agent
+     */
+    public double getBeta() {
+        return this.beta;
+    }
+
+    /**
+     * Set the value for the similarity Threshold
+     * @param similarityThreshold : the new value
+     */
+    public void setSimilarityThreshold(double similarityThreshold) {
+        //OCELogger.log(Level.INFO,"Agent = "+ this.myServiceAgent.toString() + " update the SIMILARITY THRESHOLD value to " + similarityThreshold);
+        this.similarityThreshold = similarityThreshold;
+    }
+
+    /**
+     * Get the value for the similarity Threshold
+     * @return : the value of the similarity Threshold of this agent
+     */
+    public double getSimilarityThreshold() {
+        return this.similarityThreshold;
+    }
+
+    /**
+     * Get the value for the reinforcement
+     * @return
+     */
+    public double getReinforcement() {
+        return reinforcement;
+    }
+
+    /**
+     * Get the value for the initial value used when creating an entry for a service agent
+     * @return : the value of the initial value
+     */
+    public double getInitialValue() {
+        return reinforcement;
+    }
+
+
+    /**
      * Reset the set of attributes of this agent to factory setting except for the knowledge
      */
     public void resetToFactoryDefaultSettings(){
         //Mark  the state of the connection to not connected
-        this.setMyConnexionState(ServiceAgentConnexionState.NotConnected);
+        this.setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
         //Delete the agent to which this agent is maybe connected to
         this.resetConnectedTo();
         //If the agent has a binder agent delete it
@@ -395,10 +528,13 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.resetMyScoredCurrentSituation();
         //Reset the number of the cycle of the agent
         this.myCurrentCycleNumber = 0;
-        //Reset the field indicating the feedback is received
-        this.feedbackReceived = false;
+//        //Reset the field indicating the feedback is received
+//        this.feedbackReceived = false;
+        //Reset the oceCycle Best agent
+        this.oceCycleBestAgent = Optional.empty();
+        //Reset the variable indicating that it's the start of a new OCE Cycle
+        this.startingNewEngineCycle = false;
     }
-
     /**
      *  Compare two Service Agents (the comparison is compute on the handled Service)
      * @param o the service agent to compare this to

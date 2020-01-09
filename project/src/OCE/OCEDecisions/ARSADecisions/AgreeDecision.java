@@ -51,8 +51,8 @@ public class AgreeDecision extends OCEDecision {
         ArrayList<OCEAgent> bindReceiver = new ArrayList<>();
         bindReceiver.add(this.binderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter, bindReceiver);
-        // Change the state of the agent to "Waiting state"
-        ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.Waiting);
+        // Change the state of the agent to "WAITING state" // todo walid 13/12/2019 -> put the agent directly in WAITTING-Feedback state (we don't need that the binder agent sends a message)
+        ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.EXPECTING_FEEDBACK);
     }
 
     @Override

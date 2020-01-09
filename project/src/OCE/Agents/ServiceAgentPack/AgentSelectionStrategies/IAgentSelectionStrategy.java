@@ -9,7 +9,8 @@ import OCE.Agents.ServiceAgentPack.Learning.ScoredCurrentSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
 
 import java.util.Map;
+import java.util.Optional;
 
 public interface IAgentSelectionStrategy {
-    Map.Entry<IDAgent, ScoredCurrentSituationEntry> execute(Situation<ScoredCurrentSituationEntry> scoredCS);
+    Optional<Map.Entry<IDAgent, ScoredCurrentSituationEntry>> execute(Situation<ScoredCurrentSituationEntry> scoredCS);
 }

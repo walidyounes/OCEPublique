@@ -61,7 +61,7 @@ public class SelectMessage extends ARSAMessage {
 
     /**
      * treat the selection message and make the suitable decision
-     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param stateConnexionAgent : the connexion's state of this service agent "CREATED, CONNECTED, NOT_CONNECTED, WAITING"
      * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
      * @return the decision made by the engine
@@ -86,7 +86,7 @@ public class SelectMessage extends ARSAMessage {
             OCELogger.log(Level.WARNING, "the selected agent reference is NULL (no agent was selected !) ");
         }
         //Verify if their is mutual selection
-        if ( !mutualSelection ){
+        if (!mutualSelection ){
             // Send a agree message to the emitter of this message
             ArrayList<OCEAgent> agreeReceivers = new ArrayList<>();
             agreeReceivers.add(this.emitter);

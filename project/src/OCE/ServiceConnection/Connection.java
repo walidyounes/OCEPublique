@@ -210,6 +210,7 @@ public class Connection implements Comparable {
             OCELogger.log(Level.INFO, "Connection without a state, it can't be treated !");
         }
     }
+
     /**
      * Compare two connexions (the comparison is compute on all the attribute of the connexion)
      * @param o the connexion to compare this one

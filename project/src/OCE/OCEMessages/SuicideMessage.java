@@ -58,7 +58,7 @@ public class SuicideMessage extends OCEMessage {
 
     /**
      * treat the probe message and make the suitable decision
-     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param stateConnexionAgent : the connexion's state of this service agent "Created, CONNECTED, NotConnected, WAITING"
      * @param OCEAgentRef : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService : the information of the service of the agent that's treating this message
      * @return the decision made by the engine

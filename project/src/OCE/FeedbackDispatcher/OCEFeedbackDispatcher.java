@@ -4,7 +4,9 @@
 
 package OCE.FeedbackDispatcher;
 
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Communication.ICommunication;
+import MASInfrastructure.Infrastructure;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Medium.Recorder.IRecord;
@@ -12,13 +14,16 @@ import OCE.ServiceConnection.Connection;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OCEFeedbackDispatcher implements PropertyChangeListener{
 
-    ICommunicationAdapter communicationAdapter;         //The reference of the component responsible of transit of messages to the agents
-    IRecord  oceRecord;                                 //The reference of the component responsible of resolving references and recording agents
-    IOCEBinderAgentFactory binderAgentFactory;          //The reference of the component used to create Binder agents
+    ICommunicationAdapter communicationAdapter;             //The reference of the component responsible of transit of messages to the agents
+    IRecord  oceRecord;                                     //The reference of the component responsible of resolving references and recording agents
+    IOCEBinderAgentFactory binderAgentFactory;              //The reference of the component used to create Binder agents
+    List<InfrastructureAgent> listAgentsToInformFeedback;   //The list of agents to wake up to treat user feedback
+    Infrastructure infrastructure;                          //The reference of the MAS infrastructure
 
     /** Holder */
     private static class OCEFeedbackDispatcherSingletonHolder
@@ -33,6 +38,13 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
     public static OCEFeedbackDispatcher getInstance()
     {
         return OCEFeedbackDispatcherSingletonHolder.instance;
+    }
+
+    /**
+     * Private constructor to be called by the Holder to implement the singleton pattern
+     */
+    private  OCEFeedbackDispatcher() {
+        this.listAgentsToInformFeedback = new ArrayList<>();
     }
 
     /**
@@ -60,6 +72,14 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
     }
 
     /**
+     * Set the Multi-agent infrastructure
+     * @param infrastructure : the reference for the MAS infrastructure
+     */
+    public void setInfrastructure(Infrastructure infrastructure) {
+        this.infrastructure = infrastructure;
+    }
+
+    /**
      * Treat the annotated connections depending on user feedback, and dispatch the feedback to the corresponding agents
      * @param annotatedConnections  :   the list of connections after annotation using user feedbacks
      */
@@ -68,23 +88,26 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
             //Check if the connection is annotated
             if(connection.getMyConnectionState().isPresent()){
                 //Treat the connection depending on it's annotation
-                connection.getMyConnectionState().get().treatConnection(connection, this.communicationAdapter, this.oceRecord, this.binderAgentFactory);
+                connection.getMyConnectionState().get().treatConnection(connection, this.communicationAdapter, this.oceRecord, this.binderAgentFactory, this.listAgentsToInformFeedback);
             }
         }
-
     }
 
     /**
      * This method gets called when a bound property is changed (in this case is the property exist in the feedbackManager component in the interaction component between OCE-ICE, when the feedback is computed
-     * and the connections were annotated the listeners are notified)
-     *
+     * and the connections were annotated the listeners are notified
      * @param evt A PropertyChangeEvent object describing the event source
      *            and the property that has changed.
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-           System.out.println("Value changed " + evt.getNewValue());
-           //Treat the annotated connections
-           dispatchFeedback((List<Connection>) evt.getNewValue());
+        System.out.println("Value changed " + evt.getNewValue());
+        //Clear previous reference of the agents in the list of agents to wake up to treat feedback
+        this.listAgentsToInformFeedback.clear();
+        //Treat the annotated connections
+        dispatchFeedback((List<Connection>) evt.getNewValue());
+        //Lunch in the infrastructure the special scheduling
+        int numberOfCycle = this.listAgentsToInformFeedback.size()*3;
+        this.infrastructure.startSpecialScheduling(this.listAgentsToInformFeedback, numberOfCycle);
     }
 }

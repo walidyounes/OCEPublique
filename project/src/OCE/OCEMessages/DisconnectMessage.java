@@ -15,7 +15,6 @@ import OCE.OCEDecisions.DoNothingDecision;
 import OCE.OCEDecisions.OCEDecision;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.logging.Level;
 
 public class DisconnectMessage extends OCEMessage {
@@ -34,7 +33,7 @@ public class DisconnectMessage extends OCEMessage {
     /**
      * treat the message and make the suitable decision
      *
-     * @param stateConnexionAgent : the connexion's state of this service agent "Created, Connected, NotConnected, Waiting"
+     * @param stateConnexionAgent : the connexion's state of this service agent "Created, CONNECTED, NOT_CONNECTED, WAITING"
      * @param OCEAgentRef         : the reference of the agent treating this message (its used to initialise the emitter)
      * @param localService        : the information of the service of the agent that's treating this message
      * @return the decision made by the engine
@@ -45,9 +44,16 @@ public class DisconnectMessage extends OCEMessage {
         //Cast the matchingID of the agent to a service agent
         ServiceAgent serviceAgent = (ServiceAgent) OCEAgentRef;
         //Change the connexion state of the service agent
-        serviceAgent.setMyConnexionState(ServiceAgentConnexionState.NotConnected);
-        //Reset the attribute "connectedTo" to initial value (empty)
+        serviceAgent.setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
+        //Reset the attribute "connectedTo" to empty value
         serviceAgent.resetConnectedTo();
+        //Delete the reference of the agent treating this message from it's binder agent
+        if(serviceAgent.getMyBinderAgent().isPresent()){
+            //Delete the service handled by tis agent from the binder agent, if the two service were deleted the binder agent suicide
+            serviceAgent.getMyBinderAgent().get().deleteMyService(serviceAgent.getHandledService());
+            //Delete the reference of the binder agent from the service
+            serviceAgent.deleteMyBinderAgent();
+        }
         return new DoNothingDecision();
     }
 

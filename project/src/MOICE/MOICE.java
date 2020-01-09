@@ -12,6 +12,8 @@ import MOICE.deploymentManager.DeploymentManager;
 import MOICE.deploymentManager.IDeploymentManager;
 import MOICE.feedbackManager.FeedbackManager;
 import MOICE.feedbackManager.IFeedbackManager;
+import OCE.Agents.BinderAgentPack.BinderAgent;
+import OCE.Agents.IDAgent;
 import OCE.ServiceConnection.Connection;
 
 import java.beans.PropertyChangeListener;
@@ -23,6 +25,7 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     private IFeedbackManager myFeedbackManager;
     private IDeploymentManager myDeploymentManager;
     private MOICEProbe probeFileStorage;
+
     /** Holder */
     private static class MOICESingletonHolder
     {
@@ -186,5 +189,14 @@ public class MOICE implements IConnectionManager, IFeedbackManager, IDeploymentM
     public void resetToDefaultSettings(){
         ((ConnectionManager)this.myConnectionManager).resetToDefaultSettings();
         ((FeedbackManager)this.myFeedbackManager).resetToDefaultSettings();
+    }
+
+    /**
+     * Delete all connections that are handled by the binder agent send as a parameter
+     * @param binderAgent : the binder agent that we which to delete the connections
+     */
+    @Override
+    public void unRegisterConnectionByBinderAgent(BinderAgent binderAgent) {
+        this.myConnectionManager.unRegisterConnectionByBinderAgent(binderAgent);
     }
 }

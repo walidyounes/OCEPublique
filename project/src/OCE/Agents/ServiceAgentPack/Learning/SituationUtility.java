@@ -227,7 +227,7 @@ public class SituationUtility {
      * @param agentSelectionStrategy : the strategy used to choose he best agent
      * @return the selected agent
      */
-    public static Map.Entry<IDAgent, ScoredCurrentSituationEntry> selectBestAgent(Situation<ScoredCurrentSituationEntry> scoredCS, IAgentSelectionStrategy agentSelectionStrategy){
+    public static Optional<Map.Entry<IDAgent, ScoredCurrentSituationEntry>> selectBestAgent(Situation<ScoredCurrentSituationEntry> scoredCS, IAgentSelectionStrategy agentSelectionStrategy){
         return agentSelectionStrategy.execute(scoredCS);
     }
 

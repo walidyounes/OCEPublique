@@ -6,18 +6,17 @@ package Midlleware.AgentFactory;
 
 import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
-import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Agent.InfraAgentReference;
-import MASInfrastructure.State.LifeCycle;
+import MASInfrastructure.Agent.InfrastructureAgent;
 import MASInfrastructure.Infrastructure;
+import MASInfrastructure.State.LifeCycle;
 import Midlleware.ThreeState.*;
-import OCE.Agents.*;
+import OCE.Agents.AgentPerception;
+import OCE.Agents.IDAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.Agents.ServiceAgentPack.ServiceAgentAction;
 import OCE.Agents.ServiceAgentPack.ServiceAgentDecision;
 import OCE.Medium.Medium;
-import OCE.Selection.IMessageSelection;
-import OCE.Selection.RandomSelection;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -53,10 +52,9 @@ public class OCEServiceAgentFactory implements IOCEServiceAgentFactory {
         // Create The service InfrastructureAgent
         ServiceAgent serviceAgent = new ServiceAgent(attachedService, myWayOfPerception, null, myWayOfAction);
 
-        //Create the strategy of message selection
-        IMessageSelection messageSelectionStrategy = new RandomSelection(Integer.MAX_VALUE);
         //Create the decision component And Update the referenceResolver (Record) of the decision component of the agent
-        IDecisionState myWayOfDecision = new ServiceAgentDecision(messageSelectionStrategy, serviceAgent, this.medium);
+        //IDecisionState myWayOfDecision = new ServiceAgentDecision(serviceAgent, this.medium);
+        IDecisionState myWayOfDecision = new ServiceAgentDecision(serviceAgent, this.medium, this.medium);
 
         //update the decision component in the service Agent
         serviceAgent.setMyWayOfDecision(myWayOfDecision);

@@ -53,8 +53,8 @@ public class SelectDecision extends OCEDecision {
 
                 myBinderAgent);
         communicationAdapter.sendMessage(bindMessage, this.emitter,bindReceivers);
-        // Change the state of the agent to "Waiting state"
-        ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.Waiting);
+        // Change the state of the agent to "WAITING state"
+        ((ServiceAgent)this.emitter).setMyConnexionState(ServiceAgentConnexionState.WAITING);
         //Set the selectedAgent ot be verified later
         this.emitter.setMySelectedAgent(this.receivers.get(0));
         //Set the binder agent in the service agent
