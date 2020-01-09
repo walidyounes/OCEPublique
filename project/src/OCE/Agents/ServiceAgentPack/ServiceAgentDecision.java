@@ -365,11 +365,36 @@ public class ServiceAgentDecision implements IDecisionState {
      * @param OCEPerceptionFeedback :   the set of Feedback messages perceived by the agent in the current agent cycle
      */
     private void feedbackTreatment(List<OCEDecision> myListOfDecisions, List<OCEMessage> OCEPerceptionFeedback) {
-        //Get the received feedback Message -> index 0 cause there is only one and treat the feedback message -> for now it returns "do nothing decision"
-        FeedbackMessage receivedFeedbackMessage = (FeedbackMessage) OCEPerceptionFeedback.get(0);
-        // Treat the received feedback Message
-        OCEDecision myDecision = receivedFeedbackMessage.toSelfTreat(this.myServiceAgent.getMyConnexionState(), this.myServiceAgent, this.myServiceAgent.getHandledService());
-        myListOfDecisions.add(myDecision);
+        //Set to false the value of the boolean variable indicating that we updated the BA if we received modified feedback
+        this.myServiceAgent.setUpdateBAFeedbackModified(false);
+        //Iterate over the feedback received to treat them
+        for(int i=0; i< OCEPerceptionFeedback.size(); i++){
+            //Get the received feedback Message -> index 0 cause there is only one and treat the feedback message -> for now it returns "do nothing decision"
+            FeedbackMessage receivedFeedbackMessage = (FeedbackMessage) OCEPerceptionFeedback.get(i);
+            // Treat the received feedback Message
+            OCEDecision myDecision = receivedFeedbackMessage.toSelfTreat(this.myServiceAgent.getMyConnexionState(), this.myServiceAgent, this.myServiceAgent.getHandledService());
+            // the agent is deciding to do nothing (it can be changed later)
+            myListOfDecisions.add(myDecision);
+        }
+        //Once we treat all the feedback received, we update the knowledge of the agent
+
+        //Normalise the scores of the agents in the scored current situation
+        SituationUtility.normalizeScoresSCS(this.myServiceAgent.getMyScoredCurrentSituation().get());
+        OCELogger.log(Level.INFO, "Agent : Decision -> Updated and Normalized SCS = " + this.myServiceAgent.getMyScoredCurrentSituation().toString());
+
+        //Update the agent Knowledge base
+        this.myServiceAgent.updateMyKnowledgeBase();
+        OCELogger.log(Level.INFO, "Agent : Decision -> Knowledge Base = " + this.myServiceAgent.getMyKnowledgeBase().toString());
+
+        //Reinitialize the cycle number of the agent
+        this.myServiceAgent.setMyCurrentCycleNumber(0);
+        //Set the variable indicating that the agent will be starting a new agent cycle
+        // this.serviceAgentRef.setStartingNewEngineCycle(true);
+        //Reinitialise the current situation and the scored current situation of the service agent
+        this.myServiceAgent.resetMyCurrentSituation();
+        this.myServiceAgent.resetMyScoredCurrentSituation();
+        //Set to false the value of the boolean variable indicating that we updated the BA if we received modified feedback
+        this.myServiceAgent.setUpdateBAFeedbackModified(false);
     }
 
     /**

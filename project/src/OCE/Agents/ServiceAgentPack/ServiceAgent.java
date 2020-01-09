@@ -43,7 +43,10 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     // private FeedbackValues feedbackValue;                                                   // The feedback value
     private Optional<BinderAgent> myBinderAgent;                                            // The binder agent
     private boolean startingNewEngineCycle;                                                 // Variable used to indicate whether we are starting a new Engine cycle (it's used when the service agent was connected in the previous engine cycle, when starting a new cycle, the agent for now sty connected
-                                                                                            //so it need to inform it's binder agent to recreate the same connection to get visualized by the user in ICE
+                                                                                                //so it need to inform it's binder agent to recreate the same connection to get visualized by the user in ICE
+
+    private boolean updateBAFeedbackModified;                                               //Variable indicates whether the agent updated the reference of it's binder agent after receiving a feedback indicating that the user replaced what he proposed to connect to
+
     // Learning parameters
     private final double initialValue = 0.0;    //The value used to initialise the score
     private double reinforcement = 0.0;         //The value of the reinforcement
@@ -75,6 +78,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myCurrentCycleNumber = 0;
         this.myKnowledgeBase = new HashSet<>(); //PS : we can change implementation to add uploading of old knowledge
         this.startingNewEngineCycle = true; // By default, when the engine get launched
+        this.updateBAFeedbackModified = false;
     }
 
     /**
@@ -101,6 +105,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myCurrentCycleNumber = 0;
         this.myKnowledgeBase = new HashSet<>(); //PS : we can change implementation to add uploading of old knowledge
         this.startingNewEngineCycle = true; // By default, when the engine get launched
+        this.updateBAFeedbackModified=false;
     }
 
 
@@ -426,6 +431,22 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     public void setStartingNewEngineCycle(boolean startingNewEngineCycle) {
         this.startingNewEngineCycle = startingNewEngineCycle;
         this.myCurrentCycleNumber = 0;
+    }
+
+    /**
+     * Check if the agent update it's binder agent once he received feedback, it's important in the modified feedback
+     * @return true if the agent updated it's BA after feedback.
+     */
+    public boolean isUpdateBAFeedbackModified() {
+        return updateBAFeedbackModified;
+    }
+
+    /**
+     * Set whether the agent update it's binder agent once he received feedback, it's important in the modified feedback
+     * @param updateBAFeedbackModified  : the new value
+     */
+    public void setUpdateBAFeedbackModified(boolean updateBAFeedbackModified) {
+        this.updateBAFeedbackModified = updateBAFeedbackModified;
     }
 
     /**

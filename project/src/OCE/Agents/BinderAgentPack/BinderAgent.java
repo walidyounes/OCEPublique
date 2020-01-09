@@ -4,6 +4,7 @@
 
 package OCE.Agents.BinderAgentPack;
 
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.OCELogger;
 import MOICE.MOICE;
@@ -115,8 +116,8 @@ public class BinderAgent extends OCEAgent {
         int tempValue = this.counterBeforeSuicide;
         //if the value is greater than 2, put it to 2
         this.counterBeforeSuicide = this.counterBeforeSuicide > 2 ? 2 : tempValue;
-
     }
+
     /**
      * This function is called by the service agents which this binder agent administrate their connection.
      * If the two service agent delete their service from the binder agent, the later trigger the suicide  mechanism
@@ -157,6 +158,36 @@ public class BinderAgent extends OCEAgent {
             OCELogger.log(Level.WARNING, "The service to delete is not handled by this service ! ");
         }
 
+    }
+
+    /**
+     * Add the services send in the parameters as handled services by this binder agent
+     * @param firstService  :   the reference of the first service to add
+     * @param secondService :   the reference of the second service to add
+     * @return true in both cases : the operation succeed or the two services are already handled by this binder agent. False otherwise.
+     */
+    public boolean addHandledServices(MockupService firstService, MockupService secondService){
+        //Check if the two attribute are empty or not
+        if(!this.firstService.isPresent() && !this.secondService.isPresent()){
+            //add the two services as handled by this binder agent
+            this.setFirstService(firstService);
+            this.setSecondService(secondService);
+            return true;
+        }
+        else{
+            //Check if this binder agent already handle this services
+            if(this.firstService.isPresent() && this.secondService.isPresent()){
+                return ((this.firstService.get().equals(firstService) && this.secondService.get().equals(secondService)) || (this.firstService.get().equals(secondService) && this.secondService.get().equals(firstService)) );
+            }else return false;
+        }
+    }
+
+    /**
+     * Reset the two attributes of the handled service to "empty"
+     */
+    public void resetHandledServices(){
+        this.firstService = Optional.empty();
+        this.secondService = Optional.empty();
     }
     /**
      * Reset the set of attributes of this agent to factory settings

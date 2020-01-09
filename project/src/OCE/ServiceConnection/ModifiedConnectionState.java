@@ -43,6 +43,12 @@ public class ModifiedConnectionState implements IConnectionState {
      */
     @Override
     public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList) {
+        //check if both orginal services of the connection got connected to new ones
+        if(this.secondServiceChangedTo.isPresent() && this.firstServiceChangedTo.isPresent()){
+            //In the binder agent handling this connection, delete both the services
+            connection.getBinderAgent().resetHandledServices();
+        }
+
         //Get the first Service agent
         ServiceAgent firstServiceAgent = connection.getFirstServiceAgent();
         //Get the second Service agent

@@ -4,6 +4,7 @@
 
 package OCE.OCEMessages;
 
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.OCELogger;
 import OCE.Agents.BinderAgentPack.BinderAgent;
@@ -88,7 +89,7 @@ public class FeedbackMessage extends OCEMessage {
         // double epsilon = this.serviceAgentRef.getEpsilon();                                     //The value of the threshold used by the strategy of selection of best agent
 
         //If the service agent receiving this feedback was waiting
-        if (this.serviceAgentRef.getMyConnexionState().equals(ServiceAgentConnexionState.EXPECTING_FEEDBACK)) {
+        if (this.serviceAgentRef.getMyConnexionState().equals(ServiceAgentConnexionState.EXPECTING_FEEDBACK) || this.serviceAgentRef.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED)) {
             if(this.serviceAgentRef.getOceCycleBestAgent().isPresent()){
                 OCELogger.log(Level.INFO, "Agent : Decision -> Before updating Scored Current Situation = " + this.serviceAgentRef.getMyScoredCurrentSituation().toString());
                 //Compute the value of the reinforcement depending on the value of the feedback
@@ -101,7 +102,7 @@ public class FeedbackMessage extends OCEMessage {
                         System.out.println("Agent : Decision -> Feedback Modify - > Service Agent was connected by user to = " + agentChosenByUser.get().toString());
                         //Check if the agent chosen by the user is in the CS
                         if (!this.serviceAgentRef.getMyScoredCurrentSituation().get().containServiceAgent(agentChosenByUser.get().getMyID())) { //The chosen agent doesn't exist in the current situation
-                            //Add the chosen agent to the Scored CS (the Message type is not important) TODO : intial value to be changed to max or mean
+                            //Add the chosen agent to the Scored CS (the Message type is not important) TODO : initial value to be changed to max or mean
                             this.serviceAgentRef.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, initialValue));
                         }
                         //Get the score of the agent chosen by the USER
@@ -114,7 +115,16 @@ public class FeedbackMessage extends OCEMessage {
                         SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), agentChosenByUser.get().getMyID(), learningRate, reinforcement);
                         //Set the state of the agent to connected
                         this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.CONNECTED);
-
+                        //Update the binder agent
+                        //Get the emitter of this message
+                        BinderAgent potentialBinderAgent = (BinderAgent) this.getEmitter();
+                        if(!this.serviceAgentRef.isUpdateBAFeedbackModified()){
+                            boolean result = potentialBinderAgent.addHandledServices((MockupService) this.serviceAgentRef.getHandledService(), (MockupService)((ServiceAgent)agentChosenByUser.get()).getHandledService());
+                            if(result){
+                                this.serviceAgentRef.setMyBinderAgent(potentialBinderAgent);
+                                this.serviceAgentRef.setUpdateBAFeedbackModified(true);
+                            }
+                        }
                     } else {
                         //The service agent left unconnected -> the agent which was proposed by OCE we reinforce negatively
                         OCELogger.log(Level.INFO, "Agent : Decision -> Feedback Modify - > Service Agent was not connected by user");
@@ -216,13 +226,13 @@ public class FeedbackMessage extends OCEMessage {
         }
         OCELogger.log(Level.INFO, "Agent : Decision -> Updated Scored Current Situation = " + this.serviceAgentRef.getMyScoredCurrentSituation().toString());
 
-        //Normalise the scores of the agents in the scored current situation
-        SituationUtility.normalizeScoresSCS(this.serviceAgentRef.getMyScoredCurrentSituation().get());
-        OCELogger.log(Level.INFO, "Agent : Decision -> Updated and Normalized SCS = " + this.serviceAgentRef.getMyScoredCurrentSituation().toString());
-
-        //Update the agent Knowledge base
-        this.serviceAgentRef.updateMyKnowledgeBase();
-        OCELogger.log(Level.INFO, "Agent : Decision -> Knowledge Base = " + this.serviceAgentRef.getMyKnowledgeBase().toString());
+//        //Normalise the scores of the agents in the scored current situation
+//        SituationUtility.normalizeScoresSCS(this.serviceAgentRef.getMyScoredCurrentSituation().get());
+//        OCELogger.log(Level.INFO, "Agent : Decision -> Updated and Normalized SCS = " + this.serviceAgentRef.getMyScoredCurrentSituation().toString());
+//
+//        //Update the agent Knowledge base
+//        this.serviceAgentRef.updateMyKnowledgeBase();
+//        OCELogger.log(Level.INFO, "Agent : Decision -> Knowledge Base = " + this.serviceAgentRef.getMyKnowledgeBase().toString());
 
         //Set to whom the service agent is connected, it may be an other service agent or Empty
         Optional<OCEAgent> connectedToAgent = this.getAgentChosenUser();
@@ -243,14 +253,14 @@ public class FeedbackMessage extends OCEMessage {
 //        //Set the feedback received to false
 //        this.serviceAgentRef.setFeedbackReceived(false);
 
-        //Reinitialize the cycle number of the agent
-        this.serviceAgentRef.setMyCurrentCycleNumber(0);
-        //Set the variable indicating that the agent will be starting a new agent cycle
-        // this.serviceAgentRef.setStartingNewEngineCycle(true);
-        //Reinitialise the current situation and the scored current situation of the service agent
-        this.serviceAgentRef.resetMyCurrentSituation();
-        this.serviceAgentRef.resetMyScoredCurrentSituation();
-        // the agent will do nothing after this
+//        //Reinitialize the cycle number of the agent
+//        this.serviceAgentRef.setMyCurrentCycleNumber(0);
+//        //Set the variable indicating that the agent will be starting a new agent cycle
+//        // this.serviceAgentRef.setStartingNewEngineCycle(true);
+//        //Reinitialise the current situation and the scored current situation of the service agent
+//        this.serviceAgentRef.resetMyCurrentSituation();
+//        this.serviceAgentRef.resetMyScoredCurrentSituation();
+//        // the agent will do nothing after this
 
         return new DoNothingDecision();
     }
