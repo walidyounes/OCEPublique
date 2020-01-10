@@ -430,7 +430,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      */
     public void setStartingNewEngineCycle(boolean startingNewEngineCycle) {
         this.startingNewEngineCycle = startingNewEngineCycle;
-        this.myCurrentCycleNumber = 0;
+        //this.myCurrentCycleNumber = 0;
     }
 
     /**

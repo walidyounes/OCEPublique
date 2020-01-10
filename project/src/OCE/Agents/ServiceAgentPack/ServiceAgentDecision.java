@@ -233,8 +233,11 @@ public class ServiceAgentDecision implements IDecisionState {
                                     if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
                                         //Mark the agent with whom we are connected to as the best agent
                                         this.oceCycleBestAgent = Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(this.myServiceAgent.getConnectedTo().get().getMyID(), this.myServiceAgent.getMyScoredCurrentSituation().get().getSituationEntryByIDAgent(this.myServiceAgent.getConnectedTo().get().getMyID())));
+
                                         //if it's the beginning of the engine cycle
                                         if (this.myServiceAgent.isStartingNewEngineCycle()) {
+                                            //Update the field in the service agent
+                                            this.myServiceAgent.setOceCycleBestAgent(this.oceCycleBestAgent.get());
                                             //Send a bind message to the binder agent
                                             BindInfraMessage bindMessage = new BindInfraMessage(null, null);
                                             ArrayList<OCEAgent> bindReceiver = new ArrayList<>();

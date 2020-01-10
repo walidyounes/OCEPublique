@@ -177,8 +177,52 @@ public class BinderAgent extends OCEAgent {
         else{
             //Check if this binder agent already handle this services
             if(this.firstService.isPresent() && this.secondService.isPresent()){
-                return ((this.firstService.get().equals(firstService) && this.secondService.get().equals(secondService)) || (this.firstService.get().equals(secondService) && this.secondService.get().equals(firstService)) );
-            }else return false;
+                //check if the binder agent is handling the same services as those asked to add
+                boolean alreadyContainsServices = ((this.firstService.get().equals(firstService) && this.secondService.get().equals(secondService)) || (this.firstService.get().equals(secondService) && this.secondService.get().equals(firstService)) );
+                if (alreadyContainsServices){
+                    return  true; // or return alreadyContainsServices==true
+                }else{
+                    //Check if at least one service is equal to one of the services asked to add
+                    boolean alreadyContainsOneService = ((this.firstService.get().equals(firstService) || this.secondService.get().equals(secondService)) || (this.firstService.get().equals(secondService) || this.secondService.get().equals(firstService)) );
+                    if(alreadyContainsOneService){
+                        //add the two services as handled by this binder agent
+                        this.setFirstService(firstService);
+                        this.setSecondService(secondService);
+                        return true;
+                    }else{ // The binder agent handle other services then the ones asked to add
+                        return false;
+                    }
+                }
+            }else{
+                //Check if it contains one service (the other services deleted itself from the binder agent, it may happens when you have a replacement in the connection proposed to the user and one of the services proposed was left not connected)
+                if(this.firstService.isPresent() && !this.secondService.isPresent()){
+                    //second service is not present
+                    //Check if the first agent of the binder agent is equal to one of the services asked to add
+                    boolean alreadyContainsOneService = (this.firstService.get().equals(firstService) || this.firstService.get().equals(secondService));
+                    if(alreadyContainsOneService){
+                        //add the two services as handled by this binder agent
+                        this.setFirstService(firstService);
+                        this.setSecondService(secondService);
+                        return true;
+                    }else{ // The binder agent handle an other service then the ones asked to add
+                        return false;
+                    }
+                }else{
+                    if(!this.firstService.isPresent() && this.secondService.isPresent()) {
+                        //first service is not present
+                        //Check if the first agent of the binder agent is equal to one of the services asked to add
+                        boolean alreadyContainsOneService = (this.secondService.get().equals(firstService) || this.secondService.get().equals(secondService));
+                        if(alreadyContainsOneService){
+                            //add the two services as handled by this binder agent
+                            this.setFirstService(firstService);
+                            this.setSecondService(secondService);
+                            return true;
+                        }else{ // The binder agent handle an other service then the ones asked to add
+                            return false;
+                        }
+                    }else return false;
+                }
+            }
         }
     }
 
