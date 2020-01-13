@@ -188,90 +188,96 @@ public class ServiceAgentDecision implements IDecisionState {
                             } else {
                                 //If the service agent is not in WAITING for feedback state (it's not connected or connected)
                                 if (!this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.EXPECTING_FEEDBACK)) {
-                                    //Check if it's a start of a new engine cycle
-                                    if(this.myServiceAgent.isStartingNewEngineCycle()){
-                                        //Clear the content of the history of messages received in the last cycle
-                                        oceServiceAgentPerceptionHistory.clear();
-                                        //Create the current situation- > We initialise a new current situation
-                                        //this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
-                                    }//else{
+//                                    if (!OCEPerception.isEmpty()){
+                                        //Check if it's a start of a new engine cycle
+                                        if(this.myServiceAgent.isStartingNewEngineCycle()){
+                                            //Clear the content of the history of messages received in the last cycle
+                                            oceServiceAgentPerceptionHistory.clear();
+                                            //Create the current situation- > We initialise a new current situation
+                                            //this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
+                                        }//else{
                                         //Create the current situation -> We update the current one
-                                       // Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
+                                        // Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
                                         // this.myServiceAgent.getMyCurrentSituation().get().getAgentSituationEntries().putAll(myCurrentSituation.getAgentSituationEntries());
-                                    // }
-                                    //Create a mapping of the agent's id and their messages
-                                    oceServiceAgentPerceptionHistory.putAll(OCEPerception.stream().collect(Collectors.toMap(OCEMessage::getIDEmitter, s -> s, (x, y) -> y)));
-                                    //Create the current situation
-                                    //Check if it's the start of the agent cycle
-                                    if (this.myServiceAgent.getMyCurrentCycleNumber() == 0) {
-                                        //Start of the cycle // We initialise a new current situation
-                                        this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
-                                    } else {
-                                        //We update the current one
-                                        Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
-                                        this.myServiceAgent.getMyCurrentSituation().get().getAgentSituationEntries().putAll(myCurrentSituation.getAgentSituationEntries());
-                                    }
-                                    OCELogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
-                                    //Check if the service agent is connected (in the previous engine cycle)
-                                    if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
-                                        //Add the service to whom we are connected to the current situation
-                                        this.myServiceAgent.getMyCurrentSituation().get().addSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), new CurrentSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), MessageTypes.AGREE));
-                                    }
-
-                                    //Check for similar Reference Situation
-                                    Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation().get(), this.myServiceAgent.getMyKnowledgeBase(), similarityThreshold);
-                                    OCELogger.log(Level.INFO, "Agent : Decision -> The list of RS selected with a similarityThreshold '" + similarityThreshold + "' = " + listSimilarRS.toString());
-                                    //Score the current situation
-                                    //Using the similar reference situations score the current situation, if no RF similar found initialise the score to initialValue
-                                    Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation = SituationUtility.scoreCurrentSituation(this.myServiceAgent.getMyCurrentSituation().get(), listSimilarRS, initialValue);
-                                    this.myServiceAgent.setMyScoredCurrentSituation(myScoredCurrentSituation);
-                                    OCELogger.log(Level.INFO, "Agent : Decision -> The scored current situation = " + myScoredCurrentSituation.toString());
-
-                                    OCEDecision myDecision;
-
-                                    //Check if the service agent is connected (in the previous engine cycle) we don't select a best agent, the best agent is the one with whom we are connected
-                                    if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
-                                        //Mark the agent with whom we are connected to as the best agent
-                                        this.oceCycleBestAgent = Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(this.myServiceAgent.getConnectedTo().get().getMyID(), this.myServiceAgent.getMyScoredCurrentSituation().get().getSituationEntryByIDAgent(this.myServiceAgent.getConnectedTo().get().getMyID())));
-
-                                        //if it's the beginning of the engine cycle
-                                        if (this.myServiceAgent.isStartingNewEngineCycle()) {
-                                            //Update the field in the service agent
-                                            this.myServiceAgent.setOceCycleBestAgent(this.oceCycleBestAgent.get());
-                                            //Send a bind message to the binder agent
-                                            BindInfraMessage bindMessage = new BindInfraMessage(null, null);
-                                            ArrayList<OCEAgent> bindReceiver = new ArrayList<>();
-                                            bindReceiver.add(this.myServiceAgent.getMyBinderAgent().get());
-                                            communicationToolOCE.sendMessage(bindMessage, this.myServiceAgent, bindReceiver);
-                                        }
-                                        myDecision = new DoNothingDecision();
-                                    } else {
-                                        //Select the best agent to respond to from the scored current situation
-                                        // IAgentSelectionStrategy agentSelectionStrategy = new BestScoreEpsilonGreedy(epsilon);
-                                        //IAgentSelectionStrategy agentSelectionStrategy = new HighestPriorityScore();
-                                        IAgentSelectionStrategy agentSelectionStrategy = new BestScoreHighestPriority(epsilon);
-                                        this.oceCycleBestAgent = SituationUtility.selectBestAgent(myScoredCurrentSituation, agentSelectionStrategy);
-                                        OCELogger.log(Level.INFO, " Agent : Decision -> Using the maximum score and epsilon greedy strategy (" + epsilon + "), the best agent = " + this.oceCycleBestAgent);
-
-                                        if (this.oceCycleBestAgent.isPresent()) {
-                                            //Update the field in the service agent
-                                            this.myServiceAgent.setOceCycleBestAgent(this.oceCycleBestAgent.get());
-                                            //Get from the map the corresponding OCEMessage corresponding to the agent that has been selected
-                                            OCEMessage bestOCEMessage;
-                                            bestOCEMessage = oceServiceAgentPerceptionHistory.get(this.oceCycleBestAgent.get().getKey());
-                                            myDecision = bestOCEMessage.toSelfTreat(this.myServiceAgent.getMyConnexionState(), this.myServiceAgent, this.myServiceAgent.getHandledService());
+                                        // }
+                                        //Create a mapping of the agent's id and their messages
+                                        oceServiceAgentPerceptionHistory.putAll(OCEPerception.stream().collect(Collectors.toMap(OCEMessage::getIDEmitter, s -> s, (x, y) -> y)));
+                                        //Create the current situation
+                                        //Check if it's the start of the agent cycle
+                                        if (this.myServiceAgent.getMyCurrentCycleNumber() == 0) {
+                                            //Start of the cycle // We initialise a new current situation
+                                            this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
                                         } else {
-                                            myDecision = new DoNothingDecision();
+                                            //We update the current one
+                                            Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
+                                            this.myServiceAgent.getMyCurrentSituation().get().getAgentSituationEntries().putAll(myCurrentSituation.getAgentSituationEntries());
+                                        }
+                                        OCELogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
+                                        //Check if the service agent is connected (in the previous engine cycle)
+                                        if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
+                                            //Add the service to whom we are connected to the current situation
+                                            this.myServiceAgent.getMyCurrentSituation().get().addSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), new CurrentSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), MessageTypes.AGREE));
                                         }
 
-                                    }
-                                    myListOfDecisions.add(myDecision);
+                                        //Check for similar Reference Situation
+                                        Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation().get(), this.myServiceAgent.getMyKnowledgeBase(), similarityThreshold);
+                                        OCELogger.log(Level.INFO, "Agent : Decision -> The list of RS selected with a similarityThreshold '" + similarityThreshold + "' = " + listSimilarRS.toString());
+                                        //Score the current situation
+                                        //Using the similar reference situations score the current situation, if no RF similar found initialise the score to initialValue
+                                        Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation = SituationUtility.scoreCurrentSituation(this.myServiceAgent.getMyCurrentSituation().get(), listSimilarRS, initialValue);
+                                        this.myServiceAgent.setMyScoredCurrentSituation(myScoredCurrentSituation);
+                                        OCELogger.log(Level.INFO, "Agent : Decision -> The scored current situation = " + myScoredCurrentSituation.toString());
 
-                                    //Mark the end of the engine cycle (so that we don't redo the special case again)
-                                    this.myServiceAgent.deactivateStartingNewEngineCycle();
+                                        OCEDecision myDecision;
 
-                                    //Increment the current cycle number of the agent
-                                    this.myServiceAgent.incrementMyCurrentCycleNumber();
+                                        //Check if the service agent is connected (in the previous engine cycle) we don't select a best agent, the best agent is the one with whom we are connected
+                                        if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
+                                            //Mark the agent with whom we are connected to as the best agent
+                                            this.oceCycleBestAgent = Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(this.myServiceAgent.getConnectedTo().get().getMyID(), this.myServiceAgent.getMyScoredCurrentSituation().get().getSituationEntryByIDAgent(this.myServiceAgent.getConnectedTo().get().getMyID())));
+
+                                            //if it's the beginning of the engine cycle
+                                            if (this.myServiceAgent.isStartingNewEngineCycle()) {
+                                                //Update the field in the service agent
+                                                this.myServiceAgent.setOceCycleBestAgent(this.oceCycleBestAgent.get());
+                                                //Send a bind message to the binder agent
+                                                BindInfraMessage bindMessage = new BindInfraMessage(null, null);
+                                                ArrayList<OCEAgent> bindReceiver = new ArrayList<>();
+                                                bindReceiver.add(this.myServiceAgent.getMyBinderAgent().get());
+                                                communicationToolOCE.sendMessage(bindMessage, this.myServiceAgent, bindReceiver);
+                                            }
+                                            myDecision = new DoNothingDecision();
+                                        } else {
+                                            //Select the best agent to respond to from the scored current situation
+                                            // IAgentSelectionStrategy agentSelectionStrategy = new BestScoreEpsilonGreedy(epsilon);
+                                            //IAgentSelectionStrategy agentSelectionStrategy = new HighestPriorityScore();
+                                            IAgentSelectionStrategy agentSelectionStrategy = new BestScoreHighestPriority(epsilon);
+                                            this.oceCycleBestAgent = SituationUtility.selectBestAgent(myScoredCurrentSituation, agentSelectionStrategy);
+                                            OCELogger.log(Level.INFO, " Agent : Decision -> Using the maximum score and epsilon greedy strategy (" + epsilon + "), the best agent = " + this.oceCycleBestAgent);
+
+                                            if (this.oceCycleBestAgent.isPresent()) {
+                                                //Update the field in the service agent
+                                                this.myServiceAgent.setOceCycleBestAgent(this.oceCycleBestAgent.get());
+                                                //Get from the map the corresponding OCEMessage corresponding to the agent that has been selected
+                                                OCEMessage bestOCEMessage;
+                                                bestOCEMessage = oceServiceAgentPerceptionHistory.get(this.oceCycleBestAgent.get().getKey());
+                                                myDecision = bestOCEMessage.toSelfTreat(this.myServiceAgent.getMyConnexionState(), this.myServiceAgent, this.myServiceAgent.getHandledService());
+                                            } else {
+                                                myDecision = new DoNothingDecision();
+                                            }
+
+                                        }
+                                        myListOfDecisions.add(myDecision);
+
+                                        //Mark the end of the engine cycle (so that we don't redo the special case again)
+                                        this.myServiceAgent.deactivateStartingNewEngineCycle();
+
+                                        //Increment the current cycle number of the agent
+                                        this.myServiceAgent.incrementMyCurrentCycleNumber();
+//                                    }else{
+//                                        //The service agent didn't receive any messages
+//                                        myListOfDecisions.add(new DoNothingDecision());
+//                                    }
+
                                 }
                             }
 

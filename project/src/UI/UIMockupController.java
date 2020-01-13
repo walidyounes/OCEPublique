@@ -792,6 +792,7 @@ public class UIMockupController implements Initializable {
         Label idAgent = new Label("IDAgent = " + serviceAgent.getMyID());
         Label handledService = new Label("Handled Service  = " + serviceAgent.getHandledService().toString());
         Label agentState = new Label("Agent's state  = " + serviceAgent.getMyConnexionState().toString());
+        Label agentConnectedTo = new Label("Agent is connected to  = " + serviceAgent.getConnectedTo().toString());
         Label agentBinderAgent = new Label("Agent's binder Agent  = " + serviceAgent.getMyBinderAgent().toString());
 
         TitledPane agentKnowledgeBaseTitledPane = new TitledPane();
@@ -818,6 +819,7 @@ public class UIMockupController implements Initializable {
         contentSA.getChildren().add(idAgent);
         contentSA.getChildren().add(handledService);
         contentSA.getChildren().add(agentState);
+        contentSA.getChildren().add(agentConnectedTo);
         contentSA.getChildren().add(agentBinderAgent);
         contentSA.getChildren().add(agentKnowledgeBaseTitledPane);
 
