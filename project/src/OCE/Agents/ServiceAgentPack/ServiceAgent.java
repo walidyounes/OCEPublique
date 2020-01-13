@@ -434,6 +434,25 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     }
 
     /**
+     * Activate that the service agent is starting a new engine (OCE) cycle, and reset important variables
+     */
+    public void activateStartingNewEngineCycle(){
+        this.startingNewEngineCycle = true;
+//        //reset the field Current situation and scored current situation
+//        this.resetMyCurrentSituation();
+//        this.resetMyScoredCurrentSituation();
+//        //Reset the number of the cycle of the agent
+//        this.myCurrentCycleNumber = 0;
+    }
+
+    /**
+     * Deactivate that the service agent is starting a new engine (OCE) cycle
+     */
+    public void deactivateStartingNewEngineCycle(){
+        this.startingNewEngineCycle = false;
+    }
+
+    /**
      * Check if the agent update it's binder agent once he received feedback, it's important in the modified feedback
      * @return true if the agent updated it's BA after feedback.
      */

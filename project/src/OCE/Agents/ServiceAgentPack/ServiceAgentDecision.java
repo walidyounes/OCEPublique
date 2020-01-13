@@ -268,7 +268,7 @@ public class ServiceAgentDecision implements IDecisionState {
                                     myListOfDecisions.add(myDecision);
 
                                     //Mark the end of the engine cycle (so that we don't redo the special case again)
-                                    this.myServiceAgent.setStartingNewEngineCycle(false);
+                                    this.myServiceAgent.deactivateStartingNewEngineCycle();
 
                                     //Increment the current cycle number of the agent
                                     this.myServiceAgent.incrementMyCurrentCycleNumber();
