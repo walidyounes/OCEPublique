@@ -302,4 +302,21 @@ public class SituationUtility {
         }
     }
 
+    /**
+     * Compute and return the maximum value of the scores in the current scored situation
+     * @param scoredCurrentSituation    :  the scored current situations
+     * @return : the maximum value, returns 1 if the current scored situation is empty
+     */
+    public static double computeMaxScoresSCS(Situation<ScoredCurrentSituationEntry> scoredCurrentSituation){
+        double maxValue = 1.0;
+
+        if(scoredCurrentSituation.getAgentSituationEntries().size() >0){
+            //The SCS contains at least one entry
+            maxValue = scoredCurrentSituation.getAgentSituationEntries().values().stream().map(e -> ((ScoredCurrentSituationEntry) e).getScore()).mapToDouble(d -> (double) d).max().getAsDouble();
+            return maxValue;
+        }else{
+            return maxValue;
+        }
+    }
+
 }

@@ -112,7 +112,7 @@ public class ServiceAgentDecision implements IDecisionState {
         Criteria matchingAdvertiseCriteria = new MatchingAdvertiseCriteria(myServiceAgent.getHandledService(), matching);
         ArrayList<InfraMessage> filteredPerception = matchingAdvertiseCriteria.meetCriteria(perceptions);
 
-
+       // OCELogger.log(Level.INFO, "Agent -> Decision -> filtred Messages after matching =  " + filteredPerception.toString());
 
         //Create a list of decisions
         ArrayList<OCEDecision> myListOfDecisions = new ArrayList<>();
@@ -193,18 +193,12 @@ public class ServiceAgentDecision implements IDecisionState {
                                         if(this.myServiceAgent.isStartingNewEngineCycle()){
                                             //Clear the content of the history of messages received in the last cycle
                                             oceServiceAgentPerceptionHistory.clear();
-                                            //Create the current situation- > We initialise a new current situation
-                                            //this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
-                                        }//else{
-                                        //Create the current situation -> We update the current one
-                                        // Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
-                                        // this.myServiceAgent.getMyCurrentSituation().get().getAgentSituationEntries().putAll(myCurrentSituation.getAgentSituationEntries());
-                                        // }
+                                        }
                                         //Create a mapping of the agent's id and their messages
                                         oceServiceAgentPerceptionHistory.putAll(OCEPerception.stream().collect(Collectors.toMap(OCEMessage::getIDEmitter, s -> s, (x, y) -> y)));
                                         //Create the current situation
                                         //Check if it's the start of the agent cycle
-                                        if (this.myServiceAgent.getMyCurrentCycleNumber() == 0) {
+                                        if (!this.myServiceAgent.getMyCurrentSituation().isPresent()) {
                                             //Start of the cycle // We initialise a new current situation
                                             this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
                                         } else {
@@ -212,18 +206,17 @@ public class ServiceAgentDecision implements IDecisionState {
                                             Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
                                             this.myServiceAgent.getMyCurrentSituation().get().getAgentSituationEntries().putAll(myCurrentSituation.getAgentSituationEntries());
                                         }
-                                        OCELogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
                                         //Check if the service agent is connected (in the previous engine cycle)
                                         if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
                                             //Add the service to whom we are connected to the current situation
                                             this.myServiceAgent.getMyCurrentSituation().get().addSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), new CurrentSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), MessageTypes.AGREE));
                                         }
-
+                                        OCELogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
                                         //Check for similar Reference Situation
                                         Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation().get(), this.myServiceAgent.getMyKnowledgeBase(), similarityThreshold);
                                         OCELogger.log(Level.INFO, "Agent : Decision -> The list of RS selected with a similarityThreshold '" + similarityThreshold + "' = " + listSimilarRS.toString());
                                         //Score the current situation
-                                        //Using the similar reference situations score the current situation, if no RF similar found initialise the score to initialValue
+                                        //Using the similar reference situations score the current situation, if no RF similar found initialise the score to initialValue such as Sum(Scores)==1
                                         Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation = SituationUtility.scoreCurrentSituation(this.myServiceAgent.getMyCurrentSituation().get(), listSimilarRS, initialValue);
                                         this.myServiceAgent.setMyScoredCurrentSituation(myScoredCurrentSituation);
                                         OCELogger.log(Level.INFO, "Agent : Decision -> The scored current situation = " + myScoredCurrentSituation.toString());

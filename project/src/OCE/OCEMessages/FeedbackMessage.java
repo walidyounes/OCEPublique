@@ -88,87 +88,122 @@ public class FeedbackMessage extends OCEMessage {
         double similarityThreshold = this.serviceAgentRef.getSimilarityThreshold();             //Define the similarityThreshold for selecting similar reference situation
         // double epsilon = this.serviceAgentRef.getEpsilon();                                     //The value of the threshold used by the strategy of selection of best agent
 
-        //If the service agent receiving this feedback was waiting
-        if (this.serviceAgentRef.getMyConnexionState().equals(ServiceAgentConnexionState.EXPECTING_FEEDBACK) || this.serviceAgentRef.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED)) {
-            if(this.serviceAgentRef.getOceCycleBestAgent().isPresent()){
-                OCELogger.log(Level.INFO, "Agent : Decision -> Before updating Scored Current Situation = " + this.serviceAgentRef.getMyScoredCurrentSituation().toString());
-                //Compute the value of the reinforcement depending on the value of the feedback
-                if (this.feedbackValue.equals(FeedbackValues.MODIFIED)) {
-                    //Check if the agent got connected to another one or left unconnected
-                    Optional<OCEAgent> agentChosenByUser = this.getAgentChosenUser();
-                    if (agentChosenByUser.isPresent()) {
-                        //This service agent got connected to another service agent
-                        OCELogger.log(Level.INFO, "Agent : Decision -> Feedback Modify - > Service Agent was connected by user to = " + agentChosenByUser.get().toString());
-                        System.out.println("Agent : Decision -> Feedback Modify - > Service Agent was connected by user to = " + agentChosenByUser.get().toString());
-                        //Check if the agent chosen by the user is in the CS
-                        if (!this.serviceAgentRef.getMyScoredCurrentSituation().get().containServiceAgent(agentChosenByUser.get().getMyID())) { //The chosen agent doesn't exist in the current situation
-                            //Add the chosen agent to the Scored CS (the Message type is not important) TODO : initial value to be changed to max or mean
-                            this.serviceAgentRef.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, initialValue));
-                        }
-                        //Get the score of the agent chosen by the USER
-                        double scoreAgentChosenByUser = this.serviceAgentRef.getMyScoredCurrentSituation().get().getAgentSituationEntries().get(agentChosenByUser.get().getMyID()).getScore();
-                        //Get the score of the agent chosen by OCE
-                        double scoreAgentProposedByOCE = this.serviceAgentRef.getOceCycleBestAgent().get().getValue().getScore();
-                        //Compute the reinforcement
-                        reinforcement = Math.abs(scoreAgentProposedByOCE - scoreAgentChosenByUser) + beta;
-                        //Update the score of the agent chosen by the user in the current scored situation
-                        SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), agentChosenByUser.get().getMyID(), learningRate, reinforcement);
-                        //Set the state of the agent to connected
-                        this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.CONNECTED);
-                        //Update the binder agent
-                        //Get the emitter of this message
-                        BinderAgent potentialBinderAgent = (BinderAgent) this.getEmitter();
-                        if(!this.serviceAgentRef.isUpdateBAFeedbackModified()){
-                            boolean result = potentialBinderAgent.addHandledServices((MockupService) this.serviceAgentRef.getHandledService(), (MockupService)((ServiceAgent)agentChosenByUser.get()).getHandledService());
-                            if(result){
-                                this.serviceAgentRef.setMyBinderAgent(potentialBinderAgent);
-                                this.serviceAgentRef.setUpdateBAFeedbackModified(true);
-                            }
-                        }
-                    } else {
-                        //The service agent left unconnected -> the agent which was proposed by OCE we reinforce negatively
-                        OCELogger.log(Level.INFO, "Agent : Decision -> Feedback Modify - > Service Agent was not connected by user");
-                        System.out.println("Agent : Decision -> Feedback Modify - > Service Agent was not connected by user");
-                        //Set the state of the agent to Not connected
-                        this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
-                        //Delete the reference of the old binder agent
-                        if (this.serviceAgentRef.getMyBinderAgent().isPresent()) {
-                            //Delete the reference of the service from the binder agent
-                            this.serviceAgentRef.getMyBinderAgent().get().deleteMyService(this.serviceAgentRef.getHandledService());
-                            //Delete the reference of the binder agent from the service agent
-                            this.serviceAgentRef.deleteMyBinderAgent();
-                        }
-                    }
-                    //Update the score (negatively) for the agent proposed by OCE
-                    reinforcement = -beta;
-                    //Update the score of the agent initially proposed by OCE in the current scored situation
-                    SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), this.serviceAgentRef.getOceCycleBestAgent().get().getKey(), learningRate, reinforcement);
-                } else {
-                    if (this.feedbackValue.equals(FeedbackValues.ACCEPTED)) {
-                        //Set the value of the reinforcement (positive reinforcement)
-                        reinforcement = +beta;
-                        //Set the state of the agent to connected
-                        this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.CONNECTED);
-                    } else {
-                        //Set the value of the reinforcement (negative reinforcement)
-                        reinforcement = -beta;
-                        //Set the state of the agent to Not connected
-                        this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
-                        //Delete the service handled by tis agent from the binder agent, if the two service were deleted the binder agent suicide
-                        this.serviceAgentRef.getMyBinderAgent().get().deleteMyService(this.serviceAgentRef.getHandledService());
-                        //delete the reference of the binder agent
-                        this.serviceAgentRef.deleteMyBinderAgent();
-
-                    }
-                    //Update the scores in the current scored situation and normalize the values
-                    SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), this.serviceAgentRef.getOceCycleBestAgent().get().getKey(), learningRate, reinforcement);
+        //Check if th value of feedback is ADDED
+        if(this.feedbackValue.equals(FeedbackValues.ADDED)){ // we don't check for the state of the agent -> we will make it connected
+            //Check if it has a binder agent
+            if (this.serviceAgentRef.getMyBinderAgent().isPresent()){
+                //We delete it -> order it to suicide
+                OCELogger.log(Level.INFO, this.serviceAgentRef + "  After receiving ADDED feedback -> deleting it's binder Agent  " + this.serviceAgentRef.getMyBinderAgent().get());
+                this.serviceAgentRef.getMyBinderAgent().get().suicide();
+            }
+            //Add the new binder agent
+            this.serviceAgentRef.setMyBinderAgent((BinderAgent)this.emitter);
+            //Update Knowledge
+            //Get the agent chosen by the user
+            Optional<OCEAgent> agentChosenByUser = this.getAgentChosenUser();
+            if (agentChosenByUser.isPresent()) {
+                //This service agent got connected to another service agent
+                OCELogger.log(Level.INFO, "Agent : Decision -> Feedback ADDED - > Service Agent was connected by user to = " + agentChosenByUser.get().toString());
+                //Check if the agent chosen by the user is in the CS
+                if (!this.serviceAgentRef.getMyScoredCurrentSituation().get().containServiceAgent(agentChosenByUser.get().getMyID())) { //The chosen agent doesn't exist in the current situation
+                    //Add the chosen agent to the Scored CS (the Message type is not important)
+                    double maxValue = SituationUtility.computeMaxScoresSCS(this.serviceAgentRef.getMyScoredCurrentSituation().get()); // If the SCS is empty max value == 1
+                    this.serviceAgentRef.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, maxValue));
                 }
-            }else{
-                OCELogger.log(Level.INFO, "Agent : Decision -> Feedback - > Error : service agent chosen by OCE is Empty = " + this.serviceAgentRef.getOceCycleBestAgent().toString());
-                System.out.println("Agent : Decision -> Feedback - > Error : service agent chosen by OCE is Empty = " + this.serviceAgentRef.getOceCycleBestAgent().toString());
+                reinforcement = +beta;
+                //Update the score of the agent chosen by the user in the current scored situation
+                SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), agentChosenByUser.get().getMyID(), learningRate, reinforcement);
+                //Cast the variable ConnectedTo
+                ServiceAgent otherServiceAgent = (ServiceAgent) agentChosenByUser.get();
+                //Set the reference of the service agent that the service agent treating this message is connected to
+                this.serviceAgentRef.setConnectedTo(otherServiceAgent);
+                //Set the state of the agent to connected
+                this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.CONNECTED);
             }
 
-        } else { // The service agent was not expecting feedback -> it must got connected by the USER
+        }else{
+            //If the service agent receiving this feedback was waiting
+            if (this.serviceAgentRef.getMyConnexionState().equals(ServiceAgentConnexionState.EXPECTING_FEEDBACK) || this.serviceAgentRef.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED)) {
+                if(this.serviceAgentRef.getOceCycleBestAgent().isPresent()){
+                    OCELogger.log(Level.INFO, "Agent : Decision -> Before updating Scored Current Situation = " + this.serviceAgentRef.getMyScoredCurrentSituation().toString());
+                    //Compute the value of the reinforcement depending on the value of the feedback
+                    if (this.feedbackValue.equals(FeedbackValues.MODIFIED)) {
+                        //Check if the agent got connected to another one or left unconnected
+                        Optional<OCEAgent> agentChosenByUser = this.getAgentChosenUser();
+                        if (agentChosenByUser.isPresent()) {
+                            //This service agent got connected to another service agent
+                            OCELogger.log(Level.INFO, "Agent : Decision -> Feedback Modify - > Service Agent was connected by user to = " + agentChosenByUser.get().toString());
+                            System.out.println("Agent : Decision -> Feedback Modify - > Service Agent was connected by user to = " + agentChosenByUser.get().toString());
+                            //Check if the agent chosen by the user is in the CS
+                            if (!this.serviceAgentRef.getMyScoredCurrentSituation().get().containServiceAgent(agentChosenByUser.get().getMyID())) { //The chosen agent doesn't exist in the current situation
+                                //Add the chosen agent to the Scored CS (the Message type is not important)
+                                double maxValue = SituationUtility.computeMaxScoresSCS(this.serviceAgentRef.getMyScoredCurrentSituation().get()); // If the SCS is empty max value == 1
+                                this.serviceAgentRef.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, maxValue));
+                            }
+                            //Get the score of the agent chosen by the USER
+                            double scoreAgentChosenByUser = this.serviceAgentRef.getMyScoredCurrentSituation().get().getAgentSituationEntries().get(agentChosenByUser.get().getMyID()).getScore();
+                            //Get the score of the agent chosen by OCE
+                            double scoreAgentProposedByOCE = this.serviceAgentRef.getOceCycleBestAgent().get().getValue().getScore();
+                            //Compute the reinforcement
+                            reinforcement = Math.abs(scoreAgentProposedByOCE - scoreAgentChosenByUser) + beta;
+                            //Update the score of the agent chosen by the user in the current scored situation
+                            SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), agentChosenByUser.get().getMyID(), learningRate, reinforcement);
+                            //Set the state of the agent to connected
+                            this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.CONNECTED);
+                            //Update the binder agent
+                            //Get the emitter of this message
+                            BinderAgent potentialBinderAgent = (BinderAgent) this.getEmitter();
+                            if(!this.serviceAgentRef.isUpdateBAFeedbackModified()){
+                                boolean result = potentialBinderAgent.addHandledServices((MockupService) this.serviceAgentRef.getHandledService(), (MockupService)((ServiceAgent)agentChosenByUser.get()).getHandledService());
+                                if(result){
+                                    this.serviceAgentRef.setMyBinderAgent(potentialBinderAgent);
+                                    this.serviceAgentRef.setUpdateBAFeedbackModified(true);
+                                }
+                            }
+                        } else {
+                            //The service agent left unconnected -> the agent which was proposed by OCE we reinforce negatively
+                            OCELogger.log(Level.INFO, "Agent : Decision -> Feedback Modify - > Service Agent was not connected by user");
+                            System.out.println("Agent : Decision -> Feedback Modify - > Service Agent was not connected by user");
+                            //Set the state of the agent to Not connected
+                            this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
+                            //Delete the reference of the old binder agent
+                            if (this.serviceAgentRef.getMyBinderAgent().isPresent()) {
+                                //Delete the reference of the service from the binder agent
+                                this.serviceAgentRef.getMyBinderAgent().get().deleteMyService(this.serviceAgentRef.getHandledService());
+                                //Delete the reference of the binder agent from the service agent
+                                this.serviceAgentRef.deleteMyBinderAgent();
+                            }
+                        }
+                        //Update the score (negatively) for the agent proposed by OCE
+                        reinforcement = -beta;
+                        //Update the score of the agent initially proposed by OCE in the current scored situation
+                        SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), this.serviceAgentRef.getOceCycleBestAgent().get().getKey(), learningRate, reinforcement);
+                    } else {
+                        if (this.feedbackValue.equals(FeedbackValues.ACCEPTED)) {
+                            //Set the value of the reinforcement (positive reinforcement)
+                            reinforcement = +beta;
+                            //Set the state of the agent to connected
+                            this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.CONNECTED);
+                        } else {
+                            //It's rejected
+                            //Set the value of the reinforcement (negative reinforcement)
+                            reinforcement = -beta;
+                            //Set the state of the agent to Not connected
+                            this.serviceAgentRef.setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
+                            //Delete the service handled by tis agent from the binder agent, if the two service were deleted the binder agent suicide
+                            this.serviceAgentRef.getMyBinderAgent().get().deleteMyService(this.serviceAgentRef.getHandledService());
+                            //delete the reference of the binder agent
+                            this.serviceAgentRef.deleteMyBinderAgent();
+                        }
+                        //Update the scores in the current scored situation and normalize the values
+                        SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), this.serviceAgentRef.getOceCycleBestAgent().get().getKey(), learningRate, reinforcement);
+                    }
+                }else{
+                    OCELogger.log(Level.INFO, "Agent : Decision -> Feedback - > Error : service agent chosen by OCE is Empty = " + this.serviceAgentRef.getOceCycleBestAgent().toString());
+                    System.out.println("Agent : Decision -> Feedback - > Error : service agent chosen by OCE is Empty = " + this.serviceAgentRef.getOceCycleBestAgent().toString());
+                }
+
+            } else { // The service agent was not expecting feedback -> it must got connected by the USER
                 //Check if the agent got connected to another one or left unconnected
                 Optional<OCEAgent> agentChosenByUser = this.getAgentChosenUser();
                 if (agentChosenByUser.isPresent()) { //The agent was connected by the user
@@ -191,18 +226,13 @@ public class FeedbackMessage extends OCEMessage {
                         this.serviceAgentRef.setMyScoredCurrentSituation(ScoredS);
                         OCELogger.log(Level.INFO, "Agent : Decision : creating new Scored Situation after Feedback -> The scored Situation = " + ScoredS.toString());
                     }
-                    //Check if the agent chosen by the user is in the current situation TODO : initial value to be changed to max or mean
+                    //Check if the agent chosen by the user is in the current situation
                     if (!this.serviceAgentRef.getMyScoredCurrentSituation().get().containServiceAgent(agentChosenByUser.get().getMyID())) { //The chosen agent doesn't exist in the current situation
                         //Add the chosen agent to the Scored CS (the Message type is not important)
-                        this.serviceAgentRef.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, initialValue));
+                        double maxValue = SituationUtility.computeMaxScoresSCS(this.serviceAgentRef.getMyScoredCurrentSituation().get()); // If the SCS is empty max value == 1
+                        this.serviceAgentRef.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, maxValue));
                     }
-                    //We reinforce with beta NOT with [max(scoreAgent)-scoreChosenAgent] + beta
-                    //Get the score of the agent chosen by the user
-//                                            double soreAgentChosenByUser = this.myServiceAgent.getMyScoredCurrentSituation().get().getAgentSituationEntries().get(agentChosenByUser.get().getMyID()).getScore();
-//                                        //Compute the maximum of scores in the scored current situation
-//                                        double maxiScoreAgent = this.myServiceAgent.getMyScoredCurrentSituation().get().getAgentSituationEntries().values().stream().map(e -> ((ScoredCurrentSituationEntry) e).getScore()).mapToDouble(d -> (double) d).max().getAsDouble();
-//                                        reinforcement = Math.abs(maxiScoreAgent - soreAgentChosenByUser )+ beta ;
-//
+
                     reinforcement = beta;
                     //Update the score of the agent chosen by the user in the current scored situation
                     SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), agentChosenByUser.get().getMyID(), learningRate, reinforcement);
@@ -223,8 +253,8 @@ public class FeedbackMessage extends OCEMessage {
                 } else {
                     OCELogger.log(Level.WARNING, "Agent : Decision -> Feedback - > the agent received feedback but WAS  NOT CONNECTED BY THE USER !! ");
                 }
-        }
-        OCELogger.log(Level.INFO, "Agent : Decision -> Updated Scored Current Situation = " + this.serviceAgentRef.getMyScoredCurrentSituation().toString());
+            }
+            OCELogger.log(Level.INFO, "Agent : Decision -> Updated Scored Current Situation = " + this.serviceAgentRef.getMyScoredCurrentSituation().toString());
 
 //        //Normalise the scores of the agents in the scored current situation
 //        SituationUtility.normalizeScoresSCS(this.serviceAgentRef.getMyScoredCurrentSituation().get());
@@ -234,22 +264,24 @@ public class FeedbackMessage extends OCEMessage {
 //        this.serviceAgentRef.updateMyKnowledgeBase();
 //        OCELogger.log(Level.INFO, "Agent : Decision -> Knowledge Base = " + this.serviceAgentRef.getMyKnowledgeBase().toString());
 
-        //Set to whom the service agent is connected, it may be an other service agent or Empty
-        Optional<OCEAgent> connectedToAgent = this.getAgentChosenUser();
-        //If the service agent was connected by the user (or left connected)
-        if (connectedToAgent.isPresent()) {
-            //Cast the variable ConnectedTo
-            ServiceAgent otherServiceAgent = (ServiceAgent) connectedToAgent.get();
-            //Set the reference of the service agent that the service agent treating this message is connected to
-            this.serviceAgentRef.setConnectedTo(otherServiceAgent);
-            OCELogger.log(Level.INFO, "Service agent = " + this.serviceAgentRef.toString() + " is connected to = " + otherServiceAgent.toString());
-            System.out.println("Service agent = " + this.serviceAgentRef.toString() + " is connected to = " + otherServiceAgent.toString());
-        } else {
-            //The user deleted the connection
-            this.serviceAgentRef.resetConnectedTo();
-            OCELogger.log(Level.INFO, "Service agent = " + this.serviceAgentRef.toString() + " is NOT connected to any service agent ! ");
-            System.out.println("Service agent = " + this.serviceAgentRef.toString() + " is NOT connected to any service agent ! ");
+            //Set to whom the service agent is connected, it may be an other service agent or Empty
+            Optional<OCEAgent> connectedToAgent = this.getAgentChosenUser();
+            //If the service agent was connected by the user (or left connected)
+            if (connectedToAgent.isPresent()) {
+                //Cast the variable ConnectedTo
+                ServiceAgent otherServiceAgent = (ServiceAgent) connectedToAgent.get();
+                //Set the reference of the service agent that the service agent treating this message is connected to
+                this.serviceAgentRef.setConnectedTo(otherServiceAgent);
+                OCELogger.log(Level.INFO, "Service agent = " + this.serviceAgentRef.toString() + " is connected to = " + otherServiceAgent.toString());
+                System.out.println("Service agent = " + this.serviceAgentRef.toString() + " is connected to = " + otherServiceAgent.toString());
+            } else {
+                //The user deleted the connection
+                this.serviceAgentRef.resetConnectedTo();
+                OCELogger.log(Level.INFO, "Service agent = " + this.serviceAgentRef.toString() + " is NOT connected to any service agent ! ");
+                System.out.println("Service agent = " + this.serviceAgentRef.toString() + " is NOT connected to any service agent ! ");
+            }
         }
+
 //        //Set the feedback received to false
 //        this.serviceAgentRef.setFeedbackReceived(false);
 
