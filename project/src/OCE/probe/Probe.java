@@ -59,7 +59,7 @@ public class Probe {
                     OCELogger.log(Level.INFO, "************************ Probing *******************");
                     componentsManager.appearingComponentsAcquisition();
                     componentsManager.disappearingComponentsAcquisition();
-                    //Todo Walid  06/11/2019 : To delete, this is just for test in the Midlleware MOICE
+                    //Collect the proposed configuration by the Midlleware MOICE
                     MOICE.getInstance().collectOCEProposedConfiguration();
                 } catch (AcquisitionFailure acquisitionFailure) {
                     acquisitionFailure.printStackTrace();

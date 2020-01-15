@@ -30,7 +30,6 @@ public class RandomSelection implements IMessageSelection {
 
     @Override
     public ArrayList<InfraMessage> multipleSelect(ArrayList<InfraMessage> perceptions) {
-        // TOdO Compléter la procédure
-        return null;
+        return new ArrayList<>();
     }
 }

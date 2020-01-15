@@ -36,7 +36,6 @@ public class MatchingAdvertiseCriteria implements Criteria {
      */
     @Override
     public ArrayList<InfraMessage> meetCriteria(ArrayList<InfraMessage> infraMessages) {
-        //Todo : check if it is relevant to do this
         //Filter the advertise message to keep Only the matching ones
         ArrayList<InfraMessage> myListAdvertiseFiltered = new ArrayList<>( infraMessages.stream().filter(m -> m.getMyType()== MessageTypes.ADVERTISE)
                                                             .map(m -> (AdvertiseInfraMessage) m)

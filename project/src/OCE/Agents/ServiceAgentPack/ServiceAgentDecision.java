@@ -112,13 +112,13 @@ public class ServiceAgentDecision implements IDecisionState {
         Criteria matchingAdvertiseCriteria = new MatchingAdvertiseCriteria(myServiceAgent.getHandledService(), matching);
         ArrayList<InfraMessage> filteredPerception = matchingAdvertiseCriteria.meetCriteria(perceptions);
 
-        // OCELogger.log(Level.INFO, "Agent -> Decision -> filtred Messages after matching =  " + filteredPerception.toString());
+        // OCELogger.log(Level.INFO, "Agent -> Decision -> filtered Messages after matching =  " + filteredPerception.toString());
 
         //Create a list of decisions
         ArrayList<OCEDecision> myListOfDecisions = new ArrayList<>();
 
         //Check if the service Agent is in suicide mechanism -> we inform the other partner of the disconnection
-        if (this.commitSuicide == true) { //Create the disconnection decision
+        if (this.commitSuicide) { //Create the disconnection decision
             this.suicideTreatment(myListOfDecisions);
         }
         // If the agent isn't in sleep Mode -> if it's the case the service attached to it disappeared ->  for now the agent doesn't do anything
@@ -148,7 +148,7 @@ public class ServiceAgentDecision implements IDecisionState {
                 } else {
                     // Reinitialize the value of the counters to 0
                     this.waitingCycleAgentBeforeAdvertiseCounter = 0;
-                    //Todo 15/01 see if this is where we need to put back the counter to wait before select to 0 -> i think it should go elsewhere
+                    //Todo 15/01 see if this is where we need to put back the counter to wait before select to 0 -> i think it should go elsewhere - 15/01 it works without it
                     //this.waitingCycleAgentAfterSelectCounter = 0;
 
                     // Check if we received a disconnect message from the service agent with whom it is connected to

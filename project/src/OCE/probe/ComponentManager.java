@@ -36,12 +36,10 @@ public class ComponentManager {
     public void appearingComponentsAcquisition() throws AcquisitionFailure {
 
         Set<OCComponent> componentsList = acquisition.getNewComponents();
-
-        // TODO walid 30-09-2019 : Delete later this is just for test
+            //Register the components detected by the probe
             ArrayList<MockupComponent> MOICEComponentsList = new ArrayList<>(componentsList.stream().map( e -> (MockupComponent) e).collect(Collectors.toList()));
             MOICE middlewareMOICE = MOICE.getInstance();
             MOICEComponentsList.forEach( c -> middlewareMOICE.registerComponent(c));
-        // fin Todo
 
         for (OCComponent component : componentsList) {
             // log in the appearing components
@@ -72,12 +70,11 @@ public class ComponentManager {
 
         Set<OCComponent> componentsList = acquisition.getDisappearedComponents();
 
-        // TODO walid 06-11-2019 : Delete later this is just for test
+        //Unregister the disappearing components from the MOICE Middeleware
         ArrayList<MockupComponent> MOICEComponentsList = new ArrayList<>(componentsList.stream().map( e -> (MockupComponent) e).collect(Collectors.toList()));
         MOICE middlewareMOICE = MOICE.getInstance();
         MOICEComponentsList.forEach( c -> middlewareMOICE.unRegisterComponent(c));
 
-        // fin Todo
 
         // System.out.println(" Disappearing components = " + componentsList + "size = " + componentsList.size());
         for (OCComponent component : componentsList) {

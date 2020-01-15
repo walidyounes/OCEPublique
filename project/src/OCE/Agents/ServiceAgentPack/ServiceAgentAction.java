@@ -53,6 +53,6 @@ public class ServiceAgentAction implements IActionState {
 
     @Override
     public void setBinderAgent(OCEAgent myBinderAgent) {
-        //todo : walid this is only for test, i need this fonction for the binder Agent and the feedback message
+        //Walid : this is only for test, i need this function for the binder Agent and the feedback message
     }
 }

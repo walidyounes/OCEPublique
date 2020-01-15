@@ -200,18 +200,6 @@ public class Connection implements Comparable {
     }
 
     /**
-     * Treat the connection according to her state (accepted, rejected or modified)
-     */
-    public void toSelfTreat(){
-        if (this.myConnectionState.isPresent()){
-            //Todo :  15/11/2019 : complete this section
-            //this.myConnectionState.get().treatConnection(this, );
-        }else{
-            OCELogger.log(Level.INFO, "Connection without a state, it can't be treated !");
-        }
-    }
-
-    /**
      * Compare two connexions (the comparison is compute on all the attribute of the connexion)
      * @param o the connexion to compare this one
      * @return true if the two object are equal, false else

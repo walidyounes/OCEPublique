@@ -80,10 +80,6 @@ public class ServiceManager implements INotification {
                 System.out.println("Recording the reference of the agent = " + serviceAgent.get().toString() + " and it's attached service = "+ service.toString());
                 OCELogger.log(Level.INFO, "Recording the reference of the agent = " + serviceAgent.get().toString() + " and it's attached service = "+ service.toString());
 
-                //Todo : check if this is necessary -> i think i should keep the association and don't unregister it -> walid 24/10/2019 : i deleted it :)
-                // Unregister the association between the ServiceAgent and it's reference in the infrastructure from the recording component of the medium
-                // agentRecorder.unregisterOCEAgent(serviceAgent.get());
-
             }else{
                 OCELogger.log(Level.INFO, " No Agent is attached to the service = " + service.toString() + " !");
             }

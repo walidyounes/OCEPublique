@@ -213,7 +213,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
 
     /**
      * Set the value of the current agent cycle
-     * @param myCurrentCycleNumber
+     * @param myCurrentCycleNumber : the new value of the current agent cycle
      */
     public void setMyCurrentCycleNumber(int myCurrentCycleNumber) {
         this.myCurrentCycleNumber = myCurrentCycleNumber;
@@ -358,7 +358,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is committing SUICIDE !");
         //Check if the agent is connected
         if(this.myConnexionState.equals(ServiceAgentConnexionState.CONNECTED) && this.connectedTo.isPresent()){
-            //Todo : walid 29 11H55 on rentre pas ici je pense que le service connected to n'existe pas -> 20/01 je pense que ce todo est inutile
+
             OCELogger.log(Level.INFO, " The agent = " + this.toString() + " is ready to SUICIDE!");
             //Put the indicator of suicide to true so in the decision process, the agent will send a disconnect message
             ((ServiceAgentDecision)this.myWayOfDecision).setCommitSuicide(true);
@@ -538,7 +538,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
 
     /**
      * Get the value for the reinforcement
-     * @return
+     * @return  : the value of the reinforcement of this agent
      */
     public double getReinforcement() {
         return reinforcement;

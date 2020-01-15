@@ -28,7 +28,7 @@ public class PrioritySelection implements IMessageSelection {
         this.matching = matching;
     }
 
-    /** The priority is fixed as follow (0 higher)
+    /* The priority is fixed as follow (0 higher)
      *  Others = 4 (Bind message and EmptyInfraMessage)
      *  Advertise = 3
      *  Reply = 2
@@ -42,7 +42,6 @@ public class PrioritySelection implements IMessageSelection {
      */
     @Override
     public InfraMessage singleSelect(ArrayList<InfraMessage> perceptions) {
-        //Todo For now when we select a message from a sublist we do it randomly -> after we have to choose the right one (witch learning)
         Criteria myCriteria;
         //Check fo agree messages
         myCriteria = new AgreeCriteria();

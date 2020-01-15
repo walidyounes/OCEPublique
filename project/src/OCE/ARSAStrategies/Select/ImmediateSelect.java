@@ -46,7 +46,7 @@ public class ImmediateSelect implements ISelectStrategy {
      //   MessageAgent bestReply = responses.get(0); // to remove
     //    ReferenceAgent bestTransmitter = bestReply.getExpediteur();
 
-        InfraAgentReference refBinder = new InfraAgentReference(); // ToDO walid générer la référence de l'agent Binder --  to remove
+        InfraAgentReference refBinder = new InfraAgentReference();
 
 //		the binder will be created and initialized with the service of the advertising agent
         //MessageAgent binding = new BindingMessage("", "", "", "", 0);

@@ -59,8 +59,7 @@ public class PhysicalDeviceBinder {
         OCELogger.log(Level.INFO, "Binding "+ MService1.getName()+"-"+MService1.getOwner()+" to "+MService2.getName()+"-"+MService2.getOwner());
         PhysicalDeviceBinder.UIBinderServices.set(""+MService1.getName()+""+MService1.getMatchingID()+""+MService1.getOwner()+""+ MService1.getWay()+"-"+MService2.getName()+""+MService2.getMatchingID()+""+MService2.getOwner()+""+ MService2.getWay());
         this.UIBinderS.setValue(""+MService1.getName()+""+MService1.getMatchingID()+""+MService1.getOwner()+""+ MService1.getWay()+"-"+MService2.getName()+""+MService2.getMatchingID()+""+MService2.getOwner()+""+ MService2.getWay());
-        //Todo Walid  02/10/2019 : To delete, this is just for test in the Midlleware MOICE
-        // this.listConnections.forEach(c -> MOICE.getInstance().registerConnection(c));
+
         MOICE.getInstance().collectOCEProposedConfiguration();
      }
 
@@ -90,10 +89,10 @@ public class PhysicalDeviceBinder {
      */
     public void addConnexion(Connection connection){
         this.listConnections.add(connection);
-        //Todo Walid  06/11/2019 : To delete, this is just for test in the Midlleware MOICE
          MOICE.getInstance().registerConnection(connection);
     }
 
+    //Todo : this function is obsolete
     /**
      * Delete the connexion between the two service agents, it's triggered by the user from the UI
      * @param idFirstService  :   the name of the first service
@@ -104,7 +103,7 @@ public class PhysicalDeviceBinder {
             if(connection.isTheSameServices(idFirstService,idSecondService)){
                 OCELogger.log(Level.INFO, "Bingo");
                 OCELogger.log(Level.INFO,"Connection to delete = " + connection.toString());
-                //Disconnect the two service by changing their state Todo : this is just for test
+                //Disconnect the two service by changing their state
                 connection.getFirstServiceAgent().setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
                 connection.getSecondServiceAgent().setMyConnexionState(ServiceAgentConnexionState.NOT_CONNECTED);
             }

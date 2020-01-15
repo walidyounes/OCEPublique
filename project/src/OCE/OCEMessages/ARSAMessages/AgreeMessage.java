@@ -46,7 +46,7 @@ public class AgreeMessage extends ARSAMessage {
     public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, OCEAgent oceAgentRef, OCService localService) {
         OCELogger.log(Level.INFO, oceAgentRef + " treats an agreement message ");
         // change the connexion's state of the agent
-        //((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.WAITING); //  Todo Walid 02/09/2019 : je pense que c'est inutile de faire ça - 04/10/2019 : je le remet car j'ai changé dans le code de decision de l'agent - 04/09 17h : je l'ai enlevé
+        //((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.WAITING); //Walid 02/09/2019 : je pense que c'est inutile de faire ça - 04/10/2019 : je le remet car j'ai changé dans le code de decision de l'agent - 04/09 17h : je l'ai enlevé
         ((ServiceAgent)oceAgentRef).setMyConnexionState(ServiceAgentConnexionState.EXPECTING_FEEDBACK); // Todo walid 13/12/2019 : je l'ai ajouté car lorsqu'un agent traite se message il n'est plus en mode WAITING FOR AGREE il passe directement vers l'attente de feedback
         //OCELogger.log(Level.INFO, oceAgentRef + " is now in waiting state ");
         return new DoNothingDecision();

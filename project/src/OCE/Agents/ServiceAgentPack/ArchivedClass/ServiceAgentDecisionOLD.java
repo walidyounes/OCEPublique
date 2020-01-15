@@ -228,7 +228,7 @@ public class ServiceAgentDecisionOLD implements IDecisionState {
 //                                    System.out.println("Agent : Decision -> Feedback Modify - > Service Agent was connected by user to = " +agentChosenByUser.get().toString());
 //                                    //Check if the agent chosen by the user is in the CS
 //                                    if(!this.myServiceAgent.getMyScoredCurrentSituation().get().containServiceAgent(agentChosenByUser.get().getMyID())) { //The chosen agent doesn't exist in the current situation
-//                                        //Add the chosen agent to the Scored CS (the Message type is not important) TODO : intial value to be changed to max or mean
+//                                        //Add the chosen agent to the Scored CS (the Message type is not important)
 //                                        this.myServiceAgent.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, initialValue));
 //                                    }
 //                                    double soreAgentChosenByUser = this.myServiceAgent.getMyScoredCurrentSituation().get().getAgentSituationEntries().get(agentChosenByUser.get().getMyID()).getScore();
@@ -294,7 +294,7 @@ public class ServiceAgentDecisionOLD implements IDecisionState {
 //                                        this.myServiceAgent.setMyScoredCurrentSituation(ScoredS);
 //                                        OCELogger.log(Level.INFO, "Agent : Decision : creating new Scored Situation after Feedback -> The scored Situation = " + ScoredS.toString());
 //                                    }
-//                                    //Check if the agent chosen by the user is in the current situation TODO : initial value to be changed to max or mean
+//                                    //Check if the agent chosen by the user is in the current situation
 //                                    if(!this.myServiceAgent.getMyScoredCurrentSituation().get().containServiceAgent(agentChosenByUser.get().getMyID())) { //The chosen agent doesn't exist in the current situation
 //                                        //Add the chosen agent to the Scored CS (the Message type is not important)
 //                                        this.myServiceAgent.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, initialValue));

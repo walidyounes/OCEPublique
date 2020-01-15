@@ -180,7 +180,7 @@ public class SituationUtility {
 
                     //Compute the mean of scores
                     scoreServiceAgent = scoreServiceAgent / count;
-                    //Todo : change this code and put it in a function in the class PackageSituation.CurrentSituationEntry
+                    //Todo walid Suggestion : change this code and put it in a function in the class PackageSituation.CurrentSituationEntry
                     //Create a scoredCurrentSituationEntry for the service agent
                     serviceAgentScoredEntry = new ScoredCurrentSituationEntry(serviceAgent, messageType, scoreServiceAgent);
 

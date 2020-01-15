@@ -40,27 +40,6 @@ public class AdvertiseInfraMessage extends ARSAInfraMessage {
         this.myType = MessageTypes.ADVERTISE;
     }
 
-    /*
-    @Override
-    public OCEDecision toSelfTreat(ServiceAgentConnexionState stateConnexionAgent, InfraAgentReference serviceAgentRef, OCService localService) {
-        OCELogger.log(Level.INFO, "Treating an advertisement message ! ");
-        //Verify the connexion state of the agent
-        if (stateConnexionAgent.equals(ServiceAgentConnexionState.NotConnected) || stateConnexionAgent.equals(ServiceAgentConnexionState.Created)){
-            //Verify the matching between the services Todo use the matching in the future
-            //todo here we are casting the matchingID to MockupService
-            MockupService service1 =  (MockupService)localService;
-            MockupService service2 = (MockupService)this.myService;
-
-            //verify the matching
-            if(service1.equals(service2)){
-                // Send a reply message to the emitter of this message
-                ArrayList<InfraAgentReference> replyRecievers = new ArrayList<>();
-                replyRecievers.add(this.emitter);
-                return new ReplyDecision(serviceAgentRef, replyRecievers);
-            }
-            else return new DoNothingDecision();
-        }else return new DoNothingDecision();
-    }*/
 
     @Override
     public OCEMessage toOCEMessage(IRecord referenceResolver) {

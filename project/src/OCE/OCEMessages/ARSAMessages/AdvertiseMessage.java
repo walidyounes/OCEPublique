@@ -55,8 +55,8 @@ public class AdvertiseMessage extends ARSAMessage {
         //Verify the connexion state of the agent
         if (stateConnexionAgent.equals(ServiceAgentConnexionState.NOT_CONNECTED) || stateConnexionAgent.equals(ServiceAgentConnexionState.CREATED)){
             OCELogger.log(Level.INFO, oceAgentRef +" is not connected  ");
-            //Verify the matching between the services Todo use the matching in the future
-            //todo here we are casting the matchingID to MockupService
+            //Verify the matching between the services
+            //Casting the services from OCService to MockupService
             MockupService service1 =  (MockupService)localService;
             MockupService service2 = (MockupService)this.distantService;
            // OCELogger.log(Level.INFO, "service local = " + service1.toString());
