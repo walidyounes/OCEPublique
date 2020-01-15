@@ -77,7 +77,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myScoredCurrentSituation = Optional.empty();
         this.myCurrentCycleNumber = 0;
         this.myKnowledgeBase = new HashSet<>(); //PS : we can change implementation to add uploading of old knowledge
-        this.startingNewEngineCycle = true; // By default, when the engine get launched
+        this.startingNewEngineCycle = false; // By default, when the engine get launched
         this.updateBAFeedbackModified = false;
     }
 
@@ -104,7 +104,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myScoredCurrentSituation =  Optional.empty();
         this.myCurrentCycleNumber = 0;
         this.myKnowledgeBase = new HashSet<>(); //PS : we can change implementation to add uploading of old knowledge
-        this.startingNewEngineCycle = true; // By default, when the engine get launched
+        this.startingNewEngineCycle = false; // By default, when the engine get launched
         this.updateBAFeedbackModified=false;
     }
 

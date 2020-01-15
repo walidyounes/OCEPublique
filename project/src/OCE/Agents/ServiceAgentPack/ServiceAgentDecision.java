@@ -112,7 +112,7 @@ public class ServiceAgentDecision implements IDecisionState {
         Criteria matchingAdvertiseCriteria = new MatchingAdvertiseCriteria(myServiceAgent.getHandledService(), matching);
         ArrayList<InfraMessage> filteredPerception = matchingAdvertiseCriteria.meetCriteria(perceptions);
 
-       // OCELogger.log(Level.INFO, "Agent -> Decision -> filtred Messages after matching =  " + filteredPerception.toString());
+        // OCELogger.log(Level.INFO, "Agent -> Decision -> filtred Messages after matching =  " + filteredPerception.toString());
 
         //Create a list of decisions
         ArrayList<OCEDecision> myListOfDecisions = new ArrayList<>();
@@ -128,32 +128,45 @@ public class ServiceAgentDecision implements IDecisionState {
             List<OCEMessage> OCEPerception = filteredPerception.stream().map(m -> m.toOCEMessage(oceAgentRecorder)).collect(Collectors.toList());
 
             if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CREATED)) {
-                createdStateTreatment(myListOfDecisions);
+                this.createdStateTreatment(myListOfDecisions);
             } else {
-                //If the service agent is in waiting state
-                if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.WAITING)) {
-                    this.waitingStateTreatment(myListOfDecisions, OCEPerception);
+                //Check if the agent didn't receive any messages
+                if (OCEPerception.isEmpty() && this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.NOT_CONNECTED)) {
+                    this.waitingCycleAgentBeforeAdvertiseCounter++; //Increment the value
+                    OCELogger.log(Level.INFO, "Agent -> Decision -> Value Cycle =  " + this.waitingCycleAgentBeforeAdvertiseCounter);
+                    if (this.waitingCycleAgentBeforeAdvertiseCounter == this.waitingCycleAgentBeforeAdvertiseBound) { // After n cycles we advertise again
+                        OCELogger.log(Level.INFO, "Agent -> Decision -> is Advertising !");
+                        //The agent will advertise
+                        OCEDecision myDecision = new AdvertiseDecision(this.myServiceAgent, new ArrayList<>(), this.myServiceAgent.getHandledService());
+                        myListOfDecisions.add(myDecision);
+                        //Reinitialize the value of the cycle agent counter before advertising
+                        this.waitingCycleAgentBeforeAdvertiseCounter = 0;
+                    } else {
+                        //The agent do nothing
+                        myListOfDecisions.add(new DoNothingDecision());
+                    }
                 } else {
-                    //Check if the agent didn't receive any messages
-                    if (OCEPerception.isEmpty() && this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.NOT_CONNECTED)) {
-                        this.waitingCycleAgentBeforeAdvertiseCounter++; //Increment the value
-                        OCELogger.log(Level.INFO, "Agent -> Decision -> Value Cycle =  " + this.waitingCycleAgentBeforeAdvertiseCounter);
-                        if (this.waitingCycleAgentBeforeAdvertiseCounter == this.waitingCycleAgentBeforeAdvertiseBound) { // After n cycles we advertise again
-                            OCELogger.log(Level.INFO, "Agent -> Decision -> is Advertising !");
-                            //The agent will advertise
-                            OCEDecision myDecision = new AdvertiseDecision(this.myServiceAgent, new ArrayList<>(), this.myServiceAgent.getHandledService());
-                            myListOfDecisions.add(myDecision);
-                            //Reinitialize the value of the cycle agent counter before advertising
-                            this.waitingCycleAgentBeforeAdvertiseCounter = 0;
-                        } else {
-                            //The agent do nothing
-                            myListOfDecisions.add(new DoNothingDecision());
+                    // Reinitialize the value of the counters to 0
+                    this.waitingCycleAgentBeforeAdvertiseCounter = 0;
+                    //Todo 15/01 see if this is where we need to put back the counter to wait before select to 0 -> i think it should go elsewhere
+                    //this.waitingCycleAgentAfterSelectCounter = 0;
+
+                    // Check if we received a disconnect message from the service agent with whom it is connected to
+                    List<OCEMessage> OCEPerceptionDisconnect = OCEPerception.stream().filter(m -> m instanceof DisconnectMessage).collect(Collectors.toList());
+                    if (!OCEPerceptionDisconnect.isEmpty()) { // The agent received the disconnect message
+                        //We check if the agent who sends the disconnect message is the same as the one that we are connected to
+                        ServiceAgent emitterDisconnect = (ServiceAgent) OCEPerceptionDisconnect.get(0).getEmitter();
+                        if (this.myServiceAgent.getConnectedTo().get().equals(emitterDisconnect)) {
+                            //Treat the message
+                            OCEPerceptionDisconnect.get(0).toSelfTreat(this.myServiceAgent.getMyConnexionState(), this.myServiceAgent, this.myServiceAgent.getHandledService());
+                            //Delete from the current situation of this service agent , all entries belonging the agent sending the disconnect message
+                            if (this.myServiceAgent.getMyCurrentSituation().isPresent()) {
+                                this.myServiceAgent.getMyCurrentSituation().get().deleteSituationEntryByIDAgent(emitterDisconnect.getMyID());
+                            }
+                            //Delete from the history of messages, the ones that were send by the emitter of the disconnect message
+                            oceServiceAgentPerceptionHistory.remove(emitterDisconnect.getMyID());
                         }
                     } else {
-                        // Reinitialize the value of the counters to 0
-                        this.waitingCycleAgentBeforeAdvertiseCounter = 0;
-                        this.waitingCycleAgentAfterSelectCounter = 0;
-
                         //Check if the agent received a temporary connected message from the binder agent
                         List<OCEMessage> OCEPerceptionTemporaryConnected = OCEPerception.stream().filter(m -> m instanceof WaitingForFeedbackMessage).collect(Collectors.toList());
                         if (!OCEPerceptionTemporaryConnected.isEmpty()) {
@@ -163,70 +176,54 @@ public class ServiceAgentDecision implements IDecisionState {
                             OCEDecision myDecision = receivedWaitingForFeedbackMessage.toSelfTreat(this.myServiceAgent.getMyConnexionState(), this.myServiceAgent, this.myServiceAgent.getHandledService());
                             // Reinitialize the value of the counters to 0 cause we are not waiting for the agent response anymore
                             this.waitingCycleAgentAfterSelectCounter = 0;
-                        }
-
-                        //Check if we received a disconnect message from the service agent with whom it is connected to (This action is priority =0)
-                        List<OCEMessage> OCEPerceptionDisconnect = OCEPerception.stream().filter(m -> m instanceof DisconnectMessage).collect(Collectors.toList());
-                        if (!OCEPerceptionDisconnect.isEmpty()) { // The agent received the disconnect message
-                            //We check if the agent who sends the disconnect message is the same as the one that we are connected to
-                            ServiceAgent emitterDisconnect = (ServiceAgent) OCEPerceptionDisconnect.get(0).getEmitter();
-                            if (this.myServiceAgent.getConnectedTo().get().equals(emitterDisconnect)) {
-                                //Treat the message
-                                OCEPerceptionDisconnect.get(0).toSelfTreat(this.myServiceAgent.getMyConnexionState(), this.myServiceAgent, this.myServiceAgent.getHandledService());
-                                //Delete from the current situation of this service agent , all entries belonging the agent sending the disconnect message
-                                if(this.myServiceAgent.getMyCurrentSituation().isPresent()){
-                                    this.myServiceAgent.getMyCurrentSituation().get().deleteSituationEntryByIDAgent(emitterDisconnect.getMyID());
-                                }
-                                //Delete from the history of messages, the ones that were send by the emitter of the disconnect message
-                                oceServiceAgentPerceptionHistory.remove(emitterDisconnect.getMyID());
-                            }
-                        } else {
-                            //Check if the agent received the feedback message from the agent binder (This action is priority= 1)
+                        }else{
+                            //Check if the agent received the feedback message from the agent binder
                             List<OCEMessage> OCEPerceptionFeedback = OCEPerception.stream().filter(m -> m instanceof FeedbackMessage).collect(Collectors.toList());
                             if (!OCEPerceptionFeedback.isEmpty()) { // The agent received the feedback message
                                 feedbackTreatment(myListOfDecisions, OCEPerceptionFeedback);
                             } else {
-                                //If the service agent is not in WAITING for feedback state (it's not connected or connected)
-                                if (!this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.EXPECTING_FEEDBACK)) {
-//                                    if (!OCEPerception.isEmpty()){
-                                        //Check if it's a start of a new engine cycle
-                                        if(this.myServiceAgent.isStartingNewEngineCycle()){
-                                            //Clear the content of the history of messages received in the last cycle
-                                            oceServiceAgentPerceptionHistory.clear();
-                                        }
-                                        //Create a mapping of the agent's id and their messages
-                                        oceServiceAgentPerceptionHistory.putAll(OCEPerception.stream().collect(Collectors.toMap(OCEMessage::getIDEmitter, s -> s, (x, y) -> y)));
-                                        //Create the current situation
-                                        //Check if it's the start of the agent cycle
-                                        if (!this.myServiceAgent.getMyCurrentSituation().isPresent()) {
-                                            //Start of the cycle // We initialise a new current situation
-                                            this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
-                                        } else {
-                                            //We update the current one
-                                            Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
-                                            this.myServiceAgent.getMyCurrentSituation().get().getAgentSituationEntries().putAll(myCurrentSituation.getAgentSituationEntries());
-                                        }
-                                        //Check if the service agent is connected (in the previous engine cycle)
-                                        if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
-                                            //Add the service to whom we are connected to the current situation
-                                            this.myServiceAgent.getMyCurrentSituation().get().addSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), new CurrentSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), MessageTypes.AGREE));
-                                        }
-                                        OCELogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
-                                        //Check for similar Reference Situation
-                                        Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation().get(), this.myServiceAgent.getMyKnowledgeBase(), similarityThreshold);
-                                        OCELogger.log(Level.INFO, "Agent : Decision -> The list of RS selected with a similarityThreshold '" + similarityThreshold + "' = " + listSimilarRS.toString());
-                                        //Score the current situation
-                                        //Using the similar reference situations score the current situation, if no RF similar found initialise the score to initialValue such as Sum(Scores)==1
-                                        Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation = SituationUtility.scoreCurrentSituation(this.myServiceAgent.getMyCurrentSituation().get(), listSimilarRS, initialValue);
-                                        this.myServiceAgent.setMyScoredCurrentSituation(myScoredCurrentSituation);
-                                        OCELogger.log(Level.INFO, "Agent : Decision -> The scored current situation = " + myScoredCurrentSituation.toString());
+                                //If the service agent is in waiting state
+                                if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.WAITING)) {
+                                    this.waitingStateTreatment(myListOfDecisions, OCEPerception);
+                                } else {
+                                    if (this.myServiceAgent.isStartingNewEngineCycle()) {
+                                        //Clear the content of the history of messages received in the last cycle
+                                        oceServiceAgentPerceptionHistory.clear();
+                                    }
+                                    //Create a mapping of the agent's id and their messages
+                                    oceServiceAgentPerceptionHistory.putAll(OCEPerception.stream().collect(Collectors.toMap(OCEMessage::getIDEmitter, s -> s, (x, y) -> y)));
+                                    //Create the current situation
+                                    //Check if it's the start of the agent cycle
+                                    if (!this.myServiceAgent.getMyCurrentSituation().isPresent()) {
+                                        //Start of the cycle // We initialise a new current situation
+                                        this.myServiceAgent.setMyCurrentSituation(new Situation<CurrentSituationEntry>(OCEPerception));
+                                    } else {
+                                        //We update the current one
+                                        Situation<CurrentSituationEntry> myCurrentSituation = new Situation<CurrentSituationEntry>(OCEPerception);
+                                        this.myServiceAgent.getMyCurrentSituation().get().getAgentSituationEntries().putAll(myCurrentSituation.getAgentSituationEntries());
+                                    }
+                                    //Check if the service agent is connected (in the previous engine cycle)
+                                    if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
+                                        //Add the service to whom we are connected to the current situation
+                                        this.myServiceAgent.getMyCurrentSituation().get().addSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), new CurrentSituationEntry(this.myServiceAgent.getConnectedTo().get().getMyID(), MessageTypes.AGREE));
+                                    }
+                                    OCELogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
+                                    //Check for similar Reference Situation
+                                    Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation().get(), this.myServiceAgent.getMyKnowledgeBase(), similarityThreshold);
+                                    OCELogger.log(Level.INFO, "Agent : Decision -> The list of RS selected with a similarityThreshold '" + similarityThreshold + "' = " + listSimilarRS.toString());
+                                    //Score the current situation
+                                    //Using the similar reference situations score the current situation, if no RF similar found initialise the score to initialValue such as Sum(Scores)==1
+                                    Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation = SituationUtility.scoreCurrentSituation(this.myServiceAgent.getMyCurrentSituation().get(), listSimilarRS, initialValue);
+                                    this.myServiceAgent.setMyScoredCurrentSituation(myScoredCurrentSituation);
+                                    OCELogger.log(Level.INFO, "Agent : Decision -> The scored current situation = " + myScoredCurrentSituation.toString());
 
-                                        OCEDecision myDecision;
-
+                                    OCEDecision myDecision;
+                                    if (!this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.EXPECTING_FEEDBACK)) {
                                         //Check if the service agent is connected (in the previous engine cycle) we don't select a best agent, the best agent is the one with whom we are connected
                                         if (this.myServiceAgent.getMyConnexionState().equals(ServiceAgentConnexionState.CONNECTED) && this.myServiceAgent.getConnectedTo().isPresent()) {
                                             //Mark the agent with whom we are connected to as the best agent
-                                            this.oceCycleBestAgent = Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(this.myServiceAgent.getConnectedTo().get().getMyID(), this.myServiceAgent.getMyScoredCurrentSituation().get().getSituationEntryByIDAgent(this.myServiceAgent.getConnectedTo().get().getMyID())));
+                                            this.oceCycleBestAgent = Optional.ofNullable(new AbstractMap.SimpleEntry<IDAgent, ScoredCurrentSituationEntry>(this.myServiceAgent.getConnectedTo().get().getMyID(),
+                                                    this.myServiceAgent.getMyScoredCurrentSituation().get().getSituationEntryByIDAgent(this.myServiceAgent.getConnectedTo().get().getMyID())));
 
                                             //if it's the beginning of the engine cycle
                                             if (this.myServiceAgent.isStartingNewEngineCycle()) {
@@ -237,6 +234,7 @@ public class ServiceAgentDecision implements IDecisionState {
                                                 ArrayList<OCEAgent> bindReceiver = new ArrayList<>();
                                                 bindReceiver.add(this.myServiceAgent.getMyBinderAgent().get());
                                                 communicationToolOCE.sendMessage(bindMessage, this.myServiceAgent, bindReceiver);
+
                                             }
                                             myDecision = new DoNothingDecision();
                                         } else {
@@ -259,34 +257,33 @@ public class ServiceAgentDecision implements IDecisionState {
                                             }
 
                                         }
-                                        myListOfDecisions.add(myDecision);
+                                    }else {
+                                        myDecision = new DoNothingDecision();
+                                    }
+                                    myListOfDecisions.add(myDecision);
 
-                                        //Mark the end of the engine cycle (so that we don't redo the special case again)
-                                        this.myServiceAgent.deactivateStartingNewEngineCycle();
+                                    //Mark the end of the engine cycle (so that we don't redo the special case again)
+                                    this.myServiceAgent.deactivateStartingNewEngineCycle();
 
-                                        //Increment the current cycle number of the agent
-                                        this.myServiceAgent.incrementMyCurrentCycleNumber();
-//                                    }else{
-//                                        //The service agent didn't receive any messages
-//                                        myListOfDecisions.add(new DoNothingDecision());
-//                                    }
-
+                                    //Increment the current cycle number of the agent
+                                    this.myServiceAgent.incrementMyCurrentCycleNumber();
                                 }
                             }
-
                         }
-                    }
 
+                    }
                 }
             }
-
         } else {
             OCELogger.log(Level.INFO, "Agent : Decision -> is in SLEEP mode !");
         }
+
         OCELogger.log(Level.INFO, "Agent : Decision -> List of decisions = " + myListOfDecisions.toString());
 
         return myListOfDecisions;
     }
+
+
 
     /**
      * Internal function called to execute the suicide order

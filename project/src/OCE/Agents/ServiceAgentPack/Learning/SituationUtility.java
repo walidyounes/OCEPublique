@@ -213,7 +213,8 @@ public class SituationUtility {
             }else{
                 numberAgents = scoredCurrentSituation.getAgentSituationEntries().size();
             }
-            double finalMeanValue = (sumScoreValue-maxScoreValue) /numberAgents;
+            final double finalMeanValue = (numberAgents >0 )? ((sumScoreValue-maxScoreValue) /numberAgents): 0.0; //Todo 15/01/2020 15:31 - here if we have 2 agents (one of them is new) sumScores == maxSCores -> the mean will be equal to 0
+
             situationEntriesToScoreLaterMean.forEach(se-> se.setScore(finalMeanValue));
 
         }

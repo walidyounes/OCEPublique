@@ -65,20 +65,6 @@ public class FeedbackMessage extends OCEMessage {
         OCELogger.log(Level.INFO, OCEAgentRef + " treats a feedback message");
         //Cast the OCEAgentRef from OCEAgent to ServiceAgent
         this.serviceAgentRef = (ServiceAgent) OCEAgentRef;
-//        //Set that the feedback is received
-//        serviceAgentRef.setFeedbackReceived(true); // Todo 16/12 delete later
-//        //Set the value of the received feedback
-//        serviceAgentRef.setFeedbackValue(this.feedbackValue); // todo 16/12 delete later
-//        //Get the reference of the other agent connected to the agent treating this message
-//        Optional<OCEAgent> connectedToAgent = this.getAgentChosenUser();
-//        //If the value returned by the function is not empty
-//        if(connectedToAgent.isPresent()){
-//            //Cast the variable ConnectedTo
-//            ServiceAgent otherServiceAgent = (ServiceAgent) connectedToAgent.get();
-//            //Set the reference of the service agent that the service agent treating this message is connected to
-//            serviceAgentRef.setConnectedTo(Optional.ofNullable(otherServiceAgent));
-//            OCELogger.log(Level.INFO, "Service agent = " + serviceAgentRef.toString() + " is connected to = "+ otherServiceAgent.toString());
-//        }
 
         //Get the parameters for the learning
         double initialValue = this.serviceAgentRef.getInitialValue();                           //The value used to initialise the score
