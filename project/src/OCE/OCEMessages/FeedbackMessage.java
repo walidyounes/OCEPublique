@@ -95,8 +95,14 @@ public class FeedbackMessage extends OCEMessage {
                     //Add the chosen agent to the Scored CS (the Message type is not important)
                     double maxValue = SituationUtility.computeMaxScoresSCS(this.serviceAgentRef.getMyScoredCurrentSituation().get()); // If the SCS is empty max value == 1
                     this.serviceAgentRef.getMyScoredCurrentSituation().get().addSituationEntry(agentChosenByUser.get().getMyID(), new ScoredCurrentSituationEntry(agentChosenByUser.get().getMyID(), MessageTypes.AGREE, maxValue));
+                    reinforcement = +beta;
+                }else{
+                    //The agent chosen by the user exists in the current situation
+                    //We reinforce it such as it's score will be the maximum : we give the importance to the action of the user
+                    double maxValue = SituationUtility.computeMaxScoresSCS(this.serviceAgentRef.getMyScoredCurrentSituation().get()); // If the SCS is empty max value == 1
+                    reinforcement = maxValue + beta;
                 }
-                reinforcement = +beta;
+
                 //Update the score of the agent chosen by the user in the current scored situation
                 SituationUtility.updateScoreCurrentSituation(this.serviceAgentRef.getMyScoredCurrentSituation().get(), agentChosenByUser.get().getMyID(), learningRate, reinforcement);
                 //Cast the variable ConnectedTo
