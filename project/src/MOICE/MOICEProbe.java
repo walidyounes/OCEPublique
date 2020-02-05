@@ -34,27 +34,20 @@ public class MOICEProbe {
          */
         @Override
         public void run() {
-//            try{
-                //Try to open the file and delete it when we call the function close (if it's not existing we throw a FileNotFoundException)
-                //FileInputStream fileICE = new FileInputStream("ICEConfiguration\\ICEConfiguration.ice_editor");
                 File fileICE = new File("ICEConfiguration\\ICEConfiguration.ice_editor");
                 //Mark the file as found and notify the observer
                 if(fileICE.exists()){
                     System.out.println("File Found");
-                    fileReceived.firePropertyChange("FileICEFound", fileFound, true);
-                    //fileICE.delete();
+                    if(!fileFound) {
+                        fileReceived.firePropertyChange("FileICEFound", fileFound, true);
+                        fileFound = true;
+                    }
+
                 }else{
                     System.out.println("File Not Found");
                     //Mark the file as not found
                     fileFound = false;
                 }
-
-//            }catch(FileNotFoundException exception){
-//                //Mark the file as not found
-//                fileFound = false;
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
         }
     }
 

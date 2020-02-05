@@ -52,7 +52,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     private double reinforcement = 0.0;         //The value of the reinforcement
     private double beta = 1;              //The value used to compute the reinforcement from the feedback
     private double learningRate = 0.4;           //The Learning rate
-    private double similarityThreshold = 0.3;             //Define the similarityThreshold for selecting similar reference situation
+    private double similarityThreshold = 0.5;             //Define the similarityThreshold for selecting similar reference situation (initially was 0.3)
     private double epsilon = 0.2;              //The value of the threshold used by the strategy of selection of best agent
 
     /**

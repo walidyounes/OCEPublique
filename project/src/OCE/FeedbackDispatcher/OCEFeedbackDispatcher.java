@@ -101,13 +101,16 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("Value changed " + evt.getNewValue());
-        //Clear previous reference of the agents in the list of agents to wake up to treat feedback
-        this.listAgentsToInformFeedback.clear();
-        //Treat the annotated connections
-        dispatchFeedback((List<Connection>) evt.getNewValue());
-        //Lunch in the infrastructure the special scheduling
-        int numberOfCycle = this.listAgentsToInformFeedback.size()*3;
-        this.infrastructure.startSpecialScheduling(this.listAgentsToInformFeedback, numberOfCycle);
+        if(evt.getPropertyName().equalsIgnoreCase("AnnotatedConnection")){
+            System.out.println("Value changed " + evt.getNewValue());
+            //Clear previous reference of the agents in the list of agents to wake up to treat feedback
+            this.listAgentsToInformFeedback.clear();
+            //Treat the annotated connections
+            dispatchFeedback((List<Connection>) evt.getNewValue());
+            //Lunch in the infrastructure the special scheduling
+            int numberOfCycle = this.listAgentsToInformFeedback.size()*3;
+            this.infrastructure.startSpecialScheduling(this.listAgentsToInformFeedback, numberOfCycle);
+        }
+
     }
 }

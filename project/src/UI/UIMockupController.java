@@ -710,6 +710,16 @@ public class UIMockupController implements Initializable {
             //reset settings in MOICE, which automatically clear the content of ICE's File for visualisation
             MOICE.getInstance().resetToDefaultSettings();
 
+//            //Delete the content of the directory where we save the files send by ICE
+//            File ICEFileFolder = new File("ICEConfiguration");
+//            File[] listFiles = ICEFileFolder.listFiles();
+//            for (File file : listFiles){
+//                if(!file.delete()){
+//                    System.out.println("Failed to delete the file : "+file.getName());
+//                }else{
+//                    System.out.println("Success to delete the file : "+file.getName());
+//                }
+//            }
         }
     }
 

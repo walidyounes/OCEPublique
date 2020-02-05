@@ -266,7 +266,7 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
 
             System.out.println("List OCE Proposed Connections after annotation = " + OCEConnectionList.toString());
             //Notify the listener that the feedback is computed and the connections are annotated
-            this.support.firePropertyChange("AnnotatedConnection", this.connectionsBeforeAnnotation, OCEConnectionList );
+            this.support.firePropertyChange("AnnotatedConnection", this.connectionsBeforeAnnotation, OCEConnectionList);
 
             //Delete the initial connections proposed by ICE
             this.connectionManager.getListConnectionProposedOCE().clear();
@@ -495,11 +495,13 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //The files send by the user exists so we treat them
-        String iceFilePath = "ICEConfiguration\\ICEConfiguration.ice_editor";
-        String oceFilePath = "ICEConfiguration\\OCE-ICE-old.ice_editor";
-        System.out.println("Compute feedback :)");
-        this.registerUserConfiguration(oceFilePath, iceFilePath);
+        if (evt.getPropertyName().equalsIgnoreCase("FileICEFound") && evt.getNewValue().equals(true)){
+            //The files send by the user exists so we treat them
+            String iceFilePath = "ICEConfiguration\\ICEConfiguration.ice_editor";
+            String oceFilePath = "ICEConfiguration\\OCE-ICE-old.ice_editor";
+            System.out.println("Compute feedback :)");
+            this.registerUserConfiguration(oceFilePath, iceFilePath);
+        }
     }
 
     /**
