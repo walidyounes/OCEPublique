@@ -52,7 +52,7 @@ public class ServiceAgentDecision implements IDecisionState {
 
     // Learning parameters
     private final double initialValue = 0.0;        //The value used to initialise the score
-    private double similarityThreshold = 0.3;       //Define the similarityThreshold for selecting similar reference situation
+    //private double similarityThreshold = 0.3;       //Define the similarityThreshold for selecting similar reference situation
     private double epsilon = 0.2;                   //The value of the threshold used by the strategy of selection of best agent
 
     private Optional<Map.Entry<IDAgent, ScoredCurrentSituationEntry>> oceCycleBestAgent; // 2-Uplet that indicates the best agent selected in the previous cycle agent
@@ -210,8 +210,8 @@ public class ServiceAgentDecision implements IDecisionState {
                                     }
                                     OCELogger.log(Level.INFO, "Agent : Decision -> Current Situation = " + this.myServiceAgent.getMyCurrentSituation().toString());
                                     //Check for similar Reference Situation
-                                    Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation().get(), this.myServiceAgent.getMyKnowledgeBase(), similarityThreshold);
-                                    OCELogger.log(Level.INFO, "Agent : Decision -> The list of RS selected with a similarityThreshold '" + similarityThreshold + "' = " + listSimilarRS.toString());
+                                    Map<Situation<ReferenceSituationEntry>, Double> listSimilarRS = SituationUtility.getSimilarReferenceSituations(this.myServiceAgent.getMyCurrentSituation().get(), this.myServiceAgent.getMyKnowledgeBase(), this.myServiceAgent.getSimilarityThreshold());
+                                    OCELogger.log(Level.INFO, "Agent : Decision -> The list of RS selected with a similarityThreshold '" + this.myServiceAgent.getSimilarityThreshold() + "' = " + listSimilarRS.toString());
                                     //Score the current situation
                                     //Using the similar reference situations score the current situation, if no RF similar found initialise the score to initialValue such as Sum(Scores)==1
                                     Situation<ScoredCurrentSituationEntry> myScoredCurrentSituation = SituationUtility.scoreCurrentSituation(this.myServiceAgent.getMyCurrentSituation().get(), listSimilarRS, initialValue);
@@ -241,10 +241,10 @@ public class ServiceAgentDecision implements IDecisionState {
                                         } else {
                                             //Select the best agent to respond to from the scored current situation
                                             // IAgentSelectionStrategy agentSelectionStrategy = new BestScoreEpsilonGreedy(epsilon);
-                                            IAgentSelectionStrategy agentSelectionStrategy = new BestScoreHighestPriority(epsilon);
+                                            IAgentSelectionStrategy agentSelectionStrategy = new BestScoreHighestPriority(this.myServiceAgent.getEpsilon());
                                             //IAgentSelectionStrategy agentSelectionStrategy = new HighestPriorityBestScore(epsilon);
                                             this.oceCycleBestAgent = SituationUtility.selectBestAgent(myScoredCurrentSituation, agentSelectionStrategy);
-                                            OCELogger.log(Level.INFO, " Agent : Decision -> Using the maximum score and epsilon greedy strategy (" + epsilon + "), the best agent = " + this.oceCycleBestAgent);
+                                            OCELogger.log(Level.INFO, " Agent : Decision -> Using the maximum score and epsilon greedy strategy (" + this.myServiceAgent.getEpsilon() + "), the best agent = " + this.oceCycleBestAgent);
 
                                             if (this.oceCycleBestAgent.isPresent()) {
                                                 //Update the field in the service agent

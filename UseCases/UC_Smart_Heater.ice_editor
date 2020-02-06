@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iCE_Editor:Environment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:iCE_Editor="http://www.eclipse.org/sirius/sample/ice_editor">
+  <component Name="HeaterA" Role="Receive data">
+    <service xsi:type="iCE_Editor:ProvidedService" matchingID="SK" Name="getTempA" IOAction="." Launcher="onRequired" ServiceDescription="Receive data" Cardinality="1">
+    </service>
+  </component>
+
+  <component Name="HeaterB" Role="Receive data">
+    <service xsi:type="iCE_Editor:ProvidedService" matchingID="SL" Name="getTempB" IOAction="." Launcher="onRequired" ServiceDescription="Receive data" Cardinality="1">
+    </service>
+  </component>
+
+  <component Name="Controller" Role="Receive data">
+    <service xsi:type="iCE_Editor:ProvidedService" matchingID="SJ" Name="getTemp" IOAction="." Launcher="onRequired" ServiceDescription="Receive data" Cardinality="1">
+    </service>
+    <service xsi:type="iCE_Editor:RequiredService" matchingID="SK" Name="sendTempA" IOAction="VAL@OUTPUT" Launcher="onButtonPressed" ServiceDescription="send value"  Cardinality="1">
+    </service>
+    <service xsi:type="iCE_Editor:RequiredService" matchingID="SL" Name="sendTempB" IOAction="VAL@OUTPUT" Launcher="onButtonPressed" ServiceDescription="send value"  Cardinality="1">
+    </service>
+  </component>
+
+  <component Name="TempController-V1" Role="Send Data">
+    <service xsi:type="iCE_Editor:RequiredService" matchingID="SJ" Name="sendValue1" IOAction="VAL@OUTPUT" Launcher="onButtonPressed" ServiceDescription="send value"  Cardinality="1">
+    </service>
+  </component>
+
+  <component Name="TempController-V2" Role="Send Data">
+    <service xsi:type="iCE_Editor:RequiredService" matchingID="SJ" Name="sendValue2" IOAction="VAL@OUTPUT" Launcher="onButtonPressed" ServiceDescription="send value"  Cardinality="1">
+    </service>
+  </component>
+
+  <component Name="TempSensor" Role="Send Data">
+    <service xsi:type="iCE_Editor:RequiredService" matchingID="SJ" Name="sendValue3" IOAction="VAL@OUTPUT" Launcher="onButtonPressed" ServiceDescription="send value"  Cardinality="1">
+    </service>
+  </component>
+
+  <component Name="CZ" Role="Send Data">
+    <service xsi:type="iCE_Editor:RequiredService" matchingID="SJ" Name="sendValue3" IOAction="VAL@OUTPUT" Launcher="onButtonPressed" ServiceDescription="send value"  Cardinality="1">
+    </service>
+  </component>
+  
+</iCE_Editor:Environment>
