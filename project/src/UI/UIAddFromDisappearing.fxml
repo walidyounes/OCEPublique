@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="521.0" stylesheets="@UIStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.UIAddFromDisappearingController">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="416.0" prefWidth="322.0" VBox.vgrow="ALWAYS">
+      <children>
+        <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="&#10;" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+          <font>
+            <Font size="18.0" />
+          </font>
+        </Label>
+            <VBox prefHeight="560.0" prefWidth="521.0" style="-fx-border-color: #78909C; -fx-border-width: 1;">
+               <children>
+                  <Label prefHeight="40.0" prefWidth="584.0" style="-fx-background-color: #0097A7;" text=" Components" textFill="WHITE" wrapText="false">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <JFXListView fx:id="componentsViewList" depth="1" prefHeight="102.0" prefWidth="519.0" verticalGap="10.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+      </children>
+    </AnchorPane>
+      <HBox prefHeight="60.0" prefWidth="491.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+         <children>
+            <JFXButton onAction="#choseAction" styleClass="button-raised-save" text="Chose">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </JFXButton>
+            <JFXButton onAction="#cancelAction" styleClass="button-raised-cancel" text="Cancel">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </JFXButton>
+         </children>
+         <padding>
+            <Insets bottom="10.0" top="10.0" />
+         </padding>
+      </HBox>
+  </children>
+</VBox>

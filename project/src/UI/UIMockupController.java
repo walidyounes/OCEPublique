@@ -17,7 +17,6 @@ import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
 import OCE.Agents.ServiceAgentPack.Learning.SituationUtility;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
-import OCE.Agents.ServiceAgentPack.ServiceAgentDecision;
 import OCE.DeviceBinder.PhysicalDeviceBinder;
 import OCE.Medium.Medium;
 import OCE.OCE;
@@ -29,8 +28,10 @@ import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -40,6 +41,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -86,6 +90,8 @@ public class UIMockupController implements Initializable {
     private Graph serviceGraph;
 
     private MockupFacadeAdapter mockupFacadeAdapter;
+    private List<OCComponent> disappearedComponents;
+
     private Infrastructure infrastructure;
 //    private Thread simulation;
     private OCE myOCE;
@@ -108,6 +114,8 @@ public class UIMockupController implements Initializable {
 
         // Initialize the Mockup
         this.mockupFacadeAdapter = new MockupFacadeAdapter();
+        //Initialize the list of disappearing components
+        this.disappearedComponents = new ArrayList<>();
         //Initialize the MAS Infrastructure
         this.infrastructure = new Infrastructure();
 
@@ -398,6 +406,8 @@ public class UIMockupController implements Initializable {
         // Delete the component from the mockup container
         System.out.println("Removing : " + C1.getName());
         this.mockupFacadeAdapter.removeComponent(C1);
+        //Add the component to the list of disappearing components
+        this.disappearedComponents.add(C1);
 
         // Update the graph visualisation
         deleteServicesFromGraph(C1.getProvidedServices());
@@ -864,5 +874,53 @@ public class UIMockupController implements Initializable {
         agentTitledPane.setContent(contentSA);
 
         return agentTitledPane;
+    }
+
+    @FXML
+    private void showChoseDisappearingComponent(ActionEvent event){
+//        Parent root = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "UIAddFromDisappearing.fxml"
+                    )
+            );
+
+
+//            // cGet the parentStage
+//            MenuItem source = (MenuItem) event.getSource();
+//            Stage parentStage  = (Stage) (source.getParentPopup().getScene().getWindow());
+
+            Stage secondaryStage = new Stage(StageStyle.UTILITY);
+            secondaryStage.setTitle("Disappearing Components");
+            secondaryStage.setScene(new Scene(loader.load(), 521, 650));
+//            secondaryStage.initOwner(parentStage); //Add my main UI as parent for the secondary UI
+            secondaryStage.initModality(Modality.APPLICATION_MODAL); // Block the interaction with the main UI until this secondary UI is closed
+            secondaryStage.setAlwaysOnTop(true);
+            secondaryStage.setMaximized(false);
+            UIAddFromDisappearingController secondaryStageController = loader.getController();
+            secondaryStageController.initData(this.disappearedComponents);
+//            root = FXMLLoader.load(getClass().getResource("UIAddFromDisappearing.fxml"));
+//
+            secondaryStage.showAndWait();
+            //if the user chose a component to make it reappear
+            if(secondaryStageController.getChosenComponent().isPresent()){
+                MockupComponent component = secondaryStageController.getChosenComponent().get();
+                this.mockupFacadeAdapter.addComponent(component);
+                //remove it from the disappearing components list
+                this.disappearedComponents.remove(component);
+                Label label = new Label();
+                String textToAdd = "" + component.getName();
+                label.setText(textToAdd);
+                label.getStyleClass().add("label-list");
+                label.setGraphic(new ImageView("/component.png"));
+                this.componentsList.getItems().add(label);
+            }
+            System.out.println(secondaryStageController.getChosenComponent());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

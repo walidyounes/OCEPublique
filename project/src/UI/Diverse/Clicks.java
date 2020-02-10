@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2019.  Younes Walid, IRIT, University of Toulouse
+ * Copyright (c) 2020.  Younes Walid, IRIT, University of Toulouse
  */
 
-package UI;
+package UI.Diverse;
 
 import org.graphstream.ui.graphicGraph.GraphicElement;
 import org.graphstream.ui.graphicGraph.GraphicGraph;
