@@ -91,7 +91,7 @@ public class OCE implements Runnable{
         //Restart the scheduling of the agents in the infrastructure
         this.infrastructure.resetCurrentCycleAgent();
 
-        //Inform the agent of the begining of the engine cycle
+        //Inform the agent of the beginning of the engine cycle
         this.medium.getAllAgents().stream().filter(agent -> agent instanceof ServiceAgent).forEach(agent -> ((ServiceAgent)agent).activateStartingNewEngineCycle());
     }
 

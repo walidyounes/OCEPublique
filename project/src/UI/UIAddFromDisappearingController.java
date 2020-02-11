@@ -42,7 +42,7 @@ public class UIAddFromDisappearingController implements Initializable {
 
     /**Function used to send the data to visualise to this stage (window)
      *
-     * @param listComponents : list of components to
+     * @param listComponents : list of components to display in this window
      */
     public void initData(List<OCComponent> listComponents) {
         //Save  in the local variable the list of components received
