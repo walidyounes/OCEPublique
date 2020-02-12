@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="620.0" prefWidth="1052.0" stylesheets="@UIStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.UIInitializeAgentLearningController">
+<VBox prefHeight="857.0" prefWidth="1128.0" stylesheets="@UIStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.UIInitializeAgentLearningController">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="590.0" prefWidth="1052.0" VBox.vgrow="ALWAYS">
       <children>
-            <VBox prefHeight="620.0" prefWidth="335.0" style="-fx-border-color: #78909C; -fx-border-width: 1;">
+            <VBox prefHeight="845.0" prefWidth="335.0" style="-fx-border-color: #78909C; -fx-border-width: 1;">
                <children>
                   <Label prefHeight="40.0" prefWidth="584.0" style="-fx-background-color: #0097A7;" text=" Agents" textFill="WHITE" wrapText="false">
                      <font>
@@ -37,9 +37,9 @@
                   </Label>
                   <VBox layoutY="40.0" prefHeight="561.0" prefWidth="703.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                      <children>
-                        <VBox prefHeight="192.0" prefWidth="703.0">
+                        <VBox prefHeight="302.0" prefWidth="779.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="40.0" prefWidth="703.0" style="-fx-background-color: #e57373;" text="Add  entriy" textFill="WHITE" wrapText="false">
+                              <Label prefHeight="40.0" prefWidth="806.0" style="-fx-background-color: #e57373;" text=" Add  entry" textFill="WHITE" wrapText="false" VBox.vgrow="ALWAYS">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -60,7 +60,7 @@
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <JFXTextField fx:id="agentScore" focusColor="#e57373" promptText="Score" />
+                                    <JFXTextField fx:id="agentScoreTextField" focusColor="#e57373" promptText="Score" />
                                  </children>
                                  <VBox.margin>
                                     <Insets top="10.0" />
@@ -68,12 +68,12 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="333.0" style="-fx-background-color: white;">
                                  <children>
-                                    <JFXButton prefHeight="40.0" prefWidth="71.0" styleClass="button-raised-save" text="Add">
+                                    <JFXButton onAction="#addRSEntry" prefHeight="40.0" prefWidth="71.0" styleClass="button-raised-save" text="Add">
                                        <HBox.margin>
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton styleClass="button-raised-cancel" text="Cancel">
+                                    <JFXButton onAction="#cancelAddingEntry" styleClass="button-raised-cancel" text="Cancel">
                                        <HBox.margin>
                                           <Insets left="20.0" right="90.0" />
                                        </HBox.margin>
@@ -88,43 +88,22 @@
                               <Insets top="20.0" />
                            </VBox.margin>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="30.0" prefHeight="192.0" prefWidth="703.0">
+                        <VBox layoutX="10.0" layoutY="30.0" prefHeight="459.0" prefWidth="779.0">
                            <children>
-                              <Label prefHeight="40.0" prefWidth="703.0" style="-fx-background-color: #e57373;" text=" Reference Situation" textFill="WHITE" wrapText="false">
+                              <Label prefHeight="40.0" prefWidth="779.0" style="-fx-background-color: #e57373;" text=" Currently constructed Reference Situation" textFill="WHITE" wrapText="false">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Label>
-                              <HBox prefHeight="52.0" prefWidth="703.0">
+                              <JFXListView fx:id="currentlyConstructedRSViewList" depth="1" prefHeight="220.0" prefWidth="779.0" verticalGap="10.0" />
+                              <HBox alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="779.0" style="-fx-background-color: white;">
                                  <children>
-                                    <Label prefHeight="30.0" prefWidth="63.0" text=" Agent">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <JFXComboBox prefHeight="25.0" prefWidth="164.0" />
-                                    <Label layoutX="10.0" layoutY="10.0" prefHeight="30.0" prefWidth="63.0" text=" Score">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="20.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <JFXTextField promptText="Score" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="333.0" style="-fx-background-color: white;">
-                                 <children>
-                                    <JFXButton prefHeight="40.0" prefWidth="71.0" styleClass="button-raised-save" text="Add">
+                                    <JFXButton onAction="#addRS" prefHeight="40.0" prefWidth="71.0" styleClass="button-raised-save" text="Save">
                                        <HBox.margin>
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton styleClass="button-raised-cancel" text="Cancel">
+                                    <JFXButton onAction="#deleteTheCurrentRS" styleClass="button-raised-cancel" text="Delete">
                                        <HBox.margin>
                                           <Insets left="20.0" right="90.0" />
                                        </HBox.margin>
@@ -136,45 +115,29 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox layoutX="10.0" layoutY="222.0" prefHeight="192.0" prefWidth="703.0">
+                        <VBox layoutX="10.0" layoutY="222.0" prefHeight="445.0" prefWidth="779.0">
                            <children>
-                              <Label prefHeight="40.0" prefWidth="703.0" style="-fx-background-color: #e57373;" text=" Agent's knowledge base" textFill="WHITE" wrapText="false">
+                              <Label prefHeight="40.0" prefWidth="793.0" style="-fx-background-color: #e57373;" text=" Reference situations to add" textFill="WHITE" wrapText="false">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Label>
-                              <HBox prefHeight="52.0" prefWidth="703.0">
+                              <JFXListView fx:id="RSViewList" depth="1" prefHeight="200.0" prefWidth="779.0" verticalGap="10.0" />
+                              <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="779.0" style="-fx-background-color: white;">
                                  <children>
-                                    <Label prefHeight="30.0" prefWidth="63.0" text=" Agent">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <JFXComboBox prefHeight="25.0" prefWidth="164.0" />
-                                    <Label layoutX="10.0" layoutY="10.0" prefHeight="30.0" prefWidth="63.0" text=" Score">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="20.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <JFXTextField promptText="Score" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="59.0" prefWidth="333.0" style="-fx-background-color: white;">
-                                 <children>
-                                    <JFXButton prefHeight="40.0" prefWidth="71.0" styleClass="button-raised-save" text="Add">
+                                    <JFXButton onAction="#UpdateKnowledge" prefHeight="40.0" prefWidth="71.0" styleClass="button-raised-save" text="Save">
                                        <HBox.margin>
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton styleClass="button-raised-cancel" text="Cancel">
+                                    <JFXButton onAction="#deleteListRS" styleClass="button-raised-cancel" text="Delete">
                                        <HBox.margin>
-                                          <Insets left="20.0" right="90.0" />
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onAction="#closeWindow" styleClass="button-raised-cancel" text="Fermer">
+                                       <HBox.margin>
+                                          <Insets right="30.0" />
                                        </HBox.margin>
                                     </JFXButton>
                                  </children>

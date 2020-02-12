@@ -74,6 +74,7 @@ public class UIMockupController implements Initializable {
    // @FXML private AnchorPane Terminal;
     @FXML private JFXTextField NbCyclesAgent;
     //@FXML private JFXTextField coefficientNovelty;
+    @FXML private JFXCheckBox editLearningCheckBox;
 
     @FXML private JFXSlider noveltyCoefficientSlider;
     @FXML private JFXSlider learningRateSlider;
@@ -617,6 +618,11 @@ public class UIMockupController implements Initializable {
     private void lunchSimulation(ActionEvent event){
         //this.simulation.start();
         //if(!this.opportunisticCompositionEngine.isInterrupted()){
+        if(this.editLearningCheckBox.isSelected()){
+            this.myOCE.setEditLearning(true);
+        }else{
+            this.myOCE.setEditLearning(false);
+        }
         this.opportunisticCompositionEngine.start();
         //disable the launch button
         ((JFXButton)event.getSource()).setDisable(true);
@@ -923,4 +929,30 @@ public class UIMockupController implements Initializable {
         }
 
     }
+
+//    @FXML
+//    private void showAgentEditKnowledgeStage(ActionEvent event) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(
+//                    getClass().getResource(
+//                            "UIInitializeAgentLearning.fxml"
+//                    )
+//            );
+//
+//            Stage secondaryStage = new Stage(StageStyle.UTILITY);
+//            secondaryStage.setTitle("Editing Agents' Knowledge");
+//            secondaryStage.setScene(new Scene(loader.load(), 1130, 860));
+//
+////            secondaryStage.initOwner(parentStage); //Add my main UI as parent for the secondary UI
+//            secondaryStage.initModality(Modality.APPLICATION_MODAL); // Block the interaction with the main UI until this secondary UI is closed
+//            secondaryStage.setAlwaysOnTop(true);
+//            secondaryStage.setMaximized(false);
+//            UIInitializeAgentLearningController secondaryStageController = loader.getController();
+//            secondaryStageController.initData(this.myOCE.gteAllAgents());
+//            secondaryStage.showAndWait();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

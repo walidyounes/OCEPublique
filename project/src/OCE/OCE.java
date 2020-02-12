@@ -18,7 +18,16 @@ import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.FeedbackDispatcher.OCEFeedbackDispatcher;
 import OCE.Medium.Medium;
 import OCE.probe.Probe;
+import UI.UIInitializeAgentLearningController;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import java.io.IOException;
 
 public class OCE implements Runnable{
     private MockupFacadeAdapter mockupFacadeAdapter;
@@ -27,6 +36,8 @@ public class OCE implements Runnable{
     private Medium medium;
     private IOCEServiceAgentFactory serviceAgentFactory;
     private OCEFeedbackDispatcher oceFeedbackDispatcher;
+    private boolean editLearning; // Variable used to indicate if the user of the engine want's to add initial knowledge to the agents
+    private Object lock=this; // A lock for synchronizing:
 
     public OCE(MockupFacadeAdapter mockupFacadeAdapter, Infrastructure infrastructure) {
         this.mockupFacadeAdapter = mockupFacadeAdapter;
@@ -54,6 +65,7 @@ public class OCE implements Runnable{
         MOICE.getInstance().addFeedbackComputedListener(this.oceFeedbackDispatcher);
         //Add MOICE's feedbackManager as a listener in MOICEProbe component
         MOICE.getInstance().getProbeFileStorage().addPropertyChangeListener((FeedbackManager)MOICE.getInstance().getMyFeedbackManager());
+        this.editLearning = false;
     }
 
     /**
@@ -64,8 +76,26 @@ public class OCE implements Runnable{
         //Probe the environment for appearing or disappearing of components and services
         this.probe.probeEnvironment();
         pause(2000);
+        if(this.editLearning) {
+
+            Platform.runLater(new Runnable() {
+                public void run() {
+                    // Show the Edit knowledge window
+                    showAgentEditKnowledgeStageAndStartSchedulingAfter();
+                }
+            });
+            synchronized (lock){
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         //Start the scheduling process of the agents in the MAS infrastructure
         infrastructure.startScheduling();
+
         OCELogger.close();
     }
 
@@ -109,5 +139,49 @@ public class OCE implements Runnable{
 
     public Medium getMedium() {
         return medium;
+    }
+
+    private void showAgentEditKnowledgeStageAndStartSchedulingAfter() {
+        try {
+                    FXMLLoader loader = new FXMLLoader(
+                            getClass().getResource(
+                                    "/UI/UIInitializeAgentLearning.fxml"
+                            )
+                    );
+
+                    Stage secondaryStage = new Stage(StageStyle.UTILITY);
+                    secondaryStage.setTitle("Editing Agents' Knowledge");
+                    secondaryStage.setScene(new Scene(loader.load(), 1130,860));
+
+                    secondaryStage.initModality(Modality.APPLICATION_MODAL); // Block the interaction with the main UI until this secondary UI is closed
+                    secondaryStage.setAlwaysOnTop(true);
+                    secondaryStage.setMaximized(false);
+                    UIInitializeAgentLearningController secondaryStageController = loader.getController();
+                    secondaryStageController.initData(gteAllAgents());
+                    secondaryStage.setOnCloseRequest(e -> {Platform.exit(); System.exit(0);});
+                    secondaryStage.showAndWait();
+                    synchronized (lock)
+                    {
+                        lock.notifyAll(); // Notify the thread to resume the process
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+    }
+
+    /**
+     * Check if the edit learning option is selected
+     * @return true if the option edit learning is selected, false otherwise
+     */
+    public boolean isEditLearning() {
+        return editLearning;
+    }
+
+    /**
+     * Update the value of the option to edit the knowledge of the agents
+     * @param editLearning : true to activate the option which forces the system must show the edit knowledge window, false to deactivate
+     */
+    public void setEditLearning(boolean editLearning) {
+        this.editLearning = editLearning;
     }
 }
