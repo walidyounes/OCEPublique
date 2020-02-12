@@ -154,7 +154,7 @@ public class SituationUtility {
             //For each service agent in the current situation
             for (IDAgent serviceAgent : currentSituation.getAgentSituationEntries().keySet()){
                 int count = 0; // the number of references situations where the service agent appears
-
+                double sum_weights=0.0; // The sum of the degree of similarity
                 double scoreServiceAgent = initialValue; // the value of score (the mean of scores from the reference situation where the service agent appears or initial value)
                 //For each similar reference situations
                 for(Situation<ReferenceSituationEntry> referenceSituation : listReferenceSituations.keySet()){
@@ -164,6 +164,8 @@ public class SituationUtility {
                         scoreServiceAgent += referenceSituation.getAgentSituationEntries().get(serviceAgent).getScore()* listReferenceSituations.get(referenceSituation);
                         //Increase the number of reference situation where the agent is found
                         count++;
+                        //Add the current value of the degree of similarity to the sum
+                        sum_weights+=listReferenceSituations.get(referenceSituation);
                     }
                 }
                 ScoredCurrentSituationEntry serviceAgentScoredEntry =null; // the entry corresponding to the service agent after scoring
@@ -171,6 +173,9 @@ public class SituationUtility {
                 MessageTypes messageType = currentSituation.getAgentSituationEntries().get(serviceAgent).getMessageType();
                 //check if the service agent appears at least in one reference situation
                 if(count!=0) {
+                    //Compute the weighted mean of scores
+                    scoreServiceAgent = scoreServiceAgent / sum_weights;
+
                     //Update the maximum of scores  of the agents that we managed to score in the current situation
                     if(scoreServiceAgent > maxScoreValue){
                         maxScoreValue = scoreServiceAgent;
@@ -178,8 +183,6 @@ public class SituationUtility {
                     //Update the sum of scores  of the agents that we managed to score in the current situation
                     sumScoreValue = sumScoreValue + scoreServiceAgent;
 
-                    //Compute the mean of scores
-                    scoreServiceAgent = scoreServiceAgent / count;
                     //Todo walid Suggestion : change this code and put it in a function in the class PackageSituation.CurrentSituationEntry
                     //Create a scoredCurrentSituationEntry for the service agent
                     serviceAgentScoredEntry = new ScoredCurrentSituationEntry(serviceAgent, messageType, scoreServiceAgent);
@@ -205,7 +208,8 @@ public class SituationUtility {
 
             Random random = new Random();
             double finalMaxScoreValue = maxScoreValue;
-            situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue+random.nextDouble()));
+            // situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue+random.nextDouble()));
+            situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue+0.01));
             //we compute the mean values of the score  (we take out the maximum score and the agent if the number of agents >2)
             int numberAgents = 0;
             if(scoredCurrentSituation.getAgentSituationEntries().size() > 2 ){
