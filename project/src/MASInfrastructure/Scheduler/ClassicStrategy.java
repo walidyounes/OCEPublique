@@ -19,7 +19,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
     private int currentAgentCycle;
     private int maxCycleAgent;
     private boolean isRunning;
-    private final int defaultMaxCycleAgent = 400;
+    private final int defaultMaxCycleAgent = 600;
 
     /**
      *
@@ -45,7 +45,7 @@ public class ClassicStrategy implements ISchedulingStrategies {
         while(isRunning) {
             synchronized (this) {
 
-                    while (this.currentAgentCycle < this.maxCycleAgent && listAgentsToSchedule.size()>0 ) {
+                    while ((this.currentAgentCycle < this.maxCycleAgent) && (listAgentsToSchedule.size()>0 )) {
                         currentInfrastructureAgent = listAgentsToSchedule.get(0);
                         OCELogger.log(Level.INFO, " *********************************** Cycle of the Agent = " + currentInfrastructureAgent.getInfraAgentReference() + " ***********************************");
                         currentInfrastructureAgent.run(); // change the state of the agent

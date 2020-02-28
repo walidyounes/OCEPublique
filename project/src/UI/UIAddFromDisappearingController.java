@@ -40,8 +40,8 @@ public class UIAddFromDisappearingController implements Initializable {
         this.componentsViewList.setExpanded(true);
     }
 
-    /**Function used to send the data to visualise to this stage (window)
-     *
+    /***
+     * Function used to send the data to visualise to this stage (window)
      * @param listComponents : list of components to display in this window
      */
     public void initData(List<OCComponent> listComponents) {
@@ -64,7 +64,6 @@ public class UIAddFromDisappearingController implements Initializable {
     private void choseAction(ActionEvent event){
         //Get the selected component from the list
         this.chosenComponent = Optional.ofNullable(this.componentsViewList.getSelectionModel().getSelectedItem());
-
         // close the dialog.
         Node source = (Node)  event.getSource();
         Stage stage  = (Stage) source.getScene().getWindow();

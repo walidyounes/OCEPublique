@@ -4,6 +4,7 @@
 
 package UI;
 
+import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
@@ -25,9 +26,7 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class UIInitializeAgentLearningController implements Initializable {
 
@@ -41,6 +40,10 @@ public class UIInitializeAgentLearningController implements Initializable {
     private JFXComboBox<OCEAgent> agentComboBox;
     @FXML
     private JFXTextField agentScoreTextField;
+    @FXML
+    private JFXTextField serviceTextField;
+    @FXML
+    private JFXTextField agentScoreServiceTextField;
 
     private ObservableList<OCEAgent> oceAgentList;
     private ObservableList<OCEAgent> filteredOCEAgentList;
@@ -50,12 +53,18 @@ public class UIInitializeAgentLearningController implements Initializable {
     private Optional<ServiceAgent> selectedServiceAgentEntry;
     private Optional<Double> scoreEntry;
 
+    private Optional<String> selectedServiceNameEntry;
+    private Optional<Double> scoreNameEntry;
+
+    private Map<String, IDAgent> createdAgentByServiceName;
     private Matching matcher;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //Initialise the matcher
         this.matcher = new Matching();
+        //Initialize the list of agent created when introducing the name of services
+        this.createdAgentByServiceName = new TreeMap<>();
 
         this.selectedServiceAgentKnowledge = Optional.empty();
         //Initialize the variables used to create one entry of a reference situation
@@ -97,17 +106,34 @@ public class UIInitializeAgentLearningController implements Initializable {
         this.agentComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<OCEAgent>() {
             @Override
             public void changed(ObservableValue<? extends OCEAgent> observable, OCEAgent oldValue, OCEAgent newValue) {
-                System.out.println("ComboBox changed from " + oldValue + " to " + newValue);
+//                System.out.println("ComboBox changed from " + oldValue + " to " + newValue);
                 selectedServiceAgentEntry = Optional.ofNullable((ServiceAgent)newValue);
             }
         });
         //Add a listener for the value of score TextField
         this.agentScoreTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.isEmpty()){
-                System.out.println("textfield changed from " + oldValue + " to " + newValue); scoreEntry = Optional.ofNullable(Double.parseDouble(newValue));
+//                System.out.println("textfield changed from " + oldValue + " to " + newValue);
+                scoreEntry = Optional.ofNullable(Double.parseDouble(newValue));
             }
 
         });
+        //Add a change listener to the textField for the name of the service
+        serviceTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.isEmpty()){
+//                System.out.println("textfield changed from " + oldValue + " to " + newValue);
+                selectedServiceNameEntry = Optional.ofNullable(newValue);
+            }
+        });
+
+        //Add a listener for the value of score TextField
+        this.agentScoreServiceTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.isEmpty()){
+                scoreNameEntry = Optional.ofNullable(Double.parseDouble(newValue));
+            }
+
+        });
+
     }
 
     /**
@@ -147,7 +173,28 @@ public class UIInitializeAgentLearningController implements Initializable {
             ReferenceSituationEntry referenceSituationEntry = new ReferenceSituationEntry(this.selectedServiceAgentEntry.get().getMyID(), this.scoreEntry.get());
             this.currentlyConstructedRSViewList.getItems().add(referenceSituationEntry);
             //Clear the fields
-            clearFieldsAddEntry();
+            clearFieldsAddEntryByAgent();
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("The selected service field or the score field must not be empty !");
+            alert.show();
+        }
+    }
+
+    @FXML
+    public void addRSEntryFromServiceName(ActionEvent event){
+        if(this.selectedServiceNameEntry.isPresent() && this.scoreNameEntry.isPresent()){
+            //Create an ID for the agent
+            //check if for this service name an agent was already created -> if yes use the previous one, if no create one and add it to the list
+            if(!this.createdAgentByServiceName.containsKey(this.selectedServiceNameEntry.get())){
+                IDAgent customID = new IDAgent();
+                customID.setVisualizingName(this.selectedServiceNameEntry.get());
+                this.createdAgentByServiceName.put(this.selectedServiceNameEntry.get(), customID);
+            }
+            ReferenceSituationEntry referenceSituationEntry = new ReferenceSituationEntry(this.createdAgentByServiceName.get(this.selectedServiceNameEntry.get()), this.scoreNameEntry.get());
+            this.currentlyConstructedRSViewList.getItems().add(referenceSituationEntry);
+            //Clear the fields
+            this.clearFieldsAddEntryByServiceName();
         }else{
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("The selected service field or the score field must not be empty !");
@@ -199,7 +246,6 @@ public class UIInitializeAgentLearningController implements Initializable {
     @FXML
     private void closeWindow(ActionEvent actionEvent){
         Alert alertConfirm = new Alert(Alert.AlertType.CONFIRMATION);
-        alertConfirm.showAndWait();
         alertConfirm.setTitle("Close edit knowledge window");
         alertConfirm.setContentText("Are you sure of willing to close the edit knowledge window?");
         Optional<ButtonType> result = alertConfirm.showAndWait();
@@ -214,19 +260,24 @@ public class UIInitializeAgentLearningController implements Initializable {
     }
 
     @FXML
-    public void cancelAddingEntry(ActionEvent event){
-        clearFieldsAddEntry();
+    public void cancelAddingEntryByAgent(ActionEvent event){
+        clearFieldsAddEntryByAgent();
+    }
+
+    @FXML
+    public void cancelAddingEntryByServiceName(ActionEvent event){
+        clearFieldsAddEntryByAgent();
     }
 
     @FXML
     public void deleteTheCurrentRS(ActionEvent event){
         Alert alertConfirm = new Alert(Alert.AlertType.CONFIRMATION);
-        alertConfirm.showAndWait();
         alertConfirm.setTitle("Delete current RS");
         alertConfirm.setContentText("Are you sure of willing to delete the reference situation under construction?");
         Optional<ButtonType> result = alertConfirm.showAndWait();
         if (result.get() == ButtonType.OK) {
-            this.clearFieldsAddEntry();
+            this.clearFieldsAddEntryByAgent();
+            this.clearFieldsAddEntryByServiceName();
             this.currentlyConstructedRSViewList.getItems().clear();
         }
     }
@@ -234,12 +285,12 @@ public class UIInitializeAgentLearningController implements Initializable {
     @FXML
     public void deleteListRS(ActionEvent event){
         Alert alertConfirm = new Alert(Alert.AlertType.CONFIRMATION);
-        alertConfirm.showAndWait();
         alertConfirm.setTitle("Delete the list of RS");
         alertConfirm.setContentText("Are you sure of willing to delete the reference situations?");
         Optional<ButtonType> result = alertConfirm.showAndWait();
         if (result.get() == ButtonType.OK) {
-            this.clearFieldsAddEntry();
+            this.clearFieldsAddEntryByAgent();
+            this.clearFieldsAddEntryByServiceName();
             this.currentlyConstructedRSViewList.getItems().clear();
             this.RSViewList.getItems().clear();
         }
@@ -248,11 +299,21 @@ public class UIInitializeAgentLearningController implements Initializable {
     /**
      * Clear all the fields of the Add Entry panel (UI and the variables)
      */
-    private void clearFieldsAddEntry(){
+    private void clearFieldsAddEntryByAgent(){
         this.selectedServiceAgentEntry = Optional.empty();
         this.scoreEntry = Optional.empty();
         this.agentScoreTextField.setText("");
         this.agentComboBox.getSelectionModel().clearSelection();
+    }
+
+    /**
+     * Clear all the fields of the Add Entry panel for the Service name part (UI and the variables)
+     */
+    private void clearFieldsAddEntryByServiceName(){
+        this.selectedServiceNameEntry = Optional.empty();
+        this.scoreNameEntry = Optional.empty();
+        this.agentScoreServiceTextField.setText("");
+        this.serviceTextField.setText("");
     }
 
     /**
@@ -263,6 +324,8 @@ public class UIInitializeAgentLearningController implements Initializable {
         this.selectedServiceAgentEntry = Optional.empty();
         this.scoreEntry = Optional.empty();
         this.filteredOCEAgentList.clear();
+        this.scoreNameEntry = Optional.empty();
+        this.selectedServiceNameEntry = Optional.empty();
     }
 
     /**
@@ -273,6 +336,8 @@ public class UIInitializeAgentLearningController implements Initializable {
         this.currentlyConstructedRSViewList.getItems().clear();
         this.agentComboBox.getItems().clear();
         this.agentScoreTextField.setText("");
+        this.serviceTextField.setText("");
+        this.agentScoreServiceTextField.setText("");
     }
 
 

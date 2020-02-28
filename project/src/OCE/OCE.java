@@ -151,14 +151,13 @@ public class OCE implements Runnable{
 
                     Stage secondaryStage = new Stage(StageStyle.UTILITY);
                     secondaryStage.setTitle("Editing Agents' Knowledge");
-                    secondaryStage.setScene(new Scene(loader.load(), 1130,860));
+                    secondaryStage.setScene(new Scene(loader.load(), 1130,990));
 
-                    secondaryStage.initModality(Modality.APPLICATION_MODAL); // Block the interaction with the main UI until this secondary UI is closed
-                    secondaryStage.setAlwaysOnTop(true);
+                    //secondaryStage.initModality(Modality.APPLICATION_MODAL); // Block the interaction with the main UI until this secondary UI is closed
+                    //secondaryStage.setAlwaysOnTop(true);
                     secondaryStage.setMaximized(false);
                     UIInitializeAgentLearningController secondaryStageController = loader.getController();
                     secondaryStageController.initData(gteAllAgents());
-                    secondaryStage.setOnCloseRequest(e -> {Platform.exit(); System.exit(0);});
                     secondaryStage.showAndWait();
                     synchronized (lock)
                     {

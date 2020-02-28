@@ -90,6 +90,7 @@ public class FeedbackMessage extends OCEMessage {
             if (agentChosenByUser.isPresent()) {
                 //This service agent got connected to another service agent
                 OCELogger.log(Level.INFO, "Agent : Decision -> Feedback ADDED - > Service Agent was connected by user to = " + agentChosenByUser.get().toString());
+                //Todo : Check if the agent has a scored current situation if not create it nad put the service added by the user
                 //Check if the agent chosen by the user is in the CS
                 if (!this.serviceAgentRef.getMyScoredCurrentSituation().get().containServiceAgent(agentChosenByUser.get().getMyID())) { //The chosen agent doesn't exist in the current situation
                     //Add the chosen agent to the Scored CS (the Message type is not important)

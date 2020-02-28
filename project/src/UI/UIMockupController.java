@@ -659,6 +659,7 @@ public class UIMockupController implements Initializable {
         try {
             int intValue = Integer.parseInt(stringValue);
             this.infrastructure.setMaxCycleAgent(intValue);
+            System.out.println("New max cycle agent = " + intValue);
         }catch (NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Parsing error !");
