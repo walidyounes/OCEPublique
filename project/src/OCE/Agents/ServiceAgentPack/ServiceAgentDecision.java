@@ -10,7 +10,6 @@ import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.BestScoreHighestPriority;
-import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.HighestPriorityBestScore;
 import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.IAgentSelectionStrategy;
 import OCE.Agents.ServiceAgentPack.Learning.*;
 import OCE.InfrastructureMessages.BindInfraMessage;
@@ -235,7 +234,6 @@ public class ServiceAgentDecision implements IDecisionState {
                                                 ArrayList<OCEAgent> bindReceiver = new ArrayList<>();
                                                 bindReceiver.add(this.myServiceAgent.getMyBinderAgent().get());
                                                 communicationToolOCE.sendMessage(bindMessage, this.myServiceAgent, bindReceiver);
-
                                             }
                                             myDecision = new DoNothingDecision();
                                         } else {

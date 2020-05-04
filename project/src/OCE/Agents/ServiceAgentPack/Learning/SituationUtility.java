@@ -131,8 +131,8 @@ public class SituationUtility {
         List<ScoredCurrentSituationEntry> situationEntriesToScoreLaterMax = new ArrayList<>(); // List of situations entries to score with maximum value after all the other scores were compute
         List<ScoredCurrentSituationEntry> situationEntriesToScoreLaterMean = new ArrayList<>(); // List of situations entries to score with sum value after all the other scores were compute
 
-        double maxScoreValue=0; //Maximum of scores of the agents that we managed to score in this situation
-        double sumScoreValue=0; //The sum of scores of the agents that we managed to score in the current situation
+        double maxScoreValue=0.0; //Maximum of scores of the agents that we managed to score in this situation
+        double sumScoreValue=0.0; //The sum of scores of the agents that we managed to score in the current situation
 
         //If no reference situation similar to the current situation were found
         if(listReferenceSituations.size() == 0){
@@ -194,7 +194,8 @@ public class SituationUtility {
                     //Generate a random probability of sensitivity coefficient to novelty
                     Random random = new Random();
                     double probatCSN = random.nextDouble();
-                    System.out.println("Probabilite de CSN = "+probatCSN);
+                    OCELogger.log(Level.INFO,"Scoring Current situation -> Probability CSN = " + probatCSN);
+                    //System.out.println("Probabilite de CSN = "+probatCSN);
                     if(probatCSN <= SituationUtility.CSN){ //Score with maximum
                         situationEntriesToScoreLaterMax.add(serviceAgentScoredEntry);
                     }else{//Score with sum of values
@@ -207,19 +208,24 @@ public class SituationUtility {
             //Update the scores for the service agents that we couldn't score
 
             Random random = new Random();
-            double finalMaxScoreValue = maxScoreValue;
+            double finalMaxScoreValue = maxScoreValue + 0.01;
             // situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue+random.nextDouble()));
-            situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue+0.01));
+            situationEntriesToScoreLaterMax.forEach(se -> se.setScore(finalMaxScoreValue));
             //we compute the mean values of the score  (we take out the maximum score and the agent if the number of agents >2)
             int numberAgents = 0;
-            if(scoredCurrentSituation.getAgentSituationEntries().size() > 2 ){
-                numberAgents = (scoredCurrentSituation.getAgentSituationEntries().size() -2);
+            if(scoredCurrentSituation.getAgentSituationEntries().size()==2){//Todo 15/01/2020 15:31 - here if we have 2 agents (one of them is new) sumScores == maxSCores -> the mean will be equal to 0
+                numberAgents = 2;
+                final double finalMeanValue = (maxScoreValue /numberAgents); // The meanScore = MaxScore /2
+                situationEntriesToScoreLaterMean.forEach(se-> se.setScore(finalMeanValue));
             }else{
-                numberAgents = scoredCurrentSituation.getAgentSituationEntries().size();
+                if(scoredCurrentSituation.getAgentSituationEntries().size() > 2 ){
+                    numberAgents = (scoredCurrentSituation.getAgentSituationEntries().size() -2);
+                }else{
+                    numberAgents = scoredCurrentSituation.getAgentSituationEntries().size();
+                }
+                final double finalMeanValue = (numberAgents >0 )? ((sumScoreValue-maxScoreValue) /numberAgents): 0.0;
+                situationEntriesToScoreLaterMean.forEach(se-> se.setScore(finalMeanValue));
             }
-            final double finalMeanValue = (numberAgents >0 )? ((sumScoreValue-maxScoreValue) /numberAgents): 0.0; //Todo 15/01/2020 15:31 - here if we have 2 agents (one of them is new) sumScores == maxSCores -> the mean will be equal to 0
-
-            situationEntriesToScoreLaterMean.forEach(se-> se.setScore(finalMeanValue));
 
         }
         OCELogger.log(Level.INFO,"Scoring Current situation -> scored current situation = " + scoredCurrentSituation);

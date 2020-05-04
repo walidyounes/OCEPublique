@@ -43,7 +43,7 @@ public class BestScoreHighestPriority implements IAgentSelectionStrategy {
             chooseLater=true;
             //Extract the set from which the best agent is selected
             List<IDAgent> listNotBestScoreAgent = scoredCS.getAgentSituationEntries().values().stream().filter(e -> !listBestScoreAgent.contains(e.getAgent())).map(e-> e.getAgent()).collect(Collectors.toList());
-            if(listNotBestScoreAgent.isEmpty()){ //The cas where for example in the current situation we have 1 entry or n entry all with the same score
+            if(listNotBestScoreAgent.isEmpty()){ //The case where for example in the current situation we have 1 entry or n entry all with the same score
                 //we will choose from the list of all agents, which is equal to list BestScore agents
                 listAgentsToChooseFrom = Optional.ofNullable(listBestScoreAgent);
             }else {
@@ -79,7 +79,7 @@ public class BestScoreHighestPriority implements IAgentSelectionStrategy {
                 System.out.println("random index = "+indexAgent);
                 bestAgent = Optional.ofNullable(listAgentsToChooseFrom.get().get(indexAgent));
             }else{
-                System.out.println("ERROR, no list of agents to hoose from !");
+                System.out.println("ERROR, no list of agents to choose from !");
             }
 
         }
