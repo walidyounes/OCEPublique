@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iCE_Editor:Environment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:iCE_Editor="http://www.eclipse.org/sirius/sample/ice_editor">
+  <component Name="Lamp" Role="Receive data">
+    <service xsi:type="iCE_Editor:ProvidedService" matchingID="J" Name="Collect" IOAction="." Launcher="onRequired" ServiceDescription="Receive data" Cardinality="1">
+      <Rules>Launcher AND VAL@INPUT&lt;50 --> NOP</Rules>
+      <Rules>Launcher AND VAL@INPUT>=50 --> IOAction</Rules>
+    </service>
+  </component>
+  
+  <component Name="Button" Role="Send Data">
+    <service xsi:type="iCE_Editor:RequiredService" matchingID="J" Name="Sender" IOAction="VAL@OUTPUT" Launcher="onButtonPressed" ServiceDescription="send value"  Cardinality="1">
+      <Rules>Launcher --> IOAction</Rules>
+    </service>
+  </component>
+
+</iCE_Editor:Environment>
