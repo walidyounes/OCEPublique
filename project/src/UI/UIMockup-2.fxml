@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="721.0" prefWidth="1170.0" stylesheets="@UIStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.UIMockupController">
+  <children>
+    <MenuBar style="-fx-background-color: #0097A7;" VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" style="-fx-text-fill: #FFFFFF; -fx-font-size: 12pt;" text="Scénario">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#addComponentsFromXMLFile" text="Open…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Save As…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" style="-fx-font-size: 12pt;" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Cut" />
+            <MenuItem mnemonicParsing="false" text="Copy" />
+            <MenuItem mnemonicParsing="false" text="Paste" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Select All" />
+            <MenuItem mnemonicParsing="false" text="Unselect All" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" style="-fx-font-size: 12pt;" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+      <children>
+            <VBox layoutX="12.0" layoutY="41.0" prefHeight="633.0" prefWidth="343.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="41.0">
+               <children>
+                  <Label prefHeight="33.0" prefWidth="375.0" style="-fx-background-color: #0097A7;" text=" Add new Component" textFill="WHITE" wrapText="false">
+                     <font>
+                        <Font name="Cambria Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <VBox prefHeight="314.0" prefWidth="375.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="351.0">
+                           <children>
+                              <Label prefHeight="40.0" prefWidth="102.0" text=" Designation" wrapText="false">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="designationComponent" focusColor="#00bcd4" prefHeight="31.0" prefWidth="161.0" promptText="Designation">
+                                 <font>
+                                    <Font name="Cambria" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                        <Label prefHeight="22.0" prefWidth="279.0" text="  Add associated services" textFill="#00bcd4" wrapText="false">
+                           <font>
+                              <Font name="Cambria Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="52.0" prefWidth="351.0">
+                           <children>
+                              <Label prefHeight="40.0" prefWidth="102.0" text="Name" wrapText="false">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="nameService" focusColor="#00bcd4" prefHeight="31.0" prefWidth="161.0" promptText="Name">
+                                 <font>
+                                    <Font name="Cambria" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="351.0">
+                           <children>
+                              <Label prefHeight="40.0" prefWidth="102.0" text="Type" wrapText="false">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="matchingIDService" focusColor="#00bcd4" prefHeight="31.0" prefWidth="161.0" promptText="Type">
+                                 <font>
+                                    <Font name="Cambria" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="351.0">
+                           <children>
+                              <Label prefHeight="40.0" prefWidth="102.0" text=" Way" wrapText="false">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXRadioButton fx:id="providedR" layoutY="10.0" text="Provided" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="Way" />
+                                       </toggleGroup>
+                                    </JFXRadioButton>
+                                    <JFXRadioButton fx:id="requiredR" layoutX="100.0" layoutY="10.0" text="Required" toggleGroup="$Way" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="351.0">
+                           <children>
+                              <Label prefHeight="40.0" prefWidth="102.0" text=" Link" wrapText="false">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXRadioButton fx:id="singleR" layoutY="10.0" text="Single" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="Link" />
+                                       </toggleGroup>
+                                    </JFXRadioButton>
+                                    <JFXRadioButton fx:id="multipleR" layoutX="100.0" layoutY="10.0" text="Multiple" toggleGroup="$Link" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="351.0">
+                           <children>
+                              <Label prefHeight="40.0" prefWidth="102.0" text="Cardinality" wrapText="false">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXTextField focusColor="#00bcd4" prefHeight="37.0" prefWidth="169.0" promptText="Cardianlity">
+                                       <font>
+                                          <Font name="Cambria" size="14.0" />
+                                       </font>
+                                    </JFXTextField>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="63.0" prefWidth="375.0">
+                           <children>
+                              <JFXButton fx:id="saveButton" buttonType="RAISED" onAction="#addComponent" styleClass="button-raised-save" text="Save" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets left="10.0" right="40.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="AddButton" buttonType="RAISED" onAction="#addService" styleClass="button-raised" text="Add" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets right="40.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#cancelAddingServices" styleClass="button-raised-cancel" text="Cancel" HBox.hgrow="ALWAYS">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                     </children>
+                  </VBox>
+                  <Label prefHeight="27.0" prefWidth="375.0" style="-fx-background-color: #00BCD4;" text=" Services" textFill="WHITE" wrapText="false">
+                     <font>
+                        <Font name="Cambria" size="18.0" />
+                     </font>
+                  </Label>
+                  <JFXListView fx:id="servicesList" depth="1" prefHeight="43.0" prefWidth="343.0" verticalGap="10.0" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="343.0">
+                     <children>
+                        <JFXButton fx:id="clearServicesButton" buttonType="RAISED" onAction="#cancelAddingServices" styleClass="button-raised-cancel" text="Clear" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox layoutX="432.0" layoutY="41.0" prefHeight="384.0" prefWidth="373.0" AnchorPane.bottomAnchor="259.0" AnchorPane.leftAnchor="432.0" AnchorPane.topAnchor="41.0">
+               <children>
+                  <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" Components" textFill="WHITE" wrapText="false" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <JFXListView fx:id="componentsList" depth="1" onMouseClicked="#showPopup" prefHeight="106.0" prefWidth="373.0" verticalGap="10.0" VBox.vgrow="ALWAYS" />
+                  <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text="Paramétrage" textFill="WHITE" wrapText="false">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+                     <children>
+                        <Label prefHeight="20.0" prefWidth="113.0" text="Cycles Agents">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField fx:id="NbCyclesAgent" promptText="Nb cycles agents " />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+                     <children>
+                        <Label prefHeight="20.0" prefWidth="113.0" text="Epsilon">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <JFXTextField promptText="Epsilon" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="373.0">
+                     <children>
+                        <Label prefHeight="40.0" prefWidth="90.0" text=" Execution" wrapText="false">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </Label>
+                        <JFXButton fx:id="AddButton1" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#lunchSimulation" styleClass="button-raised-save" text="Launch" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets right="40.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="oneStepButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#oneStepExecution" styleClass="button-raised" text="One Step" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="stopButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#stopExecution" styleClass="button-raised-cancel" text="Stop" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox layoutX="744.0" layoutY="12.0" prefHeight="355.0" prefWidth="333.0" AnchorPane.bottomAnchor="311.0" AnchorPane.leftAnchor="823.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="12.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="207.0" style="&#10;" text="Service Graph" textAlignment="CENTER" wrapText="false">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="deleteEdgesButton" alignment="CENTER_RIGHT" buttonType="RAISED" contentDisplay="CENTER" onAction="#deleteConnexion" styleClass="button-raised-cancel" text="Delete edges">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+                  <AnchorPane fx:id="visualisationPane" prefHeight="349.0" prefWidth="333.0" style="-fx-background-color: #78909C; -fx-border-color: #78909C; -fx-border-width: 4;" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox layoutX="349.0" layoutY="356.0" prefHeight="236.0" prefWidth="723.0" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="432.0" AnchorPane.rightAnchor="15.0">
+               <children>
+                  <Label alignment="CENTER" style="&#10;" text="Terminal" textAlignment="CENTER" wrapText="false">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane fx:id="Terminal" prefHeight="258.0" prefWidth="723.0" style="-fx-background-color: #616161; -fx-border-color: #616161; -fx-border-width: 2;" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>
