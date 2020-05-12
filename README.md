@@ -1,2 +1,2 @@
 # OCE
-Opprtunistic Composition Engine
+Opportunistic Composition Engine
