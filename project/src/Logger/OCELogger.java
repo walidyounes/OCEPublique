@@ -30,7 +30,7 @@ public class OCELogger {
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HHmmssSSS");
             String sDate = dateFormat.format(date);
-            String fileName = "MyLogFiles/MyLog_" + sDate + ".log";
+            String fileName = "LogFiles/MyLog_" + sDate + ".log";
             fh = new FileHandler(fileName, false);
         } catch (SecurityException | IOException e) {
             e.printStackTrace();
