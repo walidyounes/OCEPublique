@@ -24,7 +24,7 @@ En court
 
 ### How to import
 
-Before starting: make sure that you have **JDK 9.0** and **IntelliJ IDEA**  installed
+Before starting: make sure that you have **JDK 9.0** and **IntelliJ IDEA**  installed on your computer
 
 1. Clone the project from the [GitHub] repository (In the project homepage https://github.com/SylvieTrouilhet/OCE click on **Clone or download**  and copy the link)
 1. Open **IntelliJ IDEA** 
