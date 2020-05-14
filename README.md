@@ -18,6 +18,9 @@ https://www.jetbrains.com/fr-fr/idea/
 
 ### Content of the project
 
+```JAVA
+En court
+```
 
 ### How to import
 
@@ -34,4 +37,6 @@ Before starting: make sure that you have **JDK 9.0** and **IntelliJ IDEA**  inst
     1. Intellij should start downlaodng the project
 1. Wait until the *configuration* and *indexing* of the project is complete
 1. If the *JDK* is not automatically configured, add it manually to the project (it should appear in **External librairies**)
-    
+```JAVA
+En court
+```
