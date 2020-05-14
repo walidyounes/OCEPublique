@@ -46,3 +46,9 @@ To be completed
 ```JAVA
 To be done
 ```
+
+### Configuration in VSCode
+
+```JAVA
+To be completed by walid with Maxime's help :)
+```
