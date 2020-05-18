@@ -53,13 +53,13 @@ To be done
 To be completed by walid with Maxime's help :)
 ```
 
-### Integrating OCE and ICE
+### Integrating OCE and ICE (OCE configuration)
 
 To integrate OCE and ICE you must change in OCE's code to update ICE's files path. 
 
 1. Open package *MOICE*
 1. Open *ICEXMLFormatter* class
-    - In line **22** change the exiting line code : 
+    - In line **22** edit the exiting line code : 
     ```JAVA
     final String ICEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor";
     ``` 
@@ -67,7 +67,16 @@ To integrate OCE and ICE you must change in OCE's code to update ICE's files pat
     ```JAVA
     final String ICEFilePath  = " the path of the file runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor in your laptop";
     ``` 
-
+ 1. Open *UI*
+ 1. Open *UIMockupController* class
+    -In line **771** edit the existing line code : 
+    ```JAVA
+    String command = "C:\\Users\\wyounes\\Documents\\GEMOC\\GemocStudio";
+    ``` 
+    update the gemocStudio app path :
+    ```JAVA
+    String command = "Path of the GemocStudio application in your laptop";
+    ``` 
 ### Executing OCE
 
 To execute OCE run the main class *UIMockup* wich can be found in the package *UI*
