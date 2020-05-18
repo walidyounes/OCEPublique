@@ -59,15 +59,7 @@ To integrate OCE and ICE you must change in OCE's code to update ICE's files pat
 
 1. Open package *MOICE*
 1. Open *ICEXMLFormatter* class
-    1. In line **66** change the exiting line code : 
-    ```JAVA
-    BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor"));
-    ``` 
-     update the file path to :
-    ```JAVA
-    BufferedWriter bw = new BufferedWriter(new FileWriter(" the path of the file runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor in your laptop"));
-    ``` 
-    1. In line **113** change the exiting line code : 
+    - In line **22** change the exiting line code : 
     ```JAVA
     final String ICEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor";
     ``` 
@@ -75,3 +67,7 @@ To integrate OCE and ICE you must change in OCE's code to update ICE's files pat
     ```JAVA
     final String ICEFilePath  = " the path of the file runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor in your laptop";
     ``` 
+
+### Executing OCE
+
+To execute OCE run the main class *UIMockup* wich can be found in the package *UI*
