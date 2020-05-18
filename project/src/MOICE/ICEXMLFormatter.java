@@ -19,6 +19,8 @@ public class ICEXMLFormatter implements IFileFormatter {
     List<MockupComponent> listComponents;
     List<Connection> listConnections;
 
+    final String ICEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor";
+
     /**
      * Construct the custom file formatter used by ICE.
      * @param listComponents
@@ -63,7 +65,7 @@ public class ICEXMLFormatter implements IFileFormatter {
             this.listConnections    = listConnections;
             // Open the model XML file
             // BufferedWriter bw = new BufferedWriter(new FileWriter("MyLogFiles/ICE.ice_editor"));
-            BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(ICEFilePath));
             //write the first line
             bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <iCE_Editor:Environment xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" "
                     + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance \" xmlns:iCE_Editor=\"http://www.eclipse.org/sirius/sample/ice_editor\"> \n");
@@ -109,8 +111,6 @@ public class ICEXMLFormatter implements IFileFormatter {
             bw.close();
 
             //Making the OCE Copy of the generated file
-
-            final String ICEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor";
 
             final String OCEFilePath = "ICEConfiguration\\OCE-ICE-old.ice_editor";
 
@@ -199,7 +199,7 @@ public class ICEXMLFormatter implements IFileFormatter {
         try {
             // Open the model XML file
             // BufferedWriter bw = new BufferedWriter(new FileWriter("MyLogFiles/ICE.ice_editor"));
-            BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(ICEFilePath));
             //write the first line
             bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <iCE_Editor:Environment xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" "
                     + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance \" xmlns:iCE_Editor=\"http://www.eclipse.org/sirius/sample/ice_editor\"> \n");
