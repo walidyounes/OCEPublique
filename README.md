@@ -65,6 +65,10 @@ To integrate OCE and ICE you must change in OCE's code to update ICE's files pat
     ```JAVA
     final String ICEFilePath  = " the path of the file runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor in your laptop";
     ``` 
+    - The *matchingID* used for service matching is called in ICE's metamodel *ID* : 
+     ```JAVA
+    Rename all occurences of MatchingID to ID in the ICEXMLFormatter.java class
+    ``` 
  1. Open *UI*
  1. Open *UIMockupController* class
     -In line **771** edit the existing line code : 
