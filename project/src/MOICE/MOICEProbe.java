@@ -41,6 +41,8 @@ public class MOICEProbe {
                     if(!fileFound) {
                         fileReceived.firePropertyChange("FileICEFound", fileFound, true);
                         fileFound = true;
+                    }else{
+                        fileICE.delete();
                     }
 
                 }else{
