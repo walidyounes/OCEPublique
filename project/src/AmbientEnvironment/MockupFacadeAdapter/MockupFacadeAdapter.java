@@ -13,10 +13,16 @@ import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.MockupCompo.Way;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
+import MOICE.MOICE;
+import OCE.ServiceConnection.Connection;
+import OCE.ServiceConnection.ModifiedConnectionState;
+import OCE.ServiceConnection.RejectedConnectionState;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MockupFacadeAdapter extends MockupContainer implements IBinding, IAcquisition, IAddRemove {
 
@@ -129,14 +135,12 @@ public class MockupFacadeAdapter extends MockupContainer implements IBinding, IA
     }
 
     public void removeComponent(OCComponent component) {
-		/* super.removeComponent(component);
-		int index;
-		index = componentList.indexOf(component);
-		disappearedComponentSet.add(componentList.get(index));
-		existingComponentSet.remove(componentList.get(index));
-		componentList.remove(index);
-		*/
-        // Code Walid
+        for(OCService service : new ArrayList<>(component.getAllServices())){
+            for(OCService linkedService : new ArrayList<>(service.getLinkedServices())){
+                unbind(service, linkedService);
+            }
+        }
+
         disappearedComponentSet.add(component);
         System.out.println("Disappearing " + component);
         existingComponentSet.remove(component);
@@ -166,4 +170,28 @@ public class MockupFacadeAdapter extends MockupContainer implements IBinding, IA
 		}*/
     }
 
+    public void bindConnections(List<Connection> connections){
+        System.out.println("Connections to bind : " + connections);
+        for(OCService service : existingServiceSet){
+            for(OCService linkedService : new ArrayList<>(service.getLinkedServices())){
+                unbind(service, linkedService);
+            }
+        }
+
+        for(Connection connection : connections){
+            if(!connection.getMyConnectionState().isPresent()){
+                bind(connection.getFirstService(), connection.getSecondService());
+            }else{
+                if(connection.getMyConnectionState().get() instanceof ModifiedConnectionState){
+                    ModifiedConnectionState state = (ModifiedConnectionState) connection.getMyConnectionState().get();
+                    bind(
+                            state.getFirstServiceChangedTo().orElse(connection.getFirstService()),
+                            state.getSecondServiceChangedTo().orElse(connection.getSecondService())
+                    );
+                }else if(!(connection.getMyConnectionState().get() instanceof RejectedConnectionState)){
+                    bind(connection.getFirstService(), connection.getSecondService());
+                }
+            }
+        }
+    }
 }
