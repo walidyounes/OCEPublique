@@ -5,11 +5,13 @@
 package Demo.Components.Impl;
 
 import Demo.Components.Annotations.Provided;
+import Demo.Components.Interfaces.ColorConsumer;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.function.Consumer;
 
-public class IntDisplay implements @Provided Consumer<Integer> {
+public class IntDisplay implements @Provided Consumer<Integer>, @Provided ColorConsumer {
     private JLabel label = new JLabel("");
 
     public IntDisplay(){
@@ -23,5 +25,10 @@ public class IntDisplay implements @Provided Consumer<Integer> {
     @Override
     public void accept(Integer integer) {
         label.setText(String.format("%d",integer));
+    }
+
+    @Override
+    public void acceptColor(Color color){
+        label.setForeground(color);
     }
 }
