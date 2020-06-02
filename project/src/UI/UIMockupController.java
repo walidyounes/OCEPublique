@@ -8,9 +8,12 @@ import AmbientEnvironment.MockupCompo.*;
 import AmbientEnvironment.MockupFacadeAdapter.MockupFacadeAdapter;
 import AmbientEnvironment.OCPlateforme.OCComponent;
 import AmbientEnvironment.OCPlateforme.OCService;
+import Demo.Components.DemoComponentFactory;
+import Demo.Demo;
 import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
 import MOICE.MOICE;
+import MOICE.feedbackManager.FeedbackManager;
 import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
@@ -35,7 +38,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -53,18 +55,15 @@ import org.graphstream.ui.view.Viewer;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class UIMockupController implements Initializable {
-    @FXML private JFXTextField designationComponent;
-    @FXML private JFXTextField nameService;
-    @FXML private JFXTextField matchingIDService;
-    @FXML private JFXListView<Label> servicesList;
-    @FXML private JFXListView<Label> componentsList;
-    @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
+    @FXML private JFXListView<Label> availableComponentsList;
+    @FXML private JFXListView<Label> envComponentsList;
     @FXML private JFXButton launchButton;
     @FXML private JFXButton nextOCECycleButton;
     @FXML private AnchorPane visualisationPane;
@@ -84,10 +83,9 @@ public class UIMockupController implements Initializable {
 
     @FXML private JFXListView<OCEAgent> agentsListUI;
 //    private TextArea UILog;
-    private JFXPopup popup;
+    private JFXPopup envComponentPopup;
+    private JFXPopup addComponentPopup;
 
-    private ArrayList<OCService> providedByC;
-    private ArrayList<OCService> requiredByC;
     private Graph serviceGraph;
 
     private MockupFacadeAdapter mockupFacadeAdapter;
@@ -120,14 +118,11 @@ public class UIMockupController implements Initializable {
         //Initialize the MAS Infrastructure
         this.infrastructure = new Infrastructure();
 
-        // Create the list of services
-        this.requiredByC = new ArrayList<>();
-        this.providedByC = new ArrayList<>();
-
         // Create the thread for the execution
         this.myOCE = new OCE(this.mockupFacadeAdapter, this.infrastructure);
         this.opportunisticCompositionEngine = new Thread(this.myOCE);
 
+        ((FeedbackManager)MOICE.getInstance().getMyFeedbackManager()).setMockupFacadeAdapter(mockupFacadeAdapter);
         // Init log
         // Create and configure the logger service
         OCELogger logger = new OCELogger();
@@ -149,12 +144,16 @@ public class UIMockupController implements Initializable {
      * Initialise the UI of the system
      */
     private void initSystemUI(){
-        this.servicesList.setExpanded(true);
-        this.componentsList.setExpanded(true);
+        this.availableComponentsList.setExpanded(true);
+        this.envComponentsList.setExpanded(true);
+
+        for(String name : Demo.AVAILABLE_CLASSES_MAP.keySet()){
+            Label label = new Label();
+            label.setText(name);
+            this.availableComponentsList.getItems().add(label);
+        }
+
         this.agentsListUI.setExpanded(true);
-        //Put by default the radios button selected
-        this.providedR.setSelected(true);
-        this.singleR.setSelected(true);
         //Associate the text fields to the function called when we press "Enter"
         this.NbCyclesAgent.setOnKeyPressed((event) -> { if(event.getCode() == KeyCode.ENTER) { updateMaxCycleAgent(); } });
 
@@ -221,8 +220,7 @@ public class UIMockupController implements Initializable {
             }
         });
 
-        // Initialise popUp that we show in the components list
-        initPopup();
+        initEnvComponentPopup();
 
         // Initialise and preview the graph the graph
         initGraph();
@@ -230,7 +228,7 @@ public class UIMockupController implements Initializable {
         this.graphVisualisationPane.setVisible(false);
     }
 
-    @FXML
+    /*@FXML
     private void addService(ActionEvent event){
         //System.out.println("adding services " + this.nameService.getText().length());
         Label label = new Label();
@@ -304,17 +302,17 @@ public class UIMockupController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill the designation of the component !!");
             alert.show();
         }
-    }
+    }*/
 
-    @FXML
+    /*@FXML
     private void cancelAddingServices(ActionEvent event){
         this.servicesList.getItems().clear();
         this.nameService.setText("");
         this.requiredByC.clear();
         this.providedByC.clear();
-    }
+    }*/
 
-    @FXML
+    /*@FXML
     private void addComponent(ActionEvent event){
         Label label = new Label();
 
@@ -324,7 +322,7 @@ public class UIMockupController implements Initializable {
                 label.setText(textToAdd);
                 label.getStyleClass().add("label-list");
                 label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
+                this.runningComponentsList.getItems().add(label);
                 //Add component to mockup
                 addComponentToMockup(this.designationComponent.getText(), this.providedByC, this.requiredByC);
                 //Reset UI Elements
@@ -350,7 +348,7 @@ public class UIMockupController implements Initializable {
         this.designationComponent.setText("");
         this.nameService.setText("");
         this.matchingIDService.setText("");
-    }
+    }*/
 
     /**
      * Add a component to the mockup environment
@@ -385,7 +383,7 @@ public class UIMockupController implements Initializable {
                 label.setText(textToAdd);
                 label.getStyleClass().add("label-list");
                 label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
+                this.envComponentsList.getItems().add(label);
             }
 
 
@@ -540,19 +538,33 @@ public class UIMockupController implements Initializable {
 //    }
 
     @FXML
-    private void showPopup(MouseEvent event){
-        if(event.getButton().equals(MouseButton.SECONDARY)){// Detect right button click
-            this.popup.show(componentsList, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT);
-            //JFXListView list = (JFXListView) event.getSource();
-        }
-
+    private void showEnvComponentsPopup(MouseEvent event){
+        this.envComponentPopup.show(envComponentsList, JFXPopup.PopupVPosition.TOP, JFXPopup.PopupHPosition.RIGHT);
     }
 
-    /**
-     *  Create a PopUp with delete / update
-     */
-    private void initPopup(){
-        this.popup = new JFXPopup();
+    @FXML
+    private void addComponent(MouseEvent event) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        MockupComponent component = DemoComponentFactory.makeDemoComponent(
+                Demo.AVAILABLE_CLASSES_MAP.get(
+                        availableComponentsList.getSelectionModel().getSelectedItem().getText()
+                )
+        );
+
+        this.mockupFacadeAdapter.addComponent(component);
+        System.out.println(this.mockupFacadeAdapter.getComponents().toString());
+
+        addProvidedServiceToGraphe(component.getProvidedServices());
+        addRequiredServiceToGraphe(component.getRequiredServices());
+
+        Label label = new Label();
+        label.setText(component.getName());
+        label.getStyleClass().add("label-list");
+        label.setGraphic(new ImageView("/component.png"));
+        this.envComponentsList.getItems().add(label);
+    }
+
+    private void initEnvComponentPopup(){
+        this.envComponentPopup = new JFXPopup();
         JFXButton deleteButton = new JFXButton("Delete");
         JFXButton detailButton = new JFXButton("Detail");
         deleteButton.setPadding(new Insets(10));
@@ -565,17 +577,17 @@ public class UIMockupController implements Initializable {
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               String nameComp = componentsList.getSelectionModel().getSelectedItem().getText();
+               String nameComp = envComponentsList.getSelectionModel().getSelectedItem().getText();
                //System.out.println(nameComp);
                deleteComponentFromMockup(nameComp);
-               componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
+               envComponentsList.getItems().remove(envComponentsList.getSelectionModel().getSelectedIndex());
             }
         });
 
         detailButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String nameComp = componentsList.getSelectionModel().getSelectedItem().getText();
+                String nameComp = envComponentsList.getSelectionModel().getSelectedItem().getText();
                 System.out.println(nameComp);
                 Set<OCComponent> mycomponents = mockupFacadeAdapter.getComponents().stream().filter(c -> ((MockupComponent)c).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toSet());
                 // Display the component's detail on a window
@@ -610,9 +622,8 @@ public class UIMockupController implements Initializable {
         });
 
         VBox popUpContent = new VBox( detailButton,deleteButton);
-        this.popup.setPopupContent(popUpContent);
+        this.envComponentPopup.setPopupContent(popUpContent);
     }
-
 
     @FXML
     private void lunchSimulation(ActionEvent event){
@@ -703,7 +714,7 @@ public class UIMockupController implements Initializable {
             //Delete components and services
             Platform.runLater(new Runnable() {
                 @Override public void run() {
-                    componentsList.getItems().clear();
+                    envComponentsList.getItems().clear();
                     //Reactivate the launch button
                     launchButton.setDisable(false);
                     //Clear list of details of the agent
@@ -768,7 +779,7 @@ public class UIMockupController implements Initializable {
     public void launchICEVisualisationProgram(ActionEvent event){
         try {
             // Command to create an external process
-            String command = "C:\\Users\\wyounes\\Documents\\GEMOC\\GemocStudio";
+            String command = "C:\\GemocStudio";
             // Running the above command
             Runtime run  = Runtime.getRuntime();
             Process proc = run.exec(command);
@@ -921,7 +932,7 @@ public class UIMockupController implements Initializable {
                 label.setText(textToAdd);
                 label.getStyleClass().add("label-list");
                 label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
+                this.envComponentsList.getItems().add(label);
             }
             System.out.println(secondaryStageController.getChosenComponent());
 
