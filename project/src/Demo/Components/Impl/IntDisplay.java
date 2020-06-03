@@ -16,6 +16,8 @@ public class IntDisplay implements @Provided Consumer<Integer>, @Provided ColorC
 
     public IntDisplay(){
         JFrame frame = new JFrame("IntDisplay");
+        label.setFont(new Font("Arial", Font.PLAIN, 25));
+        frame.setMinimumSize(new Dimension(300,100));
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getContentPane().add(label);
         frame.pack();

@@ -36,7 +36,7 @@ public class RandomIntGenerator {
     }
 
     @Required
-    public void setConsumer(Consumer<Integer> consumer) {
+    public void setIntegerConsumer(Consumer<Integer> consumer) {
         this.consumer = consumer;
     }
 }
