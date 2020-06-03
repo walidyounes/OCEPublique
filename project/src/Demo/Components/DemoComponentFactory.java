@@ -17,6 +17,8 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DemoComponentFactory {
 
@@ -39,8 +41,8 @@ public class DemoComponentFactory {
         for(AnnotatedType at : implementationClass.getAnnotatedInterfaces()){
             if(at.getAnnotation(Provided.class) != null){
                 providedServices.add(new ProvidedService(
-                        at.getType().getTypeName().replace('<','_').replace('>','_').replace('.','_'),
-                        at.getType().getTypeName().replace('<','_').replace('>','_').replace('.','_'),
+                        providedServiceNameEscaping(at.getType().getTypeName()),
+                        serviceMatchingIdEscaping(at.getType().getTypeName()),
                         componentName,
                         implementationInstance
                 ));
@@ -51,8 +53,8 @@ public class DemoComponentFactory {
         for(Method m : implementationClass.getMethods()) {
             if(m.getAnnotation(Required.class) != null) {
                 requiredServices.add(new RequiredService(
-                        m.getName(),
-                        m.getGenericParameterTypes()[0].getTypeName().replace('<','_').replace('>','_').replace('.','_'),
+                        requiredServiceNameEscaping(m.getName()),
+                        serviceMatchingIdEscaping(m.getGenericParameterTypes()[0].getTypeName()),
                         componentName,
                         implementationInstance,
                         m
@@ -65,5 +67,26 @@ public class DemoComponentFactory {
                 providedServices,
                 requiredServices
         );
+    }
+
+    private static String serviceMatchingIdEscaping(String rawMatchingId){
+        return rawMatchingId.replace('<','_').replace('>','_').replace('.','_');
+    }
+
+    private static String requiredServiceNameEscaping(String rawName){
+        return rawName.replaceFirst("set","");
+    }
+
+    private static String providedServiceNameEscaping(String rawName){
+        Matcher matcher = Pattern.compile("(.*)<(.*)>").matcher(rawName);
+
+        if(matcher.find()){
+            String[] firstSplit = matcher.group(1).split("\\.");
+            String[] secondSplit = matcher.group(2).split("\\.");
+            return secondSplit[secondSplit.length - 1] + firstSplit[firstSplit.length - 1];
+        }
+
+        String[] split = rawName.split("\\.");
+        return split[split.length - 1];
     }
 }
