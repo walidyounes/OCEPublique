@@ -52,7 +52,7 @@
                <children>
                   <VBox prefHeight="430.0" prefWidth="343.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label prefHeight="43.0" prefWidth="351.0" style="-fx-background-color: #0097A7;" text=" Available Components" textFill="WHITE" wrapText="false">
+                        <Label prefHeight="43.0" prefWidth="351.0" style="-fx-background-color: #0097A7;" text=" Component Repository" textFill="WHITE" wrapText="false">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
