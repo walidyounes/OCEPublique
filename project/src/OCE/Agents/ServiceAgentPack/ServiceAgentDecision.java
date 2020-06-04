@@ -365,6 +365,7 @@ public class ServiceAgentDecision implements IDecisionState {
     private void feedbackTreatment(List<OCEDecision> myListOfDecisions, List<OCEMessage> OCEPerceptionFeedback) {
         //Set to false the value of the boolean variable indicating that we updated the BA if we received modified feedback
         this.myServiceAgent.setUpdateBAFeedbackModified(false);
+
         //Iterate over the feedback received to treat them
         for(int i=0; i< OCEPerceptionFeedback.size(); i++){
             //Get the received feedback Message -> index 0 cause there is only one and treat the feedback message -> for now it returns "do nothing decision"
