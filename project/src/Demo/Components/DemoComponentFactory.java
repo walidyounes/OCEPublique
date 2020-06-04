@@ -6,6 +6,7 @@ package Demo.Components;
 
 import AmbientEnvironment.MockupCompo.MockupComponent;
 import AmbientEnvironment.MockupCompo.SingleLinkMockupService;
+import AmbientEnvironment.MockupCompo.Way;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Demo.Components.Annotations.Provided;
 import Demo.Components.Annotations.Required;
@@ -69,6 +70,43 @@ public class DemoComponentFactory {
         );
     }
 
+    /**
+     * makes an example component from a class. For display purposes.
+     *
+     * @param implementationClass
+     * @return An example component (not running)
+     */
+    public static MockupComponent makeExampleComponent(Class<?> implementationClass) {
+        ArrayList<OCService> providedServices = new ArrayList<>();
+        for(AnnotatedType at : implementationClass.getAnnotatedInterfaces()){
+            if(at.getAnnotation(Provided.class) != null){
+                providedServices.add(new SingleLinkMockupService(
+                        providedServiceNameEscaping(at.getType().getTypeName()),
+                        serviceMatchingIdEscaping(at.getType().getTypeName()),
+                        implementationClass.getSimpleName(),
+                        Way.PROVIDED
+                ));
+            }
+        }
+
+        ArrayList<OCService> requiredServices = new ArrayList<>();
+        for(Method m : implementationClass.getMethods()) {
+            if(m.getAnnotation(Required.class) != null) {
+                requiredServices.add(new SingleLinkMockupService(
+                        requiredServiceNameEscaping(m.getName()),
+                        serviceMatchingIdEscaping(m.getGenericParameterTypes()[0].getTypeName()),
+                        implementationClass.getSimpleName(),
+                        Way.REQUIRED
+                ));
+            }
+        }
+
+        return new MockupComponent(
+                implementationClass.getSimpleName(),
+                providedServices,
+                requiredServices
+        );
+    }
     private static String serviceMatchingIdEscaping(String rawMatchingId){
         return rawMatchingId.replace('<','_').replace('>','_').replace('.','_');
     }

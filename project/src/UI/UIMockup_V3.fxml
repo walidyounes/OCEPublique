@@ -32,8 +32,7 @@
             </Menu>
         <Menu mnemonicParsing="false" style="-fx-text-fill: #FFFFFF; -fx-font-size: 12pt;" text="Components">
           <items>
-            <MenuItem mnemonicParsing="false" onAction="#addComponentsFromXMLFile" text="Add file" />
-                  <MenuItem mnemonicParsing="false" onAction="#showChoseDisappearingComponent" text="Add disappearing" />
+             <MenuItem mnemonicParsing="false" onAction="#showChoseDisappearingComponent" text="Add disappearing" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Save" />
             <MenuItem mnemonicParsing="false" text="Save As…" />
