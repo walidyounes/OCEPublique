@@ -373,7 +373,7 @@
             </VBox>
             <VBox layoutX="381.0" layoutY="465.0" prefHeight="242.0" prefWidth="331.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="149.0" AnchorPane.leftAnchor="381.0">
                <children>
-                  <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" OCE Settings" textFill="WHITE" wrapText="false">
+                  <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" OCE settings" textFill="WHITE" wrapText="false">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
