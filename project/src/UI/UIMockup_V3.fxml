@@ -179,7 +179,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="142.0" text=" Epsilon">
+                        <Label prefHeight="20.0" prefWidth="142.0" text=" Exploration factor">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
