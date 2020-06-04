@@ -24,7 +24,7 @@ To be done
 
 ### Configuration in IntelliJ IDEA
 
-Before starting: make sure that you have **JDK 9.0** and **IntelliJ IDEA**  installed on your computer
+Before starting: make sure that you have **JDK 9.0** **JRE 9.0** and **IntelliJ IDEA**  installed on your computer
 
 1. Clone the project from the [GitHub] repository (In the project homepage https://github.com/SylvieTrouilhet/OCE click on **Clone or download**  and copy the link)
 1. Open **IntelliJ IDEA** 
@@ -37,9 +37,7 @@ Before starting: make sure that you have **JDK 9.0** and **IntelliJ IDEA**  inst
     1. Intellij should start downlaodng the project
 1. Wait until the *configuration* and *indexing* of the project is complete
 1. If the *JDK* is not automatically configured, add it manually to the project (it should appear in **External librairies**)
-```JAVA
-To be completed
-```
+
 
 ### Configuration in Eclipse IDEA
 
@@ -53,21 +51,13 @@ To be done
 To be completed by walid with Maxime's help :)
 ```
 
-### Integrating OCE and ICE
+### Integrating OCE and ICE (OCE configuration)
 
 To integrate OCE and ICE you must change in OCE's code to update ICE's files path. 
 
 1. Open package *MOICE*
 1. Open *ICEXMLFormatter* class
-    1. In line **66** change the exiting line code : 
-    ```JAVA
-    BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor"));
-    ``` 
-     update the file path to :
-    ```JAVA
-    BufferedWriter bw = new BufferedWriter(new FileWriter(" the path of the file runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor in your laptop"));
-    ``` 
-    1. In line **113** change the exiting line code : 
+    - In line **22** edit the exiting line code : 
     ```JAVA
     final String ICEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor";
     ``` 
@@ -75,3 +65,41 @@ To integrate OCE and ICE you must change in OCE's code to update ICE's files pat
     ```JAVA
     final String ICEFilePath  = " the path of the file runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor in your laptop";
     ``` 
+    - The *matchingID* used for service matching is called in ICE's metamodel *ID* : 
+     ```JAVA
+    Rename all occurences of MatchingID to ID in the ICEXMLFormatter.java class
+    ``` 
+ 1. Open *UI*
+ 1. Open *UIMockupController* class
+    -In line **771** edit the existing line code : 
+    ```JAVA
+    String command = "C:\\Users\\wyounes\\Documents\\GEMOC\\GemocStudio";
+    ``` 
+    update the gemocStudio app path :
+    ```JAVA
+    String command = "Path of the GemocStudio application in your laptop";
+    ``` 
+    This will allow you to launch GemocStudio (ICE) from the user interface
+    
+### Integrating OCE and ICE (ICE configuration)
+Make sure that you installed GemocStudio and ICE like shown in https://github.com/marounkoussaifi/ICE/ 
+
+1. Run GemocStudio and then run ICE
+1. Open *Services.java*
+    - In the *Acept* function, identify this line of code : 
+    ```JAVA
+    final String ICESharedFilePath = "C:\\Users\\wyounes\\Documents\\Thèse\\Programation\\Code source\\OCE\\ICEConfiguration\\ICEConfiguration.ice_editor";
+    ``` 
+    in the file path, change this part *C:\\Users\\wyounes\\Documents\\Thèse\\Programation\\Code source\\OCE\\ICEConfiguration* and put the path of the folder *ICEConfiguration* found were OCE is stored in your laptop. 
+    
+    - In the *Reject* function, identify this line of code : 
+    ```JAVA
+    File fileDir = new File( "C:\\Users\\wyounes\\Documents\\Thèse\\Programation\\Code source\\OCE\\ICEConfiguration\\ICEConfiguration.ice_editor");
+    ``` 
+   repeat what you did in the previous step
+    
+
+
+### Executing OCE
+
+To execute OCE run the main class *UIMockup* wich can be found in the package *UI*
