@@ -184,10 +184,22 @@ public class MockupFacadeAdapter extends MockupContainer implements IBinding, IA
             }else{
                 if(connection.getMyConnectionState().get() instanceof ModifiedConnectionState){
                     ModifiedConnectionState state = (ModifiedConnectionState) connection.getMyConnectionState().get();
-                    bind(
-                            state.getFirstServiceChangedTo().orElse(connection.getFirstService()),
-                            state.getSecondServiceChangedTo().orElse(connection.getSecondService())
-                    );
+
+                    if(state.getFirstServiceChangedTo().isPresent() && state.getSecondServiceChangedTo().isPresent()){
+                        bind(
+                                state.getFirstServiceChangedTo().get(),
+                                connection.getSecondService()
+                        );
+                        bind(
+                                connection.getFirstService(),
+                                state.getSecondServiceChangedTo().get()
+                        );
+                    }else{
+                        bind(
+                                state.getFirstServiceChangedTo().orElse(connection.getFirstService()),
+                                state.getSecondServiceChangedTo().orElse(connection.getSecondService())
+                        );
+                    }
                 }else if(!(connection.getMyConnectionState().get() instanceof RejectedConnectionState)){
                     bind(connection.getFirstService(), connection.getSecondService());
                 }
