@@ -86,26 +86,12 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
      * @param annotatedConnections  :   the list of connections after annotation using user feedbacks
      */
     public void  dispatchFeedback(List<Connection> annotatedConnections){
-        //Special case: check if there is only one connection annotated as modified
-        // this can happen for example when we OCE propose a connection between two services and the user modifies this connection by adding a component in the middle
-        if(annotatedConnections.size()==1){
-            if ((annotatedConnections.get(0)).getMyConnectionState().isPresent()){
-                IConnectionState connectionState = (annotatedConnections.get(0)).getMyConnectionState().get();
-                //Check if the connection is annotated as modified
-                if(connectionState instanceof ModifiedConnectionState){
-                    if(((ModifiedConnectionState)connectionState).getFirstServiceChangedTo().isPresent() && ((ModifiedConnectionState)connectionState).getSecondServiceChangedTo().isPresent()){
-                        //Indicate that the connection need to create one more Binder agent to handle the two new connections
-                        ((ModifiedConnectionState)connectionState).setCreateOneMoreBinderAgent(true);
-                    }
 
-                }
-            }
-        }
         for (Connection connection: annotatedConnections) {
             //Check if the connection is annotated
             if(connection.getMyConnectionState().isPresent()){
                 //Treat the connection depending on it's annotation
-                connection.getMyConnectionState().get().treatConnection(connection, this.communicationAdapter, this.oceRecord, this.binderAgentFactory, this.listAgentsToInformFeedback);
+                connection.getMyConnectionState().get().treatConnection(connection, this.communicationAdapter, this.oceRecord, this.binderAgentFactory, this.listAgentsToInformFeedback,  annotatedConnections);
             }
         }
     }

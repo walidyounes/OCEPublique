@@ -42,13 +42,19 @@ public class ModifiedConnectionState implements IConnectionState {
      * @param oceRecord                 : the reference to the component responsible for reference resolving
      * @param binderAgentFactory        : the reference to the component which allows creating binder agents
      * @param infrastructureAgentList   : the list of agents to wake up to inform them of the arrival of user feedback
+     * @param annotatedConnections      : the list of annotated connections received after user's feedback
      */
     @Override
-    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList) {
+    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList, List<Connection> annotatedConnections) {
         //check if both of the original services of the connection got connected to new ones
         if(this.secondServiceChangedTo.isPresent() && this.firstServiceChangedTo.isPresent()){
             //In the binder agent handling this connection, delete both the services
             connection.getBinderAgent().resetHandledServices();
+
+            //Special case: check if there is only one connection annotated as modified
+            // this can happen for example when we OCE propose a connection between two services and the user modifies this connection by adding a component in the middle
+            // IF the two services doesn't appear in any other connection we need to create a new binder agent
+            this.createOneMoreBinderAgent = Optional.ofNullable(!isNewServicesPartOfConnections(this.firstServiceChangedTo.get(), this.secondServiceChangedTo.get(), annotatedConnections));
         }
 
         //Get the first Service agent
@@ -152,6 +158,20 @@ public class ModifiedConnectionState implements IConnectionState {
 
     }
 
+    /**
+     * check whether the two new services that got connected to the old services are part of another connection
+     * @param firstServiceChangedTo     :   the reference of the first service that the user choose to connect to the old second service of the connection proposed by OCE
+     * @param secondServiceChangedTo    :   the reference of the second service that the user choose to connect to the old first service of the connection proposed by OCE
+     * @param annotatedConnections      :   the list of all annotated connections
+     * @return true if at least one of the two new services are part of another connection, else returns false
+     */
+    private boolean isNewServicesPartOfConnections(MockupService firstServiceChangedTo, MockupService secondServiceChangedTo, List<Connection> annotatedConnections){
+        boolean found=false;
+        for (Connection connection: annotatedConnections ) {
+            if(connection.containService(firstServiceChangedTo) || connection.containService(secondServiceChangedTo)) found =true;
+        }
+        return found;
+    }
     /**
      * Get the new second service that the user choose to connect to the old first service of the connection proposed by OCE
      * @return : the reference of the new service, or "empty" if the first service was left not connected
