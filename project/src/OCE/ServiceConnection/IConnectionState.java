@@ -20,6 +20,7 @@ public interface IConnectionState {
      * @param oceRecord                 : the reference to the component responsible for reference resolving
      * @param binderAgentFactory        : the reference to the component which allows creating binder agents
      * @param infrastructureAgentList   : the list of agents to wake up to inform them of the arrival of user feedback
+     * @param annotatedConnections      : the list of annotated connections received after user's feedback
      */
-    void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList);
+    void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList, List<Connection> annotatedConnections);
 }
