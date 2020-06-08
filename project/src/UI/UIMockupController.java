@@ -768,7 +768,7 @@ public class UIMockupController implements Initializable {
     public void launchICEVisualisationProgram(ActionEvent event){
         try {
             // Command to create an external process
-            String command = "C:\\Users\\wyounes\\Documents\\GEMOC\\GemocStudio";
+            String command = "C:\\Users\\furet\\Downloads\\gemoc\\GemocStudio";
             // Running the above command
             Runtime run  = Runtime.getRuntime();
             Process proc = run.exec(command);

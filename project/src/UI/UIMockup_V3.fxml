@@ -20,34 +20,34 @@
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="933.0" prefWidth="2079.0" stylesheets="@UIStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.UIMockupController">
-  <children>
-    <MenuBar style="-fx-background-color: #0097A7;" VBox.vgrow="NEVER">
-      <menus>
+   <children>
+      <MenuBar style="-fx-background-color: #0097A7;" VBox.vgrow="NEVER">
+         <menus>
             <Menu mnemonicParsing="false" style="-fx-font-size: 12pt; -fx-text-fill: #FFFFFF;" text="File">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#resetSystem" text="Reset system" />
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#resetSystem" text="Reset system" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#quitter" text="Exit" />
-              </items>
+               </items>
             </Menu>
-        <Menu mnemonicParsing="false" style="-fx-text-fill: #FFFFFF; -fx-font-size: 12pt;" text="Components">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#addComponentsFromXMLFile" text="Add file" />
+            <Menu mnemonicParsing="false" style="-fx-text-fill: #FFFFFF; -fx-font-size: 12pt;" text="Components">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#addComponentsFromXMLFile" text="Add file" />
                   <MenuItem mnemonicParsing="false" onAction="#showChoseDisappearingComponent" text="Add disappearing" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" style="-fx-font-size: 12pt;" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefWidth="1777.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
-      <children>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" text="Save As…" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" style="-fx-font-size: 12pt;" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefWidth="1777.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+         <children>
             <VBox fx:id="AddComponent" layoutX="12.0" layoutY="16.0" prefHeight="658.0" prefWidth="343.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="16.0">
                <children>
                   <Label prefHeight="44.0" prefWidth="343.0" style="-fx-background-color: #0097A7;" text=" Add new Component" textFill="WHITE" wrapText="false">
@@ -327,7 +327,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
                      <children>
-                        <Label prefHeight="20.0" prefWidth="142.0" text=" Exploration factor">
+                        <Label prefHeight="20.0" prefWidth="142.0" text=" Epsilon">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
@@ -449,7 +449,7 @@
                   </HBox>
                </children>
             </VBox>
-      </children>
-    </AnchorPane>
-  </children>
+         </children>
+      </AnchorPane>
+   </children>
 </VBox>

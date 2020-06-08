@@ -104,13 +104,13 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
                                 //Get the name of the service in OCE File
                                 String serviceNameOCE = serviceElementOCE.getAttribute("Name");
                                 //Get the matchingID of the service in OCE File
-                                String serviceMatchingIDOCE = serviceElementOCE.getAttribute("matchingID");
+                                String serviceMatchingIDOCE = serviceElementOCE.getAttribute("ID");
 
                                 //Get the name of the service in ICE File
                                 Element serviceElementICE = (Element) serviceNodeICE;
                                 String serviceNameICE = serviceElementICE.getAttribute("Name");
                                 //Get the matchingID of the service in ICE File
-                                String serviceMatchingIDICE = serviceElementICE.getAttribute("matchingID");
+                                String serviceMatchingIDICE = serviceElementICE.getAttribute("ID");
 
                                 String bindOCE = "";
                                 String bindICE = "";

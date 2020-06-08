@@ -21,7 +21,7 @@ public class UIMockup extends Application {
         UIMockupController uiMockupController =  fxmlLoader.getController();
         */
 
-        Parent root = FXMLLoader.load(getClass().getResource("UIMockup_V3.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("UIMockup_V4.fxml"));
         primaryStage.setTitle("Mockup");
         primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root, 300, 275));

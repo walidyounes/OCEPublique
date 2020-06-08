@@ -19,7 +19,7 @@ public class ICEXMLFormatter implements IFileFormatter {
     List<MockupComponent> listComponents;
     List<Connection> listConnections;
 
-    final String ICEFilePath = "C:\\Users\\wyounes\\runtime-Editor\\org.eclipse.ice.editor\\ICE.ice_editor";
+    final String ICEFilePath = "C:\\Users\\furet\\Downloads\\gemoc\\ICE-master\\ICE-master\\runtime-bis\\org.eclipse.iceEditor.sample\\editor.ice_editor";
 
     /**
      * Construct the custom file formatter used by ICE.
@@ -79,11 +79,11 @@ public class ICEXMLFormatter implements IFileFormatter {
                             if(mapIsConnectedConnectedTo.getKey().isPresent()) {
                                 Map.Entry<Integer, Integer> indexes = findIndexes(mapIsConnectedConnectedTo);
 
-                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID() + "\" "
+                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  ID=\""+currentService.getMatchingID() + "\" "
                                         + "bindRequired=\"//@component."+ indexes.getKey()+
                                         "/@service."+ indexes.getValue()+"\" Cardinality=\"1\"/>\n");
                             } else {
-                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID() +"\" Cardinality=\"1\"/>\n");
+                                bw.write("<service xsi:type=\"iCE_Editor:ProvidedService\" Name=\""+currentService.getName()+"\"  ID=\""+currentService.getMatchingID() +"\" Cardinality=\"1\"/>\n");
                             }
                         }
                     }
@@ -94,11 +94,11 @@ public class ICEXMLFormatter implements IFileFormatter {
                             if(mapIsConnectedConnectedTo.getKey().isPresent()) {
                                 Map.Entry<Integer, Integer> indexes = findIndexes(mapIsConnectedConnectedTo);
 
-                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID()+"\" "
+                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  ID=\""+currentService.getMatchingID()+"\" "
                                         + "bindProvided=\"//@component."+ indexes.getKey()+
                                         "/@service."+ indexes.getValue()+"\" Cardinality=\"1\"/>\n");
                             } else {
-                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  matchingID=\""+currentService.getMatchingID()+"\" Cardinality=\"1\"/>\n");
+                                bw.write("<service xsi:type=\"iCE_Editor:RequiredService\" Name=\""+currentService.getName()+"\"  ID=\""+currentService.getMatchingID()+"\" Cardinality=\"1\"/>\n");
                             }
                         }
                     }
