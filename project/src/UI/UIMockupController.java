@@ -831,13 +831,13 @@ public class UIMockupController implements Initializable {
         Iterator<Situation<ReferenceSituationEntry>> iterator = serviceAgent.getMyKnowledgeBase().iterator();
         while (iterator.hasNext()){
             Situation<ReferenceSituationEntry> currentSit = iterator.next();
-            HBox hBoxKB = new HBox();
-            ScrollPane scrollPaneKB = new ScrollPane(hBoxKB);
-            Label rSDebut = new Label( " RS = {");
-            hBoxKB.getChildren().add(rSDebut);
-            currentSit.getAgentSituationEntries().forEach((k,v) -> hBoxKB.getChildren().add(new Label(""+v+" - ")));
+            VBox vBoxKB = new VBox();
+            ScrollPane scrollPaneKB = new ScrollPane(vBoxKB);
+            Label rSDebut = new Label( " RS = {\tAgent  \t\t\tScore");
+            vBoxKB.getChildren().add(rSDebut);
+            currentSit.getAgentSituationEntries().forEach((k,v) -> vBoxKB.getChildren().add(new Label("\t"+k+" \t"+v.getScore())));
             Label rSFin = new Label( " }");
-            hBoxKB.getChildren().add(rSFin);
+            vBoxKB.getChildren().add(rSFin);
             contentKB.getChildren().add(scrollPaneKB);
         }
         contentKB.getChildren().forEach(node -> node.setStyle("-fx-font-weight: bold; -fx-font-size: 12;"));

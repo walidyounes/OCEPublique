@@ -69,7 +69,9 @@ public class AgentUIPersonalisedCell extends JFXListCell<OCEAgent> {
         setContentDisplay(ContentDisplay.LEFT);
         if (!empty && item != null) {
             if (item instanceof ServiceAgent) {
-                this.agentType.setText("Service Agent");
+                //this.agentType.setText("Service Agent");
+                String serviceID = item.getMyID().getVisualizingName();
+                this.agentType.setText(serviceID);
                 String serviceDescription = ((MockupService) ((ServiceAgent) item).getHandledService()).toString();
                 this.serviceLabel.setText(serviceDescription);
                 this.agentIcon.setImage(new Image("/AgentNC.png"));
