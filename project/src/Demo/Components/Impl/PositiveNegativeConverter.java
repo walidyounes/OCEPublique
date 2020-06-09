@@ -9,7 +9,7 @@ import Demo.Components.Annotations.Required;
 
 import java.util.function.Consumer;
 
-public class IntToIntAndItsNegative implements @Provided Consumer<Integer> {
+public class PositiveNegativeConverter implements @Provided Consumer<Integer> {
 
     private Consumer<Integer> positiveConsumer;
 

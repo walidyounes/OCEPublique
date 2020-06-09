@@ -274,7 +274,7 @@ public class FeedbackManager implements IFeedbackManager, PropertyChangeListener
             this.connectionManager.getListConnectionProposedOCE().clear();
             try{
                 //Delete the two files after computing feedback
-                OCEConfiguration.delete();
+                //OCEConfiguration.delete();
                 ICEUserConfiguration.delete();
 
             }catch(Exception exception){

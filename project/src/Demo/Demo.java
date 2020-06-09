@@ -7,7 +7,7 @@ package Demo;
 
 import Demo.Components.Impl.ColorPicker;
 import Demo.Components.Impl.IntDisplay;
-import Demo.Components.Impl.IntToIntAndItsNegative;
+import Demo.Components.Impl.PositiveNegativeConverter;
 import Demo.Components.Impl.RandomIntGenerator;
 
 
@@ -20,7 +20,7 @@ public class Demo {
     private static final Class<?>[] AVAILABLE_CLASSES = {
             IntDisplay.class,
             RandomIntGenerator.class,
-            IntToIntAndItsNegative.class,
+            PositiveNegativeConverter.class,
             ColorPicker.class
     };
 
