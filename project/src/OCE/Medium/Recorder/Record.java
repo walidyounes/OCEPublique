@@ -182,6 +182,8 @@ public class Record implements IRecord{
      */
     @Override
     public ObservableList<OCEAgent> getAllAgents() {
+        Comparator<OCEAgent> comparator = Comparator.comparing(OCEAgent::getMyID);
+        FXCollections.sort(listOCEAgents,comparator);
         return this.listOCEAgents;
     }
 

@@ -50,7 +50,7 @@
             <children>
                 <VBox fx:id="AddComponent" layoutX="12.0" layoutY="16.0" prefHeight="658.0" prefWidth="343.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="16.0">
                     <children>
-                        <Label prefHeight="44.0" prefWidth="343.0" style="-fx-background-color: #0097A7;" text=" Add new Component" textFill="WHITE" wrapText="false">
+                        <Label prefHeight="62.0" prefWidth="343.0" style="-fx-background-color: #0097A7;" text=" Add new Component" textFill="WHITE" wrapText="false">
                             <font>
                                 <Font name="Cambria Bold" size="18.0" />
                             </font>
@@ -227,7 +227,7 @@
                     <children>
                         <VBox prefHeight="361.0" prefWidth="304.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" VBox.vgrow="ALWAYS">
                             <children>
-                                <Label prefHeight="27.0" prefWidth="430.0" style="-fx-background-color: #0097A7;" text=" Agents (Service--Type-Component)" textFill="WHITE" wrapText="false" VBox.vgrow="ALWAYS">
+                                <Label prefHeight="40.0" prefWidth="430.0" style="-fx-background-color: #0097A7;" text=" Agents (Service--Type-Component)" textFill="WHITE" wrapText="false" VBox.vgrow="ALWAYS">
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
@@ -239,7 +239,7 @@
                 </VBox>
                 <VBox layoutX="1205.0" layoutY="16.0" prefHeight="515.0" prefWidth="491.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label prefHeight="27.0" prefWidth="491.0" style="-fx-background-color: #0097A7;" text=" Agent's content" textFill="WHITE" wrapText="false">
+                        <Label prefHeight="40.0" prefWidth="491.0" style="-fx-background-color: #0097A7;" text=" Agent's content" textFill="WHITE" wrapText="false">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
@@ -249,7 +249,7 @@
                 </VBox>
                 <VBox fx:id="graphVisualisationPane" layoutX="1204.0" layoutY="600.0" prefHeight="400.0" prefWidth="491.0" AnchorPane.bottomAnchor="36.0">
                     <children>
-                        <Label prefHeight="38.0" prefWidth="646.0" style="-fx-background-color: #0097A7;" text=" Service Graph" textFill="WHITE" VBox.vgrow="ALWAYS">
+                        <Label prefHeight="40.0" prefWidth="646.0" style="-fx-background-color: #0097A7;" text=" Service Graph" textFill="WHITE" VBox.vgrow="ALWAYS">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
@@ -263,7 +263,7 @@
                 </VBox>
                 <VBox layoutX="731.0" layoutY="400.0" prefHeight="282.0" prefWidth="422.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="731.0">
                     <children>
-                        <Label prefHeight="37.0" prefWidth="422.0" style="-fx-background-color: #0097A7;" text="Agent's parameters settings" textFill="WHITE" wrapText="false">
+                        <Label prefHeight="40.0" prefWidth="422.0" style="-fx-background-color: #0097A7;" text="Agent's parameters settings" textFill="WHITE" wrapText="false">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>

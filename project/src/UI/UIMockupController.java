@@ -12,6 +12,7 @@ import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
 import MOICE.MOICE;
 import OCE.Agents.BinderAgentPack.BinderAgent;
+import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
@@ -817,10 +818,10 @@ public class UIMockupController implements Initializable {
         VBox contentSA = new VBox();
 
         Label idAgent = new Label("IDAgent = " + serviceAgent.getMyID());
-        Label handledService = new Label("Handled Service  = " + serviceAgent.getHandledService().toString());
-        Label agentState = new Label("Agent's state  = " + serviceAgent.getMyConnexionState().toString());
-        Label agentConnectedTo = new Label("Agent is connected to  = " + serviceAgent.getConnectedTo().toString());
-        Label agentBinderAgent = new Label("Agent's binder Agent  = " + serviceAgent.getMyBinderAgent().toString());
+        Label handledService = new Label("\nHandled Service  = " + serviceAgent.getHandledService().toString());
+        Label agentState = new Label("\nAgent's state  = " + serviceAgent.getMyConnexionState().toString());
+        Label agentConnectedTo = new Label("\nAgent is connected to  = " + serviceAgent.getConnectedTo().toString());
+        Label agentBinderAgent = new Label("\nAgent's binder Agent  = " + serviceAgent.getMyBinderAgent().toString());
 
         TitledPane agentKnowledgeBaseTitledPane = new TitledPane();
         agentKnowledgeBaseTitledPane.setText(" Knowledge Base ");
@@ -829,16 +830,19 @@ public class UIMockupController implements Initializable {
 
         //iterate over the situationEntries and printThem
         Iterator<Situation<ReferenceSituationEntry>> iterator = serviceAgent.getMyKnowledgeBase().iterator();
+        int RSCpt = 1;
         while (iterator.hasNext()){
             Situation<ReferenceSituationEntry> currentSit = iterator.next();
             VBox vBoxKB = new VBox();
             ScrollPane scrollPaneKB = new ScrollPane(vBoxKB);
-            Label rSDebut = new Label( " RS = {\tAgent  \t\t\tScore");
+            Label rSDebut = new Label( " RS"+RSCpt+" = {\tAgent  \t\t\tScore");
             vBoxKB.getChildren().add(rSDebut);
-            currentSit.getAgentSituationEntries().forEach((k,v) -> vBoxKB.getChildren().add(new Label("\t"+k+" \t"+v.getScore())));
+            TreeMap<IDAgent, ReferenceSituationEntry> tree = new TreeMap<>(currentSit.getAgentSituationEntries());
+            tree.forEach((k,v) -> vBoxKB.getChildren().add(new Label("\t"+k+" \t"+v.getScore())));
             Label rSFin = new Label( " }");
             vBoxKB.getChildren().add(rSFin);
             contentKB.getChildren().add(scrollPaneKB);
+            RSCpt+=1;
         }
         contentKB.getChildren().forEach(node -> node.setStyle("-fx-font-weight: bold; -fx-font-size: 12;"));
         agentKnowledgeBaseTitledPane.setContent(contentKB);
