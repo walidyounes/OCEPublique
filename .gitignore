@@ -1,1 +1,4 @@
 /MyLogFiles/
+.idea
+*.iml
+/project/.idea/
