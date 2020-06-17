@@ -89,7 +89,7 @@ public abstract class MockupService extends OCService implements Comparable, Ser
         }else{
             serviceType = "REQ";
         }
-        return ""+this.name+"-"+"-"+serviceType+ "-"+this.owner;
+        return ""+this.owner+"."+serviceType+ "."+this.name;
     }
 
     /**

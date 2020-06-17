@@ -41,6 +41,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -64,7 +69,7 @@ public class UIMockupController implements Initializable {
     @FXML private JFXTextField nameService;
     @FXML private JFXTextField matchingIDService;
     @FXML private JFXListView<Label> servicesList;
-    @FXML private JFXListView<Label> componentsList;
+    @FXML private JFXListView<TextFlow> componentsList;
     @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
     @FXML private JFXButton launchButton;
     @FXML private JFXButton nextOCECycleButton;
@@ -325,7 +330,8 @@ public class UIMockupController implements Initializable {
                 label.setText(textToAdd);
                 label.getStyleClass().add("label-list");
                 label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
+                MockupComponent component = new MockupComponent(textToAdd,this.providedByC,this.requiredByC);
+                this.componentsList.getItems().add(textFlowDisplayingComponent(component));
                 //Add component to mockup
                 addComponentToMockup(this.designationComponent.getText(), this.providedByC, this.requiredByC);
                 //Reset UI Elements
@@ -363,6 +369,7 @@ public class UIMockupController implements Initializable {
         // Add the component to the mockup container
         this.mockupFacadeAdapter.addComponent(C1);
         System.out.println(this.mockupFacadeAdapter.getComponents().toString());
+        this.componentsList.getItems().add(textFlowDisplayingComponent(C1));
         // Update the graph visualisation
         addProvidedServiceToGraphe(providedServices);
         addRequiredServiceToGraphe(requiredServices);
@@ -381,12 +388,6 @@ public class UIMockupController implements Initializable {
             List<MockupComponent> listComponents = XMLFileTools.readXMLComponentFile(xmlFilePath);
             for (MockupComponent component : listComponents){
                 addComponentToMockup(component.getName(),component.getProvidedServices(), component.getRequiredServices());
-                Label label = new Label();
-                String textToAdd = "" + component.getName();
-                label.setText(textToAdd);
-                label.getStyleClass().add("label-list");
-                label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
             }
 
 
@@ -566,7 +567,7 @@ public class UIMockupController implements Initializable {
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               String nameComp = componentsList.getSelectionModel().getSelectedItem().getText();
+               String nameComp = ((Text)componentsList.getSelectionModel().getSelectedItem().getChildren().get(0)).getText();
                //System.out.println(nameComp);
                deleteComponentFromMockup(nameComp);
                componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
@@ -576,7 +577,7 @@ public class UIMockupController implements Initializable {
         detailButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String nameComp = componentsList.getSelectionModel().getSelectedItem().getText();
+                String nameComp = ((Text)componentsList.getSelectionModel().getSelectedItem().getChildren().get(0)).getText();
                 System.out.println(nameComp);
                 Set<OCComponent> mycomponents = mockupFacadeAdapter.getComponents().stream().filter(c -> ((MockupComponent)c).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toSet());
                 // Display the component's detail on a window
@@ -930,12 +931,7 @@ public class UIMockupController implements Initializable {
                 this.mockupFacadeAdapter.addComponent(component);
                 //remove it from the disappearing components list
                 this.disappearedComponents.remove(component);
-                Label label = new Label();
-                String textToAdd = "" + component.getName();
-                label.setText(textToAdd);
-                label.getStyleClass().add("label-list");
-                label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
+                this.componentsList.getItems().add(textFlowDisplayingComponent(component));
             }
             System.out.println(secondaryStageController.getChosenComponent());
 
@@ -970,4 +966,46 @@ public class UIMockupController implements Initializable {
 //            e.printStackTrace();
 //        }
 //    }
+    private static TextFlow textFlowDisplayingComponent(MockupComponent component){
+
+        TextFlow textFlow = new TextFlow();
+
+        Text text = new Text();
+
+        text.setText(component.getName());
+        text.setFont(Font.font("System", FontWeight.BOLD,20));
+
+        textFlow.getChildren().add(text);
+
+        for(OCService providedService : component.getProvidedServices()){
+            Text providedText = new Text("\n(Provided) ");
+            providedText.setFill(Color.ROYALBLUE);
+            providedText.setFont(Font.font("System",12));
+
+            Text serviceText = new Text(((MockupService)providedService).getName());
+            serviceText.setFont(Font.font("System", FontWeight.BOLD, 15));
+
+            Text matchingIdText = new Text(" - " + ((MockupService)providedService).getMatchingID());
+            matchingIdText.setFont(Font.font("System", 10));
+
+            textFlow.getChildren().addAll(providedText, serviceText, matchingIdText);
+        }
+
+        for(OCService requiredService : component.getRequiredServices()){
+            Text requiredText = new Text("\n(Required) ");
+            requiredText.setFill(Color.TOMATO);
+            requiredText.setFont(Font.font("System",12));
+
+            Text serviceText = new Text(((MockupService)requiredService).getName());
+            serviceText.setFont(Font.font("System", FontWeight.BOLD, 15));
+
+
+            Text matchingIdText = new Text(" - " + ((MockupService)requiredService).getMatchingID());
+            matchingIdText.setFont(Font.font("System", 10));
+
+            textFlow.getChildren().addAll(requiredText, serviceText, matchingIdText);
+        }
+
+        return textFlow;
+    }
 }
