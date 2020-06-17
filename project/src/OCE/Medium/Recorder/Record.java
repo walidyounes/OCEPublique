@@ -181,11 +181,7 @@ public class Record implements IRecord{
      * @return the list of agent present in the environment
      */
     @Override
-    public ObservableList<OCEAgent> getAllAgents() {
-        Comparator<OCEAgent> comparator = Comparator.comparing(OCEAgent::getMyID);
-        FXCollections.sort(listOCEAgents,comparator);
-        return this.listOCEAgents;
-    }
+    public ObservableList<OCEAgent> getAllAgents() { return this.listOCEAgents; }
 
     /**
      * private function used to get the corresponding keys from a value from a map

@@ -837,7 +837,17 @@ public class UIMockupController implements Initializable {
             ScrollPane scrollPaneKB = new ScrollPane(vBoxKB);
             Label rSDebut = new Label( " RS"+RSCpt+" = {\tAgent  \t\t\tScore");
             vBoxKB.getChildren().add(rSDebut);
-            TreeMap<IDAgent, ReferenceSituationEntry> tree = new TreeMap<>(currentSit.getAgentSituationEntries());
+            TreeMap<IDAgent, ReferenceSituationEntry> tree =
+                    new TreeMap<>(
+                            new Comparator<IDAgent>() {
+                                @Override
+                                public int compare(IDAgent ida1, IDAgent ida2) {
+                                    String str1 = ida1.getVisualizingName();
+                                    String str2 = ida2.getVisualizingName();
+                                    return str1.compareTo(str2);
+                                }
+                            });
+            tree.putAll(currentSit.getAgentSituationEntries());
             tree.forEach((k,v) -> vBoxKB.getChildren().add(new Label("\t"+k+" \t"+v.getScore())));
             Label rSFin = new Label( " }");
             vBoxKB.getChildren().add(rSFin);
