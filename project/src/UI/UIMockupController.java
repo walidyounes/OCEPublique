@@ -330,10 +330,8 @@ public class UIMockupController implements Initializable {
                 label.setText(textToAdd);
                 label.getStyleClass().add("label-list");
                 label.setGraphic(new ImageView("/component.png"));
-                MockupComponent component = new MockupComponent(textToAdd,this.providedByC,this.requiredByC);
-                this.componentsList.getItems().add(textFlowDisplayingComponent(component));
                 //Add component to mockup
-                addComponentToMockup(this.designationComponent.getText(), this.providedByC, this.requiredByC);
+                addComponentToMockup(textToAdd, this.providedByC, this.requiredByC);
                 //Reset UI Elements
                 deleteUIElements();
                 //Display the services and agents in the graph view
