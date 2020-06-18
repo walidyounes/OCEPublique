@@ -13,13 +13,16 @@ import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import Midlleware.AgentFactory.IOCEServiceAgentFactory;
 import Midlleware.AgentFactory.OCEBinderAgentFactory;
 import Midlleware.AgentFactory.OCEServiceAgentFactory;
+import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
+import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import OCE.FeedbackDispatcher.OCEFeedbackDispatcher;
 import OCE.Medium.Medium;
 import OCE.probe.Probe;
 import UI.UIInitializeAgentLearningController;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,6 +31,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.TreeMap;
 
 public class OCE implements Runnable{
     private MockupFacadeAdapter mockupFacadeAdapter;

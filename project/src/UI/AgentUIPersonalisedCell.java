@@ -24,7 +24,6 @@ public class AgentUIPersonalisedCell extends JFXListCell<OCEAgent> {
     private final GridPane gridPane = new GridPane();
     private final AnchorPane content = new AnchorPane();
 
-    private final Label serviceLabel = new Label();
     private final Label agentType = new Label();
     private final ImageView agentIcon = new ImageView();
     private final Tooltip agentTooltip = new Tooltip();
@@ -40,8 +39,6 @@ public class AgentUIPersonalisedCell extends JFXListCell<OCEAgent> {
         agentType.setStyle("-fx-font-weight: bold; -fx-font-size: 1.5em;");
         GridPane.setConstraints(agentType, 1, 0);
 
-        serviceLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 1em;");
-        GridPane.setConstraints(serviceLabel, 1, 1);
 
         //
         gridPane.getColumnConstraints().add(new ColumnConstraints(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE, Priority.NEVER, HPos.LEFT, true));
@@ -53,7 +50,7 @@ public class AgentUIPersonalisedCell extends JFXListCell<OCEAgent> {
         gridPane.getRowConstraints().add(new RowConstraints(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE, Priority.ALWAYS, VPos.CENTER, true));
         gridPane.setHgap(6);
         gridPane.setVgap(6);
-        gridPane.getChildren().setAll(agentIcon, agentType,serviceLabel);
+        gridPane.getChildren().setAll(agentIcon, agentType);
         AnchorPane.setTopAnchor(gridPane, 0d);
         AnchorPane.setLeftAnchor(gridPane, 0d);
         AnchorPane.setBottomAnchor(gridPane, 0d);
@@ -69,18 +66,14 @@ public class AgentUIPersonalisedCell extends JFXListCell<OCEAgent> {
         setContentDisplay(ContentDisplay.LEFT);
         if (!empty && item != null) {
             if (item instanceof ServiceAgent) {
-                //this.agentType.setText("Service Agent");
                 String serviceID = item.getMyID().getVisualizingName();
                 this.agentType.setText(serviceID);
-                String serviceDescription = ((MockupService) ((ServiceAgent) item).getHandledService()).toString();
-                this.serviceLabel.setText(serviceDescription);
                 this.agentIcon.setImage(new Image("/AgentNC.png"));
                 String toolTipContent = createToolTipContentServiceAgent((ServiceAgent) item);
                 this.agentTooltip.setText(toolTipContent);
             }
             if (item instanceof BinderAgent){
                 this.agentType.setText("Binder Agent");
-                this.serviceLabel.setText("");
                 this.agentIcon.setImage(new Image("/AgentC.png"));
                 String toolTipContent = createToolTipContentBinderAgent((BinderAgent) item);
                 this.agentTooltip.setText(toolTipContent);

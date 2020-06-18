@@ -556,13 +556,13 @@ public class UIMockupController implements Initializable {
     private void initPopup(){
         this.popup = new JFXPopup();
         JFXButton deleteButton = new JFXButton("Delete");
-        JFXButton detailButton = new JFXButton("Detail");
+        //JFXButton detailButton = new JFXButton("Detail");
         deleteButton.setPadding(new Insets(10));
-        detailButton.setPadding(new Insets(10));
+        //detailButton.setPadding(new Insets(10));
         ImageView deleteImage = new ImageView("/delete.png");
-        ImageView detailImage = new ImageView("/detail.png");
+        //ImageView detailImage = new ImageView("/detail.png");
         deleteButton.setGraphic(deleteImage);
-        detailButton.setGraphic(detailImage);
+        //detailButton.setGraphic(detailImage);
 
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -574,44 +574,44 @@ public class UIMockupController implements Initializable {
             }
         });
 
-        detailButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String nameComp = ((Text)componentsList.getSelectionModel().getSelectedItem().getChildren().get(0)).getText();
-                System.out.println(nameComp);
-                Set<OCComponent> mycomponents = mockupFacadeAdapter.getComponents().stream().filter(c -> ((MockupComponent)c).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toSet());
-                // Display the component's detail on a window
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                //customise CSS of the new window
-                DialogPane dialogPane = alert.getDialogPane();
-                dialogPane.getStylesheets().add("/custumAlert.css");
-                dialogPane.getStyleClass().add("myAlert");
+//        detailButton.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                String nameComp = ((Text)componentsList.getSelectionModel().getSelectedItem().getChildren().get(0)).getText();
+//                System.out.println(nameComp);
+//                Set<OCComponent> mycomponents = mockupFacadeAdapter.getComponents().stream().filter(c -> ((MockupComponent)c).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toSet());
+//                // Display the component's detail on a window
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                //customise CSS of the new window
+//                DialogPane dialogPane = alert.getDialogPane();
+//                dialogPane.getStylesheets().add("/custumAlert.css");
+//                dialogPane.getStyleClass().add("myAlert");
+//
+//                alert.setTitle("Component's Detail");
+//                alert.setHeaderText("The component * " + nameComp + " * contains ");
+//                String content="";
+//                for (OCComponent compo : mycomponents) {
+//                    content = content + "Provided services : \n";
+//                    // Concat the content of all services of the component in a single string
+//                    content = content + ((MockupComponent)compo).getProvidedServices().stream()
+//                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID() +"\n")
+//                                                                                            .collect(Collectors.joining());
+//                    // content = content + ""+((MockupComponent)compo).getProvidedServices()+"\n";
+//                    content = content + "Required services : \n";
+//                    // content = content + ""+((MockupComponent)compo).getRequiredServices();
+//                    content = content + ((MockupComponent)compo).getRequiredServices().stream()
+//                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID()+"\n")
+//                                                                                            .collect(Collectors.joining());
+//                    System.out.println("Provided services = "+ ((MockupComponent)compo).getProvidedServices()+"\n");
+//                    System.out.println(" Required services = "+ ((MockupComponent)compo).getRequiredServices()+"\n");
+//                }
+//                alert.setContentText(content);
+//                alert.show();
+//                //componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
+//            }
+//        });
 
-                alert.setTitle("Component's Detail");
-                alert.setHeaderText("The component * " + nameComp + " * contains ");
-                String content="";
-                for (OCComponent compo : mycomponents) {
-                    content = content + "Provided services : \n";
-                    // Concat the content of all services of the component in a single string
-                    content = content + ((MockupComponent)compo).getProvidedServices().stream()
-                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID() +"\n")
-                                                                                            .collect(Collectors.joining());
-                    // content = content + ""+((MockupComponent)compo).getProvidedServices()+"\n";
-                    content = content + "Required services : \n";
-                    // content = content + ""+((MockupComponent)compo).getRequiredServices();
-                    content = content + ((MockupComponent)compo).getRequiredServices().stream()
-                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID()+"\n")
-                                                                                            .collect(Collectors.joining());
-                    System.out.println("Provided services = "+ ((MockupComponent)compo).getProvidedServices()+"\n");
-                    System.out.println(" Required services = "+ ((MockupComponent)compo).getRequiredServices()+"\n");
-                }
-                alert.setContentText(content);
-                alert.show();
-                //componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
-            }
-        });
-
-        VBox popUpContent = new VBox( detailButton,deleteButton);
+        VBox popUpContent = new VBox(deleteButton);
         this.popup.setPopupContent(popUpContent);
     }
 
