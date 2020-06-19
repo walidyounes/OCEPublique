@@ -11,6 +11,8 @@ import Midlleware.AgentFactory.IOCEBinderAgentFactory;
 import OCE.Medium.Communication.ICommunicationAdapter;
 import OCE.Medium.Recorder.IRecord;
 import OCE.ServiceConnection.Connection;
+import OCE.ServiceConnection.IConnectionState;
+import OCE.ServiceConnection.ModifiedConnectionState;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -84,11 +86,12 @@ public class OCEFeedbackDispatcher implements PropertyChangeListener{
      * @param annotatedConnections  :   the list of connections after annotation using user feedbacks
      */
     public void  dispatchFeedback(List<Connection> annotatedConnections){
+
         for (Connection connection: annotatedConnections) {
             //Check if the connection is annotated
             if(connection.getMyConnectionState().isPresent()){
                 //Treat the connection depending on it's annotation
-                connection.getMyConnectionState().get().treatConnection(connection, this.communicationAdapter, this.oceRecord, this.binderAgentFactory, this.listAgentsToInformFeedback);
+                connection.getMyConnectionState().get().treatConnection(connection, this.communicationAdapter, this.oceRecord, this.binderAgentFactory, this.listAgentsToInformFeedback,  annotatedConnections);
             }
         }
     }

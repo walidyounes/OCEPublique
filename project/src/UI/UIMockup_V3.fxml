@@ -50,7 +50,7 @@
          <children>
             <VBox fx:id="AddComponent" layoutX="12.0" layoutY="16.0" prefHeight="658.0" prefWidth="343.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="16.0">
                <children>
-                  <Label prefHeight="44.0" prefWidth="343.0" style="-fx-background-color: #0097A7;" text=" Add new Component" textFill="WHITE" wrapText="false">
+                  <Label prefHeight="44.0" prefWidth="343.0" style="-fx-background-color: #0097A7;" text=" Add new components" textFill="WHITE" wrapText="false">
                      <font>
                         <Font name="Cambria Bold" size="18.0" />
                      </font>
@@ -290,7 +290,7 @@
             </VBox>
             <VBox layoutX="731.0" layoutY="583.0" prefHeight="282.0" prefWidth="422.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="731.0">
                <children>
-                  <Label prefHeight="37.0" prefWidth="422.0" style="-fx-background-color: #0097A7;" text="Agent's parameters settings" textFill="WHITE" wrapText="false">
+                  <Label prefHeight="37.0" prefWidth="422.0" style="-fx-background-color: #0097A7;" text=" Agent's parameter settings" textFill="WHITE" wrapText="false">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -373,7 +373,7 @@
             </VBox>
             <VBox layoutX="381.0" layoutY="465.0" prefHeight="242.0" prefWidth="331.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="149.0" AnchorPane.leftAnchor="381.0">
                <children>
-                  <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" OCE Settings" textFill="WHITE" wrapText="false">
+                  <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" OCE settings" textFill="WHITE" wrapText="false">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
