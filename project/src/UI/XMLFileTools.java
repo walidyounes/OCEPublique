@@ -78,15 +78,16 @@ public class XMLFileTools {
                             String serviceMatchingID = serviceElement.getAttribute("matchingID");
                             String serviceWay = serviceElement.getAttribute("xsi:type");
                             String serviceCardinality = serviceElement.getAttribute("Cardinality");
+                            String serviceType = serviceElement.getAttribute("type");
                             OCService serviceToAdd = null;
                             //Check if the service is a provided service
                             if( serviceWay!= "" && (serviceWay.contains("Provided") || serviceWay.contains("provided")) ) {
                                 //Check if it's a single link (cardinality = 1)
                                 if(serviceCardinality!="" && serviceCardinality.equals("1")) {
-                                    serviceToAdd  = new SingleLinkMockupService(serviceName,serviceMatchingID, componentName, Way.PROVIDED);
+                                    serviceToAdd  = new SingleLinkMockupService(serviceName,serviceMatchingID, componentName, Way.PROVIDED, serviceType);
                                     providedServices.add(serviceToAdd);
                                 }else{
-                                    serviceToAdd = new  MultiLinkMockupService(serviceName,serviceMatchingID, componentName, Way.PROVIDED);
+                                    serviceToAdd = new  MultiLinkMockupService(serviceName,serviceMatchingID, componentName, Way.PROVIDED, serviceType);
                                     providedServices.add(serviceToAdd);
                                 }
 
@@ -94,10 +95,10 @@ public class XMLFileTools {
                             if( serviceWay!= "" && (serviceWay.contains("Required") || serviceWay.contains("required")) ) {
                                 //Check if it's a single link (cardinality = 1)
                                 if(serviceCardinality!="" && serviceCardinality.equals("1")) {
-                                    serviceToAdd  = new SingleLinkMockupService(serviceName,serviceMatchingID, componentName, Way.REQUIRED);
+                                    serviceToAdd  = new SingleLinkMockupService(serviceName,serviceMatchingID, componentName, Way.REQUIRED, serviceType);
                                     requiredServices.add(serviceToAdd);
                                 }else{
-                                    serviceToAdd = new  MultiLinkMockupService(serviceName,serviceMatchingID, componentName, Way.REQUIRED);
+                                    serviceToAdd = new  MultiLinkMockupService(serviceName,serviceMatchingID, componentName, Way.REQUIRED, serviceType);
                                     requiredServices.add(serviceToAdd);
                                 }
                             }

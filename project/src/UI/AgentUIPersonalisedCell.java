@@ -90,6 +90,7 @@ public class AgentUIPersonalisedCell extends JFXListCell<OCEAgent> {
         String content=" SERVICE AGENT \n";
         content += "IDAgent = " + serviceAgent.getMyID() + "\n";
         content += "Handled service = " + ((MockupService)serviceAgent.getHandledService()).toString() +"\n";
+//        content += "Type = " + ((MockupService) serviceAgent.getHandledService()).getType() +"\n";
         content += "Knowledge Base = " + serviceAgent.getMyKnowledgeBase() + "\n";
         return content;
     }

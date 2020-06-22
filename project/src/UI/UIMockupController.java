@@ -817,6 +817,7 @@ public class UIMockupController implements Initializable {
         VBox contentSA = new VBox();
 
         Label idAgent = new Label("IDAgent = " + serviceAgent.getMyID());
+        Label agentType = new Label("\nAgent Type = " + ((MockupService) serviceAgent.getHandledService()).getType());
         Label handledService = new Label("\nHandled Service  = " + serviceAgent.getHandledService().toString());
         Label agentState = new Label("\nAgent's state  = " + serviceAgent.getMyConnexionState().toString());
         Label agentConnectedTo = new Label("\nAgent is connected to  = " + serviceAgent.getConnectedTo().toString());
@@ -858,6 +859,7 @@ public class UIMockupController implements Initializable {
 
         contentSA.getChildren().add(idAgent);
         contentSA.getChildren().add(handledService);
+        contentSA.getChildren().add(agentType);
         contentSA.getChildren().add(agentState);
         contentSA.getChildren().add(agentConnectedTo);
         contentSA.getChildren().add(agentBinderAgent);
