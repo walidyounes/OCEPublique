@@ -15,7 +15,7 @@ public abstract class MockupService extends OCService implements Comparable, Ser
     protected String matchingID; // Used to check if two services match
     private String owner;
     private Way myWay;
-    private String type = "";
+    private String type;
 
     public MockupService(String name, String matchingID, String ownerComponentName, Way myWay, String type) {
         this.name = name;
@@ -31,6 +31,7 @@ public abstract class MockupService extends OCService implements Comparable, Ser
         this.matchingID = matchingID;
         this.owner = ownerComponentName;
         this.myWay = myWay;
+        this.type = "";
         this.linkedServices = new ArrayList<>();
     }
 

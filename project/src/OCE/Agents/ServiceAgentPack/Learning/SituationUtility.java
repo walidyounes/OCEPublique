@@ -85,14 +85,62 @@ public class SituationUtility {
 
         //Iterate on the list of reference situations and compute the similarity
         for(Situation<ReferenceSituationEntry> refSituation : listReferenceSituations){
+
+            //Map of the types of all agents present in refsituation
+            Map<String,ReferenceSituationEntry> types = new TreeMap<>();
+            for (IDAgent agent : refSituation.getAgentSituationEntries().keySet()) {
+                String typeAgent = agent.getType();
+                boolean contains = types.containsKey(typeAgent);
+                Double scoreAgent = refSituation.getAgentSituationEntries().get(agent).getScore();
+                //add agent if type not null and not encountered
+                //or update it if encountered but worst score than current one
+                if (typeAgent != "" && ( !contains || (contains && scoreAgent > types.get(typeAgent).getScore()) ))
+                    types.put(agent.getType(), refSituation.getSituationEntryByIDAgent(agent));
+            }
+
+            //reference situation where we substitute disappeared agents with a type by new agent of the same type
+            Situation<ReferenceSituationEntry> resultMapping = new Situation<>();
+            //foreach agent in current situation
+            for (IDAgent currentAgent : currentSituation.getAgentSituationEntries().keySet()) {
+                String type = currentAgent.getType(); //agent's type
+                boolean typesContains = types.containsKey(type); //agent in types
+                ReferenceSituationEntry refEntry = refSituation.getSituationEntryByIDAgent(currentAgent);
+                ReferenceSituationEntry typeEntry = types.get(type);
+
+                //if an agent is in refSituation he is added to result with his own score
+                //only if his score is the best of his type or his type is not identified yet
+                //else he take the score of the best of his type
+                if (refSituation.getAgentSituationEntries().keySet().contains(currentAgent)) {
+                    if (typesContains) {
+                        if (refEntry.getScore() > typeEntry.getScore())
+                            resultMapping.addSituationEntry(currentAgent,refEntry);
+                        else
+                            resultMapping.addSituationEntry(currentAgent,new ReferenceSituationEntry(currentAgent,typeEntry.getScore()));
+                    }
+                    else
+                        resultMapping.addSituationEntry(currentAgent, refEntry);
+                }
+                else {
+                    if (typesContains)
+                        resultMapping.addSituationEntry(currentAgent,new ReferenceSituationEntry(currentAgent,typeEntry.getScore()));
+                }
+            }
+
+//            System.out.println("**************************\nDebut");
+//            System.out.println(currentSituation.toString());
+//            System.out.println(refSituation.toString());
+//            System.out.println(types.toString());
+//            System.out.println(resultMapping.toString());
+//            System.out.println("FIN\n****************************");
+
             //compute the similarity
-            double degreeSimilarity= computeJaccardSimilarity(currentSituation,refSituation);
+            double degreeSimilarity = computeJaccardSimilarity(currentSituation,resultMapping);
             System.out.println("RS: "+refSituation);
             System.out.println("Similarity: "+ degreeSimilarity);
             //check if the degree of similarity is greater than the threshold
             if(degreeSimilarity >= threshold){
                 //Add the reference situation to the list of similar situations
-                listSimilarRSituations.put(refSituation,degreeSimilarity);
+                listSimilarRSituations.put(resultMapping,degreeSimilarity);
             }
         }
         //Order the list of similar reference situations by the decreasing order of the degree of similarity

@@ -45,7 +45,7 @@ public class ServiceAgentDecision implements IDecisionState {
 
     //ARSA parameters
     private int waitingCycleAgentBeforeAdvertiseCounter = 0;                //The variable used to count the number of cycle to wait by the agent before advertising again
-    private final int waitingCycleAgentBeforeAdvertiseBound = 6;        //The number of cycle to wait by the agent before advertising another time
+    private final int waitingCycleAgentBeforeAdvertiseBound = 1;        //The number of cycle to wait by the agent before advertising another time
     private int waitingCycleAgentAfterSelectCounter = 0;                    //The variable used to count the number of cycle that the agent wait after selecting an other service agent
     private final int waitingCycleAgentAfterSelectBound = 6;               //The number of cycle to wait by the agent for the answer from the selected service agent and the binding agent
 

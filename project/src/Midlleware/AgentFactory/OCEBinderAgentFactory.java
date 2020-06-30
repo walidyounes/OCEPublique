@@ -73,7 +73,7 @@ public class OCEBinderAgentFactory implements IOCEBinderAgentFactory {
         myWayOfPerception.setInfraAgent(associatedInfrastructureAgent);
 
         //Make the ID of the binder Agent the same as the associated infrastructure agent
-        binderAgent.setMyIDAgent(new IDAgent(""+ associatedInfrastructureAgent.getInfraAgentReference().getReferenceInterne()));
+        binderAgent.setMyIDAgent(new IDAgent(""+ associatedInfrastructureAgent.getInfraAgentReference().getReferenceInterne(),""));
 
         //Set the name for the visualization of this agent as "BinderAgent' + Sequential Number
         String visualizationName = "BA-"+this.binderAgentSerialNumber;

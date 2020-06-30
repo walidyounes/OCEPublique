@@ -411,8 +411,11 @@ public class UIMockupController implements Initializable {
         this.disappearedComponents.add(C1);
 
         // Update the graph visualisation
-        deleteServicesFromGraph(C1.getProvidedServices());
-        deleteServicesFromGraph(C1.getRequiredServices());
+        try{
+            deleteServicesFromGraph(C1.getProvidedServices());
+            deleteServicesFromGraph(C1.getRequiredServices());
+        } catch (Exception e) {}
+
 
     }
 
