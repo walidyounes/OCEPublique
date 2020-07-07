@@ -161,6 +161,20 @@
                               </AnchorPane>
                            </children>
                         </HBox>
+                        <HBox prefHeight="52.0" prefWidth="351.0">
+                           <children>
+                              <Label prefHeight="40.0" prefWidth="102.0" text="Crowdedness" wrapText="false">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="crowdednessService" focusColor="#00bcd4" prefHeight="31.0" prefWidth="161.0" promptText="Level : Low, Average or High">
+                                 <font>
+                                    <Font name="Cambria" size="14.0" />
+                                 </font>
+                              </JFXTextField>
+                           </children>
+                        </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="86.0" prefWidth="343.0">
                            <children>
                               <JFXButton fx:id="saveButton" buttonType="RAISED" onAction="#addComponent" styleClass="button-raised-save" text="Save" HBox.hgrow="ALWAYS">

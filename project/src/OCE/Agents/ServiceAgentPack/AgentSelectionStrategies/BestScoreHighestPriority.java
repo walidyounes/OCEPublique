@@ -39,7 +39,7 @@ public class BestScoreHighestPriority implements IAgentSelectionStrategy {
         List<IDAgent> listBestScoreAgent = scoredCS.getAgentSituationEntries().values().stream().filter(e -> e.getScore()==bestScore).map(e -> e.getAgent()).collect(Collectors.toList());
 
         if(explorationProbability <= epsilon){ // Exploration : choose randomly an agent (which is probably not the best one)
-            //mark that the choice is going to be done further in the code
+            //mark that the choice is going to be done further in the co de
             chooseLater=true;
             //Extract the set from which the best agent is selected
             List<IDAgent> listNotBestScoreAgent = scoredCS.getAgentSituationEntries().values().stream().filter(e -> !listBestScoreAgent.contains(e.getAgent())).map(e-> e.getAgent()).collect(Collectors.toList());

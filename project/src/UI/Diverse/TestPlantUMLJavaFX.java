@@ -39,11 +39,11 @@ public class TestPlantUMLJavaFX extends Application {
         //Construction du composant "A"
         ArrayList<OCService> providedByA = new ArrayList<>();
         ArrayList<OCService> requiredByA = new ArrayList<>();
-        MockupService JdeA = new SingleLinkMockupService("J", "J","A", Way.REQUIRED);
+        MockupService JdeA = new SingleLinkMockupService("J", "J","A", Way.REQUIRED, "Low");
         requiredByA.add(JdeA);
-        MockupService KdeA = new SingleLinkMockupService("K", "K","A", Way.REQUIRED);
+        MockupService KdeA = new SingleLinkMockupService("K", "K","A", Way.REQUIRED, "Low");
         requiredByA.add(KdeA);
-        MockupService IdeA = new SingleLinkMockupService("I", "I","A", Way.PROVIDED);
+        MockupService IdeA = new SingleLinkMockupService("I", "I","A", Way.PROVIDED, "Low");
         providedByA.add(IdeA);
         MockupComponent A = new MockupComponent("A", providedByA, requiredByA);
         container.addComponent(A);
@@ -52,9 +52,9 @@ public class TestPlantUMLJavaFX extends Application {
         ArrayList<OCService> providedByC = new ArrayList<>();
         ArrayList<OCService> requiredByC = new ArrayList<>();
 
-        MockupService JdeC = new SingleLinkMockupService("J", "J","C", Way.PROVIDED);
+        MockupService JdeC = new SingleLinkMockupService("J", "J","C", Way.PROVIDED, "Low");
         providedByC.add(JdeC);
-        MockupService KdeC = new SingleLinkMockupService("K", "K", "C", Way.PROVIDED);
+        MockupService KdeC = new SingleLinkMockupService("K", "K", "C", Way.PROVIDED, "Low");
         providedByC.add(KdeC);
 
         MockupComponent C = new MockupComponent("C", providedByC, requiredByC);

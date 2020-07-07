@@ -5,10 +5,12 @@
 
 package AmbientEnvironment.MockupCompo;
 
+import AmbientEnvironment.OCPlateforme.CrowdednessLevel;
 import AmbientEnvironment.OCPlateforme.OCService;
-
+import AmbientEnvironment.OCPlateforme.ServiceQuality;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MockupService extends OCService implements Comparable, Serializable{
     protected String name;
@@ -16,12 +18,25 @@ public abstract class MockupService extends OCService implements Comparable, Ser
     private String owner;
     private Way myWay;
 
+    public MockupService(String name, String matchingID, String ownerComponentName, Way myWay, String crowdedness) {
+        this.name = name;
+        this.matchingID = matchingID;
+        this.owner = ownerComponentName;
+        this.myWay = myWay;
+        this.linkedServices = new ArrayList<>();
+        this.Crowdedness = CrowdednessLevel.valueOf(crowdedness);
+       // this.serviceQualities = new ArrayList<ServiceQuality>();
+       // serviceQualities.add(new ServiceQuality<CrowdednessLevel>(41, "says the level of crowdedness of the restaurant", CrowdednessLevel.Low));
+    }
+
     public MockupService(String name, String matchingID, String ownerComponentName, Way myWay) {
         this.name = name;
         this.matchingID = matchingID;
         this.owner = ownerComponentName;
         this.myWay = myWay;
         this.linkedServices = new ArrayList<>();
+        // this.serviceQualities = new ArrayList<ServiceQuality>();
+        // serviceQualities.add(new ServiceQuality<CrowdednessLevel>(41, "says the level of crowdedness of the restaurant", CrowdednessLevel.Low));
     }
 
     public String getName() {
@@ -35,6 +50,7 @@ public abstract class MockupService extends OCService implements Comparable, Ser
     public Way getWay() {
         return myWay;
     }
+
 
     public void setOwner(String owner){
         this.owner = owner;

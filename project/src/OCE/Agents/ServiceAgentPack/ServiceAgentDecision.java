@@ -10,6 +10,7 @@ import OCE.Agents.BinderAgentPack.BinderAgent;
 import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.BestScoreHighestPriority;
+import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.BestScoreLeastCrowded;
 import OCE.Agents.ServiceAgentPack.AgentSelectionStrategies.IAgentSelectionStrategy;
 import OCE.Agents.ServiceAgentPack.Learning.*;
 import OCE.InfrastructureMessages.BindInfraMessage;
@@ -239,7 +240,7 @@ public class ServiceAgentDecision implements IDecisionState {
                                         } else {
                                             //Select the best agent to respond to from the scored current situation
                                             // IAgentSelectionStrategy agentSelectionStrategy = new BestScoreEpsilonGreedy(epsilon);
-                                            IAgentSelectionStrategy agentSelectionStrategy = new BestScoreHighestPriority(this.myServiceAgent.getEpsilon());
+                                            IAgentSelectionStrategy agentSelectionStrategy = new BestScoreLeastCrowded(this.myServiceAgent.getEpsilon(), this.oceServiceAgentPerceptionHistory);
                                             //IAgentSelectionStrategy agentSelectionStrategy = new HighestPriorityBestScore(epsilon);
                                             this.oceCycleBestAgent = SituationUtility.selectBestAgent(myScoredCurrentSituation, agentSelectionStrategy);
                                             OCELogger.log(Level.INFO, " Agent : Decision -> Using the maximum score and epsilon greedy strategy (" + this.myServiceAgent.getEpsilon() + "), the best agent = " + this.oceCycleBestAgent);

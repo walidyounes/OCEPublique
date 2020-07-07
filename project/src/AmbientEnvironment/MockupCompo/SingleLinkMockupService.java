@@ -5,14 +5,17 @@
 package AmbientEnvironment.MockupCompo;
 
 
+import AmbientEnvironment.OCPlateforme.CrowdednessLevel;
 import AmbientEnvironment.OCPlateforme.OCService;
 
 public class SingleLinkMockupService extends MockupService {
 
+    public SingleLinkMockupService(String name, String matchingID, String owner, Way myWay, String crowdedness) {
+        super(name, matchingID, owner, myWay, crowdedness);
+    }
     public SingleLinkMockupService(String name, String matchingID, String owner, Way myWay) {
         super(name, matchingID, owner, myWay);
     }
-
     public void addLink(OCService s) throws AddLinkException {
         if (linkedServices.isEmpty()) {
             linkedServices.add(s);

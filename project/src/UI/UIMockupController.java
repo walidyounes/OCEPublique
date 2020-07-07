@@ -62,6 +62,7 @@ public class UIMockupController implements Initializable {
     @FXML private JFXTextField designationComponent;
     @FXML private JFXTextField nameService;
     @FXML private JFXTextField matchingIDService;
+    @FXML private JFXTextField crowdednessService;
     @FXML private JFXListView<Label> servicesList;
     @FXML private JFXListView<Label> componentsList;
     @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
@@ -264,11 +265,11 @@ public class UIMockupController implements Initializable {
                     }
                     if (singleORMultiple == 0) {
                         if (providedORRequired == 0) {
-                            serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.matchingIDService.getText(), this.designationComponent.getText(), Way.PROVIDED);
+                            serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.matchingIDService.getText(), this.designationComponent.getText(), Way.PROVIDED, crowdednessService.getText());
                             this.providedByC.add(serviceToAdd);
                         } else {
                             if (providedORRequired == 1) {
-                                serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.matchingIDService.getText(), this.designationComponent.getText(), Way.REQUIRED);
+                                serviceToAdd = new SingleLinkMockupService(this.nameService.getText(),this.matchingIDService.getText(), this.designationComponent.getText(), Way.REQUIRED, crowdednessService.getText());
                                 this.requiredByC.add(serviceToAdd);
                             }
                         }
@@ -350,6 +351,7 @@ public class UIMockupController implements Initializable {
         this.designationComponent.setText("");
         this.nameService.setText("");
         this.matchingIDService.setText("");
+        this.crowdednessService.setText("");
     }
 
     /**
@@ -768,7 +770,7 @@ public class UIMockupController implements Initializable {
     public void launchICEVisualisationProgram(ActionEvent event){
         try {
             // Command to create an external process
-            String command = "C:\\Users\\wyounes\\Documents\\GEMOC\\GemocStudio";
+            String command = "C:\\Users\\khacid\\Documents\\Logiciels\\gemoc_studio-win32.win32.x86_64\\GemocStudio";
             // Running the above command
             Runtime run  = Runtime.getRuntime();
             Process proc = run.exec(command);

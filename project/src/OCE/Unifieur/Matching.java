@@ -21,7 +21,7 @@ public class Matching implements IMatching {
      */
     @Override
     public boolean match(OCService serviceA, OCService serviceB) {
-        /*if (serviceA == null || serviceB == null) {
+        /*n if (serviceA == null || serviceB == null) {
 			return false;
 		}
 		else {	//return true;

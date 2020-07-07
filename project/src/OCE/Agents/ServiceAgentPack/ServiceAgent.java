@@ -57,7 +57,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
 
     /**
      * Create a service Agent specifying a random ID
-     * @param handledService    : the service handled by the agent
+     * @param handledService    : the service handled by the agentn
      * @param myWayOfPerception : the perception module of the agent
      * @param myWayOfDecision   : the decision module of the agent
      * @param myWayOfAction     : the action module of the agent
@@ -106,6 +106,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
         this.myKnowledgeBase = new HashSet<>(); //PS : we can change implementation to add uploading of old knowledge
         this.startingNewEngineCycle = false; // By default, when the engine get launched
         this.updateBAFeedbackModified=false;
+
     }
 
 
@@ -173,6 +174,8 @@ public class ServiceAgent extends OCEAgent implements Comparable {
     public void setMyCurrentSituation(Situation<CurrentSituationEntry> myCurrentSituation) {
         this.myCurrentSituation = Optional.ofNullable(myCurrentSituation);
     }
+
+
 
     /**
      * reset the value of the current situation to default value (empty)

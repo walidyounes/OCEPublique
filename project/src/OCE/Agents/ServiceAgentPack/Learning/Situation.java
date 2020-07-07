@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.stream.Collectors;
 
+
 /**
  * Class implementing the situation (current or reference) of a service agent
  */

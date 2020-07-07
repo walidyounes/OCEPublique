@@ -22,11 +22,11 @@ public class Script3 {
         //Construction du composant "A"
         ArrayList<OCService> providedByA = new ArrayList<>();
         ArrayList<OCService> requiredByA = new ArrayList<>();
-        MockupService JdeA = new SingleLinkMockupService("J", "J","A", Way.REQUIRED);
+        MockupService JdeA = new SingleLinkMockupService("J", "J","A", Way.REQUIRED, "Low");
         requiredByA.add(JdeA);
-        MockupService KdeA = new SingleLinkMockupService("K", "K","A", Way.REQUIRED);
+        MockupService KdeA = new SingleLinkMockupService("K", "K","A", Way.REQUIRED, "Low");
         requiredByA.add(KdeA);
-        MockupService IdeA = new SingleLinkMockupService("I", "I","A", Way.PROVIDED);
+        MockupService IdeA = new SingleLinkMockupService("I", "I","A", Way.PROVIDED, "Low");
         providedByA.add(IdeA);
         MockupComponent A = new MockupComponent("A", providedByA, requiredByA);
         container.addComponent(A);
@@ -38,9 +38,9 @@ public class Script3 {
         ArrayList<OCService> providedByC = new ArrayList<>();
         ArrayList<OCService> requiredByC = new ArrayList<>();
 
-        MockupService JdeC = new SingleLinkMockupService("J", "J","C", Way.PROVIDED);
+        MockupService JdeC = new SingleLinkMockupService("J", "J","C", Way.PROVIDED, "Low");
         providedByC.add(JdeC);
-        MockupService KdeC = new SingleLinkMockupService("K", "K", "C", Way.PROVIDED);
+        MockupService KdeC = new SingleLinkMockupService("K", "K", "C", Way.PROVIDED, "Low");
         providedByC.add(KdeC);
 
         MockupComponent C = new MockupComponent("C", providedByC, requiredByC);
@@ -65,9 +65,9 @@ public class Script3 {
         ArrayList<OCService> providedByB = new ArrayList<>();
         ArrayList<OCService> requiredByB = new ArrayList<>();
 
-        MockupService KdeB = new SingleLinkMockupService("K", "K","B", Way.PROVIDED);
+        MockupService KdeB = new SingleLinkMockupService("K", "K","B", Way.PROVIDED, "Low");
         providedByB.add(KdeB);
-        MockupService IdeB = new SingleLinkMockupService("I", "I","B", Way.REQUIRED);
+        MockupService IdeB = new SingleLinkMockupService("I", "I","B", Way.REQUIRED, "Low");
         requiredByB.add(KdeA);
         MockupComponent B = new MockupComponent("B", providedByB, requiredByB);
         container.addComponent(B);
