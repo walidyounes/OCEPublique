@@ -16,6 +16,11 @@ public class SingleLinkMockupService extends MockupService {
     public SingleLinkMockupService(String name, String matchingID, String owner, Way myWay, CrowdednessLevel crowdedness) {
         super(name, matchingID, owner, myWay, crowdedness);
     }
+
+    public SingleLinkMockupService(String name, String matchingID, String owner, Way myWay, String type, CrowdednessLevel crowdedness) {
+        super(name, matchingID, owner, myWay, type, crowdedness);
+    }
+
     public SingleLinkMockupService(String name, String matchingID, String owner, Way myWay) {
         super(name, matchingID, owner, myWay);
     }

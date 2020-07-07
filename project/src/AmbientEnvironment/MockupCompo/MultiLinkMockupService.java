@@ -17,8 +17,11 @@ public class MultiLinkMockupService extends MockupService {
     public MultiLinkMockupService(String name, String matchingID, String owner, Way myWay) {
         super(name, matchingID, owner, myWay);
     }
-    public MultiLinkMockupService(String name, String matchingID, String owner, Way myWay, String crowdedness) {
+    public MultiLinkMockupService(String name, String matchingID, String owner, Way myWay, CrowdednessLevel crowdedness) {
         super(name, matchingID, owner, myWay, crowdedness);
+    }
+    public MultiLinkMockupService(String name, String matchingID, String owner, Way myWay, String type, CrowdednessLevel crowdedness) {
+        super(name, matchingID, owner, myWay, type, crowdedness);
     }
     public void addLink(OCService s) throws AddLinkException {
         linkedServices.add(s);

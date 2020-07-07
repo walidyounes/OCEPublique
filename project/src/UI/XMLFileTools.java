@@ -8,6 +8,7 @@ import AmbientEnvironment.MockupCompo.MockupComponent;
 import AmbientEnvironment.MockupCompo.MultiLinkMockupService;
 import AmbientEnvironment.MockupCompo.SingleLinkMockupService;
 import AmbientEnvironment.MockupCompo.Way;
+import AmbientEnvironment.OCPlateforme.CrowdednessLevel;
 import AmbientEnvironment.OCPlateforme.OCService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -86,7 +87,7 @@ public class XMLFileTools {
                             if( serviceWay!= "" && (serviceWay.contains("Provided") || serviceWay.contains("provided")) ) {
                                 //Check if it's a single link (cardinality = 1)
                                 if(serviceCardinality!="" && serviceCardinality.equals("1")) {
-                                    serviceToAdd  = new SingleLinkMockupService(serviceName,serviceMatchingID, componentName, Way.PROVIDED, serviceType, serviceCrowdedness);
+                                    serviceToAdd  = new SingleLinkMockupService(serviceName,serviceMatchingID, componentName, Way.PROVIDED, serviceType, CrowdednessLevel.valueOf(serviceCrowdedness));
                                     providedServices.add(serviceToAdd);
                                 }else{
                                     serviceToAdd = new  MultiLinkMockupService(serviceName,serviceMatchingID, componentName, Way.PROVIDED, serviceType);
@@ -97,7 +98,7 @@ public class XMLFileTools {
                             if( serviceWay!= "" && (serviceWay.contains("Required") || serviceWay.contains("required")) ) {
                                 //Check if it's a single link (cardinality = 1)
                                 if(serviceCardinality!="" && serviceCardinality.equals("1")) {
-                                    serviceToAdd  = new SingleLinkMockupService(serviceName,serviceMatchingID, componentName, Way.REQUIRED, serviceType, serviceCrowdedness);
+                                    serviceToAdd  = new SingleLinkMockupService(serviceName,serviceMatchingID, componentName, Way.REQUIRED, serviceType, CrowdednessLevel.valueOf(serviceCrowdedness));
                                     requiredServices.add(serviceToAdd);
                                 }else{
                                     serviceToAdd = new  MultiLinkMockupService(serviceName,serviceMatchingID, componentName, Way.REQUIRED, serviceType);

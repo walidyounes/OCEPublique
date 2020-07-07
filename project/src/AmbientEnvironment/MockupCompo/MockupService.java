@@ -39,6 +39,16 @@ public abstract class MockupService extends OCService implements Comparable, Ser
        // serviceQualities.add(new ServiceQuality<CrowdednessLevel>(41, "says the level of crowdedness of the restaurant", CrowdednessLevel.Low));
     }
 
+    public MockupService(String name, String matchingID, String ownerComponentName, Way myWay, String type, CrowdednessLevel crowdedness) {
+        this.name = name;
+        this.matchingID = matchingID;
+        this.owner = ownerComponentName;
+        this.myWay = myWay;
+        this.type = type;
+        this.linkedServices = new ArrayList<>();
+        this.Crowdedness = crowdedness;
+    }
+
     public MockupService(String name, String matchingID, String ownerComponentName, Way myWay) {
         this.name = name;
         this.matchingID = matchingID;
