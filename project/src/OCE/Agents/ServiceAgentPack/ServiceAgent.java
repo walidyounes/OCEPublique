@@ -4,6 +4,7 @@
 
 package OCE.Agents.ServiceAgentPack;
 
+import AmbientEnvironment.MockupCompo.MockupService;
 import AmbientEnvironment.OCPlateforme.OCService;
 import Logger.OCELogger;
 import Midlleware.AgentFactory.IOCEBinderAgentFactory;
@@ -63,7 +64,7 @@ public class ServiceAgent extends OCEAgent implements Comparable {
      * @param myWayOfAction     : the action module of the agent
      */
     public ServiceAgent(OCService handledService, IPerceptionState myWayOfPerception, IDecisionState myWayOfDecision, IActionState myWayOfAction) {
-        this.myID = new IDAgent();
+        this.myID = new IDAgent(((MockupService)handledService).getType());
         this.handledService = handledService;
         this.myWayOfPerception = myWayOfPerception;
         this.myWayOfDecision = myWayOfDecision;

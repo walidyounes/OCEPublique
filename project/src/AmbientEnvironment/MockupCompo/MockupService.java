@@ -17,14 +17,24 @@ public abstract class MockupService extends OCService implements Comparable, Ser
     protected String matchingID; // Used to check if two services match
     private String owner;
     private Way myWay;
+    private String type;
 
-    public MockupService(String name, String matchingID, String ownerComponentName, Way myWay, String crowdedness) {
+    public MockupService(String name, String matchingID, String ownerComponentName, Way myWay, String type) {
+        this.name = name;
+        this.matchingID = matchingID;
+        this.owner = ownerComponentName;
+        this.myWay = myWay;
+        this.type = type;
+        this.linkedServices = new ArrayList<>();
+    }
+
+    public MockupService(String name, String matchingID, String ownerComponentName, Way myWay, CrowdednessLevel crowdedness) {
         this.name = name;
         this.matchingID = matchingID;
         this.owner = ownerComponentName;
         this.myWay = myWay;
         this.linkedServices = new ArrayList<>();
-        this.Crowdedness = CrowdednessLevel.valueOf(crowdedness);
+        this.Crowdedness = crowdedness;
        // this.serviceQualities = new ArrayList<ServiceQuality>();
        // serviceQualities.add(new ServiceQuality<CrowdednessLevel>(41, "says the level of crowdedness of the restaurant", CrowdednessLevel.Low));
     }
@@ -34,9 +44,8 @@ public abstract class MockupService extends OCService implements Comparable, Ser
         this.matchingID = matchingID;
         this.owner = ownerComponentName;
         this.myWay = myWay;
+        this.type = "";
         this.linkedServices = new ArrayList<>();
-        // this.serviceQualities = new ArrayList<ServiceQuality>();
-        // serviceQualities.add(new ServiceQuality<CrowdednessLevel>(41, "says the level of crowdedness of the restaurant", CrowdednessLevel.Low));
     }
 
     public String getName() {
@@ -51,6 +60,7 @@ public abstract class MockupService extends OCService implements Comparable, Ser
         return myWay;
     }
 
+    public String getType() { return type; }
 
     public void setOwner(String owner){
         this.owner = owner;
@@ -105,7 +115,7 @@ public abstract class MockupService extends OCService implements Comparable, Ser
         }else{
             serviceType = "REQ";
         }
-        return ""+this.name+"-"+"-"+serviceType+ "-"+this.owner;
+        return ""+this.owner+"."+serviceType+ "."+this.name+"."+this.type;
     }
 
     /**
@@ -122,7 +132,7 @@ public abstract class MockupService extends OCService implements Comparable, Ser
 
 //        if (!name.equals(that.name) && !matchingID.equals(that.matchingID) && !owner.equals(that.owner)) return false;
 //        return myWay == that.myWay;
-        if (name.equals(that.name) && matchingID.equals(that.matchingID) && owner.equals(that.owner) &&  myWay.equals(that.myWay)) return true;
+        if (name.equals(that.name) && matchingID.equals(that.matchingID) && owner.equals(that.owner) &&  myWay.equals(that.myWay) && type.equals(that.type)) return true;
         return false;
     }
 

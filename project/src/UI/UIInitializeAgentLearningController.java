@@ -4,6 +4,7 @@
 
 package UI;
 
+import AmbientEnvironment.MockupCompo.MockupService;
 import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
@@ -170,7 +171,10 @@ public class UIInitializeAgentLearningController implements Initializable {
     @FXML
     public void addRSEntry(ActionEvent event){
         if(this.selectedServiceAgentEntry.isPresent() && this.scoreEntry.isPresent()){
-            ReferenceSituationEntry referenceSituationEntry = new ReferenceSituationEntry(this.selectedServiceAgentEntry.get().getMyID(), this.scoreEntry.get());
+            ReferenceSituationEntry referenceSituationEntry = new ReferenceSituationEntry(
+                    this.selectedServiceAgentEntry.get().getMyID(),
+                    this.scoreEntry.get()
+            );
             this.currentlyConstructedRSViewList.getItems().add(referenceSituationEntry);
             //Clear the fields
             clearFieldsAddEntryByAgent();
@@ -186,12 +190,15 @@ public class UIInitializeAgentLearningController implements Initializable {
         if(this.selectedServiceNameEntry.isPresent() && this.scoreNameEntry.isPresent()){
             //Create an ID for the agent
             //check if for this service name an agent was already created -> if yes use the previous one, if no create one and add it to the list
-            if(!this.createdAgentByServiceName.containsKey(this.selectedServiceNameEntry.get())){
+            if(!this.createdAgentByServiceName.containsKey(this.selectedServiceNameEntry.get())) {
                 IDAgent customID = new IDAgent();
                 customID.setVisualizingName(this.selectedServiceNameEntry.get());
                 this.createdAgentByServiceName.put(this.selectedServiceNameEntry.get(), customID);
             }
-            ReferenceSituationEntry referenceSituationEntry = new ReferenceSituationEntry(this.createdAgentByServiceName.get(this.selectedServiceNameEntry.get()), this.scoreNameEntry.get());
+            ReferenceSituationEntry referenceSituationEntry = new ReferenceSituationEntry(
+                    this.createdAgentByServiceName.get(this.selectedServiceNameEntry.get()),
+                    this.scoreNameEntry.get()
+            );
             this.currentlyConstructedRSViewList.getItems().add(referenceSituationEntry);
             //Clear the fields
             this.clearFieldsAddEntryByServiceName();

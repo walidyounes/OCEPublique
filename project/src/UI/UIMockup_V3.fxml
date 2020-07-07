@@ -20,37 +20,37 @@
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="933.0" prefWidth="2079.0" stylesheets="@UIStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.UIMockupController">
-  <children>
-    <MenuBar style="-fx-background-color: #0097A7;" VBox.vgrow="NEVER">
-      <menus>
+   <children>
+      <MenuBar style="-fx-background-color: #0097A7;" VBox.vgrow="NEVER">
+         <menus>
             <Menu mnemonicParsing="false" style="-fx-font-size: 12pt; -fx-text-fill: #FFFFFF;" text="File">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#resetSystem" text="Reset system" />
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#resetSystem" text="Reset system" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#quitter" text="Exit" />
-              </items>
+               </items>
             </Menu>
-        <Menu mnemonicParsing="false" style="-fx-text-fill: #FFFFFF; -fx-font-size: 12pt;" text="Components">
-          <items>
-            <MenuItem mnemonicParsing="false" onAction="#addComponentsFromXMLFile" text="Add file" />
+            <Menu mnemonicParsing="false" style="-fx-text-fill: #FFFFFF; -fx-font-size: 12pt;" text="Components">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#addComponentsFromXMLFile" text="Add file" />
                   <MenuItem mnemonicParsing="false" onAction="#showChoseDisappearingComponent" text="Add disappearing" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" style="-fx-font-size: 12pt;" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefWidth="1777.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
-      <children>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" text="Save As…" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" style="-fx-font-size: 12pt;" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefWidth="1777.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+         <children>
             <VBox fx:id="AddComponent" layoutX="12.0" layoutY="16.0" prefHeight="658.0" prefWidth="343.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="16.0">
                <children>
-                  <Label prefHeight="44.0" prefWidth="343.0" style="-fx-background-color: #0097A7;" text=" Add new Component" textFill="WHITE" wrapText="false">
+                  <Label prefHeight="44.0" prefWidth="343.0" style="-fx-background-color: #0097A7;" text=" Add new components" textFill="WHITE" wrapText="false">
                      <font>
                         <Font name="Cambria Bold" size="18.0" />
                      </font>
@@ -241,7 +241,7 @@
                <children>
                   <VBox prefHeight="361.0" prefWidth="304.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label prefHeight="27.0" prefWidth="430.0" style="-fx-background-color: #0097A7;" text=" Agents" textFill="WHITE" wrapText="false" VBox.vgrow="ALWAYS">
+                        <Label prefHeight="27.0" prefWidth="430.0" style="-fx-background-color: #0097A7;" text=" Agents (Service--Type-Component)" textFill="WHITE" wrapText="false" VBox.vgrow="ALWAYS">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -304,7 +304,7 @@
             </VBox>
             <VBox layoutX="731.0" layoutY="583.0" prefHeight="282.0" prefWidth="422.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="731.0">
                <children>
-                  <Label prefHeight="37.0" prefWidth="422.0" style="-fx-background-color: #0097A7;" text="Agent's parameters settings" textFill="WHITE" wrapText="false">
+                  <Label prefHeight="37.0" prefWidth="422.0" style="-fx-background-color: #0097A7;" text=" Agent's parameter settings" textFill="WHITE" wrapText="false">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -387,7 +387,7 @@
             </VBox>
             <VBox layoutX="381.0" layoutY="465.0" prefHeight="242.0" prefWidth="331.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="149.0" AnchorPane.leftAnchor="381.0">
                <children>
-                  <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" OCE Settings" textFill="WHITE" wrapText="false">
+                  <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" OCE settings" textFill="WHITE" wrapText="false">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -463,7 +463,7 @@
                   </HBox>
                </children>
             </VBox>
-      </children>
-    </AnchorPane>
-  </children>
+         </children>
+      </AnchorPane>
+   </children>
 </VBox>

@@ -9,20 +9,41 @@ import java.util.UUID;
 public class IDAgent implements Comparable{
     private  UUID internalReference; // Agent's reference
     private String visualizingName; // Agent's visualizing name, used when printing agent information
+    private String type; // Agent type
 
     /**
      * Constructor of the IDAgent with a random ID value
      */
     public IDAgent() {
         this.internalReference = UUID.randomUUID();
+        this.type = "";
+    }
+
+//    /**
+//     * Constructor of the IdAgent with a custom ID value
+//     * @param uuid : the value of the ID
+//     */
+//    public IDAgent(String uuid){
+//        this.internalReference = UUID.fromString(uuid);
+//    }
+
+    /**
+     * Constructor of the IDAgent with a random ID value and a type
+     * @param type : the agent type
+     */
+    public IDAgent(String type) {
+        this.internalReference = UUID.randomUUID();
+        this.type = type;
     }
 
     /**
-     * Constructor of the IdAgent with a custom ID value
+     * Constructor of the IdAgent with a custom ID value and a type
      * @param uuid : the value of the ID
+     * @param type : the agent type
      */
-    public IDAgent(String uuid){
+    public IDAgent(String uuid, String type){
         this.internalReference = UUID.fromString(uuid);
+        this.type = type;
     }
 
     /**
@@ -55,6 +76,14 @@ public class IDAgent implements Comparable{
      */
     public void setVisualizingName(String visualizingName) {
         this.visualizingName = visualizingName;
+    }
+
+    /**
+     * Get the type of the agent
+     * @return the type
+     */
+    public String getType() {
+        return type;
     }
 
     @Override

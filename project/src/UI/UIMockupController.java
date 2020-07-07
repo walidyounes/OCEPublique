@@ -12,6 +12,7 @@ import Logger.OCELogger;
 import MASInfrastructure.Infrastructure;
 import MOICE.MOICE;
 import OCE.Agents.BinderAgentPack.BinderAgent;
+import OCE.Agents.IDAgent;
 import OCE.Agents.OCEAgent;
 import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
@@ -40,6 +41,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -64,7 +70,7 @@ public class UIMockupController implements Initializable {
     @FXML private JFXTextField matchingIDService;
     @FXML private JFXTextField crowdednessService;
     @FXML private JFXListView<Label> servicesList;
-    @FXML private JFXListView<Label> componentsList;
+    @FXML private JFXListView<TextFlow> componentsList;
     @FXML private JFXRadioButton providedR,requiredR,singleR,multipleR;
     @FXML private JFXButton launchButton;
     @FXML private JFXButton nextOCECycleButton;
@@ -325,9 +331,8 @@ public class UIMockupController implements Initializable {
                 label.setText(textToAdd);
                 label.getStyleClass().add("label-list");
                 label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
                 //Add component to mockup
-                addComponentToMockup(this.designationComponent.getText(), this.providedByC, this.requiredByC);
+                addComponentToMockup(textToAdd, this.providedByC, this.requiredByC);
                 //Reset UI Elements
                 deleteUIElements();
                 //Display the services and agents in the graph view
@@ -364,6 +369,7 @@ public class UIMockupController implements Initializable {
         // Add the component to the mockup container
         this.mockupFacadeAdapter.addComponent(C1);
         System.out.println(this.mockupFacadeAdapter.getComponents().toString());
+        this.componentsList.getItems().add(textFlowDisplayingComponent(C1));
         // Update the graph visualisation
         addProvidedServiceToGraphe(providedServices);
         addRequiredServiceToGraphe(requiredServices);
@@ -382,12 +388,6 @@ public class UIMockupController implements Initializable {
             List<MockupComponent> listComponents = XMLFileTools.readXMLComponentFile(xmlFilePath);
             for (MockupComponent component : listComponents){
                 addComponentToMockup(component.getName(),component.getProvidedServices(), component.getRequiredServices());
-                Label label = new Label();
-                String textToAdd = "" + component.getName();
-                label.setText(textToAdd);
-                label.getStyleClass().add("label-list");
-                label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
             }
 
 
@@ -413,8 +413,11 @@ public class UIMockupController implements Initializable {
         this.disappearedComponents.add(C1);
 
         // Update the graph visualisation
-        deleteServicesFromGraph(C1.getProvidedServices());
-        deleteServicesFromGraph(C1.getRequiredServices());
+        try{
+            deleteServicesFromGraph(C1.getProvidedServices());
+            deleteServicesFromGraph(C1.getRequiredServices());
+        } catch (Exception e) {}
+
 
     }
 
@@ -556,62 +559,62 @@ public class UIMockupController implements Initializable {
     private void initPopup(){
         this.popup = new JFXPopup();
         JFXButton deleteButton = new JFXButton("Delete");
-        JFXButton detailButton = new JFXButton("Detail");
+        //JFXButton detailButton = new JFXButton("Detail");
         deleteButton.setPadding(new Insets(10));
-        detailButton.setPadding(new Insets(10));
+        //detailButton.setPadding(new Insets(10));
         ImageView deleteImage = new ImageView("/delete.png");
-        ImageView detailImage = new ImageView("/detail.png");
+        //ImageView detailImage = new ImageView("/detail.png");
         deleteButton.setGraphic(deleteImage);
-        detailButton.setGraphic(detailImage);
+        //detailButton.setGraphic(detailImage);
 
         deleteButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-               String nameComp = componentsList.getSelectionModel().getSelectedItem().getText();
+               String nameComp = ((Text)componentsList.getSelectionModel().getSelectedItem().getChildren().get(0)).getText();
                //System.out.println(nameComp);
                deleteComponentFromMockup(nameComp);
                componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
             }
         });
 
-        detailButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String nameComp = componentsList.getSelectionModel().getSelectedItem().getText();
-                System.out.println(nameComp);
-                Set<OCComponent> mycomponents = mockupFacadeAdapter.getComponents().stream().filter(c -> ((MockupComponent)c).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toSet());
-                // Display the component's detail on a window
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                //customise CSS of the new window
-                DialogPane dialogPane = alert.getDialogPane();
-                dialogPane.getStylesheets().add("/custumAlert.css");
-                dialogPane.getStyleClass().add("myAlert");
+//        detailButton.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                String nameComp = ((Text)componentsList.getSelectionModel().getSelectedItem().getChildren().get(0)).getText();
+//                System.out.println(nameComp);
+//                Set<OCComponent> mycomponents = mockupFacadeAdapter.getComponents().stream().filter(c -> ((MockupComponent)c).getName().equalsIgnoreCase(nameComp)).collect(Collectors.toSet());
+//                // Display the component's detail on a window
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                //customise CSS of the new window
+//                DialogPane dialogPane = alert.getDialogPane();
+//                dialogPane.getStylesheets().add("/custumAlert.css");
+//                dialogPane.getStyleClass().add("myAlert");
+//
+//                alert.setTitle("Component's Detail");
+//                alert.setHeaderText("The component * " + nameComp + " * contains ");
+//                String content="";
+//                for (OCComponent compo : mycomponents) {
+//                    content = content + "Provided services : \n";
+//                    // Concat the content of all services of the component in a single string
+//                    content = content + ((MockupComponent)compo).getProvidedServices().stream()
+//                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID() +"\n")
+//                                                                                            .collect(Collectors.joining());
+//                    // content = content + ""+((MockupComponent)compo).getProvidedServices()+"\n";
+//                    content = content + "Required services : \n";
+//                    // content = content + ""+((MockupComponent)compo).getRequiredServices();
+//                    content = content + ((MockupComponent)compo).getRequiredServices().stream()
+//                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID()+"\n")
+//                                                                                            .collect(Collectors.joining());
+//                    System.out.println("Provided services = "+ ((MockupComponent)compo).getProvidedServices()+"\n");
+//                    System.out.println(" Required services = "+ ((MockupComponent)compo).getRequiredServices()+"\n");
+//                }
+//                alert.setContentText(content);
+//                alert.show();
+//                //componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
+//            }
+//        });
 
-                alert.setTitle("Component's Detail");
-                alert.setHeaderText("The component * " + nameComp + " * contains ");
-                String content="";
-                for (OCComponent compo : mycomponents) {
-                    content = content + "Provided services : \n";
-                    // Concat the content of all services of the component in a single string
-                    content = content + ((MockupComponent)compo).getProvidedServices().stream()
-                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID() +"\n")
-                                                                                            .collect(Collectors.joining());
-                    // content = content + ""+((MockupComponent)compo).getProvidedServices()+"\n";
-                    content = content + "Required services : \n";
-                    // content = content + ""+((MockupComponent)compo).getRequiredServices();
-                    content = content + ((MockupComponent)compo).getRequiredServices().stream()
-                                                                                        .map(s -> "\t - "+((MockupService)s).getName() + "-" + ((MockupService)s).getMatchingID()+"\n")
-                                                                                            .collect(Collectors.joining());
-                    System.out.println("Provided services = "+ ((MockupComponent)compo).getProvidedServices()+"\n");
-                    System.out.println(" Required services = "+ ((MockupComponent)compo).getRequiredServices()+"\n");
-                }
-                alert.setContentText(content);
-                alert.show();
-                //componentsList.getItems().remove(componentsList.getSelectionModel().getSelectedIndex());
-            }
-        });
-
-        VBox popUpContent = new VBox( detailButton,deleteButton);
+        VBox popUpContent = new VBox(deleteButton);
         this.popup.setPopupContent(popUpContent);
     }
 
@@ -819,10 +822,11 @@ public class UIMockupController implements Initializable {
         VBox contentSA = new VBox();
 
         Label idAgent = new Label("IDAgent = " + serviceAgent.getMyID());
-        Label handledService = new Label("Handled Service  = " + serviceAgent.getHandledService().toString());
-        Label agentState = new Label("Agent's state  = " + serviceAgent.getMyConnexionState().toString());
-        Label agentConnectedTo = new Label("Agent is connected to  = " + serviceAgent.getConnectedTo().toString());
-        Label agentBinderAgent = new Label("Agent's binder Agent  = " + serviceAgent.getMyBinderAgent().toString());
+        Label agentType = new Label("\nAgent Type = " + ((MockupService) serviceAgent.getHandledService()).getType());
+        Label handledService = new Label("\nHandled Service  = " + serviceAgent.getHandledService().toString());
+        Label agentState = new Label("\nAgent's state  = " + serviceAgent.getMyConnexionState().toString());
+        Label agentConnectedTo = new Label("\nAgent is connected to  = " + serviceAgent.getConnectedTo().toString());
+        Label agentBinderAgent = new Label("\nAgent's binder Agent  = " + serviceAgent.getMyBinderAgent().toString());
 
         TitledPane agentKnowledgeBaseTitledPane = new TitledPane();
         agentKnowledgeBaseTitledPane.setText(" Knowledge Base ");
@@ -831,22 +835,36 @@ public class UIMockupController implements Initializable {
 
         //iterate over the situationEntries and printThem
         Iterator<Situation<ReferenceSituationEntry>> iterator = serviceAgent.getMyKnowledgeBase().iterator();
+        int RSCpt = 1;
         while (iterator.hasNext()){
             Situation<ReferenceSituationEntry> currentSit = iterator.next();
-            HBox hBoxKB = new HBox();
-            ScrollPane scrollPaneKB = new ScrollPane(hBoxKB);
-            Label rSDebut = new Label( " RS = {");
-            hBoxKB.getChildren().add(rSDebut);
-            currentSit.getAgentSituationEntries().forEach((k,v) -> hBoxKB.getChildren().add(new Label(""+v+" - ")));
+            VBox vBoxKB = new VBox();
+            ScrollPane scrollPaneKB = new ScrollPane(vBoxKB);
+            Label rSDebut = new Label( " RS"+RSCpt+" = {\tAgent  \t\t\tScore");
+            vBoxKB.getChildren().add(rSDebut);
+            TreeMap<IDAgent, ReferenceSituationEntry> tree =
+                    new TreeMap<>(
+                            new Comparator<IDAgent>() {
+                                @Override
+                                public int compare(IDAgent ida1, IDAgent ida2) {
+                                    String str1 = ida1.getVisualizingName();
+                                    String str2 = ida2.getVisualizingName();
+                                    return str1.compareTo(str2);
+                                }
+                            });
+            tree.putAll(currentSit.getAgentSituationEntries());
+            tree.forEach((k,v) -> vBoxKB.getChildren().add(new Label("\t"+k+" \t"+v.getScore())));
             Label rSFin = new Label( " }");
-            hBoxKB.getChildren().add(rSFin);
+            vBoxKB.getChildren().add(rSFin);
             contentKB.getChildren().add(scrollPaneKB);
+            RSCpt+=1;
         }
         contentKB.getChildren().forEach(node -> node.setStyle("-fx-font-weight: bold; -fx-font-size: 12;"));
         agentKnowledgeBaseTitledPane.setContent(contentKB);
 
         contentSA.getChildren().add(idAgent);
         contentSA.getChildren().add(handledService);
+        contentSA.getChildren().add(agentType);
         contentSA.getChildren().add(agentState);
         contentSA.getChildren().add(agentConnectedTo);
         contentSA.getChildren().add(agentBinderAgent);
@@ -918,12 +936,7 @@ public class UIMockupController implements Initializable {
                 this.mockupFacadeAdapter.addComponent(component);
                 //remove it from the disappearing components list
                 this.disappearedComponents.remove(component);
-                Label label = new Label();
-                String textToAdd = "" + component.getName();
-                label.setText(textToAdd);
-                label.getStyleClass().add("label-list");
-                label.setGraphic(new ImageView("/component.png"));
-                this.componentsList.getItems().add(label);
+                this.componentsList.getItems().add(textFlowDisplayingComponent(component));
             }
             System.out.println(secondaryStageController.getChosenComponent());
 
@@ -958,4 +971,46 @@ public class UIMockupController implements Initializable {
 //            e.printStackTrace();
 //        }
 //    }
+    private static TextFlow textFlowDisplayingComponent(MockupComponent component){
+
+        TextFlow textFlow = new TextFlow();
+
+        Text text = new Text();
+
+        text.setText(component.getName());
+        text.setFont(Font.font("System", FontWeight.BOLD,20));
+
+        textFlow.getChildren().add(text);
+
+        for(OCService providedService : component.getProvidedServices()){
+            Text providedText = new Text("\n(Provided) ");
+            providedText.setFill(Color.ROYALBLUE);
+            providedText.setFont(Font.font("System",12));
+
+            Text serviceText = new Text(((MockupService)providedService).getName());
+            serviceText.setFont(Font.font("System", FontWeight.BOLD, 15));
+
+            Text matchingIdText = new Text(" - " + ((MockupService)providedService).getMatchingID());
+            matchingIdText.setFont(Font.font("System", 10));
+
+            textFlow.getChildren().addAll(providedText, serviceText, matchingIdText);
+        }
+
+        for(OCService requiredService : component.getRequiredServices()){
+            Text requiredText = new Text("\n(Required) ");
+            requiredText.setFill(Color.TOMATO);
+            requiredText.setFont(Font.font("System",12));
+
+            Text serviceText = new Text(((MockupService)requiredService).getName());
+            serviceText.setFont(Font.font("System", FontWeight.BOLD, 15));
+
+
+            Text matchingIdText = new Text(" - " + ((MockupService)requiredService).getMatchingID());
+            matchingIdText.setFont(Font.font("System", 10));
+
+            textFlow.getChildren().addAll(requiredText, serviceText, matchingIdText);
+        }
+
+        return textFlow;
+    }
 }

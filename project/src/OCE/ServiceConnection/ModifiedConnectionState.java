@@ -23,6 +23,7 @@ public class ModifiedConnectionState implements IConnectionState {
 
     private Optional<MockupService> secondServiceChangedTo; // The new second service for  the old first service (it may not exist if the user doesn't reconnect it)
     private Optional<MockupService> firstServiceChangedTo; // The new first service for the old second service (it may not exist if the user doesn't reconnect it)
+    private Optional<Boolean> createOneMoreBinderAgent;           // If true, a new binder agent must be created to handle one of the modified connection (cause there is insufficient number of binder agents in the system)
 
     /**
      * Constructor
@@ -30,6 +31,7 @@ public class ModifiedConnectionState implements IConnectionState {
     public ModifiedConnectionState() {
         this.firstServiceChangedTo = Optional.empty();
         this.secondServiceChangedTo = Optional.empty();
+        this.createOneMoreBinderAgent = Optional.empty();
     }
 
     /**
@@ -40,13 +42,19 @@ public class ModifiedConnectionState implements IConnectionState {
      * @param oceRecord                 : the reference to the component responsible for reference resolving
      * @param binderAgentFactory        : the reference to the component which allows creating binder agents
      * @param infrastructureAgentList   : the list of agents to wake up to inform them of the arrival of user feedback
+     * @param annotatedConnections      : the list of annotated connections received after user's feedback
      */
     @Override
-    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList) {
-        //check if both orginal services of the connection got connected to new ones
+    public void treatConnection(Connection connection, ICommunicationAdapter communicationManager, IRecord oceRecord, IOCEBinderAgentFactory binderAgentFactory, List<InfrastructureAgent> infrastructureAgentList, List<Connection> annotatedConnections) {
+        //check if both of the original services of the connection got connected to new ones
         if(this.secondServiceChangedTo.isPresent() && this.firstServiceChangedTo.isPresent()){
             //In the binder agent handling this connection, delete both the services
             connection.getBinderAgent().resetHandledServices();
+
+            //Special case: check if there is only one connection annotated as modified
+            // this can happen for example when we OCE propose a connection between two services and the user modifies this connection by adding a component in the middle
+            // IF the two services doesn't appear in any other connection we need to create a new binder agent
+            this.createOneMoreBinderAgent = Optional.ofNullable(!isNewServicesPartOfConnections(this.firstServiceChangedTo.get(), this.secondServiceChangedTo.get(), annotatedConnections));
         }
 
         //Get the first Service agent
@@ -90,7 +98,8 @@ public class ModifiedConnectionState implements IConnectionState {
                     chosenAgentFeedbackMessage.setAgentChosenUser(firstServiceAgent);
 
                     //send the feedback message to the chosen agent
-                    communicationManager.sendMessage(chosenAgentFeedbackMessage, connection.getBinderAgent(), chosenAgentReceivers);
+                    communicationManager.sendMessage(chosenAgentFeedbackMessage, binderAgent, chosenAgentReceivers);
+                    //communicationManager.sendMessage(chosenAgentFeedbackMessage, connection.getBinderAgent(), chosenAgentReceivers);
         }
         else{
             //Set to "empty" the reference to the agent to whom the first agent is connected to
@@ -98,7 +107,16 @@ public class ModifiedConnectionState implements IConnectionState {
         }
 
         //send the feedback message for the first agent using the communication manager
-        communicationManager.sendMessage(firstAgentFeedbackMessage, connection.getBinderAgent(), firstAgentReceivers);
+        communicationManager.sendMessage(firstAgentFeedbackMessage, binderAgent, firstAgentReceivers);
+
+        //Check if we need one more binder Agent
+        if(this.createOneMoreBinderAgent.isPresent()){
+            if (this.createOneMoreBinderAgent.get()){ // We need one more agent that will be used for the second new connection
+                binderAgent = (BinderAgent) binderAgentFactory.createBinderAgent().getKey();
+            }
+            //Reinitialise the field to empty
+            this.createOneMoreBinderAgent = Optional.empty();
+        }
 
         //Send the feedbackMessage for the second agent
         //Create the feedback message with a MODIFIED Value
@@ -128,7 +146,7 @@ public class ModifiedConnectionState implements IConnectionState {
                 chosenAgentFeedbackMessage.setAgentChosenUser(secondServiceAgent);
 
                 //send the feedback message to the chosen agent
-                communicationManager.sendMessage(chosenAgentFeedbackMessage, connection.getBinderAgent(), chosenAgentReceivers);
+                communicationManager.sendMessage(chosenAgentFeedbackMessage, binderAgent, chosenAgentReceivers);
         }
         else{
             //Set to "empty" the reference to the agent to whom the second agent is connected to
@@ -136,12 +154,26 @@ public class ModifiedConnectionState implements IConnectionState {
         }
 
         //send the message using the communication manager
-        communicationManager.sendMessage(secondAgentFeedbackMessage,connection.getBinderAgent(),secondAgentReceivers);
+        communicationManager.sendMessage(secondAgentFeedbackMessage,binderAgent,secondAgentReceivers);
 
     }
 
     /**
-     * Get the new second service that the old first service of the connection is connected to
+     * check whether the two new services that got connected to the old services are part of another connection
+     * @param firstServiceChangedTo     :   the reference of the first service that the user choose to connect to the old second service of the connection proposed by OCE
+     * @param secondServiceChangedTo    :   the reference of the second service that the user choose to connect to the old first service of the connection proposed by OCE
+     * @param annotatedConnections      :   the list of all annotated connections
+     * @return true if at least one of the two new services are part of another connection, else returns false
+     */
+    private boolean isNewServicesPartOfConnections(MockupService firstServiceChangedTo, MockupService secondServiceChangedTo, List<Connection> annotatedConnections){
+        boolean found=false;
+        for (Connection connection: annotatedConnections ) {
+            if(connection.containService(firstServiceChangedTo) || connection.containService(secondServiceChangedTo)) found =true;
+        }
+        return found;
+    }
+    /**
+     * Get the new second service that the user choose to connect to the old first service of the connection proposed by OCE
      * @return : the reference of the new service, or "empty" if the first service was left not connected
       */
     public Optional<MockupService> getSecondServiceChangedTo() {
@@ -149,15 +181,15 @@ public class ModifiedConnectionState implements IConnectionState {
     }
 
     /**
-     * Update the reference new second service that the old first service of the connection is connected to
-     * @return : the reference of the new service, or "empty" if the first service was left not connected
+     * Update the reference new second service that the user choose to connect to the old first service of the connection proposed by OCE
+     * @param secondServiceChangedTo : he reference new second service that the old first service of the connection is connected to
      */
     public void setSecondServiceChangedTo(MockupService secondServiceChangedTo) {
         this.secondServiceChangedTo = Optional.ofNullable(secondServiceChangedTo);
     }
 
     /**
-     * Get the new first service that the old second service of the connection is connected to
+     * Get the new first service that the user choose to connect to the old second service of the connection proposed by OCE
      * @return : the reference of the new service, or "empty" if the second service was left not connected
      */
     public Optional<MockupService> getFirstServiceChangedTo() {
@@ -165,11 +197,27 @@ public class ModifiedConnectionState implements IConnectionState {
     }
 
     /**
-     * Update the reference new first service that the old second service of the connection is connected to
-     * @return : the reference of the new service, or "empty" if the second service was left not connected
+     * Update the reference new first service that the user choose to connect to the old second service of the connection proposed by OCE
+     * @param firstServiceChangedTo : the reference new first service that the old second service of the connection is connected to
      */
     public void setFirstServiceChangedTo(MockupService firstServiceChangedTo) {
         this.firstServiceChangedTo = Optional.ofNullable(firstServiceChangedTo);
+    }
+
+    /**
+     * Get the value of the parameter that indicates whether the connection which this state belongs to need to create one more binder agent
+     * @return : true if the connection need one more binder agent, else "empty"
+     */
+    public Optional<Boolean> getCreateOneMoreBinderAgent() {
+        return createOneMoreBinderAgent;
+    }
+
+    /**
+     * Update the value of the parameter that indicates whether the connection which this state belongs to need to create one more binder agent
+     * @param createOneMoreBinderAgent : the value of the parameter that indicates whether the connection which this state belongs to need to create one more binder agent
+     */
+    public void setCreateOneMoreBinderAgent(Boolean createOneMoreBinderAgent) {
+        this.createOneMoreBinderAgent = Optional.ofNullable(createOneMoreBinderAgent);
     }
 
     /**

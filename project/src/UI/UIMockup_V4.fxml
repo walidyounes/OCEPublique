@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="933.0" prefWidth="2079.0" stylesheets="@UIStyleSheet.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.UIMockupController">
+    <children>
+        <MenuBar style="-fx-background-color: #0097A7;" VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" style="-fx-font-size: 12pt; -fx-text-fill: #FFFFFF;" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#resetSystem" text="Reset system" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#quitter" text="Exit" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" style="-fx-text-fill: #FFFFFF; -fx-font-size: 12pt;" text="Components">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#addComponentsFromXMLFile" text="Add file" />
+                        <MenuItem mnemonicParsing="false" onAction="#showChoseDisappearingComponent" text="Add disappearing" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Save" />
+                        <MenuItem mnemonicParsing="false" text="Save As…" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" style="-fx-font-size: 12pt;" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefWidth="1777.0" style="-fx-background-color: white;" VBox.vgrow="ALWAYS">
+            <children>
+                <VBox fx:id="AddComponent" layoutX="12.0" layoutY="16.0" prefHeight="658.0" prefWidth="343.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="16.0">
+                    <children>
+                        <Label prefHeight="62.0" prefWidth="343.0" style="-fx-background-color: #0097A7;" text=" Add new Component" textFill="WHITE" wrapText="false">
+                            <font>
+                                <Font name="Cambria Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <VBox prefHeight="466.0" prefWidth="343.0">
+                            <children>
+                                <HBox prefHeight="67.0" prefWidth="343.0">
+                                    <children>
+                                        <Label prefHeight="40.0" prefWidth="102.0" text=" Designation" wrapText="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="designationComponent" focusColor="#00bcd4" prefHeight="31.0" prefWidth="161.0" promptText="Designation">
+                                            <font>
+                                                <Font name="Cambria" size="14.0" />
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <Separator prefWidth="200.0" />
+                                <Label prefHeight="22.0" prefWidth="279.0" text="  Add associated services" textFill="#00bcd4" wrapText="false">
+                                    <font>
+                                        <Font name="Cambria Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <HBox prefHeight="52.0" prefWidth="351.0">
+                                    <children>
+                                        <Label prefHeight="40.0" prefWidth="102.0" text="Name" wrapText="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="nameService" focusColor="#00bcd4" prefHeight="31.0" prefWidth="161.0" promptText="Name">
+                                            <font>
+                                                <Font name="Cambria" size="14.0" />
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="52.0" prefWidth="351.0">
+                                    <children>
+                                        <Label prefHeight="40.0" prefWidth="102.0" text="Matching ID" wrapText="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <JFXTextField fx:id="matchingIDService" focusColor="#00bcd4" prefHeight="31.0" prefWidth="161.0" promptText="Matching ID">
+                                            <font>
+                                                <Font name="Cambria" size="14.0" />
+                                            </font>
+                                        </JFXTextField>
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="52.0" prefWidth="351.0">
+                                    <children>
+                                        <Label prefHeight="40.0" prefWidth="102.0" text=" Way" wrapText="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                            <children>
+                                                <JFXRadioButton fx:id="providedR" layoutY="10.0" text="Provided" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="Way" />
+                                                    </toggleGroup>
+                                                </JFXRadioButton>
+                                                <JFXRadioButton fx:id="requiredR" layoutX="100.0" layoutY="10.0" text="Required" toggleGroup="$Way" />
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="52.0" prefWidth="351.0">
+                                    <children>
+                                        <Label prefHeight="40.0" prefWidth="102.0" text=" Link" wrapText="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                            <children>
+                                                <JFXRadioButton fx:id="singleR" layoutY="10.0" text="Single" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="10.0">
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="Link" />
+                                                    </toggleGroup>
+                                                </JFXRadioButton>
+                                                <JFXRadioButton fx:id="multipleR" layoutX="100.0" layoutY="10.0" text="Multiple" toggleGroup="$Link" />
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="74.0" prefWidth="343.0">
+                                    <children>
+                                        <Label prefHeight="40.0" prefWidth="102.0" text="Cardinality" wrapText="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                            <children>
+                                                <JFXTextField focusColor="#00bcd4" prefHeight="37.0" prefWidth="169.0" promptText="Cardinality">
+                                                    <font>
+                                                        <Font name="Cambria" size="14.0" />
+                                                    </font>
+                                                </JFXTextField>
+                                            </children>
+                                        </AnchorPane>
+                                    </children>
+                                </HBox>
+                                <HBox alignment="CENTER_RIGHT" prefHeight="86.0" prefWidth="343.0">
+                                    <children>
+                                        <JFXButton fx:id="saveButton" buttonType="RAISED" onAction="#addComponent" styleClass="button-raised-save" text="Save" HBox.hgrow="ALWAYS">
+                                            <HBox.margin>
+                                                <Insets left="10.0" right="40.0" />
+                                            </HBox.margin>
+                                        </JFXButton>
+                                        <JFXButton fx:id="AddButton" buttonType="RAISED" onAction="#addService" styleClass="button-raised" text="Add" HBox.hgrow="ALWAYS">
+                                            <HBox.margin>
+                                                <Insets right="40.0" />
+                                            </HBox.margin>
+                                        </JFXButton>
+                                        <JFXButton fx:id="cancelButton" buttonType="RAISED" onAction="#cancelAddingServices" styleClass="button-raised-cancel" text="Cancel" HBox.hgrow="ALWAYS">
+                                            <HBox.margin>
+                                                <Insets right="10.0" />
+                                            </HBox.margin>
+                                        </JFXButton>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets />
+                                    </opaqueInsets>
+                                </HBox>
+                                <Separator prefWidth="200.0" />
+                            </children>
+                        </VBox>
+                        <VBox prefHeight="430.0" prefWidth="343.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="43.0" prefWidth="351.0" style="-fx-background-color: #00BCD4;" text=" Services" textFill="WHITE" wrapText="false">
+                                    <font>
+                                        <Font name="Cambria" size="18.0" />
+                                    </font>
+                                </Label>
+                                <JFXListView fx:id="servicesList" depth="1" prefHeight="377.0" prefWidth="343.0" verticalGap="10.0" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="343.0">
+                            <children>
+                                <JFXButton fx:id="clearServicesButton" buttonType="RAISED" onAction="#cancelAddingServices" styleClass="button-raised-cancel" text="Clear">
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" top="10.0" />
+                                    </HBox.margin></JFXButton>
+                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox layoutX="381.0" layoutY="16.0" prefHeight="416.0" prefWidth="331.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="424.0" AnchorPane.leftAnchor="381.0" AnchorPane.topAnchor="16.0">
+                    <children>
+                        <VBox VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" Components" textFill="WHITE" wrapText="false">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <JFXListView fx:id="componentsList" depth="1" onMouseClicked="#showPopup" prefHeight="102.0" prefWidth="329.0" verticalGap="10.0" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+                <VBox layoutX="731.0" layoutY="16.0" prefHeight="600.0" prefWidth="422.0" AnchorPane.leftAnchor="731.0" AnchorPane.topAnchor="16.0">
+                    <children>
+                        <VBox prefHeight="361.0" prefWidth="304.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="40.0" prefWidth="430.0" style="-fx-background-color: #0097A7;" text=" Agents (Service--Type-Component)" textFill="WHITE" wrapText="false" VBox.vgrow="ALWAYS">
+                                    <font>
+                                        <Font name="System Bold" size="18.0" />
+                                    </font>
+                                </Label>
+                                <JFXListView fx:id="agentsListUI" depth="1" prefHeight="324.0" prefWidth="358.0" verticalGap="10.0" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+                <VBox layoutX="1205.0" layoutY="16.0" prefHeight="515.0" prefWidth="491.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label prefHeight="40.0" prefWidth="491.0" style="-fx-background-color: #0097A7;" text=" Agent's content" textFill="WHITE" wrapText="false">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <VBox fx:id="agentDetailsPane" prefHeight="230.0" prefWidth="321.0" VBox.vgrow="ALWAYS" />
+                    </children>
+                </VBox>
+                <VBox fx:id="graphVisualisationPane" layoutX="1204.0" layoutY="600.0" prefHeight="400.0" prefWidth="491.0" AnchorPane.bottomAnchor="36.0">
+                    <children>
+                        <Label prefHeight="40.0" prefWidth="646.0" style="-fx-background-color: #0097A7;" text=" Service Graph" textFill="WHITE" VBox.vgrow="ALWAYS">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </Label>
+                        <AnchorPane fx:id="visualisationPane" prefHeight="569.0" prefWidth="491.0" style="-fx-background-color: #78909C; -fx-border-color: #78909C; -fx-border-width: 4;" VBox.vgrow="ALWAYS" />
+                        <HBox VBox.vgrow="ALWAYS" />
+                    </children>
+                </VBox>
+                <VBox layoutX="731.0" layoutY="400.0" prefHeight="282.0" prefWidth="422.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="731.0">
+                    <children>
+                        <Label prefHeight="40.0" prefWidth="422.0" style="-fx-background-color: #0097A7;" text="Agent's parameters settings" textFill="WHITE" wrapText="false">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+                            <children>
+                                <Label prefHeight="20.0" prefWidth="142.0" text=" Similarity threshold" HBox.hgrow="ALWAYS">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets bottom="25.0" top="5.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <JFXSlider fx:id="similarityThresholdSlider" blockIncrement="0.1" majorTickUnit="0.2" max="1.0" prefHeight="25.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="0.5">
+                                    <HBox.margin>
+                                        <Insets top="5.0" />
+                                    </HBox.margin>
+                                </JFXSlider>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+                            <children>
+                                <Label prefHeight="20.0" prefWidth="143.0" text=" Novelty coefficient">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets bottom="25.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <JFXSlider fx:id="noveltyCoefficientSlider" blockIncrement="0.1" majorTickUnit="0.2" max="1.0" prefHeight="25.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="0.3" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+                            <children>
+                                <Label prefHeight="20.0" prefWidth="142.0" text=" Exploration factor">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets bottom="25.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <JFXSlider fx:id="epsilonSlider" blockIncrement="0.1" majorTickUnit="0.2" max="1.0" prefHeight="25.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="0.2" />
+                            </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+                            <children>
+                                <Label prefHeight="20.0" prefWidth="142.0" text=" Learning rate" HBox.hgrow="ALWAYS">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets bottom="20.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <JFXSlider fx:id="learningRateSlider" blockIncrement="0.1" majorTickUnit="0.2" max="1.0" prefHeight="25.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="0.4">
+                                    <HBox.margin>
+                                        <Insets top="5.0" />
+                                    </HBox.margin>
+                                </JFXSlider>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+                            <children>
+                                <Label prefHeight="20.0" prefWidth="142.0" text=" Reinforcement" HBox.hgrow="ALWAYS">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets bottom="25.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <JFXSlider fx:id="reinforcementSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" minorTickCount="1" prefHeight="25.0" prefWidth="140.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox layoutX="381.0" layoutY="708.0" prefHeight="105.0" prefWidth="331.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="381.0">
+                    <children>
+                        <Label prefHeight="48.0" prefWidth="515.0" style="-fx-background-color: #0097A7;" text=" Visualisation options" textFill="WHITE" VBox.vgrow="ALWAYS">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <HBox prefHeight="67.0" prefWidth="276.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <JFXButton fx:id="showGraphVisPanButton" buttonType="RAISED" graphicTextGap="0.0" onAction="#showHideServiceGraphVisualisation" styleClass="button-raised-save" text="Graph" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" left="40.0" right="40.0" top="10.0" />
+                                    </HBox.margin>
+                                </JFXButton>
+                                <JFXButton fx:id="openICEButton" buttonType="RAISED" contentDisplay="CENTER" graphicTextGap="0.0" onAction="#launchICEVisualisationProgram" styleClass="button-raised-save" text="ICE" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" right="10.0" top="10.0" />
+                                    </HBox.margin>
+                                </JFXButton>
+                            </children>
+                            <VBox.margin>
+                                <Insets />
+                            </VBox.margin>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox layoutX="381.0" layoutY="465.0" prefHeight="242.0" prefWidth="331.0" style="-fx-border-color: #78909C; -fx-border-width: 1;" AnchorPane.bottomAnchor="149.0" AnchorPane.leftAnchor="381.0">
+                    <children>
+                        <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" OCE Settings" textFill="WHITE" wrapText="false">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <HBox>
+                            <children>
+                                <Label prefHeight="35.0" prefWidth="109.0" text=" Edit Learning" wrapText="false">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <opaqueInsets>
+                                        <Insets />
+                                    </opaqueInsets>
+                                </Label>
+                                <JFXCheckBox fx:id="editLearningCheckBox" prefHeight="37.0" prefWidth="123.0" text="Edit Learning" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="368.0">
+                            <children>
+                                <Label prefHeight="40.0" prefWidth="100.0" text=" OCE Cycle" wrapText="false">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <opaqueInsets>
+                                        <Insets />
+                                    </opaqueInsets>
+                                </Label>
+                                <JFXButton fx:id="launchButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#lunchSimulation" prefHeight="31.0" prefWidth="89.0" styleClass="button-raised-save" text="Launch" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="5.0" right="5.0" />
+                                    </HBox.margin>
+                                </JFXButton>
+                                <JFXButton fx:id="nextOCECycleButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#oneStepExecution" prefHeight="40.0" prefWidth="114.0" styleClass="button-raised" text="Next" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="5.0" right="5.0" />
+                                    </HBox.margin>
+                                </JFXButton>
+                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                        <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+                            <children>
+                                <Label prefHeight="20.0" prefWidth="109.0" text=" Agent Cycles">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                                <JFXTextField fx:id="NbCyclesAgent" promptText="Nb cycles agents " />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="204.0">
+                            <children>
+                                <Label prefHeight="40.0" prefWidth="101.0" text=" Connections" wrapText="false" HBox.hgrow="ALWAYS">
+                                    <font>
+                                        <Font name="System Bold" size="14.0" />
+                                    </font>
+                                    <opaqueInsets>
+                                        <Insets />
+                                    </opaqueInsets>
+                                </Label>
+                                <JFXButton fx:id="resetOCECycleButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" graphicTextGap="0.0" onAction="#resetOCECycle" prefHeight="40.0" prefWidth="73.0" styleClass="button-raised-cancel" text="Clear" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="5.0" right="5.0" />
+                                    </HBox.margin>
+                                </JFXButton>
+                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

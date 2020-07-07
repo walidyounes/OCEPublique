@@ -10,6 +10,10 @@ import AmbientEnvironment.OCPlateforme.OCService;
 
 public class MultiLinkMockupService extends MockupService {
 
+    public MultiLinkMockupService(String name, String matchingID, String owner, Way myWay, String type) {
+        super(name, matchingID, owner, myWay, type);
+    }
+
     public MultiLinkMockupService(String name, String matchingID, String owner, Way myWay) {
         super(name, matchingID, owner, myWay);
     }

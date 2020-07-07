@@ -81,7 +81,7 @@ public class OCEServiceAgentFactory implements IOCEServiceAgentFactory {
         serviceAgent.setMyBinderAgentFactory(myBinderAgentFactory);
 
         //Make the ID of the service Agent the same as the associated infrastructure agent
-        serviceAgent.setMyIDAgent(new IDAgent(""+ associatedInfrastructureAgent.getInfraAgentReference().getReferenceInterne()));
+        serviceAgent.setMyIDAgent(new IDAgent(""+ associatedInfrastructureAgent.getInfraAgentReference().getReferenceInterne(),((MockupService)attachedService).getType()));
         //Set the name for the visualization of this agent as the name of it's associated  service
         String visualizationName = ((MockupService) attachedService).getSummaryStringRepresentation();
         serviceAgent.getMyID().setVisualizingName(""+visualizationName);
