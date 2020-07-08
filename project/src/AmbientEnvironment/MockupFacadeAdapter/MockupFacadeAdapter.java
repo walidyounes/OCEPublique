@@ -78,8 +78,13 @@ public class MockupFacadeAdapter extends MockupContainer implements IBinding, IA
 
     public void bind(OCService Service1, OCService Service2) {
         int index1 = serviceList.indexOf(Service1);
-        MockupService service1 = (MockupService) serviceList.get(index1);
         int index2 = serviceList.indexOf(Service2);
+        if(index1 < 0 || index2 < 0){
+            System.out.println("Unknown Service : Can't bind " + Service1 + " with " + Service2);
+            return;
+        }
+
+        MockupService service1 = (MockupService) serviceList.get(index1);
         MockupService service2 = (MockupService) serviceList.get(index2);
         if ((service1.getWay() == Way.REQUIRED) && (service2.getWay() == Way.PROVIDED)) {
             super.bind(service1, service2);
