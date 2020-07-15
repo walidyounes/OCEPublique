@@ -251,7 +251,11 @@ public class ServiceAgentDecision implements IDecisionState {
                                                 //Get from the map the corresponding OCEMessage corresponding to the agent that has been selected
                                                 OCEMessage bestOCEMessage;
                                                 bestOCEMessage = oceServiceAgentPerceptionHistory.get(this.oceCycleBestAgent.get().getKey());
-                                                myDecision = bestOCEMessage.toSelfTreat(this.myServiceAgent.getMyConnexionState(), this.myServiceAgent, this.myServiceAgent.getHandledService());
+                                                myDecision = bestOCEMessage.toSelfTreat(
+                                                        this.myServiceAgent.getMyConnexionState(),
+                                                        this.myServiceAgent,
+                                                        this.myServiceAgent.getHandledService()
+                                                );
                                             } else {
                                                 myDecision = new DoNothingDecision();
                                             }
@@ -379,9 +383,10 @@ public class ServiceAgentDecision implements IDecisionState {
         //Once we treat all the feedback received, we update the knowledge of the agent
 
         //Normalise the scores of the agents in the scored current situation
-        SituationUtility.normalizeScoresSCS(this.myServiceAgent.getMyScoredCurrentSituation().get());
-        OCELogger.log(Level.INFO, "Agent : Decision -> Updated and Normalized SCS = " + this.myServiceAgent.getMyScoredCurrentSituation().toString());
-
+        if(this.myServiceAgent.getMyScoredCurrentSituation().isPresent()){
+            SituationUtility.normalizeScoresSCS(this.myServiceAgent.getMyScoredCurrentSituation().get());
+            OCELogger.log(Level.INFO, "Agent : Decision -> Updated and Normalized SCS = " + this.myServiceAgent.getMyScoredCurrentSituation().toString());
+        }
         //Update the agent Knowledge base
         this.myServiceAgent.updateMyKnowledgeBase();
         OCELogger.log(Level.INFO, "Agent : Decision -> Knowledge Base = " + this.myServiceAgent.getMyKnowledgeBase().toString());

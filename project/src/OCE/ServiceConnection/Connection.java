@@ -216,7 +216,11 @@ public class Connection implements Comparable {
         MockupService thatFirstService = that.getFirstService();
         MockupService thatSecondService = that.getSecondService();
 
-        return this.firstServiceAgent.equals(thatFirstSserviceAgent) && this.secondServiceAgent.equals(thatSecondSserviceAgent) && this.binderAgent.equals(thatBinderAgent) && this.firstService.equals(thatFirstService) && this.secondService.equals(thatSecondService);
+        try{
+            return this.firstServiceAgent.equals(thatFirstSserviceAgent) && this.secondServiceAgent.equals(thatSecondSserviceAgent) && this.binderAgent.equals(thatBinderAgent) && this.firstService.equals(thatFirstService) && this.secondService.equals(thatSecondService);
+        }catch(Exception e){
+            return false;
+        }
     }
 
 

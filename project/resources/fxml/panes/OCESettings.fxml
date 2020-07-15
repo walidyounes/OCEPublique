@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<VBox
+        stylesheets="@../../css/UIStyleSheet.css"
+        xmlns="http://javafx.com/javafx/8.0.171"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="UI.PaneControllers.OCESettingsController"
+        layoutX="381.0"
+        layoutY="465.0"
+        prefHeight="242.0"
+        prefWidth="331.0"
+        style="-fx-border-color: #78909C; -fx-border-width: 1;"
+        AnchorPane.topAnchor="16.0"
+        AnchorPane.leftAnchor="363.0"
+>
+    <children>
+        <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text=" OCE Settings" textFill="WHITE" wrapText="false">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <HBox>
+            <children>
+                <Label prefHeight="35.0" prefWidth="109.0" text=" Edit Learning" wrapText="false">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Label>
+                <JFXCheckBox fx:id="editLearningCheckBox" prefHeight="37.0" prefWidth="123.0" text="Edit Learning" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="368.0">
+            <children>
+                <Label prefHeight="40.0" prefWidth="100.0" text=" OCE Cycle" wrapText="false">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Label>
+                <JFXButton fx:id="toggleAutoButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#toggleAuto" prefHeight="31.0" prefWidth="89.0" styleClass="button-raised-save" text="Enable Auto" HBox.hgrow="ALWAYS">
+                    <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </HBox.margin>
+                </JFXButton>
+                <JFXButton fx:id="launchOrOneStepActionButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" onAction="#launchOrOneStepExecution" prefHeight="40.0" prefWidth="114.0" styleClass="button-raised" text="Launch" HBox.hgrow="ALWAYS">
+                    <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </HBox.margin>
+                </JFXButton>
+            </children>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+        </HBox>
+        <Separator prefWidth="200.0" />
+        <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="373.0">
+            <children>
+                <Label prefHeight="20.0" prefWidth="109.0" text=" Agent Cycles">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <JFXTextField fx:id="NbCyclesAgent" promptText="Nb cycles agents " />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="204.0">
+            <children>
+                <Label prefHeight="40.0" prefWidth="101.0" text=" Connections" wrapText="false" HBox.hgrow="ALWAYS">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Label>
+                <JFXButton fx:id="resetOCECycleButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" graphicTextGap="0.0" onAction="#resetOCECycle" prefHeight="40.0" prefWidth="73.0" styleClass="button-raised-cancel" text="Clear" HBox.hgrow="ALWAYS">
+                    <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </HBox.margin>
+                </JFXButton>
+            </children>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+        </HBox>
+    </children>
+</VBox>
+

@@ -216,7 +216,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <JFXListView fx:id="componentsList" depth="1" onMouseClicked="#showPopup" prefHeight="106.0" prefWidth="373.0" verticalGap="10.0" VBox.vgrow="ALWAYS" />
+                  <JFXListView fx:id="envComponentsList" depth="1" onMouseClicked="#showPopup" prefHeight="106.0" prefWidth="373.0" verticalGap="10.0" VBox.vgrow="ALWAYS" />
                   <Label prefHeight="40.0" prefWidth="387.0" style="-fx-background-color: #0097A7;" text="Paramétrage" textFill="WHITE" wrapText="false">
                      <font>
                         <Font name="System Bold" size="18.0" />
