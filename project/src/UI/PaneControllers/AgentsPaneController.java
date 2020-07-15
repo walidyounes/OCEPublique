@@ -6,7 +6,7 @@ import OCE.Agents.ServiceAgentPack.Learning.ReferenceSituationEntry;
 import OCE.Agents.ServiceAgentPack.Learning.Situation;
 import OCE.Agents.ServiceAgentPack.ServiceAgent;
 import UI.AgentUIPersonalisedCell;
-import UI.UIMockupController;
+import UI.UPnPMockupController;
 import com.jfoenix.controls.JFXListView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 
 public class AgentsPaneController implements Initializable {
 
-    private UIMockupController uiMockupController;
+    private UPnPMockupController upnpMockupController;
 
     @FXML
     private JFXListView<OCEAgent> agentsListUI;
@@ -144,11 +144,11 @@ public class AgentsPaneController implements Initializable {
         return agentTitledPane;
     }
 
-    public void setUiMockupController(UIMockupController uiMockupController) {
-        this.uiMockupController = uiMockupController;
+    public void setUpnpMockupController(UPnPMockupController upnpMockupController) {
+        this.upnpMockupController = upnpMockupController;
         System.out.println(agentsListUI == null);
-        System.out.println(uiMockupController.getMyOCE() == null);
-        this.agentsListUI.setItems(uiMockupController.getMyOCE().gteAllAgents());
+        System.out.println(upnpMockupController.getMyOCE() == null);
+        this.agentsListUI.setItems(upnpMockupController.getMyOCE().gteAllAgents());
     }
 
     public JFXListView<OCEAgent> getAgentsListUI() {

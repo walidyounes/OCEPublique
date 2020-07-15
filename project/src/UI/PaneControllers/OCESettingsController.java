@@ -1,7 +1,7 @@
 package UI.PaneControllers;
 
 import OCE.Agents.BinderAgentPack.BinderAgent;
-import UI.UIMockupController;
+import UI.UPnPMockupController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
@@ -27,7 +27,7 @@ public class OCESettingsController implements Initializable {
 
     private boolean auto = false;
 
-    private UIMockupController uiMockupController;
+    private UPnPMockupController upnpMockupController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -45,11 +45,11 @@ public class OCESettingsController implements Initializable {
     @FXML
     public void launchOrOneStepExecution(ActionEvent event) {
         if(!started) {
-            uiMockupController.lunchSimulation(event);
+            upnpMockupController.lunchSimulation(event);
             launchOrOneStepActionButton.setText("Next");
             started = true;
         } else {
-            uiMockupController.getMyOCE().oneStepExecution();
+            upnpMockupController.getMyOCE().oneStepExecution();
         }
     }
 
@@ -61,9 +61,9 @@ public class OCESettingsController implements Initializable {
         Optional<ButtonType> result = myAlert.showAndWait();
         if (result.get() == ButtonType.OK){
             //Reset all agent's attributes to factory mode settings (for service agent we don't delete the knowledge base)
-            uiMockupController.getMyOCE().gteAllAgents().stream().forEach(agent-> agent.resetToFactoryDefaultSettings());
+            upnpMockupController.getMyOCE().gteAllAgents().stream().forEach(agent-> agent.resetToFactoryDefaultSettings());
             //Delete the binder agents
-            uiMockupController.getMyOCE().gteAllAgents().stream().filter(agent -> agent instanceof BinderAgent).forEach(agentB -> ((BinderAgent) agentB).suicide());
+            upnpMockupController.getMyOCE().gteAllAgents().stream().filter(agent -> agent instanceof BinderAgent).forEach(agentB -> ((BinderAgent) agentB).suicide());
         }
     }
 
@@ -73,7 +73,7 @@ public class OCESettingsController implements Initializable {
         //convert the value to an integer
         try {
             int intValue = Integer.parseInt(stringValue);
-            uiMockupController.getInfrastructure().setMaxCycleAgent(intValue);
+            upnpMockupController.getInfrastructure().setMaxCycleAgent(intValue);
             System.out.println("New max cycle agent = " + intValue);
         } catch (NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -87,8 +87,8 @@ public class OCESettingsController implements Initializable {
         return editLearningCheckBox.isSelected();
     }
 
-    public void setUiMockupController(UIMockupController uiMockupController) {
-        this.uiMockupController = uiMockupController;
+    public void setUpnpMockupController(UPnPMockupController upnpMockupController) {
+        this.upnpMockupController = upnpMockupController;
     }
 
     public boolean isAuto() {

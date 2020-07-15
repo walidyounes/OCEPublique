@@ -1,7 +1,7 @@
 
 package UPnPEnvironment;
 
-import UI.UIMockupController;
+import UI.UPnPMockupController;
 import javafx.application.Platform;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.LocalDevice;
@@ -16,10 +16,10 @@ public class ProbeRegistryListener extends DefaultRegistryListener {
 
     Map<String,UpnpMockupComponent> knownComponents = new HashMap<>();
 
-    private UIMockupController uiMockupController;
+    private UPnPMockupController upnpMockupController;
 
-    public ProbeRegistryListener(UIMockupController uiMockupController){
-        this.uiMockupController = uiMockupController;
+    public ProbeRegistryListener(UPnPMockupController upnpMockupController){
+        this.upnpMockupController = upnpMockupController;
     }
 
     private void deviceAdded(Device device){
@@ -29,7 +29,7 @@ public class ProbeRegistryListener extends DefaultRegistryListener {
             );
             UpnpMockupComponent component = knownComponents.get(device.getIdentity().getUdn().toString());
 
-            Platform.runLater(() -> uiMockupController.addComponentToEnv(component));
+            Platform.runLater(() -> upnpMockupController.addComponentToEnv(component));
         } else {
             System.out.println(
                     "Device added: " + displayStringOfDevice(device)
@@ -37,7 +37,7 @@ public class ProbeRegistryListener extends DefaultRegistryListener {
 
             UpnpComponentFactory.makeUpnpComponent(device, component -> {
                 knownComponents.put(device.getIdentity().getUdn().toString(), component);
-                Platform.runLater(() -> uiMockupController.addComponentToEnv(component));
+                Platform.runLater(() -> upnpMockupController.addComponentToEnv(component));
             });
 
         }
@@ -49,7 +49,7 @@ public class ProbeRegistryListener extends DefaultRegistryListener {
                     "Device removed: " + device.getDisplayString()
             );
 
-            Platform.runLater(() -> uiMockupController.removeComponentFromEnv(knownComponents.get(device.getIdentity().getUdn().toString())));
+            Platform.runLater(() -> upnpMockupController.removeComponentFromEnv(knownComponents.get(device.getIdentity().getUdn().toString())));
         }
     }
 

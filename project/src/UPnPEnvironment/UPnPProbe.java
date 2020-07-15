@@ -1,7 +1,7 @@
 
 package UPnPEnvironment;
 
-import UI.UIMockupController;
+import UI.UPnPMockupController;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.UpnpServiceImpl;
 import org.fourthline.cling.model.meta.RemoteDevice;
@@ -18,8 +18,8 @@ public class UPnPProbe implements Runnable {
 
     private ProbeRegistryListener probeRegistryListener;
 
-    public UPnPProbe(UIMockupController uiMockupController){
-        this.probeRegistryListener = new ProbeRegistryListener(uiMockupController);
+    public UPnPProbe(UPnPMockupController upnpMockupController){
+        this.probeRegistryListener = new ProbeRegistryListener(upnpMockupController);
     }
 
     public void run() {

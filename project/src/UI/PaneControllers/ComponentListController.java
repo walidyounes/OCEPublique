@@ -10,7 +10,7 @@ import javafx.scene.text.TextFlow;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static UI.UIMockupController.textFlowDisplayingComponent;
+import static UI.UPnPMockupController.textFlowDisplayingComponent;
 
 public class ComponentListController implements Initializable {
 

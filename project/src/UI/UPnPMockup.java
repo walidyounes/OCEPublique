@@ -4,6 +4,7 @@
 
 package UI;
 
+import UPnPEnvironment.UPnPProbe;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-public class UIMockup extends Application {
+public class UPnPMockup extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -20,7 +21,17 @@ public class UIMockup extends Application {
         Parent root = fxmlLoader.load();
         UIMockupController uiMockupController =  fxmlLoader.getController();
         */
-        Parent root = FXMLLoader.load(getClass().getResource("UIMockup_V3.fxml"));
+
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/UIMockup_UPnP.fxml"));
+        Parent root = fxmlLoader.load();
+
+        UPnPMockupController upnpMockupController =  fxmlLoader.getController();
+
+        Thread probeThread = new Thread(new UPnPProbe(upnpMockupController));
+        probeThread.setDaemon(false);
+        probeThread.start();
+
         primaryStage.setTitle("Mockup");
         primaryStage.setMaximized(true);
         primaryStage.setScene(new Scene(root, 300, 275));
