@@ -6,7 +6,7 @@ package AmbientEnvironment.OCPlateforme;
 
 import AmbientEnvironment.MockupCompo.AddLinkException;
 import AmbientEnvironment.MockupCompo.RemoveLinkException;
-import scala.Int;
+//import scala.Int;
 
 
 import java.io.Serializable;
