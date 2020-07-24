@@ -86,16 +86,32 @@ public class SituationUtility {
         //Iterate on the list of reference situations and compute the similarity
         for(Situation<ReferenceSituationEntry> refSituation : listReferenceSituations){
 
-            //Map of the types of all agents present in refsituation
+            //Map of the types of all agents present in refsituation with max and mean score
             Map<String,ReferenceSituationEntry> types = new TreeMap<>();
+            Map<String,ReferenceSituationEntry> typesMean = new TreeMap<>();
+
             for (IDAgent agent : refSituation.getAgentSituationEntries().keySet()) {
                 String typeAgent = agent.getType();
                 boolean contains = types.containsKey(typeAgent);
                 Double scoreAgent = refSituation.getAgentSituationEntries().get(agent).getScore();
+
                 //add agent if type not null and not encountered
                 //or update it if encountered but worst score than current one
                 if (typeAgent != "" && ( !contains || (contains && scoreAgent > types.get(typeAgent).getScore()) ))
-                    types.put(agent.getType(), refSituation.getSituationEntryByIDAgent(agent));
+                    types.put(typeAgent, refSituation.getSituationEntryByIDAgent(agent));
+
+                // using mean instead of max
+                if (typeAgent != "") {
+                    double currentScore = 0.0;
+                    double div = 1.0;
+                    if (typesMean.containsKey(typeAgent)) {
+                        currentScore = typesMean.get(typeAgent).getScore();
+                        div = 2.0;
+                    }
+                    typesMean.put(typeAgent, new ReferenceSituationEntry(
+                            agent,
+                            (refSituation.getSituationEntryByIDAgent(agent).getScore()+currentScore) / div));
+                }
             }
 
             //reference situation where we substitute disappeared agents with a type by new agent of the same type
@@ -105,20 +121,34 @@ public class SituationUtility {
                 String type = currentAgent.getType(); //agent's type
                 boolean typesContains = types.containsKey(type); //agent in types
                 ReferenceSituationEntry refEntry = refSituation.getSituationEntryByIDAgent(currentAgent);
+                // use it for max score instead of mean
                 ReferenceSituationEntry typeEntry = types.get(type);
 
+                // use it for mean score instead of max
+                //ReferenceSituationEntry typeEntry = typesMean.get(type);
+
+                // ALGO PRETRAITEMENT
                 //if an agent is in refSituation he is added to result with his own score
                 //only if his score is the best of his type or his type is not identified yet
                 //else he take the score of the best of his type
+//                if (refSituation.getAgentSituationEntries().keySet().contains(currentAgent)) {
+//                    if (typesContains) {
+//                        if (refEntry.getScore() > typeEntry.getScore())
+//                            resultMapping.addSituationEntry(currentAgent,refEntry);
+//                        else
+//                            resultMapping.addSituationEntry(currentAgent,new ReferenceSituationEntry(currentAgent,typeEntry.getScore()));
+//                    }
+//                    else
+//                        resultMapping.addSituationEntry(currentAgent, refEntry);
+//                }
+//                else {
+//                    if (typesContains)
+//                        resultMapping.addSituationEntry(currentAgent,new ReferenceSituationEntry(currentAgent,typeEntry.getScore()));
+//                }
+
+                //ALGO NOUVEAU COMPOSANT
                 if (refSituation.getAgentSituationEntries().keySet().contains(currentAgent)) {
-                    if (typesContains) {
-                        if (refEntry.getScore() > typeEntry.getScore())
-                            resultMapping.addSituationEntry(currentAgent,refEntry);
-                        else
-                            resultMapping.addSituationEntry(currentAgent,new ReferenceSituationEntry(currentAgent,typeEntry.getScore()));
-                    }
-                    else
-                        resultMapping.addSituationEntry(currentAgent, refEntry);
+                    resultMapping.addSituationEntry(currentAgent, refEntry);
                 }
                 else {
                     if (typesContains)
