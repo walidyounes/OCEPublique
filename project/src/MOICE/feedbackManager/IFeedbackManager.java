@@ -21,6 +21,8 @@ public interface IFeedbackManager {
 
     /**
      *
+
+
      */
     void collectFeedback();
 

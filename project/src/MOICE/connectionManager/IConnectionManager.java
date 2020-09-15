@@ -11,7 +11,7 @@ import OCE.ServiceConnection.Connection;
 
 import java.util.List;
 
-public interface IConnectionManager {
+public interface  IConnectionManager {
 
     /**
      * Register the component in the list
