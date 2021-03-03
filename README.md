@@ -16,11 +16,7 @@ Using the **IntelliJ IDEA**
 https://www.jetbrains.com/fr-fr/idea/
 
 
-### Content of the project
-
-```JAVA
-To be done
-```
+<!--- ### Content of the project -->
 
 ### Configuration in IntelliJ IDEA
 
